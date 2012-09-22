@@ -6,21 +6,14 @@ html
     meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
     meta(name="identifier-url", content="http://www.voicious.com")
     meta(http-equiv="content-Language", content="fr")
+    link(rel="stylesheet", media="screen", type="text/css", href="/includes/css/style.css")
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
+    link(href='http://fonts.googleapis.com/css?family=Bitter:400italic', rel='stylesheet', type='text/css')
+    link(rel="icon", type="image/png", href="includes/pictures/favicon.png")
+    link(rel="shortcut icon", type="image/png", href="includes/pictures/favicon.png")
     title Voicious
     script(type="text/javascript", src="/includes/js/lib/jquery.js")
     script(type="text/javascript", src="/includes/js/client.js")
   body
-    div.header
-      h1 Welcome on #{name}
-      br
-      small Make some noise !
-    div.content
-      h3 Inscris toi et viens rejoindre la communaute Voicious
-      br
-      br
-      form
-        label Pseudo
-        input(class="inputForm", name="pseudo", value="")
-        br
-        label Mail
-        input(class="inputForm", name="mail", value="")
+    div#logo.no-selec
+    div#desc.no-selec web voice chat application
