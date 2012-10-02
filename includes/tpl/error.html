@@ -3,17 +3,15 @@ html
   head
     meta(http-equiv="Content-Type", content="text/html", charset="UTF-8")
     meta(name="description", content="Simple application for videoconference")
-    meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
     meta(name="identifier-url", content="http://www.voicious.com")
     meta(http-equiv="content-Language", content="fr")
     title Voicious
     script(type="text/javascript", src="/includes/js/lib/jquery.js")
-    script(type="text/javascript", src="/includes/js/client.js")
   body
     div
-      h1 #{httpError} Bad Request
+      h1 #{httpErrorCode} #{httpErrorMsg}
       br
       div
           p Errno : #{errno}
           | Syscall : #{syscall}
-          | Error : #{text}
+          | #{text}

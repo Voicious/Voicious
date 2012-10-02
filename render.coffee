@@ -9,16 +9,16 @@ Renderer = {
                 try
                         fs.readFileSync(file, 'utf8')
                 catch e
-                        error = error.ErrorHandler.throwError(e, 500)
-                        throw error
+                        handler = new error.ErrorHandler
+                        throw handler.throwError(e, 500)
 
         render: (str, opts) ->
                 try
                         tmp = jade.compile(str, opts)
                         tmp(opts)
                 catch e
-                        error = error.ErrorHandler.throwError(e, 500)
-                        throw error
+                        handler = new error.ErrorHandler
+                        throw handler.throwError(e, 500)
 
         jadeRender: (path, options) ->
                 file = config.TPL_PATH + path
