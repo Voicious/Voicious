@@ -1,17 +1,13 @@
-!!! 5
+!!! strict
 html
-  head
-    meta(http-equiv="Content-Type", content="text/html", charset="UTF-8")
-    meta(name="description", content="Simple application for videoconference")
-    meta(name="identifier-url", content="http://www.voicious.com")
-    meta(http-equiv="content-Language", content="fr")
-    title Voicious
+  include includes/header
     script(type="text/javascript", src="/includes/js/lib/jquery.js")
   body
     div
       h1 #{httpErrorCode} #{httpErrorMsg}
       br
       div
-          p Errno : #{errno}
-          | Syscall : #{syscall}
-          | #{text}
+          p.
+            Errno : #{errno}
+            Syscall : #{syscall}
+            #{text}
