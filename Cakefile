@@ -16,25 +16,26 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 {exec}      = require 'child_process'
+fs          = require 'fs'
 
 sourceDir   = "."
-destDir     = "."
+destDir     = "lib"
 sourceFiles = ["config", "errorHandler", "render", "router", "server", "start"]
 
 compile     = (file) ->
-    sourceFile  = sourceDir + "/" + file + ".coffee"
-    destFile    = destDir   + "/" + file + ".js"
-    console.log "Processing...  [" + sourceFile + "] -> [" + destFile + "]" 
+    sourceFile  = __dirname + "/" + sourceDir + "/" + file + ".coffee"
+    destFile    = __dirname + "/" + destDir + "/" + file + ".js"
+    console.log "Processing...  [" + file + ".coffee] -> [" + destDir + "/" + file + ".js]" 
     exec 'coffee --compile --output ' + destDir + ' ' + sourceFile, (err, stdout, stderr) ->
         throw err if err 
-        console.log stdout + stderr
 
 remove      = (file) ->
-    console.log "Removing... [" + file + ".js]"
-    exec 'rm -f ' + file + '.js', (err, stdout, stderr) ->
+    console.log "Removing... [" + destDir + "/" + file + ".js]"
+    exec 'rm -f ' + __dirname + "/" + destDir + "/" + file + ".js", (err, stdout, stderr) ->
         throw err if err
 
 task 'build', 'Build project', ->
+    exec 'mkdir ' + __dirname + '/' + destDir if not fs.exists __dirname + '/' + destDir
     compile file for file in sourceFiles
     console.log "Done."
 
