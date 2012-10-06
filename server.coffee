@@ -16,18 +16,16 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 http = require('http')
-url = require('url')
 router = require('./router')
 
 start = (port) ->
     onRequest = (request, response) ->
         try
-                pathname = url.parse(request.url).pathname
-                template = router.route(pathname, request, response)
+                template = router.Router.route(request, response)
                 if template.template?
-                    response.writeHead(200, {"Content-Type": "text/html"})
-                    response.write(template.template)
-                    response.end()
+                        response.writeHead(200, {"Content-Type": "text/html"})
+                        response.write(template.template)
+                        response.end()
         catch e
                 response.writeHead(200, {"Content-Type": "text/html"})
                 response.write(e.template)

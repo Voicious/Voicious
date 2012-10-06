@@ -25,7 +25,10 @@ jade = require('./render')
 class ErrorHandler
         constructor: () ->
                 @errorObj = {}
-                @errorCode = {500: "Internal Server Error"}
+                @errorCode = {
+                        404: "Not Found",
+                        500: "Internal Server Error"}
+
                 if not fs.existsSync(config.LOG_PATH)
                         fs.mkdirSync(config.LOG_PATH)
                 @fd = fs.openSync(config.LOG_PATH + 'error.log', 'a')
