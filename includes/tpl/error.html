@@ -1,13 +1,12 @@
 !!! strict
 html
   include includes/header
-    script(type="text/javascript", src="/includes/js/lib/jquery.js")
   body
     div
       h1 #{httpErrorCode} #{httpErrorMsg}
       br
       div
           p.
-            Errno : #{errno}
-            Syscall : #{syscall}
+            #{errno}
+            #{syscall}
             #{text}

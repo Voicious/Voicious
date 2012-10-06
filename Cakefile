@@ -25,9 +25,9 @@ sourceFiles = ["config", "errorHandler", "render", "router", "server", "start"]
 compile     = (file) ->
     sourceFile  = __dirname + "/" + sourceDir + "/" + file + ".coffee"
     destFile    = __dirname + "/" + destDir + "/" + file + ".js"
-    console.log "Processing...  [" + file + ".coffee] -> [" + destDir + "/" + file + ".js]" 
+    console.log "Processing...  [" + file + ".coffee] -> [" + destDir + "/" + file + ".js]"
     exec 'coffee --compile --output ' + destDir + ' ' + sourceFile, (err, stdout, stderr) ->
-        throw err if err 
+        throw err if err
 
 remove      = (file) ->
     console.log "Removing... [" + destDir + "/" + file + ".js]"
