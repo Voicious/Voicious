@@ -23,3 +23,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 exports.SERVER_PORT = 4242
 exports.LOG_PATH = __dirname + '/log/'
 exports.TPL_PATH = __dirname + '/includes/tpl/'
+
+exports.PATH_ROUTES = [
+        ["includes"],
+        ["modules", "user"]
+]

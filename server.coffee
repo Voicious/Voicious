@@ -16,12 +16,16 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 http = require('http')
+
 router = require('./router')
+routeHandler = require('./routeHandler')
 
 start = (port) ->
     onRequest = (request, response) ->
         try
-                template = router.Router.route(request, response)
+                requestObject = router.Router.route(request, response)
+                console.log requestObject
+                template = routeHandler.RouteHandler.resolve(request, response, requestObject)
                 if template.template?
                         response.writeHead(200, {"Content-Type": "text/html"})
                         response.write(template.template)

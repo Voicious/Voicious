@@ -17,24 +17,25 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 url = require('url')
 
-jade = require('./render')
 error = require('./errorHandler')
-#fileserve = require('./modules/node-static')
-
-#fileserver = new fileserve.Server()
 
 Router = {
         _requestObject: {
                 path: [],
                 args: {} }
 
-        _regexp: new RegExp("^/([a-z0-9/\\.]*)(?:/argv[/]?)([a-z0-9/\\.]*)$|^/([a-z0-9/\\.]*)$", "i")
+        _regexp: new RegExp("^/([a-z0-9/\\._]*)(?:/argv[/]?)([a-z0-9/\\._]*)$|^/([a-z0-9/\\._]*)$", "i")
 
         route: (request, response) ->
+                @_requestObject = {
+                        path: [],
+                        args: {} }
                 @_pathname = url.parse(request.url)
                 console.log "Requesting #{@_pathname.href}"
                 @_method = request.method
                 this.parseUrl()
+                this.clean()
+                return @_requestObject
 
         parseQueryUrl: () ->
                 @_requestObject.path = @_pathname.pathname.toLowerCase().split('/')
@@ -74,11 +75,6 @@ Router = {
                                 this.parseQueryUrl()
                         else
                                 this.parsePathUrl()
-                this.clean()
-                console.log @_requestObject
-                @_requestObject = {
-                        path: [],
-                        args: {} }
 }
 
 exports.Router = Router
@@ -93,20 +89,6 @@ exports.Router = Router
                 routes[paths[1]](request, response)
             else
                 notFound(request, response)
-
-home = (request, response) ->
-    console.log "Accessing home"
-    return {template: jade.Renderer.jadeRender('home.html', {name: "Voicious"})}
-
-includes = (request, response) ->
-    console.log "Downloading file"
-    request.addListener('end', ->
-        fileserver.serve(request, response, (e, res) ->
-            if e and e.status is 404
-                return {template: jade.Renderer.jadeRender('notFound.html')}))
-notFound = (request, response) ->
-    console.log "404 not found"
-    return {template: jade.Renderer.jadeRender('notFound.html')}
 
 routes = []
 routes['/'] = home
