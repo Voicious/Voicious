@@ -19,13 +19,13 @@ program. If not, see <http://www.gnu.org/licenses/>.
 fs          = require 'fs'
 
 sourceDir   = "."
-destDir     = "lib"
+destDir     = "."
 sourceFiles = ["config", "errorHandler", "render", "router", "server", "start"]
 
 compile     = (file) ->
     sourceFile  = __dirname + "/" + sourceDir + "/" + file + ".coffee"
     destFile    = __dirname + "/" + destDir + "/" + file + ".js"
-    console.log "Processing...  [" + file + ".coffee] -> [" + destDir + "/" + file + ".js]"
+    console.log "Processing...  [" + sourceDir + "/" + file + ".coffee] -> [" + destDir + "/" + file + ".js]" 
     exec 'coffee --compile --output ' + destDir + ' ' + sourceFile, (err, stdout, stderr) ->
         throw err if err
 
