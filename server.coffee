@@ -26,7 +26,7 @@ start = (port) ->
                 requestObject = router.Router.route(request, response)
                 console.log requestObject
                 template = routeHandler.RouteHandler.resolve(request, response, requestObject)
-                if template.template?
+                if template and template.template?
                         response.writeHead(200, {"Content-Type": "text/html"})
                         response.write(template.template)
                         response.end()
