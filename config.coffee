@@ -31,4 +31,5 @@ exports.PATH_ROUTES = [
         ["modules", "user"]
 ]
 
-exports.LOGLEVEL    = Logger.WARN
+exports.LOGLEVEL    = Logger.DEBUG
+exports.LOGONSTDOUT = true

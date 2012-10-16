@@ -39,10 +39,11 @@ class _Logger
         @name   = name
         if not fs.existsSync config.LOG_PATH
             fs.mkdirSync config.LOG_PATH
-        @_fd    = fs.openSync config.LOG_PATH + @name + '.log', 'a'
         
 
     _log: (level, message) ->
+        if message instanceof Object
+            return
         if level >= config.LOGLEVEL
             theLog  = "[" + switch level
                 when Logger.DEBUG      then "DEBUG"
@@ -52,8 +53,11 @@ class _Logger
                 when Logger.FATAL      then "FATAL"
             theLog  += "] " + (do moment).format 'MMMM Do YYYY, h:mm:ss a : '
             theLog  += message
-            fs.writeSync @_fd, theLog, 0, theLog.length, null
-            fs.closeSync @_fd
+            fd      = fs.openSync config.LOG_PATH + @name + '.log', 'a'
+            fs.writeSync fd, theLog, 0, theLog.length, null
+            fs.closeSync fd
+            if config.LOGONSTDOUT
+                console.log theLog
 
     debug:  (message) ->
         @_log(Logger.DEBUG, message)
