@@ -20,7 +20,16 @@ fs          = require 'fs'
 
 sourceDir   = "."
 destDir     = "."
-sourceFiles = ["config", "errorHandler", "render", "router", "server", "start"]
+sourceFiles = [
+    "config",
+    "errorHandler",
+    "logger",
+    "render",
+    "routeHandler",
+    "router",
+    "server",
+    "start"
+]
 
 compile     = (file) ->
     sourceFile  = __dirname + "/" + sourceDir + "/" + file + ".coffee"

@@ -19,12 +19,13 @@ http = require('http')
 
 router = require('./router')
 routeHandler = require('./routeHandler')
+logger  = (require './logger').get 'voicious'
 
 start = (port) ->
     onRequest = (request, response) ->
         try
                 requestObject = router.Router.route(request, response)
-                console.log requestObject
+                logger.debug requestObject
                 template = routeHandler.RouteHandler.resolve(request, response, requestObject)
                 if template and template.template?
                         response.writeHead(200, {"Content-Type": "text/html"})
@@ -36,6 +37,6 @@ start = (port) ->
                 response.end()
 
     http.createServer(onRequest).listen(port)
-    console.log "Server ready on port #{port}"
+    logger.info "Server ready on port #{port}"
 
 exports.start = start

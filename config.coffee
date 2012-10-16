@@ -15,6 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+Logger  = require './logger'
+
 ##
 # Voicious configuration file
 # Don't forget to recompile it after any changes
@@ -28,3 +30,5 @@ exports.PATH_ROUTES = [
         ["includes"],
         ["modules", "user"]
 ]
+
+exports.LOGLEVEL    = Logger.WARN

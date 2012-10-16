@@ -22,6 +22,8 @@ moment = require('./modules/moment')
 config = require('./config')
 jade = require('./render')
 
+logger  = (require './logger').get 'voicious'
+
 class ErrorHandler
         constructor: () ->
                 @_errorObj = {}
@@ -37,8 +39,7 @@ class ErrorHandler
                 text = "";
                 for key, value of @_errorObj
                         text += value
-                fs.writeSync(@_fd, text, 0, text.length, null)
-                fs.closeSync(@_fd)
+                logger.error @_errorObj.text
 
         renderError: () ->
                 return {

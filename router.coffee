@@ -18,6 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 url = require('url')
 
 error = require('./errorHandler')
+logger = (require './logger').get "voicious"
 
 Router = {
         _requestObject: {
@@ -31,7 +32,7 @@ Router = {
                         path: [],
                         args: {} }
                 @_pathname = url.parse(request.url)
-                console.log "Requesting #{@_pathname.href}"
+                logger.debug "Requesting #{@_pathname.href}"
                 @_method = request.method
                 this.parseUrl()
                 this.clean()
