@@ -39,7 +39,7 @@ class _Logger
         @name   = name
         if not fs.existsSync config.LOG_PATH
             fs.mkdirSync config.LOG_PATH
-        
+
 
     _log: (level, message) ->
         if message instanceof Object

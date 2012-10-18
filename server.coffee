@@ -20,6 +20,7 @@ http = require('http')
 router = require('./router')
 routeHandler = require('./routeHandler')
 logger  = (require './logger').get 'voicious'
+error = require('./errorHandler')
 
 start = (port) ->
     onRequest = (request, response) ->
@@ -33,7 +34,12 @@ start = (port) ->
                         response.end()
         catch e
                 response.writeHead(200, {"Content-Type": "text/html"})
-                response.write(e.template)
+                if e.template?
+                        response.write(e.template)
+                else
+                        handler = new error.ErrorHandler
+                        e = handler.throwError(e, 500)
+                        response.write(e.template)
                 response.end()
 
     http.createServer(onRequest).listen(port)

@@ -28,6 +28,7 @@ class ErrorHandler
         constructor: () ->
                 @_errorObj = {}
                 @_errorCode = {
+                        400: "Bad Parameter",
                         404: "Not Found",
                         500: "Internal Server Error"}
 

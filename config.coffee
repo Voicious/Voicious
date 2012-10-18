@@ -15,21 +15,21 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Logger  = require './logger'
-
 ##
 # Voicious configuration file
 # Don't forget to recompile it after any changes
 ##
 
+Logger  = require './logger'
+
 exports.SERVER_PORT = 4242
 exports.LOG_PATH = __dirname + '/log/'
 exports.TPL_PATH = __dirname + '/includes/tpl/'
-
-exports.PATH_ROUTES = [
-        ["includes"],
-        ["modules", "user"]
-]
+exports.STATIC_FILES_PATH = "includes"
 
 exports.LOGLEVEL    = Logger.DEBUG
 exports.LOGONSTDOUT = true
+exports.PATH_ROUTES = [
+        ["test", "client"],
+        ["test", "user"]
+]
