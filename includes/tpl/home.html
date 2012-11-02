@@ -1,0 +1,47 @@
+!!! strict
+html
+  include includes/header
+    link(rel="stylesheet", media="screen", type="text/css", href="/includes/css/style.css")
+    script(type="text/javascript", src="/includes/js/lib/jquery.js")
+    script(type="text/javascript", src="/includes/js/client.js")
+  body
+    div#logo.no-selec
+    div#desc.no-selec web voice chat application
+    div#choices.no-selec
+      ul.clean
+        li.choice.txt-shd Jump in
+        li.choice.middle-choice.txt-shd Log in
+        li.choice.txt-shd Sign up
+      ul
+    div#quick.no-selec
+      div#stepOne
+        button#newRoomBtn.med-green.btn-submit.txt-shd
+          span Create a new Room
+        button#joinRoomBtn.blue-green.btn-submit.txt-shd
+          span Join an existing Room
+      div#newRoom
+        form
+          input#newNickname.brdr(type="text", placeholder="Nickname")
+            button#newRoomCommit.light-blue.btn-submit.txt-shd
+              span Create the Room
+            button#newRoomCancel.grey-blue.btn-submit.txt-shd
+              span Cancel
+      div#joinRoom
+        form
+          input#joinNickname.brdr(type="text", placeholder="Nickname")
+          input#joindRoomCancel.grey-blue.btn-submit.txt-shd
+        button#joinRoomCommit.light-blue.btn-submit.txt-shd Join the Room
+        button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
+    div#signin.no-selec
+      form
+        input#login_email.brdr(type="email", placeholder="Email")
+        input#login_password.no-brdr(type="password", placeholder="Password")
+      button.light-blue.btn-submit.txt-shd
+        span Log in
+        a(href="#password") Forgot password?
+    div#signup.no-selec
+      form
+        input#signup_email.brdr(type="email", placeholder="Email")
+        input#signup_password.brdr(type="password", placeholder="Password")
+        input#signup_password_confirm.brdr(type="password", placeholder="Confirm Password")
+      button.light-blue.btn-submit.txt-shd Sign Up
