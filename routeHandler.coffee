@@ -21,6 +21,8 @@ jade = require('./render')
 config = require('./config')
 error = require('./errorHandler')
 
+logger = (require './logger').get 'voicious'
+
 RouteHandler = {
         _fileserver: new fileserve.Server()
 
@@ -37,44 +39,50 @@ RouteHandler = {
                                                         response.writeHead(e.status, e.headers)
                                                         response.end()))
                         else
-                                for path in @_routes
-                                        moduleExist = true
-                                        for file, key in path
-                                                if file isnt requestObject.path[key]
-                                                        moduleExist = false
-                                                        break
-                                        if moduleExist is true
-                                                if requestObject.path[key]?
-                                                        method = requestObject.path[key]
-                                                        requestObject.path.pop()
-                                                        object = requestObject.path.join('/')
-                                                        console.log "Calling class method \"#{method}\" of object #{object}"
-                                                        callingObject = require("./" + "#{object}")
-                                                        methodExist = false
-                                                        for parent, value of callingObject
-                                                                for funcName, funcValue of value when funcName is method
-                                                                        func = funcValue.toString()
-                                                                        paramName = func.slice(func.indexOf('(') + 1, func.indexOf(')')).match(/([^\s,]+)/g)
-                                                                        params = []
-                                                                        i = 0
-                                                                        for k, v of requestObject.args
-                                                                                if not paramName[i]? or k isnt paramName[i]
-                                                                                        handler = new error.ErrorHandler
-                                                                                        throw handler.throwError("[Error] : unknown parameter \"#{k}\" in function \"#{method}\" ", 400)
-                                                                                params.push(v)
-                                                                                i++
-                                                                        callingObject[parent][funcName].apply(null, params)
-                                                                        methodExist = true
-                                                        if methodExist is false
-                                                                handler = new error.ErrorHandler
-                                                                throw handler.throwError("[Error] : method \"#{method}\" of class \"#{parent}\" is undefined", 404)
-                                                else
-                                                        object = requestObject.path.join('/')
-                                                        console.log "Calling default class method of object #{object}"
-                                                break
-                                if moduleExist is false
-                                        handler = new error.ErrorHandler
-                                        throw handler.throwError("[Error] : #{requestObject.path.join('/')} is undefined", 404)
+                                @checkServiceRoute(requestObject)
+
+        checkServiceRoute: (requestObject) ->
+                moduleExist = false
+                for key, path of @_routes
+                        if path is requestObject.path[0]
+                                moduleExist = true
+                                break
+                if moduleExist is true
+                        if requestObject.path[1]?
+                                object = requestObject.path[0]
+                                method = requestObject.path[1]
+                                logger.info "Calling class method \"#{method}\" of object #{object}"
+                                @callServiceFunction(object, method, requestObject)
+                        else
+                                object = requestObject.path[0]
+                                logger.info "Calling default class method of object #{object}"
+                                @callServiceFunction(object, "default", requestObject)
+                else
+                        handler = new error.ErrorHandler
+                        throw handler.throwError("[Error] : #{requestObject.path.join('/')} is undefined", 404)
+
+        callServiceFunction: (object, method, requestObject) ->
+                methodExist = false
+                callingObject = require("." + config.SERVICES_PATH + "#{object}")
+                for parent, value of callingObject
+                        for funcName, funcValue of value when funcName is method
+                                func = funcValue.toString()
+                                paramName = func.slice(func.indexOf('(') + 1, func.indexOf(')')).match(/([^\s,]+)/g)
+                                params = []
+                                i = 0
+                                for k, v of requestObject.args
+                                        if paramName?
+                                                if not paramName[i]? or k isnt paramName[i]
+                                                        handler = new error.ErrorHandler
+                                                        throw handler.throwError("[Error] : unknown parameter \"#{k}\" in function \"#{method}\" ", 400)
+                                        params.push(v)
+                                        i++
+                                callingObject[parent][funcName].apply(null, params)
+                                methodExist = true
+                                break
+                if methodExist is false
+                        handler = new error.ErrorHandler
+                        throw handler.throwError("[Error] : method \"#{method}\" of class \"#{parent}\" is undefined", 404)
 }
 
 exports.RouteHandler = RouteHandler

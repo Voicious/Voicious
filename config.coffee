@@ -25,11 +25,9 @@ Logger  = require './logger'
 exports.SERVER_PORT = 4242
 exports.LOG_PATH = __dirname + '/log/'
 exports.TPL_PATH = __dirname + '/includes/tpl/'
-exports.STATIC_FILES_PATH = "includes"
+exports.STATIC_FILES_PATH = 'includes'
+exports.SERVICES_PATH = '/test/'
 
 exports.LOGLEVEL    = Logger.DEBUG
 exports.LOGONSTDOUT = true
-exports.PATH_ROUTES = [
-        ["test", "client"],
-        ["test", "user"]
-]
+exports.PATH_ROUTES = ['client', 'user']

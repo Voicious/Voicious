@@ -1,5 +1,5 @@
 User = {
-        default: () ->
+        default: (name, age) ->
                 console.log "default function of user"
 
         register: (name, age) ->
