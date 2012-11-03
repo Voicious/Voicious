@@ -3,8 +3,7 @@
   var Home;
 
   $(document).ready(function() {
-    $('div').hide();
-    return $('input', 'textarea').placeholder();
+    return $('div').hide();
   });
 
   Home = (function() {
@@ -23,6 +22,7 @@
     }
 
     Home.prototype.init = function() {
+      var _this = this;
       $('#logo').fadeIn(1600);
       ($('#desc').delay(100)).fadeIn(800);
       (this._choices.delay(100)).fadeTo(0.01);
@@ -31,7 +31,19 @@
         marginTop: '+=20'
       }, 600);
       this._stepOne.show();
-      return this.bindEvent();
+      this.bindEvent();
+      $('#newRoomBtn').click(function() {
+        return _this.nextStep(stepOne, $('#newRoom'));
+      });
+      $('#newRoomCancel').click(function() {
+        return _this.cancelStep(stepOne, $('#newRoom'));
+      });
+      $('#joinRoomBtn').click(function() {
+        return _this.nextStep(stepOne, $('#joinRoom'));
+      });
+      return $('#joinRoomCancel').click(function() {
+        return _this.cancelStep(stepOne, $('#joinRoom'));
+      });
     };
 
     Home.prototype.bindEvent = function() {
@@ -65,22 +77,54 @@
       return _results;
     };
 
+    Home.prototype.disableButtonClick = function(element) {
+      return $('#' + element.get(0).id + ' button').attr('disabled', true);
+    };
+
+    Home.prototype.enableButtonClick = function(element) {
+      return $('#' + element.get(0).id + ' button').attr('disabled', false);
+    };
+
+    Home.prototype.nextStep = function(stepOne, stepTwo) {
+      stepOne = $(stepOne);
+      stepTwo = $(stepTwo);
+      this.disableButtonClick(stepOne);
+      this.enableButtonClick(stepTwo);
+      $('#joinRoom,#newRoom').hide();
+      stepOne.fadeTo(0.99);
+      stepOne.animate({
+        opacity: 0,
+        left: '-=290'
+      }, 600);
+      stepTwo.fadeTo(0.01);
+      return stepTwo.animate({
+        opacity: 1,
+        left: '-=290'
+      }, 600);
+    };
+
+    Home.prototype.cancelStep = function(stepOne, stepTwo) {
+      stepOne = $(stepOne);
+      stepTwo = $(stepTwo);
+      this.enableButtonClick(stepOne);
+      this.disableButtonClick(stepTwo);
+      stepOne.fadeTo(0.01);
+      stepOne.animate({
+        opacity: 1,
+        left: '+=290'
+      }, 600);
+      stepTwo.fadeTo(0.99);
+      stepTwo.animate({
+        opacity: 0,
+        left: '+=290'
+      }, 600);
+      $('#' + stepTwo.get(0).id + ' form input').attr('value', '');
+      return $('#' + stepTwo.get(0).id + ' form input').blur();
+    };
+
     return Home;
 
   })();
-
-  /*
-      disableButtonClick: (element) ->
-          $('#' + element.get(0).id + ' button').attr 'disabled', 'disabled'
-
-      enableButtonClick: (element) ->
-          $('#' + element.get(0).id + ' button').attr 'disabled', ''
-
-      nextStep: (stepOne, stepTwo) ->
-          disableButtonClick stepOne
-          enableButtonClick stepTwo
-  */
-
 
   $(window).load(function() {
     var home;

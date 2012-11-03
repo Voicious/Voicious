@@ -1,6 +1,5 @@
 $(document).ready () ->
     $('div').hide()
-    $('input', 'textarea').placeholder()
 
 class Home
     constructor: () ->
@@ -25,6 +24,15 @@ class Home
             }, 600
         @_stepOne.show()
         @bindEvent()
+        $('#newRoomBtn').click () =>
+            @nextStep stepOne, $('#newRoom')
+        $('#newRoomCancel').click () =>
+            @cancelStep stepOne, $('#newRoom')
+        $('#joinRoomBtn').click () =>
+            @nextStep stepOne, $('#joinRoom')
+        $('#joinRoomCancel').click () =>
+            @cancelStep stepOne, $('#joinRoom')
+
 
     bindEvent: () ->
         that = this
@@ -44,17 +52,47 @@ class Home
                     that._lis[index]['toggle'] = false
                     that._lis[index]['domObj'].fadeOut 200
                 $(this).toggleClass 'selected', that._lis[index]['toggle']
-###
+
     disableButtonClick: (element) ->
-        $('#' + element.get(0).id + ' button').attr 'disabled', 'disabled'
+        $('#' + element.get(0).id + ' button').attr 'disabled', on
 
     enableButtonClick: (element) ->
-        $('#' + element.get(0).id + ' button').attr 'disabled', ''
+        $('#' + element.get(0).id + ' button').attr 'disabled', off
 
     nextStep: (stepOne, stepTwo) ->
-        disableButtonClick stepOne
-        enableButtonClick stepTwo
-###
+        stepOne = $(stepOne)
+        stepTwo = $(stepTwo)
+        @disableButtonClick stepOne
+        @enableButtonClick stepTwo
+        $('#joinRoom,#newRoom').hide()
+        stepOne.fadeTo 0.99
+        stepOne.animate {
+            opacity: 0
+            left: '-=290'
+            }, 600
+        stepTwo.fadeTo 0.01
+        stepTwo.animate {
+            opacity: 1
+            left: '-=290'
+            }, 600
+
+    cancelStep: (stepOne, stepTwo) ->
+        stepOne = $(stepOne)
+        stepTwo = $(stepTwo)
+        @enableButtonClick stepOne
+        @disableButtonClick stepTwo
+        stepOne.fadeTo 0.01
+        stepOne.animate {
+            opacity: 1
+            left: '+=290'
+            }, 600
+        stepTwo.fadeTo 0.99
+        stepTwo.animate {
+            opacity: 0
+            left: '+=290'
+            }, 600
+        $('#' + stepTwo.get(0).id + ' form input').attr 'value', ''
+        $('#' + stepTwo.get(0).id + ' form input').blur()
 
 $(window).load ->
     home = new Home
