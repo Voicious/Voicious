@@ -32,10 +32,6 @@ class ErrorHandler
                         404: "Not Found",
                         500: "Internal Server Error"}
 
-                if not fs.existsSync(config.LOG_PATH)
-                        fs.mkdirSync(config.LOG_PATH)
-                @_fd = fs.openSync(config.LOG_PATH + 'error.log', 'a')
-
         log: () ->
                 text = "";
                 for key, value of @_errorObj
@@ -59,7 +55,7 @@ class ErrorHandler
                         for key, value of text
                                 if key is "errno" then @_errorObj.errno = "[#{value}] "
                                 if key is "syscall" then @_errorObj.syscall = "(#{value}) "
-                @_errorObj.text = text + "\n"
+                @_errorObj.text = text
                 this.log()
                 @_errorObj.httpErrorCode = httpErrorCode
                 @_errorObj.httpErrorMsg = @_errorCode[httpErrorCode]
