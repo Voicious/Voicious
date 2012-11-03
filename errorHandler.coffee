@@ -45,7 +45,7 @@ class ErrorHandler
         renderError: () ->
                 return {
                         httpErrorCode: @_errorObj.httpErrorCode,
-                        template: jade.Renderer.jadeRender('error.html',
+                        template: jade.Renderer.jadeRender('error.jade',
                         {
                          httpErrorCode: @_errorObj.httpErrorCode,
                          httpErrorMsg: @_errorObj.httpErrorMsg,

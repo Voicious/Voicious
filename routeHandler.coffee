@@ -31,7 +31,7 @@ RouteHandler = {
         resolve: (request, response, requestObject) ->
                 if requestObject.path[0]?
                         if requestObject.path[0] == "/"
-                                return {template: jade.Renderer.jadeRender('home.html', {name: "Voicious"})}
+                                return {template: jade.Renderer.jadeRender('home.jade', {name: "Voicious"})}
                         if requestObject.path[0] == config.STATIC_FILES_PATH
                                 request.addListener('end', =>
                                         @_fileserver.serve(request, response, (e, res) ->
