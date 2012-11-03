@@ -54,7 +54,7 @@ class _Logger
             theLog  += "] " + (do moment).format 'MMMM Do YYYY, h:mm:ss a : '
             theLog  += message
             fd      = fs.openSync config.LOG_PATH + @name + '.log', 'a'
-            fs.writeSync fd, theLog, 0, theLog.length, null
+            fs.writeSync fd, theLog + '\n', 0, theLog.length + 1, null
             fs.closeSync fd
             if config.LOGONSTDOUT
                 console.log theLog
