@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+path    = require 'path'
 fs      = require 'fs'
 moment  = require 'moment'
 
@@ -53,7 +54,7 @@ class _Logger
                 when Logger.FATAL      then "FATAL"
             theLog  += "] " + (do moment).format 'MMMM Do YYYY, h:mm:ss a : '
             theLog  += message
-            fd      = fs.openSync config.LOG_PATH + @name + '.log', 'a'
+            fd      = fs.openSync (path.join config.LOG_PATH, @name + '.log'), 'a'
             fs.writeSync fd, theLog + '\n', 0, theLog.length + 1, null
             fs.closeSync fd
             if config.LOGONSTDOUT
