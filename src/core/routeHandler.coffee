@@ -15,13 +15,13 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-fileserve = require('./modules/node-static')
+fileserve   = require 'node-static'
 
-jade = require('./render')
-config = require('./config')
-error = require('./errorHandler')
+jade        = require './render'
+config      = require '../config'
+error       = require './errorHandler'
 
-logger = (require './logger').get 'voicious'
+logger      = (require './logger').get 'voicious'
 
 RouteHandler = {
         _fileserver: new fileserve.Server()

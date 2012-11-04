@@ -17,37 +17,47 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 {exec}      = require 'child_process'
 fs          = require 'fs'
+path        = require 'path'
 
-sourceDir   = "."
-destDir     = "."
+sourceDir   = "src"
+destDir     = "www/lib"
 sourceFiles = [
     "config",
+    "start"
+]
+
+coreDir     = "core"
+coreFiles   = [
     "errorHandler",
     "logger",
     "render",
     "routeHandler",
     "router",
-    "server",
-    "start"
+    "server"
 ]
 
-compile     = (file) ->
-    sourceFile  = __dirname + "/" + sourceDir + "/" + file + ".coffee"
-    destFile    = __dirname + "/" + destDir + "/" + file + ".js"
-    console.log "Processing...  [" + sourceDir + "/" + file + ".coffee] -> [" + destDir + "/" + file + ".js]" 
-    exec 'coffee --compile --output ' + destDir + ' ' + sourceFile, (err, stdout, stderr) ->
+
+compile     = (file, subDir = '.')              ->
+    sourceFile  = path.join __dirname, sourceDir, file + ".coffee"
+    destFile    = path.join __dirname, destDir, file + ".js"
+    console.log "Processing...  [" + (path.join sourceDir, file + ".coffee") + "] -> [" + (path.join destDir, file + ".js") + "]" 
+    exec 'coffee --compile --output ' + (path.join destDir, subDir) + ' ' + sourceFile, (err, stdout, stderr) ->
         throw err if err
 
-remove      = (file) ->
-    console.log "Removing... [" + destDir + "/" + file + ".js]"
-    exec 'rm -f ' + __dirname + "/" + destDir + "/" + file + ".js", (err, stdout, stderr) ->
-        throw err if err
+remove      = (file)                            ->
+    console.log "Removing... [" + (path.join destDir, file + ".js") + "]"
+    exec 'rm -f ' + (path.join __dirname, destDir, file + ".js"), (err, stdout, stderr) ->
 
-task 'build', 'Build project', ->
-    exec 'mkdir ' + __dirname + '/' + destDir if not fs.exists __dirname + '/' + destDir
+task 'build', 'Build project',                  ->
+    exec 'mkdir ' + (path.join __dirname, destDir) if not fs.exists (path.join __dirname, destDir)
     compile file for file in sourceFiles
+    exec 'mkdir ' + (path.join __dirname, destDir, coreDir) if not fs.exists (path.join __dirname, destDir, coreDir)
+    compile (path.join coreDir, file), coreDir for file in coreFiles
     console.log "Done."
 
-task 'clean', 'Remove all Javascript files', ->
+
+task 'clean', 'Remove all Javascript files',    ->
     remove file for file in sourceFiles
+    remove (path.join coreDir, file) for file in coreFiles
+    exec 'rmdir ' + (path.join __dirname, destDir, coreDir)
     console.log "Done."

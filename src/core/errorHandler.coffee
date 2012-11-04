@@ -15,12 +15,12 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-http = require('http')
-fs = require('fs')
-moment = require('./modules/moment')
+http    = require 'http'
+fs      = require 'fs'
+moment  = require 'moment'
 
-config = require('./config')
-jade = require('./render')
+config  = require '../config'
+jade    = require './render'
 
 logger  = (require './logger').get 'voicious'
 

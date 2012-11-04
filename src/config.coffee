@@ -20,13 +20,15 @@ program. If not, see <http://www.gnu.org/licenses/>.
 # Don't forget to recompile it after any changes
 ##
 
-Logger  = require './logger'
+path    = require 'path'
 
-exports.SERVER_PORT = 4242
-exports.LOG_PATH = __dirname + '/log/'
-exports.TPL_PATH = __dirname + '/includes/tpl/'
-exports.STATIC_FILES_PATH = 'includes'
-exports.SERVICES_PATH = '/test/'
+Logger  = require './core/logger'
+
+exports.SERVER_PORT         = 4242
+exports.LOG_PATH            = path.join __dirname, '..', '..', 'log'
+exports.TPL_PATH            = path.join __dirname, 'includes', 'tpl'
+exports.STATIC_FILES_PATH   = 'includes'
+exports.SERVICES_PATH       = '/test/'
 
 exports.LOGLEVEL    = Logger.DEBUG
 exports.LOGONSTDOUT = true

@@ -15,11 +15,11 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-fs = require('fs')
-jade = require('./modules/jade')
+fs      = require 'fs'
+jade    = require 'jade'
 
-config = require('./config')
-error = require('./errorHandler')
+config  = require '../config'
+error   = require './errorHandler'
 
 Renderer = {
         readJade: (file) ->

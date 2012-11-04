@@ -16,9 +16,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 fs      = require 'fs'
-moment  = require './modules/moment'
+moment  = require 'moment'
 
-config  = require './config'
+config  = require '../config'
 
 Loggers = {}
 Logger = {

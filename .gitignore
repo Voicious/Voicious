@@ -1,4 +1,6 @@
-/*.js
-*~
+/www/lib/*.js
+/www/lib/core/*.js
+
 log/*
-test/*
+
+*~
