@@ -1,0 +1,17 @@
+{
+    "name"          : "Voicious",
+    "description"   : "",
+    "main"          : "./www/voicious.js",
+    "version"       : "0.0.1",
+    "dependencies"  : {
+        "jade"          : "0.27.7",
+        "moment"        : "1.7.2",
+        "node-static"   : "0.6.4"
+    },
+    "directories"   : {
+        "lib"       : "./www/lib"
+    },
+    "scripts"       : {
+        "start"     : "node ./www/voicious.js"
+    }
+}

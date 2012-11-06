@@ -24,12 +24,15 @@ path    = require 'path'
 
 Logger  = require './core/logger'
 
+exports.WEBROOT = path.join __dirname, '..'
+APPROOT         = path.join WEBROOT, '..'
+
 exports.SERVER_PORT         = 4242
-exports.LOG_PATH            = path.join __dirname, '..', '..', 'log'
-exports.CORE_TPL_PATH       = path.join __dirname, '..', 'public', 'core', 'tpl'
-exports.SERVICES_PATH       = path.join __dirname, '..', 'public', 'services'
-exports.SERVICES_SRC_PATH   = path.join __dirname, '..', 'lib', 'services'
-exports.STATIC_DIR          = 'public'
+exports.LOG_PATH            = path.join APPROOT, 'log'
+exports.CORE_TPL_PATH       = path.join WEBROOT, 'public', 'core', 'tpl'
+exports.SERVICES_PATH       = path.join WEBROOT, 'public', 'services'
+exports.SERVICES_SRC_PATH   = path.join __dirname, 'services'
+exports.CORE_STATIC_PATH    = 'public'
 
 exports.LOGLEVEL    = Logger.DEBUG
 exports.LOGONSTDOUT = true
