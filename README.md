@@ -3,6 +3,16 @@
 Voicious is an open source web application allowing everyone to enjoy video conferencing.
 Aimed as well for private using than for enterprises, its ease of use and its ergonomy are its main strengths.
 
+## Install
+
+Run the following command from the root directory to install Voicious' dependencies :
+<pre><code>npm install</code></pre>
+
+## Run
+
+Run the following command from the root directory to run the Voicious server :
+<pre><code>npm start</code></pre>
+
 ## Licensing
 
 Copyright &copy; 2011-2012  Voicious
