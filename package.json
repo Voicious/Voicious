@@ -10,5 +10,8 @@
     },
     "directories"   : {
         "lib"       : "./www/lib"
+    },
+    "scripts"       : {
+        "start"     : "node ./www/voicious.js"
     }
 }
