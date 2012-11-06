@@ -12,6 +12,7 @@
         "lib"       : "./www/lib"
     },
     "scripts"       : {
+        "install"   : "cake build",
         "start"     : "node ./www/voicious.js"
     }
 }

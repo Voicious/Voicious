@@ -8,10 +8,24 @@ Aimed as well for private using than for enterprises, its ease of use and its er
 Run the following command from the root directory to install Voicious' dependencies :
 <pre><code>npm install</code></pre>
 
+Otherwise, you can manually install all dependencies and run :
+<pre><code>cake build</code></pre>
+
 ## Run
 
 Run the following command from the root directory to run the Voicious server :
 <pre><code>npm start</code></pre>
+
+## Dependencies
+
+The Voicious server requires the following Node.js modules to run :
+
+* Jade (>= 0.27.7)
+* Moment (>= 1.7.2)
+* Node-static (>= 0.6.4)
+
+
+To build Voicious you will also need a working CoffeeScript installation (>= 1.4.0)
 
 ## Licensing
 
