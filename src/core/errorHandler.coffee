@@ -18,6 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 http    = require 'http'
 fs      = require 'fs'
 moment  = require 'moment'
+path    = require 'path'
 
 config  = require '../config'
 jade    = require './render'
@@ -41,7 +42,7 @@ class ErrorHandler
         renderError: () ->
                 return {
                         httpErrorCode: @_errorObj.httpErrorCode,
-                        template: jade.Renderer.jadeRender('error.jade',
+                        template: jade.Renderer.jadeRender(path.join(config.CORE_TPL_PATH, 'error.jade'),
                         {
                          httpErrorCode: @_errorObj.httpErrorCode,
                          httpErrorMsg: @_errorObj.httpErrorMsg,

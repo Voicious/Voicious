@@ -26,8 +26,8 @@ Logger  = require './core/logger'
 
 exports.SERVER_PORT         = 4242
 exports.LOG_PATH            = path.join __dirname, '..', '..', 'log'
-exports.TPL_PATH            = path.join __dirname, 'includes', 'tpl'
-exports.STATIC_FILES_PATH   = 'includes'
+exports.CORE_TPL_PATH       = path.join __dirname, '..', 'public', 'core', 'tpl'
+exports.CORE_STATIC_PATH    = 'public'
 exports.SERVICES_PATH       = '/test/'
 
 exports.LOGLEVEL    = Logger.DEBUG

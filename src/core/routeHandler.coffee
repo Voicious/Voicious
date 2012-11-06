@@ -16,6 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 fileserve   = require 'node-static'
+Path        = require 'path'
 
 jade        = require './render'
 config      = require '../config'
@@ -31,8 +32,8 @@ RouteHandler = {
         resolve: (request, response, requestObject) ->
                 if requestObject.path[0]?
                         if requestObject.path[0] == "/"
-                                return {template: jade.Renderer.jadeRender('home.jade', {name: "Voicious"})}
-                        if requestObject.path[0] == config.STATIC_FILES_PATH
+                                return {template: jade.Renderer.jadeRender(Path.join(config.CORE_TPL_PATH, 'home.jade'), {name: "Voicious"})}
+                        if requestObject.path[0] == config.CORE_STATIC_PATH
                                 request.addListener('end', =>
                                         @_fileserver.serve(request, response, (e, res) ->
                                                 if e? and e.status is 404

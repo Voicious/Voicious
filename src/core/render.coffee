@@ -18,7 +18,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 fs      = require 'fs'
 jade    = require 'jade'
 
-config  = require '../config'
 error   = require './errorHandler'
 
 Renderer = {
@@ -38,13 +37,12 @@ Renderer = {
                         throw handler.throwError(e, 500)
 
         jadeRender: (path, options) ->
-                file = config.TPL_PATH + path
                 def_opts = {
                         pretty: true,
-                        filename: file}
+                        filename: path}
                 for opts of options
                         def_opts[opts] = options[opts]
-                res = this.render(this.readJade(file), def_opts)
+                res = this.render(this.readJade(path), def_opts)
 }
 
 exports.Renderer = Renderer
