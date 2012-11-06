@@ -27,9 +27,10 @@ Logger  = require './core/logger'
 exports.SERVER_PORT         = 4242
 exports.LOG_PATH            = path.join __dirname, '..', '..', 'log'
 exports.CORE_TPL_PATH       = path.join __dirname, '..', 'public', 'core', 'tpl'
-exports.CORE_STATIC_PATH    = 'public'
-exports.SERVICES_PATH       = '/test/'
+exports.SERVICES_PATH       = path.join __dirname, '..', 'public', 'services'
+exports.SERVICES_SRC_PATH   = path.join __dirname, '..', 'lib', 'services'
+exports.STATIC_DIR          = 'public'
 
 exports.LOGLEVEL    = Logger.DEBUG
 exports.LOGONSTDOUT = true
-exports.PATH_ROUTES = ['client', 'user']
+exports.PATH_ROUTES = ['room']

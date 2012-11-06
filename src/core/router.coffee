@@ -79,22 +79,3 @@ Router = {
 }
 
 exports.Router = Router
-
-###
-    if pathname? and pathname[0] is '/'
-        if not pathname[1]
-            routes['/'](request, response)
-        else
-            paths = pathname.split('/')
-            if routes[paths[1]]?
-                routes[paths[1]](request, response)
-            else
-                notFound(request, response)
-
-routes = []
-routes['/'] = home
-routes['includes'] = includes
-
-exports.home = home
-exports.includes = includes
-###

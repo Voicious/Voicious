@@ -33,7 +33,7 @@ RouteHandler = {
                 if requestObject.path[0]?
                         if requestObject.path[0] == "/"
                                 return {template: jade.Renderer.jadeRender(Path.join(config.CORE_TPL_PATH, 'home.jade'), {name: "Voicious"})}
-                        if requestObject.path[0] == config.CORE_STATIC_PATH
+                        if requestObject.path[0] == config.STATIC_DIR
                                 request.addListener('end', =>
                                         @_fileserver.serve(request, response, (e, res) ->
                                                 if e? and e.status is 404
@@ -63,8 +63,9 @@ RouteHandler = {
                         throw handler.throwError("[Error] : #{requestObject.path.join('/')} is undefined", 404)
 
         callServiceFunction: (object, method, requestObject) ->
+                rootTab = ""
                 methodExist = false
-                callingObject = require("." + config.SERVICES_PATH + "#{object}")
+                callingObject = require(Path.join(config.SERVICES_SRC_PATH, object, object))
                 for parent, value of callingObject
                         for funcName, funcValue of value when funcName is method
                                 func = funcValue.toString()
@@ -78,12 +79,17 @@ RouteHandler = {
                                                         throw handler.throwError("[Error] : unknown parameter \"#{k}\" in function \"#{method}\" ", 400)
                                         params.push(v)
                                         i++
-                                callingObject[parent][funcName].apply(null, params)
+                                rootTab = callingObject[parent][funcName].apply(null, params)
                                 methodExist = true
                                 break
                 if methodExist is false
                         handler = new error.ErrorHandler
                         throw handler.throwError("[Error] : method \"#{method}\" of class \"#{parent}\" is undefined", 404)
+                else
+                        if method is "default"
+                                return {template: jade.Renderer.jadeRender(Path.join(config.SERVICES_PATH, object, 'tpl', object + '.jade'), {rootTab})}
+                        else
+                                return {template: jade.Renderer.jadeRender(Path.join(config.SERVICES_PATH, object, 'tpl', method + '.jade'), {rootTab})}
 }
 
 exports.RouteHandler = RouteHandler
