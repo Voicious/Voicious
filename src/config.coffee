@@ -25,12 +25,12 @@ path    = require 'path'
 Logger  = require './core/logger'
 
 exports.WEBROOT = path.join __dirname, '..'
-APPROOT         = path.join WEBROOT, '..'
+APPROOT         = path.join exports.WEBROOT, '..'
 
 exports.SERVER_PORT         = 4242
 exports.LOG_PATH            = path.join APPROOT, 'log'
-exports.CORE_TPL_PATH       = path.join WEBROOT, 'public', 'core', 'tpl'
-exports.SERVICES_PATH       = path.join WEBROOT, 'public', 'services'
+exports.CORE_TPL_PATH       = path.join exports.WEBROOT, 'public', 'core', 'tpl'
+exports.SERVICES_PATH       = path.join exports.WEBROOT, 'public', 'services'
 exports.SERVICES_SRC_PATH   = path.join __dirname, 'services'
 exports.CORE_STATIC_PATH    = 'public'
 
