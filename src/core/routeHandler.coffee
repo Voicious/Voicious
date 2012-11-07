@@ -25,7 +25,7 @@ error       = require './errorHandler'
 logger      = (require './logger').get 'voicious'
 
 RouteHandler = {
-        _fileserver: new fileserve.Server()
+        _fileserver: new fileserve.Server config.WEBROOT
 
         _routes: config.PATH_ROUTES
 
