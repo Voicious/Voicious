@@ -33,12 +33,13 @@ start = (port) ->
                         response.write(template.template)
                         response.end()
         catch e
-                response.writeHead(200, {"Content-Type": "text/html"})
                 if e.template?
+                        response.writeHead(e.httpErrorCode, {"Content-Type": "text/html"})
                         response.write(e.template)
                 else
                         handler = new error.ErrorHandler
                         e = handler.throwError(e, 500)
+                        response.writeHead(500, {"Content-Type": "text/html"})
                         response.write(e.template)
                 response.end()
 
