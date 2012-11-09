@@ -36,6 +36,12 @@ coreFiles   = [
     "server"
 ]
 
+servicesDir = "services"
+services    = [
+    "service",
+    "room"
+]
+
 
 compile     = (file, subDir = '.')              ->
     sourceFile  = path.join __dirname, sourceDir, file + ".coffee"
@@ -53,11 +59,18 @@ task 'build', 'Build project',                  ->
     compile file for file in sourceFiles
     exec 'mkdir ' + (path.join __dirname, destDir, coreDir) if not fs.exists (path.join __dirname, destDir, coreDir)
     compile (path.join coreDir, file), coreDir for file in coreFiles
+    for service in services
+        exec 'mkdir ' + (path.join __dirname, service) if not fs.exists (path.join __dirname, service)
+        compile (path.join servicesDir, service, service), (path.join servicesDir, service)
     console.log "Done."
 
 
 task 'clean', 'Remove all Javascript files',    ->
     remove file for file in sourceFiles
     remove (path.join coreDir, file) for file in coreFiles
+    for service in services
+        remove (path.join servicesDir, service, service)
+        exec 'rmdir ' + (path.join __dirname, destDir, servicesDir, service)
     exec 'rmdir ' + (path.join __dirname, destDir, coreDir)
+    exec 'rmdir ' + (path.join __dirname, destDir, servicesDir)
     console.log "Done."
