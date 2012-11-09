@@ -31,7 +31,8 @@ class ErrorHandler
                 @_errorCode = {
                         400: "Bad Parameter",
                         404: "Not Found",
-                        500: "Internal Server Error"}
+                        500: "Internal Server Error",
+                        501: "Not Implemented"}
 
         log: () ->
                 text = "";
