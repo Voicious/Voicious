@@ -13,6 +13,6 @@
     },
     "scripts"       : {
         "install"   : "cake build",
-        "start"     : "node ./www/voicious.js"
+        "start"     : "node ./www/lib/start.js"
     }
 }
