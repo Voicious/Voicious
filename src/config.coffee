@@ -40,11 +40,14 @@ class _Config
             throw new (Error "When using SQLite, you must specify a database name !")
 
     loadConfigJSON      : ()            ->
-        tmpJSON = require (Path.join @Paths.Config, 'config.json')
+        fileToOpen  = 'config.json'
+        if process.env.NODE_ENV
+            fileToOpen  += '.' + process.env.NODE_ENV
+        tmpJSON     = require (Path.join @Paths.Config, fileToOpen)
 
-        @Port   = tmpJSON.port
+        @Port       = tmpJSON.port
 
-        @Logger =
+        @Logger     =
             Level   : Logger.getLevelFromString tmpJSON.logger.level
             Stdout  : tmpJSON.logger.stdout
 
