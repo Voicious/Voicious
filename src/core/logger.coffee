@@ -19,7 +19,7 @@ path    = require 'path'
 fs      = require 'fs'
 moment  = require 'moment'
 
-config  = require '../config'
+Config  = require '../config'
 
 Loggers = {}
 Logger = {
@@ -38,14 +38,14 @@ Logger = {
 class _Logger
     constructor: (name) ->
         @name   = name
-        if not fs.existsSync config.LOG_PATH
-            fs.mkdirSync config.LOG_PATH
+        if not fs.existsSync Config.Paths.Logs
+            fs.mkdirSync Config.Paths.Logs
 
 
     _log: (level, message) ->
         if message instanceof Object
             return
-        if level >= config.LOGLEVEL
+        if level >= Config.LOGLEVEL
             theLog  = "[" + switch level
                 when Logger.DEBUG      then "DEBUG"
                 when Logger.INFO       then "INFO"
@@ -54,10 +54,10 @@ class _Logger
                 when Logger.FATAL      then "FATAL"
             theLog  += "] " + (do moment).format 'MMMM Do YYYY, h:mm:ss a : '
             theLog  += message
-            fd      = fs.openSync (path.join config.LOG_PATH, @name + '.log'), 'a'
+            fd      = fs.openSync (path.join Config.Paths.Logs, @name + '.log'), 'a'
             fs.writeSync fd, theLog + '\n', 0, theLog.length + 1, null
             fs.closeSync fd
-            if config.LOGONSTDOUT
+            if Config.LOGONSTDOUT
                 console.log theLog
 
     debug:  (message) ->

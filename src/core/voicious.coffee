@@ -21,6 +21,7 @@ router = require('./router')
 routeHandler = require('./routeHandler')
 logger  = (require './logger').get 'voicious'
 error = require('./errorHandler')
+
 Config  = require '../config'
 
 class Voicious
@@ -51,5 +52,4 @@ class Voicious
     end     : () ->
         do @server.close
         
-
 exports.Voicious = Voicious

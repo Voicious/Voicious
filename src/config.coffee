@@ -15,25 +15,40 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-##
-# Voicious configuration file
-# Don't forget to recompile it after any changes
-##
-
-path    = require 'path'
+Path    = require 'path'
 
 Logger  = require './core/logger'
 
-exports.WEBROOT = path.join __dirname, '..'
-APPROOT         = path.join exports.WEBROOT, '..'
+class _Config
+    constructor : () ->
+        console.log "construction"
 
-exports.SERVER_PORT         = 4242
-exports.LOG_PATH            = path.join APPROOT, 'log'
-exports.CORE_TPL_PATH       = path.join exports.WEBROOT, 'public', 'core', 'tpl'
-exports.SERVICES_PATH       = path.join exports.WEBROOT, 'public', 'services'
-exports.SERVICES_SRC_PATH   = path.join __dirname, 'services'
-exports.STATIC_DIR          = 'public'
+        @Dirs    =
+            Static  : 'public'
+        
+        @Paths   =
+            Webroot : Path.join __dirname, '..'
+        @Paths.Approot          = Path.join @Paths.Webroot, '..'
+        @Paths.Logs             = Path.join @Paths.Approot, 'log'
+        @Paths.Config           = Path.join @Paths.Approot, 'etc'
+        @Paths.Views            = Path.join @Paths.Webroot, @Dirs.Static, 'core', 'tpl'
+        @Paths.Services         = Path.join __dirname, 'services'
+        @Paths.StaticServices   = Path.join __dirname, @Dirs.Static, 'services'
+        
+        @SERVER_PORT    = 4242
 
-exports.LOGLEVEL    = Logger.DEBUG
-exports.LOGONSTDOUT = true
-exports.PATH_ROUTES = ['room']
+        @LOGLEVEL       = Logger.DEBUG
+
+        @LOGONSTDOUT    = true
+
+        @PATH_ROUTES    = [ 'room' ]
+
+
+class Config
+    @_instance  = undefined
+    @get        : () ->
+        @_instance  ?= new _Config
+
+c   = do Config.get
+for key of c
+    exports[key]    = c[key]
