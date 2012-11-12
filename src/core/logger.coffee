@@ -33,6 +33,14 @@ Logger = {
         if not Loggers[name]?
             Loggers[name]   = new _Logger name
         Loggers[name]
+
+    getLevelFromString  : (str) ->
+        switch str
+            when "debug"    or "DEBUG"  then return Logger.DEBUG
+            when "info"     or "INFO"   then return Logger.INFO
+            when "warn"     or "WARN"   then return Logger.WARN
+            when "error"    or "ERROR"  then return Logger.ERROR
+            when "fatal"    or "FATAL"  then return Logger.FATAL
 }
 
 class _Logger
@@ -45,7 +53,7 @@ class _Logger
     _log: (level, message) ->
         if message instanceof Object
             return
-        if level >= Config.LOGLEVEL
+        if level >= Config.Logger.Level
             theLog  = "[" + switch level
                 when Logger.DEBUG      then "DEBUG"
                 when Logger.INFO       then "INFO"
@@ -57,7 +65,7 @@ class _Logger
             fd      = fs.openSync (path.join Config.Paths.Logs, @name + '.log'), 'a'
             fs.writeSync fd, theLog + '\n', 0, theLog.length + 1, null
             fs.closeSync fd
-            if Config.LOGONSTDOUT
+            if Config.Logger.Stdout
                 console.log theLog
 
     debug:  (message) ->
@@ -71,9 +79,10 @@ class _Logger
     fatal:  (message) ->
         @_log(Logger.FATAL, message)
 
-exports.get     = Logger.get
-exports.DEBUG   = Logger.DEBUG
-exports.INFO    = Logger.INFO
-exports.WARN    = Logger.WARN
-exports.ERROR   = Logger.ERROR
-exports.FATAL   = Logger.FATAL
+exports.get                 = Logger.get
+exports.getLevelFromString  = Logger.getLevelFromString
+exports.DEBUG               = Logger.DEBUG
+exports.INFO                = Logger.INFO
+exports.WARN                = Logger.WARN
+exports.ERROR               = Logger.ERROR
+exports.FATAL               = Logger.FATAL

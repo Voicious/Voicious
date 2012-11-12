@@ -6,8 +6,7 @@
     "dependencies"  : {
         "jade"          : "0.27.7",
         "moment"        : "1.7.2",
-        "node-static"   : "0.6.4",
-        "yaml"          : "0.2.3"
+        "node-static"   : "0.6.4"
     },
     "directories"   : {
         "lib"       : "./www/lib"

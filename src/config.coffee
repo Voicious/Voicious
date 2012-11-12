@@ -20,9 +20,16 @@ Path    = require 'path'
 Logger  = require './core/logger'
 
 class _Config
-    constructor : () ->
-        console.log "construction"
+    loadConfigJSON  : () ->
+        tmpJSON = require (Path.join @Paths.Config, 'config.json')
 
+        @Port   = tmpJSON.port
+
+        @Logger =
+            Level   : Logger.getLevelFromString tmpJSON.logger.level
+            Stdout  : tmpJSON.logger.stdout
+
+    constructor     : () ->
         @Dirs    =
             Static  : 'public'
         
@@ -35,13 +42,9 @@ class _Config
         @Paths.Services         = Path.join __dirname, 'services'
         @Paths.StaticServices   = Path.join __dirname, @Dirs.Static, 'services'
         
-        @SERVER_PORT    = 4242
-
-        @LOGLEVEL       = Logger.DEBUG
-
-        @LOGONSTDOUT    = true
-
         @PATH_ROUTES    = [ 'room' ]
+
+        do @loadConfigJSON
 
 
 class Config

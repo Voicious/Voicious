@@ -46,7 +46,7 @@ class Voicious
                             response.write(e.template)
                     response.end()
 
-        @server = http.createServer(onRequest).listen(Config.SERVER_PORT)
+        @server = http.createServer(onRequest).listen(Config.Port)
         logger.info "Server ready on port #{Config.SERVER_PORT}"
 
     end     : () ->

@@ -31,7 +31,7 @@ api         =
             topic   : () ->
                 options =
                     host    : 'localhost'
-                    port    : Config.SERVER_PORT
+                    port    : Config.Port
                     path    : (@context.name.split ' ')[1]
                     method  : (@context.name.split ' ')[0]
                 r       = Http.request options, @callback
