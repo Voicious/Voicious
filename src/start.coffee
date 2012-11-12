@@ -15,12 +15,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-fs      = require 'fs'
-
-server  = require './core/server'
-config  = require './config'
+Voicious  = (require './core/voicious').Voicious
 
 start   = ->
-    server.start(config.SERVER_PORT)
+    voicious    = new Voicious()
+    do voicious.start
 
 start()

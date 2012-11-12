@@ -33,7 +33,7 @@ coreFiles   = [
     "render",
     "routeHandler",
     "router",
-    "server"
+    "voicious"
 ]
 
 servicesDir = "services"
@@ -60,7 +60,7 @@ task 'build', 'Build project',                  ->
     exec 'mkdir ' + (path.join __dirname, destDir, coreDir) if not fs.exists (path.join __dirname, destDir, coreDir)
     compile (path.join coreDir, file), coreDir for file in coreFiles
     for service in services
-        exec 'mkdir ' + (path.join __dirname, service) if not fs.exists (path.join __dirname, service)
+        exec 'mkdir ' + (path.join __dirname, destDir, servicesDir, service) if not fs.exists (path.join __dirname, destDir, servicesDir, service)
         compile (path.join servicesDir, service, service), (path.join servicesDir, service)
     console.log "Done."
 
