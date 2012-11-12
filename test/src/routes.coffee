@@ -43,3 +43,7 @@ api         =
 ((Vows.describe "Voicious' Routes").addBatch
     'GET /'     : api.respondsWith 200
 ).export module
+
+((Vows.describe "Voicious' Static Server").addBatch
+    'GET /public/core/css/style.css'    : api.respondsWith 200
+).export module
