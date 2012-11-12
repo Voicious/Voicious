@@ -40,6 +40,6 @@ api         =
         context['Should respond ' + code]   = api.checkStatus code
         return context
 
-((Vows.describe 'Voicious').addBatch
+((Vows.describe "Voicious' Routes").addBatch
     'GET /'     : api.respondsWith 200
 ).export module

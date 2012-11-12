@@ -8,6 +8,7 @@
         "vows"      : "0.6.4"
     },
     "scripts"       : {
-        "install"   : "cake build"
+        "install"   : "cake build",
+        "start"     : "sh run.sh"
     }
 }
