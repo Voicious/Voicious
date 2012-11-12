@@ -20,7 +20,26 @@ Path    = require 'path'
 Logger  = require './core/logger'
 
 class _Config
-    loadConfigJSON  : () ->
+    loadDatabaseConfig  : (dbConfig)    ->
+        if dbConfig is undefined
+            throw new (Error "A database must be configured in etc/config.json !")
+
+        @Database   =
+            Connector   : dbConfig.connector
+            User        : dbConfig.user
+            Password    : dbConfig.password
+            Database    : dbConfig.database
+
+        if not { "mongo" : "" , "sqlite" : "" }.hasOwnProperty @Database.Connector
+            throw new (Error "Your database connector is not supported (yet) !")
+
+        if @Database.Connector is "mongo" and (@Database.User is undefined or @Database.Password is undefined or @Database.Database is undefined)
+            throw new (Error "When using MongoDB, you must specify a user, a password and a database name !")
+
+        if @Database.Connector is "sqlite" and @Database.Database is undefined
+            throw new (Error "When using SQLite, you must specify a database name !")
+
+    loadConfigJSON      : ()            ->
         tmpJSON = require (Path.join @Paths.Config, 'config.json')
 
         @Port   = tmpJSON.port
@@ -29,7 +48,9 @@ class _Config
             Level   : Logger.getLevelFromString tmpJSON.logger.level
             Stdout  : tmpJSON.logger.stdout
 
-    constructor     : () ->
+        @loadDatabaseConfig (tmpJSON.database || undefined)
+
+    constructor         : ()            ->
         @Dirs    =
             Static  : 'public'
         

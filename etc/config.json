@@ -3,5 +3,9 @@
     "logger"    : {
         "level"     : "debug",
         "stdout"    : true
+    },
+    "database"  : {
+        "connector" : "sqlite",
+        "database"  : "/tmp/voicious.sqlite"
     }
 }
