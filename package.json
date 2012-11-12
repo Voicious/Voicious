@@ -13,6 +13,7 @@
     },
     "scripts"       : {
         "install"   : "cake build",
-        "start"     : "node ./www/lib/start.js"
+        "start"     : "node ./www/lib/start.js",
+        "test"      : "cd test && npm start"
     }
 }
