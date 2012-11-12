@@ -1,0 +1,13 @@
+{
+    "name"          : "VoiciousTestSuite",
+    "description"   : "",
+    "main"          : "",
+    "version"       : "0.0.1",
+    "dependencies"  : {
+        "assert"    : "0.4.9",
+        "vows"      : "0.6.4"
+    },
+    "scripts"       : {
+        "install"   : "cake build"
+    }
+}

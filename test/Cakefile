@@ -22,7 +22,7 @@ path        = require 'path'
 sourceDir   = "src"
 destDir     = "."
 sourceFiles = [
-    "run"
+    "routes"
 ]
 
 compile     = (file)                            ->
@@ -37,13 +37,11 @@ remove      = (file)                            ->
     exec 'rm -f ' + (path.join __dirname, destDir, file + ".js"), (err, stdout, stderr) ->
 
 task 'build', 'Build project',                  ->
-    exec 'cd ../ && cake build'
     exec 'mkdir ' + (path.join __dirname, destDir) if not fs.exists (path.join __dirname, destDir)
     compile file for file in sourceFiles
     console.log "Done."
 
 
 task 'clean', 'Remove all Javascript files',    ->
-    exec 'cd ../ && cake clean'
     remove file for file in sourceFiles
     console.log "Done."
