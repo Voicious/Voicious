@@ -41,9 +41,11 @@ api         =
         return context
 
 ((Vows.describe "Voicious' Routes").addBatch
-    'GET /'     : api.respondsWith 200
+    'GET /aRouteThatShouldNotExist' : api.respondsWith 404
+    'GET /'                         : api.respondsWith 200
 ).export module
 
 ((Vows.describe "Voicious' Static Server").addBatch
+    'GET /public/someIncorrectFile.jpg' : api.respondsWith 404
     'GET /public/core/css/style.css'    : api.respondsWith 200
 ).export module
