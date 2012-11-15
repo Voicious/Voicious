@@ -1,0 +1,7 @@
+{
+    "port"      : 4242,
+    "logger"    : {
+        "level"     : "error",
+        "stdout"    : false
+    }
+}
