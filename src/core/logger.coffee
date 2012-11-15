@@ -19,7 +19,7 @@ path    = require 'path'
 fs      = require 'fs'
 moment  = require 'moment'
 
-Config  = require '../config'
+Config  = require './config'
 
 Loggers = {}
 Logger = {

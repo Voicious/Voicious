@@ -20,7 +20,7 @@ fs      = require 'fs'
 moment  = require 'moment'
 path    = require 'path'
 
-Config  = require '../config'
+Config  = require './config'
 jade    = require './render'
 
 logger  = (require './logger').get 'voicious'

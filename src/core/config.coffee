@@ -17,7 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Path    = require 'path'
 
-Logger  = require './core/logger'
+Logger  = require './logger'
 
 class _Config
     loadDatabaseConfig  : (dbConfig)    ->
@@ -43,6 +43,7 @@ class _Config
         fileToOpen  = 'config.json'
         if process.env.NODE_ENV
             fileToOpen  += '.' + process.env.NODE_ENV
+        console.log (Path.join @Paths.Config, fileToOpen)
         tmpJSON     = require (Path.join @Paths.Config, fileToOpen)
 
         @Port       = tmpJSON.port
@@ -58,7 +59,7 @@ class _Config
             Static  : 'public'
         
         @Paths   =
-            Webroot : Path.join __dirname, '..'
+            Webroot : Path.join __dirname, '..', '..'
         @Paths.Approot          = Path.join @Paths.Webroot, '..'
         @Paths.Logs             = Path.join @Paths.Approot, 'log'
         @Paths.Config           = Path.join @Paths.Approot, 'etc'

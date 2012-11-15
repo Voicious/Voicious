@@ -19,7 +19,7 @@ fileserve   = require 'node-static'
 Path        = require 'path'
 
 jade        = require './render'
-Config      = require '../config'
+Config      = require './config'
 error       = require './errorHandler'
 
 logger      = (require './logger').get 'voicious'

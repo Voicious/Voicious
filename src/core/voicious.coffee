@@ -22,7 +22,7 @@ routeHandler = require('./routeHandler')
 logger  = (require './logger').get 'voicious'
 error = require('./errorHandler')
 
-Config  = require '../config'
+Config  = require './config'
 
 class Voicious
     start   : () ->
