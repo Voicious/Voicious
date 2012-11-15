@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Vows        = require 'vows'
 Assert      = require 'assert'
 Http        = require 'http'
-Config      = (require '../www/lib/config')
+Config      = (require '../www/lib/core/config')
 
 api         =
     checkStatus     : (code) ->
