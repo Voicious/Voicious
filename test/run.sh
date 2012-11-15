@@ -37,8 +37,5 @@ then
     fi
   done
 else
-  for suite in *.js
-  do
-    $VOWS $VOWSARGS "./$suite"
-  done
+    $VOWS $VOWSARGS *.js
 fi

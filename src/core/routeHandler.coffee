@@ -19,21 +19,21 @@ fileserve   = require 'node-static'
 Path        = require 'path'
 
 jade        = require './render'
-config      = require '../config'
+Config      = require './config'
 error       = require './errorHandler'
 
 logger      = (require './logger').get 'voicious'
 
 RouteHandler = {
-        _fileserver: new fileserve.Server config.WEBROOT
+        _fileserver: new fileserve.Server Config.Paths.Webroot
 
-        _routes: config.PATH_ROUTES
+        _routes: Config.PATH_ROUTES
 
         resolve: (request, response, requestObject) ->
                 if requestObject.path[0]?
                         if requestObject.path[0] == "/"
-                                return {template: jade.Renderer.jadeRender(Path.join(config.CORE_TPL_PATH, 'home.jade'), {name: "Voicious"})}
-                        if requestObject.path[0] == config.STATIC_DIR
+                                return {template: jade.Renderer.jadeRender(Path.join(Config.Paths.Views, 'home.jade'), {name: "Voicious"})}
+                        if requestObject.path[0] == Config.Dirs.Static
                                 request.addListener('end', =>
                                         @_fileserver.serve(request, response, (e, res) ->
                                                 if e? and e.status is 404
@@ -65,7 +65,7 @@ RouteHandler = {
         callServiceFunction: (object, method, requestObject) ->
                 rootTab = ""
                 methodExist = false
-                callingObject = require(Path.join(config.SERVICES_SRC_PATH, object, object))
+                callingObject = require(Path.join(Config.Paths.Services, object, object))
                 for parent, value of callingObject
                         for funcName, funcValue of value when funcName is method
                                 func = funcValue.toString()
@@ -87,9 +87,9 @@ RouteHandler = {
                         throw handler.throwError("[Error] : method \"#{method}\" of class \"#{parent}\" is undefined", 404)
                 else
                         if method is "default"
-                                return {template: jade.Renderer.jadeRender(Path.join(config.SERVICES_PATH, object, 'tpl', object + '.jade'), {rootTab})}
+                                return {template: jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', object + '.jade'), {rootTab})}
                         else
-                                return {template: jade.Renderer.jadeRender(Path.join(config.SERVICES_PATH, object, 'tpl', method + '.jade'), {rootTab})}
+                                return {template: jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', method + '.jade'), {rootTab})}
 }
 
 exports.RouteHandler = RouteHandler

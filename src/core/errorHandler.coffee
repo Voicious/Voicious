@@ -20,7 +20,7 @@ fs      = require 'fs'
 moment  = require 'moment'
 path    = require 'path'
 
-config  = require '../config'
+Config  = require './config'
 jade    = require './render'
 
 logger  = (require './logger').get 'voicious'
@@ -43,7 +43,7 @@ class ErrorHandler
         renderError: () ->
                 return {
                         httpErrorCode: @_errorObj.httpErrorCode,
-                        template: jade.Renderer.jadeRender(path.join(config.CORE_TPL_PATH, 'error.jade'),
+                        template: jade.Renderer.jadeRender(path.join(Config.Paths.Views, 'error.jade'),
                         {
                          httpErrorCode: @_errorObj.httpErrorCode,
                          httpErrorMsg: @_errorObj.httpErrorMsg,

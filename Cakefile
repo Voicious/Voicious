@@ -22,12 +22,12 @@ path        = require 'path'
 sourceDir   = "src"
 destDir     = "www/lib"
 sourceFiles = [
-    "config",
     "start"
 ]
 
 coreDir     = "core"
 coreFiles   = [
+    "config",
     "errorHandler",
     "logger",
     "render",

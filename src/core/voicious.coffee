@@ -21,7 +21,8 @@ router = require('./router')
 routeHandler = require('./routeHandler')
 logger  = (require './logger').get 'voicious'
 error = require('./errorHandler')
-Config  = require '../config'
+
+Config  = require './config'
 
 class Voicious
     start   : () ->
@@ -45,11 +46,10 @@ class Voicious
                             response.write(e.template)
                     response.end()
 
-        @server = http.createServer(onRequest).listen(Config.SERVER_PORT)
-        logger.info "Server ready on port #{Config.SERVER_PORT}"
+        @server = http.createServer(onRequest).listen(Config.Port)
+        logger.info "Server ready on port #{Config.Port}"
 
     end     : () ->
         do @server.close
         
-
 exports.Voicious = Voicious

@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Vows        = require 'vows'
 Assert      = require 'assert'
 Http        = require 'http'
-Config      = (require '../www/lib/config')
+Config      = (require '../www/lib/core/config')
 
 api         =
     checkStatus     : (code) ->
@@ -31,7 +31,7 @@ api         =
             topic   : () ->
                 options =
                     host    : 'localhost'
-                    port    : Config.SERVER_PORT
+                    port    : Config.Port
                     path    : (@context.name.split ' ')[1]
                     method  : (@context.name.split ' ')[0]
                 r       = Http.request options, @callback
@@ -41,5 +41,11 @@ api         =
         return context
 
 ((Vows.describe "Voicious' Routes").addBatch
-    'GET /'     : api.respondsWith 200
+    'GET /aRouteThatShouldNotExist' : api.respondsWith 404
+    'GET /'                         : api.respondsWith 200
+).export module
+
+((Vows.describe "Voicious' Static Server").addBatch
+    'GET /public/someIncorrectFile.jpg' : api.respondsWith 404
+    'GET /public/core/css/style.css'    : api.respondsWith 200
 ).export module
