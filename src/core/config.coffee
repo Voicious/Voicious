@@ -40,11 +40,10 @@ class _Config
             throw new (Error "When using SQLite, you must specify a database name !")
 
     loadConfigJSON      : ()            ->
-        fileToOpen  = 'config.json'
+        fileToOpen  = 'config'
         if process.env.NODE_ENV
             fileToOpen  += '.' + process.env.NODE_ENV
-        console.log (Path.join @Paths.Config, fileToOpen)
-        tmpJSON     = require (Path.join @Paths.Config, fileToOpen)
+        tmpJSON     = require (Path.join @Paths.Config, fileToOpen + ".json")
 
         @Port       = tmpJSON.port
 
