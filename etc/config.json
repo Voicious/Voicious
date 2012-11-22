@@ -5,7 +5,9 @@
         "stdout"    : true
     },
     "database"  : {
-        "connector" : "sqlite",
+        "connector" : "sqlite3",
         "database"  : "/tmp/voicious.sqlite"
-    }
+    },
+    "acl"       : ["administrator", "registered", "temporary"],
+    "roles"     : ["operator", "owner"]
 }

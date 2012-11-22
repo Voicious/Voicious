@@ -28,6 +28,7 @@ sourceFiles = [
 coreDir     = "core"
 coreFiles   = [
     "config",
+    "database",
     "errorHandler",
     "logger",
     "render",
@@ -46,7 +47,7 @@ services    = [
 compile     = (file, subDir = '.')              ->
     sourceFile  = path.join __dirname, sourceDir, file + ".coffee"
     destFile    = path.join __dirname, destDir, file + ".js"
-    console.log "Processing...  [" + (path.join sourceDir, file + ".coffee") + "] -> [" + (path.join destDir, file + ".js") + "]" 
+    console.log "Processing...  [" + (path.join sourceDir, file + ".coffee") + "] -> [" + (path.join destDir, file + ".js") + "]"
     exec 'coffee --compile --output ' + (path.join destDir, subDir) + ' ' + sourceFile, (err, stdout, stderr) ->
         throw err if err
 

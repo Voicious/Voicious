@@ -23,8 +23,34 @@ logger  = (require './logger').get 'voicious'
 error = require('./errorHandler')
 
 Config  = require './config'
+Database = require './database'
 
 class Voicious
+    initDatabase: () ->
+        @db = new Database.Database
+        @db.createTable 'user', {
+            name: { type: String, length: 255, index: true },
+            mail: { type: String, length: 255 },
+            password: { type: String, length: 255 },
+            id_acl: { type: Number },
+            id_role: { type: Number },
+            c_date: { type: Date, default: Date.now },
+            last_con: { type: Date }
+            }
+        @db.createTable 'role', {
+            name: { type: String, length: 255, index: true},
+            }
+        @db.createTable 'acl', {
+            name: { type: String, length: 255, index: true},
+            }
+        @db.flushTable (err) =>
+            if err
+                handler = new error.ErrorHandler
+                e = handler.throwError(err, 500)
+            else
+                @db.insert 'role', {'name': role}  for role in Config.Roles
+                @db.insert 'acl', {'name': acl} for acl in Config.Acl
+
     start   : () ->
         onRequest = (request, response) ->
             try
@@ -46,10 +72,15 @@ class Voicious
                             response.write(e.template)
                     response.end()
 
-        @server = http.createServer(onRequest).listen(Config.Port)
-        logger.info "Server ready on port #{Config.Port}"
+        try
+            @initDatabase()
+            @server = http.createServer(onRequest).listen(Config.Port)
+            logger.info "Server ready on port #{Config.Port}"
+        catch e
+            @db.close()
+            throw e
 
     end     : () ->
         do @server.close
-        
+
 exports.Voicious = Voicious
