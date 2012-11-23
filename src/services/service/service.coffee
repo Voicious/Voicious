@@ -15,15 +15,15 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-error = require('./errorHandler')
+Error = require '../../core/errorHandler'
 
 class Service
         constructor: () ->
-                handler = new error.ErrorHandler
+                handler = new Error.ErrorHandler
                 throw handler.throwError("Not allowed to instanciate interface service", 501)
 
         @default: () ->
-                handler = new error.ErrorHandler
+                handler = new Error.ErrorHandler
                 throw handler.throwError("Default function not implemented", 501)
 
 exports.Service = Service

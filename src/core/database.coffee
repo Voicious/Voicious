@@ -19,7 +19,7 @@ Schema = (require 'jugglingdb').Schema
 
 class _Database
     constructor: () ->
-        @Databases = {'physic': null, 'memory': null}
+        @Databases = {}
 
     connect: (dbType, config) ->
         @Databases[dbType] = new Schema config.connector, config

@@ -32,6 +32,5 @@ class PopulateDB
             last_con: { type: Date }
             }
         Database.flushTable 'physic', callback
-        Database.get 'physic', 'jkdghsksruksu'
 
-exports.PopulateDB = PopulateDB0
+exports.PopulateDB = PopulateDB
