@@ -32,6 +32,7 @@ class Home
             @nextStep stepOne, $('#joinRoom')
         $('#joinRoomCancel').click () =>
             @cancelStep stepOne, $('#joinRoom')
+        @signup()
 
 
     bindEvent: () ->
@@ -93,6 +94,36 @@ class Home
             }, 600
         $('#' + stepTwo.get(0).id + ' form input').attr 'value', ''
         $('#' + stepTwo.get(0).id + ' form input').blur()
+
+    signup: () ->
+        $('#signup-btn').click () =>
+                email = $('#signup_email').val()
+                password = $('#signup_password').val()
+                confirm = $('#signup_password_confirm').val()
+                emailExp = new RegExp "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", "i"
+                passwordExp = new RegExp "^(?=.*[a-z])(?=.*[0-9])(?!.*[^a-z0-9]).{5,12}$", "gi"                
+                evalEmail = emailExp.test email
+                evalPassword = passwordExp.test password
+                msg = ""
+
+                if email == "" || password == "" || confirm == ""
+                        $('#msg').html "Incomplete form"
+                        return
+                if evalEmail != true
+                        msg += "Invalid email<br/>"
+                if evalPassword != true
+                        msg += "Password must be at least 5 characters, include at least one letter and one numeric digit<br/>"
+                if password != confirm
+                        msg += "Password does not match the confirm password"
+                $('#msg').html msg
+                if evalEmail && evalPassword && password == confirm 
+                        $('#msg').html "Registration confirmed."                                 
+                        $.ajax {
+                                type: "POST",
+                                url: "",
+                                data: JSON.stringify({ "name": email, "password": password }),
+                                dataType: "json"
+                        }
 
 $(window).load ->
     home = new Home
