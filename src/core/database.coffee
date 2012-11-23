@@ -15,28 +15,32 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Schema = (require 'jugglingdb').Schema
+Schema  = (require 'jugglingdb').Schema
+Config  = require './config'
 
 class _Database
     constructor: () ->
         @Databases = {}
 
-    connect: (dbType, config) ->
-        @Databases[dbType] = new Schema config.connector, config
+    connect: (dbType = 'default') ->
+        if dbType is 'memory'
+            return
+        else
+            @Databases[dbType] = new Schema Config.Database.connector, Config.Database
 
-    createTable: (dbType, tableName, schema) ->
+    createTable: (tableName, schema, dbType = 'default') ->
         @Databases[dbType][tableName] = @Databases[dbType].define tableName, schema
 
-    flushTable: (dbType, callback) ->
+    flushTable: (callback, dbType = 'default') ->
         @Databases[dbType].automigrate callback
 
-    insert: (dbType, tableName, queryObj, callback) ->
+    insert: (tableName, queryObj, callback, dbType = 'default') ->
         @Databases[dbType][tableName].create queryObj, callback
 
-    get: (dbType, tableName, query, callback)  ->
+    get: (tableName, query, callback, dbType = 'default')  ->
         @Databases[dbType][tableName].all query, callback
 
-    close: (dbType) ->
+    close: (dbType = 'default') ->
         @Databases[dbType]?.disconnect()
 
 class Database

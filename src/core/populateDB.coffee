@@ -21,16 +21,27 @@ Database = require './database'
 
 class PopulateDB
     @populate: (callback) ->
-        Database.connect 'physic', Config.Database
-        Database.createTable 'physic', 'user', {
-            name: { type: String, length: 255, index: true },
-            mail: { type: String, length: 255 },
-            password: { type: String, length: 255 },
-            id_acl: { type: Number },
-            id_role: { type: Number },
-            c_date: { type: Date, default: Date.now },
-            last_con: { type: Date }
-            }
-        Database.flushTable 'physic', callback
+        do Database.connect
+        Database.createTable 'user',
+            name    :
+                type    : String
+                length  : 255
+                index   : true
+            mail        :
+                type    : String
+                length  : 255
+            password:
+                type    : String
+                length  : 255
+            id_acl  :
+                type    : Number
+            id_role :
+                type    : Number
+            c_date  :
+                type    : Date
+                default : Date.now
+            last_con:
+                type    : Date
+        Database.flushTable callback
 
 exports.PopulateDB = PopulateDB
