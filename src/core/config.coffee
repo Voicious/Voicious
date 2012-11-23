@@ -33,7 +33,7 @@ class _Config
         if not { "mongodb" : "" , "sqlite3" : "" }.hasOwnProperty @Database.connector
             throw new (Error "Your database connector is not supported (yet) !")
 
-        if @Database.connector is "mongodb" and (@Database.user is undefined or @Database.password is undefined or @Database.Database is undefined)
+        if @Database.connector is "mongodb" and (@Database.user is undefined or @Database.password is undefined or @Database.database is undefined)
             throw new (Error "When using MongoDB, you must specify a user, a password and a database name !")
 
         if @Database.connector is "sqlite3" and @Database.database is undefined
