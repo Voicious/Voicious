@@ -223,3 +223,10 @@ a{
 div{
     ddisplay:block;
     }
+
+#msg {
+    text-align: center;
+    color:#636f75;
+    font-family: 'Open Sans', 'Helvetica', sans-serif;
+    font-size:13px;
+}

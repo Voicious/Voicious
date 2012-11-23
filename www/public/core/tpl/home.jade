@@ -34,12 +34,13 @@ html
       form
         input#login_email.brdr(type="email", placeholder="Email")
         input#login_password.no-brdr(type="password", placeholder="Password")
-      button.light-blue.btn-submit.txt-shd
+      button#login-btn.light-blue.btn-submit.txt-shd
         span Log in
       a(href="#password") Forgot password?
     div#signup.no-selec
-      form
+      form#signup_form
         input#signup_email.brdr(type="email", placeholder="Email")
         input#signup_password.brdr(type="password", placeholder="Password")
         input#signup_password_confirm.brdr(type="password", placeholder="Confirm Password")
-      button.light-blue.btn-submit.txt-shd Sign Up
+      button#signup-btn.light-blue.btn-submit.txt-shd Sign Up
+    p#msg
