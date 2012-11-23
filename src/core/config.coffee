@@ -67,8 +67,8 @@ class _Config
         @Paths.Logs             = Path.join @Paths.Approot, 'log'
         @Paths.Config           = Path.join @Paths.Approot, 'etc'
         @Paths.Views            = Path.join @Paths.Webroot, @Dirs.Static, 'core', 'tpl'
-        @Paths.Services         = Path.join __dirname, 'services'
-        @Paths.StaticServices   = Path.join __dirname, @Dirs.Static, 'services'
+        @Paths.Services         = Path.join __dirname, '..', 'services'
+        @Paths.StaticServices   = Path.join __dirname, '..', '..', @Dirs.Static, 'services'
 
         @PATH_ROUTES    = [ 'room' ]
 

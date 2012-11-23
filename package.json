@@ -7,7 +7,8 @@
         "jade"          : "0.27.7",
         "moment"        : "1.7.2",
         "node-static"   : "0.6.4",
-        "jugglingdb"    : "0.1.27-3"
+        "jugglingdb"    : "0.1.27-3",
+	"sqlite3"	: "2.1.5"
     },
     "directories"   : {
         "lib"       : "./www/lib"
