@@ -31,6 +31,7 @@ coreFiles   = [
     "database",
     "errorHandler",
     "logger",
+    "populateDB",
     "render",
     "routeHandler",
     "router",

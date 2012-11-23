@@ -24,34 +24,9 @@ error = require('./errorHandler')
 
 Config  = require './config'
 Database = require './database'
+PopulateDB = require './populateDB'
 
 class Voicious
-    initDatabase: () ->
-        @db = Database
-        @db.connect 'physic', Config.Database
-        @db.createTable 'physic', 'user', {
-            name: { type: String, length: 255, index: true },
-            mail: { type: String, length: 255 },
-            password: { type: String, length: 255 },
-            id_acl: { type: Number },
-            id_role: { type: Number },
-            c_date: { type: Date, default: Date.now },
-            last_con: { type: Date }
-            }
-        @db.createTable 'physic', 'role', {
-            name: { type: String, length: 255, index: true},
-            }
-        @db.createTable 'physic', 'acl', {
-            name: { type: String, length: 255, index: true},
-            }
-        @db.flushTable 'physic', (err) =>
-            if err
-                handler = new error.ErrorHandler
-                e = handler.throwError(err, 500)
-            else
-                @db.insert 'physic', 'role', {'name': role}  for role in Config.Roles
-                @db.insert 'physic', 'acl', {'name': acl} for acl in Config.Acl
-
     start   : () ->
         onRequest = (request, response) ->
             try
@@ -74,14 +49,19 @@ class Voicious
                     response.end()
 
         try
-            @initDatabase()
-            @server = http.createServer(onRequest).listen(Config.Port)
-            logger.info "Server ready on port #{Config.Port}"
+            PopulateDB.PopulateDB.populate (err) =>
+                if err
+                    throw err
+                @server = http.createServer(onRequest).listen(Config.Port)
+                logger.info "Server ready on port #{Config.Port}"
         catch e
-            @db.close()
+            Database.close("physic")
+            Database.close("memory")
             throw e
 
     end     : () ->
+        Database.close("physic")
+        Database.close("memory")
         do @server.close
 
 exports.Voicious = Voicious

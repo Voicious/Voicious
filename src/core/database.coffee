@@ -33,8 +33,11 @@ class _Database
     insert: (dbType, tableName, queryObj, callback) ->
         @Databases[dbType][tableName].create queryObj, callback
 
+    get: (dbType, tableName, query, callback)  ->
+        @Databases[dbType][tableName].all query, callback
+
     close: (dbType) ->
-        @Databases[dbType].disconnect()
+        @Databases[dbType]?.disconnect()
 
 class Database
     @_instance = undefined
