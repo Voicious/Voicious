@@ -17,39 +17,32 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Schema = (require 'jugglingdb').Schema
 
-Config = require './config'
+class _Database
+    constructor: () ->
+        @Databases = {'physic': null, 'memory': null}
 
+    connect: (dbType, config) ->
+        @Databases[dbType] = new Schema config.connector, config
+
+    createTable: (dbType, tableName, schema) ->
+        @Databases[dbType][tableName] = @Databases[dbType].define tableName, schema
+
+    flushTable: (dbType, callback) ->
+        @Databases[dbType].automigrate callback
+
+    insert: (dbType, tableName, queryObj, callback) ->
+        @Databases[dbType][tableName].create queryObj, callback
+
+    close: (dbType) ->
+        @Databases[dbType].disconnect()
 
 class Database
-    constructor: () ->
-        @Schema = new Schema Config.Database.connector, Config.Database
-        @Tables = {};
+    @_instance = undefined
 
-    createTable: (tableName, schema) ->
-        @Tables[tableName] = @Schema.define tableName, schema
+    @get : () ->
+        @_instance ?= new _Database
 
-    flushTable: (callback) ->
-        @Schema.automigrate callback
+d = do Database.get
+for key of d
+    exports[key]    = d[key]
 
-    insert: (tableName, queryObj, callback) ->
-        @Tables[tableName].create queryObj, callback
-
-    close: () ->
-        @Schema.disconnect()
-
-exports.Database = Database
-
-#Schema = (require 'jugglingdb').Schema
-
-#schema = new Schema 'sqlite3', {port: 27017, database: 'Users.db'}
-
-#User = schema.define 'user', {
-#    name:      { type: String, index: true },
-#    email:     { type: String, index: true }
-#    }
-
-#schema.automigrate () ->
-#    User.create {name: 'Alex', email: 'alexandre.loyer@outlook.com'}, (err, data) ->
-#        console.log err
-
-#schema.disconnect()

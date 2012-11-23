@@ -27,8 +27,9 @@ Database = require './database'
 
 class Voicious
     initDatabase: () ->
-        @db = new Database.Database
-        @db.createTable 'user', {
+        @db = Database
+        @db.connect 'physic', Config.Database
+        @db.createTable 'physic', 'user', {
             name: { type: String, length: 255, index: true },
             mail: { type: String, length: 255 },
             password: { type: String, length: 255 },
@@ -37,19 +38,19 @@ class Voicious
             c_date: { type: Date, default: Date.now },
             last_con: { type: Date }
             }
-        @db.createTable 'role', {
+        @db.createTable 'physic', 'role', {
             name: { type: String, length: 255, index: true},
             }
-        @db.createTable 'acl', {
+        @db.createTable 'physic', 'acl', {
             name: { type: String, length: 255, index: true},
             }
-        @db.flushTable (err) =>
+        @db.flushTable 'physic', (err) =>
             if err
                 handler = new error.ErrorHandler
                 e = handler.throwError(err, 500)
             else
-                @db.insert 'role', {'name': role}  for role in Config.Roles
-                @db.insert 'acl', {'name': acl} for acl in Config.Acl
+                @db.insert 'physic', 'role', {'name': role}  for role in Config.Roles
+                @db.insert 'physic', 'acl', {'name': acl} for acl in Config.Acl
 
     start   : () ->
         onRequest = (request, response) ->
