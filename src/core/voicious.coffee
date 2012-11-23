@@ -17,34 +17,29 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 http = require('http')
 
-router = require('./router')
-routeHandler = require('./routeHandler')
+router = require './router'
+routeHandler = require './routeHandler'
 logger  = (require './logger').get 'voicious'
-error = require('./errorHandler')
+error = require './errorHandler'
 
 Config  = require './config'
+ResponseHandler = require './responseHandler'
 
 class Voicious
     start   : () ->
         onRequest = (request, response) ->
             try
-                    requestObject = router.Router.route(request, response)
-                    logger.debug requestObject
-                    template = routeHandler.RouteHandler.resolve(request, response, requestObject)
-                    if template and template.template?
-                            response.writeHead(200, {"Content-Type": "text/html"})
-                            response.write(template.template)
-                            response.end()
+                ResponseHandler.setResponseObject response
+                requestObject = router.Router.route(request, response)
+                logger.debug requestObject
+                routeHandler.RouteHandler.resolve(request, response, requestObject)
             catch e
-                    if e.template?
-                            response.writeHead(e.httpErrorCode, {"Content-Type": "text/html"})
-                            response.write(e.template)
-                    else
-                            handler = new error.ErrorHandler
-                            e = handler.throwError(e, 500)
-                            response.writeHead(500, {"Content-Type": "text/html"})
-                            response.write(e.template)
-                    response.end()
+                if e.template?
+                    ResponseHandler.sendResponse e.httpErrorCode, e.template
+                else
+                    handler = new error.ErrorHandler
+                    e = handler.throwError(e, 500)
+                    ResponseHandler.sendResponse 500, e.template
 
         @server = http.createServer(onRequest).listen(Config.Port)
         logger.info "Server ready on port #{Config.Port}"

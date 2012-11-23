@@ -15,13 +15,22 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Service = require '../service/service'
+class _ResponseHandler
+    setResponseObject: (response) ->
+        @response = response
 
-class Room extends Service
-    @default: () ->
-        routeTab =
-            template :
-                login: "Shedna"
-        return routeTab
+    sendResponse: (code, template, responseParams) ->
+        @response.writeHead code, {"Content-Type": "text/html"}
+        for param, value in responseParams?
+            @response.setHeader param, value
+        @response.write template
+        @response.end()
 
-exports.room = Room
+class ResponseHandler
+    @_instance  = undefined
+    @get        : () ->
+        @_instance  ?= new _ResponseHandler
+
+r   = do ResponseHandler.get
+for key of r
+    exports[key]    = r[key]

@@ -31,6 +31,7 @@ coreFiles   = [
     "errorHandler",
     "logger",
     "render",
+    "responseHandler",
     "routeHandler",
     "router",
     "voicious"

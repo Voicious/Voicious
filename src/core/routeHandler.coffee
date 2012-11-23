@@ -15,14 +15,15 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-fileserve   = require 'node-static'
-Path        = require 'path'
+fileserve       = require 'node-static'
+Path            = require 'path'
 
-jade        = require './render'
-Config      = require './config'
-error       = require './errorHandler'
+jade            = require './render'
+Config          = require './config'
+error           = require './errorHandler'
+ResponseHandler  = require './responseHandler'
 
-logger      = (require './logger').get 'voicious'
+logger          = (require './logger').get 'voicious'
 
 RouteHandler = {
         _fileserver: new fileserve.Server Config.Paths.Webroot
@@ -32,8 +33,9 @@ RouteHandler = {
         resolve: (request, response, requestObject) ->
                 if requestObject.path[0]?
                         if requestObject.path[0] == "/"
-                                return {template: jade.Renderer.jadeRender(Path.join(Config.Paths.Views, 'home.jade'), {name: "Voicious"})}
-                        if requestObject.path[0] == Config.Dirs.Static
+                                tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.Views, 'home.jade'), {name: "Voicious"})
+                                ResponseHandler.sendResponse 200, tpl
+                        else if requestObject.path[0] == Config.Dirs.Static
                                 request.addListener('end', =>
                                         @_fileserver.serve(request, response, (e, res) ->
                                                 if e? and e.status is 404
@@ -63,7 +65,7 @@ RouteHandler = {
                         throw handler.throwError("[Error] : #{requestObject.path.join('/')} is undefined", 404)
 
         callServiceFunction: (object, method, requestObject) ->
-                rootTab = ""
+                routeTab = ""
                 methodExist = false
                 callingObject = require(Path.join(Config.Paths.Services, object, object))
                 for parent, value of callingObject
@@ -79,7 +81,7 @@ RouteHandler = {
                                                         throw handler.throwError("[Error] : unknown parameter \"#{k}\" in function \"#{method}\" ", 400)
                                         params.push(v)
                                         i++
-                                rootTab = callingObject[parent][funcName].apply(null, params)
+                                routeTab = callingObject[parent][funcName].apply(null, params)
                                 methodExist = true
                                 break
                 if methodExist is false
@@ -87,9 +89,10 @@ RouteHandler = {
                         throw handler.throwError("[Error] : method \"#{method}\" of class \"#{parent}\" is undefined", 404)
                 else
                         if method is "default"
-                                return {template: jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', object + '.jade'), {rootTab})}
+                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', object + '.jade'), routeTab.template)
                         else
-                                return {template: jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', method + '.jade'), {rootTab})}
+                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', method + '.jade'), routeTab.template)
+                        ResponseHandler.sendResponse 200, tpl, routeTab.responseParams
 }
 
 exports.RouteHandler = RouteHandler
