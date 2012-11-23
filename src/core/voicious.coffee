@@ -24,6 +24,8 @@ error = require './errorHandler'
 
 Config  = require './config'
 ResponseHandler = require './responseHandler'
+Database = require './database'
+PopulateDB = require './populateDB'
 
 class Voicious
     start   : () ->
@@ -41,10 +43,20 @@ class Voicious
                     e = handler.throwError(e, 500)
                     ResponseHandler.sendResponse 500, e.template
 
-        @server = http.createServer(onRequest).listen(Config.Port)
-        logger.info "Server ready on port #{Config.Port}"
+        try
+            PopulateDB.PopulateDB.populate (err) =>
+                if err
+                    throw err
+                @server = http.createServer(onRequest).listen(Config.Port)
+                logger.info "Server ready on port #{Config.Port}"
+        catch e
+            Database.close("physic")
+            Database.close("memory")
+            throw e
 
     end     : () ->
+        Database.close("physic")
+        Database.close("memory")
         do @server.close
-        
+
 exports.Voicious = Voicious

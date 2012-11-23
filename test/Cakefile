@@ -22,7 +22,6 @@ path        = require 'path'
 sourceDir   = "src"
 destDir     = "."
 sourceFiles = [
-    "config"
     "routes"
 ]
 
