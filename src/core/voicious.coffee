@@ -28,8 +28,8 @@ Database = require './database'
 PopulateDB = require './populateDB'
 
 class Voicious
-    start   : () ->
-        onRequest = (request, response) ->
+    start   : () =>
+        onRequest = (request, response) =>
             try
                 ResponseHandler.setResponseObject response
                 requestObject = router.Router.route(request, response)
@@ -39,9 +39,8 @@ class Voicious
                 if e.template?
                     ResponseHandler.sendResponse e.httpErrorCode, e.template
                 else
-                    handler = new error.ErrorHandler
-                    e = handler.throwError(e, 500)
-                    ResponseHandler.sendResponse 500, e.template
+                    @end()
+                    throw e
 
         try
             PopulateDB.PopulateDB.populate (err) =>

@@ -18,10 +18,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Service = require '../service/service'
 
 class Room extends Service
-    @default: () ->
-        routeTab =
-            template :
-                login: "Shedna"
-        return routeTab
+        @default: () ->
+                routeTab = {template : { login: "Shedna" }}
+                return routeTab
+        @default.tpl = true
 
 exports.room = Room

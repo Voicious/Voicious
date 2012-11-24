@@ -88,11 +88,16 @@ RouteHandler = {
                         handler = new error.ErrorHandler
                         throw handler.throwError("[Error] : method \"#{method}\" of class \"#{parent}\" is undefined", 404)
                 else
-                        if method is "default"
-                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', object + '.jade'), routeTab.template)
+                        responseParams = if routeTab? and routeTab.responseParams? then routeTab.responseParams else null
+                        template = if routeTab? and routeTab.template? then routeTab.template else {}
+
+                        if method is "default" and funcValue.tpl?
+                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', object + '.jade'), template)
+                        else if method isnt "default" and funcValue.tpl?
+                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', method + '.jade'), template)
                         else
-                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', method + '.jade'), routeTab.template)
-                        ResponseHandler.sendResponse 200, tpl, routeTab.responseParams
+                            tpl = ""
+                        ResponseHandler.sendResponse 200, tpl, responseParams
 }
 
 exports.RouteHandler = RouteHandler
