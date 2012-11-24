@@ -20,28 +20,25 @@ Config  = require './config'
 
 class _Database
     constructor: () ->
-        @Databases = {}
+        @Databases = undefined
 
-    connect: (dbType = 'default') ->
-        if dbType is 'memory'
-            return
-        else
-            @Databases[dbType] = new Schema Config.Database.connector, Config.Database
+    connect: () ->
+        @Databases  = new Schema Config.Database.connector, Config.Database
 
-    createTable: (tableName, schema, dbType = 'default') ->
-        @Databases[dbType][tableName] = @Databases[dbType].define tableName, schema
+    createTable: (tableName, schema) ->
+        @Databases[tableName] = @Databases.define tableName, schema
 
-    flushTable: (callback, dbType = 'default') ->
-        @Databases[dbType].automigrate callback
+    flushTable: (callback) ->
+        @Databases.automigrate callback
 
-    insert: (tableName, queryObj, callback, dbType = 'default') ->
-        @Databases[dbType][tableName].create queryObj, callback
+    insert: (tableName, queryObj, callback) ->
+        @Databases[tableName].create queryObj, callback
 
-    get: (tableName, query, callback, dbType = 'default')  ->
-        @Databases[dbType][tableName].all query, callback
+    get: (tableName, query, callback)  ->
+        @Databases[tableName].all query, callback
 
-    close: (dbType = 'default') ->
-        @Databases[dbType]?.disconnect()
+    close: () ->
+        @Databases?.disconnect()
 
 class Database
     @_instance = undefined
