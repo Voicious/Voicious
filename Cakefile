@@ -43,6 +43,7 @@ servicesDir = "services"
 services    = [
     "service"
     "room"
+    "session"
     "user"
 ]
 

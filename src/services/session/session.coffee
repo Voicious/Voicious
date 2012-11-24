@@ -15,16 +15,25 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Error = require('./errorHandler')
-Config = require './config'
-Database = require './database'
+Service     = require '../service/service'
+Database    = require '../../core/database'
+User        = require '../user/user'
 
-class PopulateDB
-    @populate: (callback) ->
-        do Database.connect
-        User    = require '../services/user/user'
-        Session = require '../services/session/session'
-        Database.flushTable () =>
-            do callback
+class Session extends Service
+    @default    : () ->
+        return
 
-exports.PopulateDB = PopulateDB
+class Model
+    @_name      : 'session'
+    @_schema    : {}
+    @_instance  : undefined
+    @get        : () ->
+        if @instance == undefined
+            @instance   = Database.createTable @_name, @_schema
+            @instance.belongsTo User.Model,
+                as          : 'user'
+                foreignKey  : 'uid'
+        @instance
+
+exports.Session = Session
+exports.Model   = do Model.get
