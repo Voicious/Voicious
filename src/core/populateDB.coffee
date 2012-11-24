@@ -24,6 +24,6 @@ class PopulateDB
         do Database.connect
         User    = require '../services/user/user'
         Database.flushTable () =>
-            return
+            do callback
 
 exports.PopulateDB = PopulateDB

@@ -46,10 +46,13 @@ class Model
             type    : Date
     @_instance  : undefined
     @get        : () ->
-        if @instance is undefined
+        if @instance == undefined
             @instance   = Database.createTable @_name, @_schema
-        else
-            @instance
+            @instance.validatesPresenceOf 'name', 'mail', 'password', 'id_acl', 'id_role'
+            @instance.validatesUniquenessOf 'mail',
+                message : 'This mail address is already used.'
+            @instance.validatesNumericalityOf 'id_acl', 'id_role'
+        @instance
 
 exports.User    = User
 exports.Model   = do Model.get

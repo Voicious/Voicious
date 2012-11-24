@@ -20,7 +20,6 @@ Config  = require './config'
 
 class _Database
     constructor: () ->
-        console.log "INSTANCIATE DB"
         @Databases = undefined
 
     connect: () ->
