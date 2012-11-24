@@ -15,9 +15,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-url = require('url')
+url = require 'url'
+qs = require 'querystring'
 
-error = require('./errorHandler')
+error = require './errorHandler'
 logger = (require './logger').get "voicious"
 
 Router = {
@@ -27,16 +28,21 @@ Router = {
 
         _regexp: new RegExp("^/([a-z0-9/\\._]*)(?:/argv[/]?)([a-z0-9/\\._]*)$|^/([a-z0-9/\\._]*)$", "i")
 
-        route: (request, response) ->
+        route: (request, response, callback) ->
                 @_requestObject = {
                         path: [],
                         args: {} }
                 @_pathname = url.parse(request.url)
                 logger.debug "Requesting #{@_pathname.href}"
-                @_method = request.method
-                this.parseUrl()
-                this.clean()
-                return @_requestObject
+                if request.method is "POST"
+                        this.parsePost request, () =>
+                                @_requestObject.args = qs.parse(@_data)
+                                this.clean()
+                                callback(@_requestObject)
+                else
+                        this.parseGet()
+                        this.clean()
+                        callback(@_requestObject)
 
         parseQueryUrl: () ->
                 @_requestObject.path = @_pathname.pathname.toLowerCase().split('/')
@@ -68,7 +74,7 @@ Router = {
                 for key, value of @_requestObject.args when key is ''
                         delete @_requestObject.args[key]
 
-        parseUrl: () ->
+        parseGet: () ->
                 if @_pathname.pathname is '/'
                         @_requestObject.path[0] = '/'
                 else
@@ -76,6 +82,13 @@ Router = {
                                 this.parseQueryUrl()
                         else
                                 this.parsePathUrl()
+
+        parsePost: (request, callback) ->
+                @_data = ""
+                @_requestObject.path = @_pathname.pathname.toLowerCase().split('/')
+                request.on "data", (chunk) =>
+                        @_data += chunk
+                request.on "end", callback
 }
 
 exports.Router = Router

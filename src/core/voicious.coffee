@@ -32,9 +32,15 @@ class Voicious
         onRequest = (request, response) =>
             try
                 ResponseHandler.setResponseObject response
-                requestObject = router.Router.route(request, response)
-                logger.debug requestObject
-                routeHandler.RouteHandler.resolve(request, response, requestObject)
+                requestObject = router.Router.route request, response, (requestObject) ->
+                        try
+                                routeHandler.RouteHandler.resolve request, response, requestObject
+                        catch e
+                                if e.template?
+                                    ResponseHandler.sendResponse e.httpErrorCode, e.template
+                                else
+                                    @end()
+                                    throw e
             catch e
                 if e.template?
                     ResponseHandler.sendResponse e.httpErrorCode, e.template

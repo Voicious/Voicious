@@ -101,7 +101,7 @@ class Home
                 password = $('#signup_password').val()
                 confirm = $('#signup_password_confirm').val()
                 emailExp = new RegExp "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", "i"
-                passwordExp = new RegExp "^(?=.*[a-z])(?=.*[0-9])(?!.*[^a-z0-9]).{5,12}$", "gi"                
+                passwordExp = new RegExp "^(?=.*[a-z])(?=.*[0-9])(?!.*[^a-z0-9]).{5,12}$", "gi"
                 evalEmail = emailExp.test email
                 evalPassword = passwordExp.test password
                 msg = ""
@@ -116,12 +116,12 @@ class Home
                 if password != confirm
                         msg += "Password does not match the confirm password"
                 $('#msg').html msg
-                if evalEmail && evalPassword && password == confirm 
-                        $('#msg').html "Registration confirmed."                                 
+                if evalEmail && evalPassword && password == confirm
+                        $('#msg').html "Registration confirmed."
                         $.ajax {
                                 type: "POST",
-                                url: "",
-                                data: JSON.stringify({ "name": email, "password": password }),
+                                url: "/user/register",
+                                data: { "mail": email, "password": password },
                                 dataType: "json"
                         }
 
