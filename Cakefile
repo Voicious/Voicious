@@ -41,8 +41,9 @@ coreFiles   = [
 
 servicesDir = "services"
 services    = [
-    "service",
+    "service"
     "room"
+    "user"
 ]
 
 
