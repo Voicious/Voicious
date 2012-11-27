@@ -21,10 +21,15 @@ Database = require './database'
 
 class PopulateDB
     @populate: (callback) ->
-        do Database.connect
         User    = require '../services/user/user'
         Session = require '../services/session/session'
         Database.flushTable () =>
-            do callback
+            u   = new User.Model
+                name    : "Paul"
+            User.Model.create u, () =>
+                s   = new Session.Model
+                s.user u.id
+                Session.Model.create s, (err, session) =>
+                    do callback
 
 exports.PopulateDB = PopulateDB
