@@ -20,25 +20,25 @@ Config  = require './config'
 
 class _Database
     constructor: () ->
-        @Databases = undefined
+        @Db = undefined
 
     connect: () ->
-        @Databases  = new Schema Config.Database.connector, Config.Database
+        @Db  = new Schema Config.Database.connector, Config.Database
 
     createTable: (tableName, schema) ->
-        @Databases[tableName] = @Databases.define tableName, schema
+        @Db[tableName] = @Db.define tableName, schema
 
     flushTable: (callback) ->
-        @Databases.automigrate callback
+        @Db.automigrate callback
 
     insert: (tableName, queryObj, callback) ->
-        @Databases[tableName].create queryObj, callback
+        @Db[tableName].create queryObj, callback
 
     get: (tableName, query, callback)  ->
-        @Databases[tableName].all query, callback
+        @Db[tableName].all query, callback
 
     close: () ->
-        @Databases?.disconnect()
+        @Db?.disconnect()
 
 class Database
     @_instance = undefined

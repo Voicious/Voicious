@@ -32,7 +32,7 @@ class Voicious
         onRequest = (request, response) =>
             try
                 ResponseHandler.setResponseObject response
-                requestObject = router.Router.route request, response, (requestObject) ->
+                requestObject = router.Router.route request, response, (requestObject) =>
                         try
                                 routeHandler.RouteHandler.resolve request, response, requestObject
                         catch e
@@ -49,19 +49,19 @@ class Voicious
                     throw e
 
         try
-            PopulateDB.PopulateDB.populate (err) =>
-                if err
-                    throw err
-                @server = http.createServer(onRequest).listen(Config.Port)
-                logger.info "Server ready on port #{Config.Port}"
+            do Database.connect
+            Database.Db.on 'connected', () =>
+                PopulateDB.PopulateDB.populate (err) =>
+                    if err
+                        throw err
+                    @server = http.createServer(onRequest).listen(Config.Port)
+                    logger.info "Server ready on port #{Config.Port}"
         catch e
-            Database.close("physic")
-            Database.close("memory")
+            do Database.close
             throw e
 
     end     : () ->
-        Database.close("physic")
-        Database.close("memory")
+        do Database.close
         do @server.close
 
 exports.Voicious = Voicious

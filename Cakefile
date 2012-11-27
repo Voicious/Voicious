@@ -27,22 +27,24 @@ sourceFiles = [
 
 coreDir     = "core"
 coreFiles   = [
-    "config",
-    "database",
-    "errorHandler",
-    "logger",
-    "populateDB",
-    "render",
-    "responseHandler",
-    "routeHandler",
-    "router",
+    "config"
+    "database"
+    "errorHandler"
+    "logger"
+    "populateDB"
+    "render"
+    "responseHandler"
+    "routeHandler"
+    "router"
     "voicious"
 ]
 
 servicesDir = "services"
 services    = [
+    "api"
     "service"
     "room"
+    "session"
     "user"
 ]
 

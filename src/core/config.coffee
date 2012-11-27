@@ -33,12 +33,6 @@ class _Config
         if not { "mongodb" : "" , "sqlite3" : "" }.hasOwnProperty @Database.connector
             throw new (Error "Your database connector is not supported (yet) !")
 
-        if @Database.connector is "mongodb" and (@Database.user is undefined or @Database.password is undefined or @Database.database is undefined)
-            throw new (Error "When using MongoDB, you must specify a user, a password and a database name !")
-
-        if @Database.connector is "sqlite3" and @Database.database is undefined
-            throw new (Error "When using SQLite3, you must specify a database name !")
-
     loadConfigJSON      : ()            ->
         fileToOpen  = 'config'
         if process.env.NODE_ENV
@@ -70,7 +64,10 @@ class _Config
         @Paths.Services         = Path.join __dirname, '..', 'services'
         @Paths.StaticServices   = Path.join __dirname, '..', '..', @Dirs.Static, 'services'
         
-        @PATH_ROUTES    = [ 'room' ]
+        @PATH_ROUTES    = [
+            'api'
+            'room'
+        ]
 
         do @loadConfigJSON
 

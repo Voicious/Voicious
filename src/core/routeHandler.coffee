@@ -91,12 +91,11 @@ RouteHandler = {
                         responseParams = if routeTab? and routeTab.responseParams? then routeTab.responseParams else null
                         template = if routeTab? and routeTab.template? then routeTab.template else {}
 
+                        tpl         = "";
                         if method is "default" and funcValue.tpl?
-                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', object + '.jade'), template)
-                        else if method isnt "default" and funcValue.tpl?
-                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', method + '.jade'), template)
-                        else
-                            tpl = ""
+                            tpl = jade.Renderer.jadeRender(Path.join(Config.Paths.StaticServices, object, 'tpl', (if method is "default" then object else method) + '.jade'), template)
+                        else if routeTab? and routeTab.content?
+                            tpl = routeTab.content
                         ResponseHandler.sendResponse 200, tpl, responseParams
 }
 
