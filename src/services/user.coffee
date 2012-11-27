@@ -15,25 +15,44 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Service     = require '../service/service'
-Database    = require '../../core/database'
-User        = require '../user/user'
+Service     = require './service'
+Database    = require '../core/database'
 
-class Session extends Service
+class User extends Service
     @default    : () ->
         return
 
 class Model
-    @_name      : 'session'
-    @_schema    : {}
+    @_name      : 'user'
+    @_schema    :
+        name    :
+            type    : String
+            length  : 255
+            index   : true
+        mail        :
+            type    : String
+            length  : 255
+        password:
+            type    : String
+            length  : 255
+        id_acl  :
+            type    : Number
+        id_role :
+            type    : Number
+        c_date  :
+            type    : Date
+            default : Date.now
+        last_con:
+            type    : Date
     @_instance  : undefined
     @get        : () ->
         if @instance == undefined
             @instance   = Database.createTable @_name, @_schema
-            @instance.belongsTo User.Model,
-                as          : 'user'
-                foreignKey  : 'uid'
+            @instance.validatesPresenceOf 'name', 'mail', 'password', 'id_acl', 'id_role'
+            @instance.validatesUniquenessOf 'mail',
+                message : 'This mail address is already used.'
+            @instance.validatesNumericalityOf 'id_acl', 'id_role'
         @instance
 
-exports.Session = Session
+exports.User    = User
 exports.Model   = do Model.get

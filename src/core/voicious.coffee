@@ -17,6 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Http    = require 'http'
 Express = require 'express'
+Fs      = require 'fs'
 
 Config      = require './config'
 Database    = require './database'
@@ -24,16 +25,26 @@ PopulateDB  = require './populateDB'
 
 class Voicious  
     constructor     : () ->
-        @app        = do Express
-        @configured = no
+        @app            = do Express
+        @configured     = no
+        @connectedToDb  = no
 
     setAllRoutes    : () =>
         @app.get '/', (req, res) =>
             options =
                 title   : 'Voicious'
             res.render 'home', options
+        servicesNames   = Fs.readdirSync Config.Paths.Services
+        for serviceName in servicesNames
+            service = require '../services/' + serviceName
+            if service.Routes?
+                if service.Routes.get?
+                    for route of service.Routes.get
+                        @app.get route, service.Routes.get[route]
 
     configure       : () =>
+        if not @connectedToDb
+            return
         @app.set 'port', Config.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
@@ -49,10 +60,11 @@ class Voicious
         @configured = yes
         
     start       : () =>
-        if not @configured
-            do @configure
         do Database.connect
         Database.Db.on 'connected', () =>
+            @connectedToDb  = yes
+            if not @configured
+                do @configure
             (Http.createServer @app).listen (@app.get 'port'), () =>
                 console.log "Server ready on port #{Config.Port}"
 

@@ -17,8 +17,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Path    = require 'path'
 
-Logger  = require './logger'
-
 class _Config
     loadDatabaseConfig  : (dbConfig)    ->
         if dbConfig is undefined
@@ -41,10 +39,6 @@ class _Config
 
         @Port       = tmpJSON.port
 
-        @Logger     =
-            Level   : Logger.getLevelFromString tmpJSON.logger.level
-            Stdout  : tmpJSON.logger.stdout
-
         @loadDatabaseConfig (tmpJSON.database || undefined)
 
         @Acl        = tmpJSON.acl
@@ -52,17 +46,13 @@ class _Config
         @Roles      = tmpJSON.roles
 
     constructor         : ()            ->
-        @Dirs    = {}
-
         @Paths   =
             Webroot : Path.join __dirname, '..', '..'
         @Paths.Approot          = Path.join @Paths.Webroot, '..'
-        @Paths.Logs             = Path.join @Paths.Approot, 'log'
         @Paths.Config           = Path.join @Paths.Approot, 'etc'
         @Paths.Views            = Path.join @Paths.Webroot, 'views'
         @Paths.Static           = Path.join @Paths.Webroot, 'public'
         @Paths.Services         = Path.join __dirname, '..', 'services'
-        @Paths.StaticServices   = Path.join __dirname, '..', '..', @Dirs.Static, 'services'
         
         @PATH_ROUTES    = [
             'api'

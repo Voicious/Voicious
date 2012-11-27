@@ -15,26 +15,25 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Fs          = require 'fs'
-Service     = require '../service/service'
-Config      = require '../../core/config'
-Database    = require '../../core/database'
+Service     = require './service'
+Database    = require '../core/database'
+User        = require './user'
 
-class Api extends Service
-    @getAllTypes    : () ->
-        services    = Fs.readdirSync Config.Paths.Services
-        types       = new Array
-        for service in services
-            if Database.Db.models[service]?
-                types.push service
-        return types
+class Session extends Service
+    @default    : () ->
+        return
 
-    @default        : () ->
-        do Api.getAllTypes
-        return {
-            responseParams  :
-                'Content-Type'  : 'application/json'
-            content         : JSON.stringify do Api.getAllTypes
-        }
+class Model
+    @_name      : 'session'
+    @_schema    : {}
+    @_instance  : undefined
+    @get        : () ->
+        if @instance == undefined
+            @instance   = Database.createTable @_name, @_schema
+            @instance.belongsTo User.Model,
+                as          : 'user'
+                foreignKey  : 'uid'
+        @instance
 
-exports.api = Api
+exports.Session = Session
+exports.Model   = do Model.get
