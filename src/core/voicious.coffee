@@ -15,50 +15,46 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-http = require('http')
+Http    = require 'http'
+Express = require 'express'
 
-router = require './router'
-routeHandler = require './routeHandler'
-logger  = (require './logger').get 'voicious'
-error = require './errorHandler'
+Config      = require './config'
+Database    = require './database'
+PopulateDB  = require './populateDB'
 
-Config  = require './config'
-ResponseHandler = require './responseHandler'
-Database = require './database'
-PopulateDB = require './populateDB'
+class Voicious  
+    constructor     : () ->
+        @app        = do Express
+        @configured = no
 
-class Voicious
-    start   : () =>
-        onRequest = (request, response) =>
-            try
-                ResponseHandler.setResponseObject response
-                requestObject = router.Router.route request, response, (requestObject) =>
-                        try
-                                routeHandler.RouteHandler.resolve request, response, requestObject
-                        catch e
-                                if e.template?
-                                    ResponseHandler.sendResponse e.httpErrorCode, e.template
-                                else
-                                    @end()
-                                    throw e
-            catch e
-                if e.template?
-                    ResponseHandler.sendResponse e.httpErrorCode, e.template
-                else
-                    @end()
-                    throw e
+    setAllRoutes    : () =>
+        @app.get '/', (req, res) =>
+            options =
+                title   : 'Voicious'
+            res.render 'home', options
 
-        try
-            do Database.connect
-            Database.Db.on 'connected', () =>
-                PopulateDB.PopulateDB.populate (err) =>
-                    if err
-                        throw err
-                    @server = http.createServer(onRequest).listen(Config.Port)
-                    logger.info "Server ready on port #{Config.Port}"
-        catch e
-            do Database.close
-            throw e
+    configure       : () =>
+        @app.set 'port', Config.Port
+        @app.set 'views', Config.Paths.Views
+        @app.set 'view engine', 'jade'
+        @app.use do Express.favicon
+        @app.use Express.logger 'dev'
+        @app.use do Express.bodyParser
+        @app.use do Express.methodOverride
+        @app.use Express.cookieParser 'your secret here'
+        @app.use do Express.session
+        @app.use @app.router
+        @app.use Express.static Config.Paths.Webroot
+        do @setAllRoutes
+        @configured = yes
+        
+    start       : () =>
+        if not @configured
+            do @configure
+        do Database.connect
+        Database.Db.on 'connected', () =>
+            (Http.createServer @app).listen (@app.get 'port'), () =>
+                console.log "Server ready on port #{Config.Port}"
 
     end     : () ->
         do Database.close

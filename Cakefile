@@ -29,13 +29,7 @@ coreDir     = "core"
 coreFiles   = [
     "config"
     "database"
-    "errorHandler"
-    "logger"
     "populateDB"
-    "render"
-    "responseHandler"
-    "routeHandler"
-    "router"
     "voicious"
 ]
 

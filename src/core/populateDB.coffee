@@ -15,7 +15,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Error = require('./errorHandler')
 Config = require './config'
 Database = require './database'
 
