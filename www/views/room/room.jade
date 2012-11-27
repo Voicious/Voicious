@@ -1,18 +1,20 @@
-!!! strict
-html
-  include ../../../core/tpl/includes/header
+extends ../main
+
+block scripts
     link(rel="stylesheet", media="screen", type="text/css", href="/public/services/room/css/room.css")
-  body
-    div#header
-    div#menu
-      div#room_logo
-      div#options_first.options
-        p room
-        p
-        button#password manage password
-        button#plugins manage plugins
-      div#options_second.options
-        p connected as #{login}
-        p
-        button#contacts contacts
-        button#settings settings
+
+block content
+    body
+        div#header
+        div#menu
+            div#room_logo
+            div#options_first.options
+                p room
+                p
+                button#password manage password
+                button#plugins manage plugins
+            div#options_second.options
+                p connected as #{login}
+                p
+                button#contacts contacts
+                button#settings settings

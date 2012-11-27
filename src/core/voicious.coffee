@@ -38,9 +38,10 @@ class Voicious
         for serviceName in servicesNames
             service = require '../services/' + serviceName
             if service.Routes?
-                if service.Routes.get?
-                    for route of service.Routes.get
-                        @app.get route, service.Routes.get[route]
+                for method of service.Routes
+                    if @app[method]?
+                        for route of service.Routes[method]
+                            @app.get route, service.Routes[method][route]
 
     configure       : () =>
         if not @connectedToDb

@@ -21,6 +21,7 @@ class Room extends Service
         @default: (req, res) ->
             options =
                 title   : 'Voicious'
+                login   : 'Paulloz'
             res.render 'room/room', options
 
 exports.Routes  =
