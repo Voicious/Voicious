@@ -4,11 +4,11 @@
     "main"          : "./www/voicious.js",
     "version"       : "0.0.1",
     "dependencies"  : {
-        "jade"          : "0.27.7",
-        "moment"        : "1.7.2",
-        "node-static"   : "0.6.4",
-        "jugglingdb"    : "0.1.27-3",
-	"sqlite3"	: "2.1.5"
+        "express"       : "3.x",
+        "jade"          : "0.27.x",
+        "moment"        : "1.7.x",
+        "jugglingdb"    : "0.1.x",
+	"sqlite3"	: "2.x"
     },
     "directories"   : {
         "lib"       : "./www/lib"

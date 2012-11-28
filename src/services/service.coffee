@@ -15,8 +15,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Error = require '../../core/errorHandler'
-
 class Service
         constructor: () ->
                 handler = new Error.ErrorHandler

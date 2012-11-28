@@ -15,12 +15,16 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Service = require '../service/service'
+Service = require './service'
 
 class Room extends Service
-        @default: () ->
-                routeTab = {template : { login: "Shedna" }}
-                return routeTab
-        @default.tpl = true
+        @default: (req, res) ->
+            options =
+                title   : 'Voicious'
+                login   : 'Paulloz'
+            res.render 'room/room', options
 
-exports.room = Room
+exports.Routes  =
+    get :
+        '/room' : Room.default
+

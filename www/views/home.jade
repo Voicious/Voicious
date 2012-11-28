@@ -1,8 +1,9 @@
-!!! strict
-html
-  include includes/header
-    script(type="text/javascript", src="/public/core/js/lib/home.js")
-  body
+extends main
+
+block scripts
+    script(type="text/javascript", src="/public/js/lib/home.js")
+
+block content
     div#logo.no-selec
     div#desc.no-selec web voice chat application
     div#choices.no-selec

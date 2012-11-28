@@ -15,22 +15,25 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-class _ResponseHandler
-    setResponseObject: (response) ->
-        @response = response
+Service     = require './service'
+Database    = require '../core/database'
+User        = require './user'
 
-    sendResponse: (code, template, responseParams) ->
-        @response.writeHead code, {"Content-Type": "text/html"}
-        for param, value in responseParams?
-            @response.setHeader param, value
-        @response.write template
-        @response.end()
+class Session extends Service
+    @default    : () ->
+        return
 
-class ResponseHandler
-    @_instance  = undefined
+class Model
+    @_name      : 'session'
+    @_schema    : {}
+    @_instance  : undefined
     @get        : () ->
-        @_instance  ?= new _ResponseHandler
+        if @instance == undefined
+            @instance   = Database.createTable @_name, @_schema
+            @instance.belongsTo User.Model,
+                as          : 'user'
+                foreignKey  : 'uid'
+        @instance
 
-r   = do ResponseHandler.get
-for key of r
-    exports[key]    = r[key]
+exports.Session = Session
+exports.Model   = do Model.get
