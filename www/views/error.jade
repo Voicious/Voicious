@@ -1,7 +1,6 @@
-!!! strict
-html
-  include includes/header
-  body
+extends main
+
+block body
     div
       h1 #{httpErrorCode} #{httpErrorMsg}
       br

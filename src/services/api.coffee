@@ -40,7 +40,10 @@ class Api extends Service
             Database.Db[req.params.ressource].all {}, (er, all) =>
                 res.json all
         else
-            res.send '404'
+            options =
+                httpErrorCode   : '404'
+                httpErrorMsg    : 'Not Found'
+            res.render 'error'
         
 
 exports.Routes  =
