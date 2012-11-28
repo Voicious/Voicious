@@ -15,11 +15,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Service     = require './service'
 Database    = require '../core/database'
 User        = require './user'
 
-class Session extends Service
+class Session
     @default    : () ->
         return
 

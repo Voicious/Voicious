@@ -15,13 +15,17 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-class Service
-        constructor: () ->
-                handler = new Error.ErrorHandler
-                throw handler.throwError("Not allowed to instanciate interface service", 501)
+class BaseService
+    constructor : () -> console.log "BASE SERVICE CONSTRUCTION"
+    
+    get         : (id, cb) =>
+        @Model.findOne { id : id }, cb
 
-        @default: () ->
-                handler = new Error.ErrorHandler
-                throw handler.throwError("Default function not implemented", 501)
+    all         : (cb) =>
+        console.log "FATHER"
+        @Model.all {}, cb
 
-exports.Service = Service
+    save        : (item, cb) =>
+        @Model.updateOrCreate item, cb
+
+exports.BaseService = BaseService

@@ -15,44 +15,77 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Service     = require './service'
 Database    = require '../core/database'
-
-class User extends Service
-    @default    : () ->
-        return
+BaseService = (require './service').BaseService
 
 class Model
-    @_name      : 'user'
-    @_schema    :
-        name    :
-            type    : String
-            length  : 255
-            index   : true
-        mail        :
-            type    : String
-            length  : 255
-        password:
-            type    : String
-            length  : 255
-        id_acl  :
-            type    : Number
-        id_role :
-            type    : Number
-        c_date  :
-            type    : Date
-            default : Date.now
-        last_con:
-            type    : Date
-    @_instance  : undefined
-    @get        : () ->
-        if @instance == undefined
-            @instance   = Database.createTable @_name, @_schema
-            @instance.validatesPresenceOf 'name', 'mail', 'password', 'id_acl', 'id_role'
-            @instance.validatesUniquenessOf 'mail',
-                message : 'This mail address is already used.'
-            @instance.validatesNumericalityOf 'id_acl', 'id_role'
-        @instance
+    @_name      : do () ->
+        return {
+            get : () -> 'user'
+        }
 
-exports.User    = User
-exports.Model   = do Model.get
+    @_schema    : do () ->
+        return {
+            get : () ->
+                return {
+                    name    :
+                        type    : String
+                        length  : 255
+                        index   : true
+                    mail        :
+                        type    : String
+                        length  : 255
+                    password:
+                        type    : String
+                        length  : 255
+                    id_acl  :
+                        type    : Number
+                    id_role :
+                        type    : Number
+                    c_date  :
+                        type    : Date
+                        default : Date.now
+                    last_con:
+                        type    : Date
+                }
+        }
+
+    @_instance  : do () ->
+        instance    = undefined
+        return {
+            get : () =>
+                return instance
+            set : (val) =>
+                instance    = val
+        }
+
+    @get        : () ->
+        if do @_instance.get == undefined
+            definition  = Database.createTable do @_name.get, do @_schema.get
+            definition.validatesPresenceOf 'name', 'mail', 'password', 'id_acl', 'id_role'
+            definition.validatesUniquenessOf 'mail',
+                message : 'This mail address is already used.'
+            definition.validatesNumericalityOf 'id_acl', 'id_role'
+            @_instance.set definition
+        do @_instance.get
+
+class _User extends BaseService
+    constructor : () ->
+        @Model  = do Model.get
+
+class User
+    @instance   : do () ->
+        instance    = undefined
+        return {
+            get : () =>
+                return instance
+            set : (val) =>
+                instance    = val
+        }
+
+    @get        : () ->
+        if do @instance.get is undefined
+            @instance.set new _User
+        do @instance.get
+
+exports.User    = do User.get

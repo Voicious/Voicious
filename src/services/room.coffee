@@ -15,9 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Service = require './service'
-
-class Room extends Service
+class Room
         @default: (req, res) ->
             options =
                 title   : 'Voicious'

@@ -16,11 +16,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Fs          = require 'fs'
-Service     = require './service'
 Config      = require '../core/config'
 Database    = require '../core/database'
 
-class Api extends Service
+class Api
     @getAllTypes    : () ->
         services    = Fs.readdirSync Config.Paths.Services
         types       = new Array
@@ -37,14 +36,14 @@ class Api extends Service
     @get            : (req, res) ->
         types   = do Api.getAllTypes
         if (types.indexOf req.params.ressource) != -1
-            Database.Db[req.params.ressource].all {}, (er, all) =>
+            user = require './user'
+            user.User.all (err, all) =>
                 res.json all
         else
             options =
                 httpErrorCode   : '404'
                 httpErrorMsg    : 'Not Found'
             res.render 'error'
-        
 
 exports.Routes  =
     get :

@@ -64,10 +64,11 @@ class Voicious
         do Database.connect
         Database.Db.on 'connected', () =>
             @connectedToDb  = yes
-            if not @configured
-                do @configure
-            (Http.createServer @app).listen (@app.get 'port'), () =>
-                console.log "Server ready on port #{Config.Port}"
+            PopulateDB.PopulateDB.populate () =>
+                if not @configured
+                    do @configure
+                (Http.createServer @app).listen (@app.get 'port'), () =>
+                    console.log "Server ready on port #{Config.Port}"
 
     end     : () ->
         do Database.close

@@ -36,8 +36,8 @@ coreFiles   = [
 servicesDir = "services"
 services    = [
     "api"
-    "service"
     "room"
+    "service"
     "session"
     "user"
 ]
