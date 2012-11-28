@@ -47,5 +47,5 @@ api         =
 
 ((Vows.describe "Voicious' Static Server").addBatch
     'GET /public/someIncorrectFile.jpg' : api.respondsWith 404
-    'GET /public/core/css/style.css'    : api.respondsWith 200
+    'GET /public/css/style.css'         : api.respondsWith 200
 ).export module
