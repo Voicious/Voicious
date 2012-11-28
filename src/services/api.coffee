@@ -25,16 +25,25 @@ class Api extends Service
         services    = Fs.readdirSync Config.Paths.Services
         types       = new Array
         for service in services
+            service = (service.split '.')[0]
             if Database.Db.models[service]?
                 types.push service
         return types
 
-    @default        : () ->
-        do Api.getAllTypes
-        return {
-            responseParams  :
-                'Content-Type'  : 'application/json'
-            content         : JSON.stringify do Api.getAllTypes
-        }
+    @default        : (req, res) ->
+        res.setHeader 'Content-Type', 'application/json'
+        res.end JSON.stringify do Api.getAllTypes
+    
+    @get            : (req, res) ->
+        types   = do Api.getAllTypes
+        if (types.indexOf req.params.ressource) != -1
+            Database.Db[req.params.ressource].all {}, (er, all) =>
+                res.json all
+        else
+            res.send '404'
+        
 
-exports.api = Api
+exports.Routes  =
+    get :
+        '/api'              : Api.default
+        '/api/:ressource'   : Api.get
