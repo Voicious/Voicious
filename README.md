@@ -20,9 +20,10 @@ Run the following command from the root directory to run the Voicious server :
 
 The Voicious server requires the following Node.js modules to run :
 
-* Jade (>= 0.27.7)
+* Express (=> 3.x)
+* Jade (>= 0.27.x)
 * Moment (>= 1.7.2)
-* Node-static (>= 0.6.4)
+* JugglingDB (>= 0.1.x)
 
 
 To build Voicious you will also need a working CoffeeScript installation (>= 1.4.0)
