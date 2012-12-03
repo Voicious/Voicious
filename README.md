@@ -26,7 +26,8 @@ The Voicious server requires the following Node.js modules to run :
 * JugglingDB (>= 0.1.x)
 
 
-To build Voicious you will also need a working CoffeeScript installation (>= 1.4.0)
+To build Voicious you will also need a working CoffeeScript installation
+To build Voicious' documentation, you will also need Docco and Pygments
 
 ## Licensing
 

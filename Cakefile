@@ -15,9 +15,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{exec}      = require 'child_process'
-fs          = require 'fs'
-path        = require 'path'
+{spawn, exec}   = require 'child_process'
+fs              = require 'fs'
+Path            = require 'path'
 
 sourceDir   = "src"
 destDir     = "www/lib"
@@ -44,32 +44,41 @@ services    = [
 
 
 compile     = (file, subDir = '.')              ->
-    sourceFile  = path.join __dirname, sourceDir, file + ".coffee"
-    destFile    = path.join __dirname, destDir, file + ".js"
-    console.log "Processing...  [" + (path.join sourceDir, file + ".coffee") + "] -> [" + (path.join destDir, file + ".js") + "]"
-    exec 'coffee --compile --output ' + (path.join destDir, subDir) + ' ' + sourceFile, (err, stdout, stderr) ->
+    sourceFile  = Path.join __dirname, sourceDir, file + ".coffee"
+    destFile    = Path.join __dirname, destDir, file + ".js"
+    console.log "Processing...  [" + (Path.join sourceDir, file + ".coffee") + "] -> [" + (Path.join destDir, file + ".js") + "]"
+    exec 'coffee --compile --output ' + (Path.join destDir, subDir) + ' ' + sourceFile, (err, stdout, stderr) ->
         throw err if err
 
 remove      = (file)                            ->
-    console.log "Removing... [" + (path.join destDir, file + ".js") + "]"
-    exec 'rm -f ' + (path.join __dirname, destDir, file + ".js"), (err, stdout, stderr) ->
+    console.log "Removing... [" + (Path.join destDir, file + ".js") + "]"
+    exec 'rm -f ' + (Path.join __dirname, destDir, file + ".js"), (err, stdout, stderr) ->
 
 task 'build', 'Build project',                  ->
-    exec 'mkdir ' + (path.join __dirname, destDir) if not fs.exists (path.join __dirname, destDir)
+    exec 'mkdir ' + (Path.join __dirname, destDir) if not fs.exists (Path.join __dirname, destDir)
     compile file for file in sourceFiles
-    exec 'mkdir ' + (path.join __dirname, destDir, coreDir) if not fs.exists (path.join __dirname, destDir, coreDir)
-    compile (path.join coreDir, file), coreDir for file in coreFiles
+    exec 'mkdir ' + (Path.join __dirname, destDir, coreDir) if not fs.exists (Path.join __dirname, destDir, coreDir)
+    compile (Path.join coreDir, file), coreDir for file in coreFiles
     for service in services
-        compile (path.join servicesDir, service), servicesDir
+        compile (Path.join servicesDir, service), servicesDir
     console.log "Done."
 
 
 task 'clean', 'Remove all Javascript files',    ->
     remove file for file in sourceFiles
-    remove (path.join coreDir, file) for file in coreFiles
+    remove (Path.join coreDir, file) for file in coreFiles
     for service in services
-        remove (path.join servicesDir, service, service)
-        exec 'rmdir ' + (path.join __dirname, destDir, servicesDir, service)
-    exec 'rmdir ' + (path.join __dirname, destDir, coreDir)
-    exec 'rmdir ' + (path.join __dirname, destDir, servicesDir)
+        remove (Path.join servicesDir, service, service)
+        exec 'rmdir ' + (Path.join __dirname, destDir, servicesDir, service)
+    exec 'rmdir ' + (Path.join __dirname, destDir, coreDir)
+    exec 'rmdir ' + (Path.join __dirname, destDir, servicesDir)
     console.log "Done."
+
+task 'doc', 'Build documentation',              ->
+    docco   = spawn 'docco', [ (Path.join sourceDir, '*.coffee'), (Path.join sourceDir, coreDir, '*.coffee'), (Path.join sourceDir, servicesDir, '*.coffee') ]
+    docco.stderr.on 'data', (data)  =>
+        process.stderr.write (do data.toString)
+    docco.stdout.on 'data', (data)  =>
+        process.stdout.write (do data.toString)
+    docco.on 'exit', (code)         =>
+        console.log "Done."
