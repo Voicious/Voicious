@@ -52,6 +52,7 @@ class _Session extends BaseService
     constructor     : () ->
         @Model  = do Model.get
 
+    # Middleware which load the current user informations in __req.currentUser__
     withCurrentUser : (req, res, next) =>
         req.currentUser = undefined
         if req.session? and req.session.uid?
@@ -62,6 +63,8 @@ class _Session extends BaseService
         else
             do next
 
+    # Middleware-like function which will call it's __next__ argument if __req.currentUser__ exists  
+    # It'll redirect to _'/'_ if not
     ifUser          : (next, req, res) =>
         if req.currentUser
             next req, res
