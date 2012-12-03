@@ -22,7 +22,6 @@ class BaseService
         @Model.findOne { id : id }, cb
 
     all         : (cb) =>
-        console.log "FATHER"
         @Model.all {}, cb
 
     save        : (item, cb) =>

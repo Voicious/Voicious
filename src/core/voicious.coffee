@@ -23,14 +23,25 @@ Config      = require './config'
 Database    = require './database'
 PopulateDB  = require './populateDB'
 
+Function.prototype.curry = () ->
+    if arguments.length < 1
+        return this
+    _method = this
+    args    = Array.prototype.slice.call arguments
+    () ->
+        _method.apply this, (args.concat Array.prototype.slice.call arguments)
+
+# Main class
 class Voicious  
     constructor     : () ->
         @app            = do Express
         @configured     = no
         @connectedToDb  = no
 
+    # Retrieve all routes from all services and register them in Express
     setAllRoutes    : () =>
-        @app.get '/', (req, res) =>
+        {Session}       = require '../services/session'
+        @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
                 title   : 'Voicious'
             res.render 'home', options
@@ -41,8 +52,9 @@ class Voicious
                 for method of service.Routes
                     if @app[method]?
                         for route of service.Routes[method]
-                            @app.get route, service.Routes[method][route]
+                            @app[method] route, Session.withCurrentUser, service.Routes[method][route]
 
+    # Configure the Express instance
     configure       : () =>
         if not @connectedToDb
             return
