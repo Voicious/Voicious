@@ -84,12 +84,14 @@ class _User extends BaseService
             user = new @Model param
             user.isValid (valid) =>
                 if not valid
-                   console.log user.errors
+                    for key, value of user.errors
+                        if value?
+                            return res.render 'home', {error: value[0]}
                 else
-                   @Model.create user, (err, data) =>
-                       if err
-                           console.log err
-                       res.redirect '/room'
+                    @Model.create user, (err, data) =>
+                    if err
+                        console.log err
+                    res.redirect '/room'
 
 
 class User

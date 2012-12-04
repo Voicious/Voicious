@@ -32,7 +32,8 @@ class Voicious
     setAllRoutes    : () =>
         @app.get '/', (req, res) =>
             options =
-                title   : 'Voicious'
+                title   : 'Voicious',
+                error   : ''
             res.render 'home', options
         servicesNames   = Fs.readdirSync Config.Paths.Services
         for serviceName in servicesNames
