@@ -32,7 +32,7 @@ class Api
     @default        : (req, res) ->
         res.setHeader 'Content-Type', 'application/json'
         res.end JSON.stringify do Api.getAllTypes
-    
+
     @get            : (req, res) ->
         types   = do Api.getAllTypes
         if (types.indexOf req.params.ressource) != -1

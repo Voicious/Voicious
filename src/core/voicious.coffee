@@ -23,7 +23,7 @@ Config      = require './config'
 Database    = require './database'
 PopulateDB  = require './populateDB'
 
-class Voicious  
+class Voicious
     constructor     : () ->
         @app            = do Express
         @configured     = no
@@ -41,7 +41,7 @@ class Voicious
                 for method of service.Routes
                     if @app[method]?
                         for route of service.Routes[method]
-                            @app.get route, service.Routes[method][route]
+                            @app[method] route, service.Routes[method][route]
 
     configure       : () =>
         if not @connectedToDb
@@ -59,7 +59,7 @@ class Voicious
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
         @configured = yes
-        
+
     start       : () =>
         do Database.connect
         Database.Db.on 'connected', () =>

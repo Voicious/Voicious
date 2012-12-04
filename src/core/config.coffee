@@ -53,11 +53,6 @@ class _Config
         @Paths.Views            = Path.join @Paths.Webroot, 'views'
         @Paths.Static           = Path.join @Paths.Webroot, 'public'
         @Paths.Services         = Path.join __dirname, '..', 'services'
-        
-        @PATH_ROUTES    = [
-            'api'
-            'room'
-        ]
 
         do @loadConfigJSON
 

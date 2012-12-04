@@ -17,7 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class BaseService
     constructor : () -> console.log "BASE SERVICE CONSTRUCTION"
-    
+
     get         : (id, cb) =>
         @Model.findOne { id : id }, cb
 

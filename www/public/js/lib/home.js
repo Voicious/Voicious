@@ -131,7 +131,7 @@
         password = $('#signup_password').val();
         confirm = $('#signup_password_confirm').val();
         emailExp = new RegExp("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", "i");
-        passwordExp = new RegExp("^(?=.*[a-z])(?=.*[0-9])(?!.*[^a-z0-9]).{5,12}$", "gi");
+        passwordExp = new RegExp("^(?=.*[a-z])(?!.*[^a-z0-9]).{5,}$", "gi");
         evalEmail = emailExp.test(email);
         evalPassword = passwordExp.test(password);
         msg = "";
@@ -143,7 +143,7 @@
           msg += "Invalid email<br/>";
         }
         if (evalPassword !== true) {
-          msg += "Password must be at least 5 characters, include at least one letter and one numeric digit<br/>";
+          msg += "Password must be at least 5 characters<br/>";
         }
         if (password !== confirm) {
           msg += "Password does not match the confirm password";
@@ -153,7 +153,7 @@
           $('#msg').html("Registration confirmed.");
           return $.ajax({
             type: "POST",
-            url: "/user/register",
+            url: "/user",
             data: {
               "mail": email,
               "password": password

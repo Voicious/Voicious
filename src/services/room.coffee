@@ -16,7 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Room
-        @default: (req, res) ->
+        @default : (req, res) ->
             options =
                 title   : 'Voicious'
                 login   : 'Paulloz'
@@ -25,4 +25,3 @@ class Room
 exports.Routes  =
     get :
         '/room' : Room.default
-

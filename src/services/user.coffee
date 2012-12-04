@@ -61,10 +61,12 @@ class Model
 
     @get        : () ->
         if do @_instance.get == undefined
-            definition  = Database.createTable do @_name.get, do @_schema.get
+            definition = Database.createTable do @_name.get, do @_schema.get
             definition.validatesPresenceOf 'name', 'mail', 'password', 'id_acl', 'id_role'
             definition.validatesUniquenessOf 'mail',
                 message : 'This mail address is already used.'
+            definition.validatesUniquenessOf 'name',
+                message : 'This name is already used.'
             definition.validatesNumericalityOf 'id_acl', 'id_role'
             @_instance.set definition
         do @_instance.get
@@ -72,6 +74,23 @@ class Model
 class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
+
+    default : (req, res) =>
+        param = req.body
+        if param.mail? and param.password?
+            param.name = param.mail
+            param.id_acl = 0 #TO DO : put the right value
+            param.id_role = 0 #TO DO : put the right value
+            user = new @Model param
+            user.isValid (valid) =>
+                if not valid
+                   console.log user.errors
+                else
+                   @Model.create user, (err, data) =>
+                       if err
+                           console.log err
+                       res.redirect '/room'
+
 
 class User
     @instance   : do () ->
@@ -89,3 +108,7 @@ class User
         do @instance.get
 
 exports.User    = do User.get
+
+exports.Routes  =
+    post :
+        '/user' : (do User.get).default
