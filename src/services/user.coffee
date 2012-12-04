@@ -89,9 +89,9 @@ class _User extends BaseService
                             return res.render 'home', {error: value[0]}
                 else
                     @Model.create user, (err, data) =>
-                    if err
-                        console.log err
-                    res.redirect '/room'
+                        if err
+                            console.log err
+                        res.redirect '/room'
 
     login : (req, res) =>
         param = req.body
