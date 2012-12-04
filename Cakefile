@@ -29,6 +29,7 @@ coreDir     = "core"
 coreFiles   = [
     "config"
     "database"
+    "errors"
     "populateDB"
     "voicious"
 ]
