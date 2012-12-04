@@ -51,7 +51,7 @@ body{
     cursor:default;
     }
 
-#quick,#signin,#signup{
+#jumpIn,#logIn,#signUp{
     position:relative;
     width:275px;
     margin-left:auto;
@@ -69,21 +69,21 @@ body{
     position:relative;
     }
 
-#quick form,#signin form,#signup form{
+#jumpIn form,#logIn form,#signUp form{
     background-color:#d2dade;
     border-radius:0.3em;
     box-shadow: inset 0 0 8px rgba(0,0,0,0.6),0 1px rgba(255,255,255,0.1);
     border: solid 1px #000000;
     margin-bottom:16px;
     }
-#signin a{
+#logIn a{
     margin-top:10px;
     color:#636f75;
     font-family: 'Open Sans', 'Helvetica', sans-serif;
     font-size:13px;
     float:right;
     }
-#signin a:hover{
+#logIn a:hover{
     color:#ffffff;
     text-shadow:0 1px rgba(0,0,0,0.3);
     }
