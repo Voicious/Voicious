@@ -22,6 +22,7 @@ Fs      = require 'fs'
 Config      = require './config'
 Database    = require './database'
 PopulateDB  = require './populateDB'
+{Errors}    = require './errors'
 
 class Voicious
     constructor     : () ->
@@ -50,6 +51,7 @@ class Voicious
         @app.set 'port', Config.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
+        @app.set 'title', 'Voicious'
         @app.use do Express.favicon
         @app.use Express.logger 'dev'
         @app.use do Express.bodyParser
@@ -59,6 +61,11 @@ class Voicious
         @app.use @app.router
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
+        @app.use (err, req, res, next) =>
+            if err instanceof Errors.NotFound
+                res.render 'error/404.jade'
+            else
+                res.render 'error/500.jade'
         @configured = yes
 
     start       : () =>
