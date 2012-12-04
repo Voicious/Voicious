@@ -44,7 +44,8 @@
       $('#joinRoomCancel').click(function() {
         return _this.cancelStep(stepOne, $('#joinRoom'));
       });
-      return this.signup();
+      this.signup();
+      return this.signin();
     };
 
     Home.prototype.bindEvent = function() {
@@ -123,6 +124,27 @@
       return $('#' + stepTwo.get(0).id + ' form input').blur();
     };
 
+    Home.prototype.signin = function() {
+      var _this = this;
+      return $('#login-btn').click(function() {
+        var err, mail, pass;
+        mail = $('#login_email').val();
+        pass = $('#login_password').val();
+        err = "";
+        if (!mail) {
+          err += "Missing field : Email<br />";
+        }
+        if (!pass) {
+          err += "Missing field : Password";
+        }
+        if (!err) {
+          return $('#login_form').submit();
+        } else {
+          return $('#msg').html(err);
+        }
+      });
+    };
+
     Home.prototype.signup = function() {
       var _this = this;
       return $('#signup-btn').click(function() {
@@ -148,9 +170,10 @@
         if (password !== confirm) {
           msg += "Password does not match the confirm password";
         }
-        $('#msg').html(msg);
         if (evalEmail && evalPassword && password === confirm) {
           return $("#signup_form").submit();
+        } else {
+          return $('#msg').html(msg);
         }
       });
     };

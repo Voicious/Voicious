@@ -93,6 +93,16 @@ class _User extends BaseService
                         console.log err
                     res.redirect '/room'
 
+    login : (req, res) =>
+        param = req.body
+        if param.mail? and param.password?
+            @Model.all {where: {mail: param.mail, password: param.password}}, (err, data) =>
+                if err
+                    console.log err #TO DO -> handle errors.
+                else if data[0] isnt undefined
+                    res.redirect '/room'
+                else
+                    res.render 'home', {error: "Incorrect email or password"}
 
 class User
     @instance   : do () ->
@@ -114,3 +124,4 @@ exports.User    = do User.get
 exports.Routes  =
     post :
         '/user' : (do User.get).default
+        '/user/login' : (do User.get).login
