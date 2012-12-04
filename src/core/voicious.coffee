@@ -44,6 +44,8 @@ class Voicious
                     if @app[method]?
                         for route of service.Routes[method]
                             @app[method] route, service.Routes[method][route]
+        @app.all /^(?!\/public)\/*/, (req, res) =>
+            throw new Errors.NotFound
 
     configure       : () =>
         if not @connectedToDb
@@ -63,8 +65,10 @@ class Voicious
         do @setAllRoutes
         @app.use (err, req, res, next) =>
             if err instanceof Errors.NotFound
+                res.status 404
                 res.render 'error/404.jade'
             else
+                res.status 500
                 res.render 'error/500.jade'
         @configured = yes
 
