@@ -150,16 +150,7 @@
         }
         $('#msg').html(msg);
         if (evalEmail && evalPassword && password === confirm) {
-          $('#msg').html("Registration confirmed.");
-          return $.ajax({
-            type: "POST",
-            url: "/user",
-            data: {
-              "mail": email,
-              "password": password
-            },
-            dataType: "json"
-          });
+          return $("#signup_form").submit();
         }
       });
     };

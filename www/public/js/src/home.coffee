@@ -106,24 +106,18 @@ class Home
                 evalPassword = passwordExp.test password
                 msg = ""
 
-                if email == "" || password == "" || confirm == ""
-                        $('#msg').html "Incomplete form"
-                        return
-                if evalEmail != true
-                        msg += "Invalid email<br/>"
-                if evalPassword != true
-                        msg += "Password must be at least 5 characters<br/>"
-                if password != confirm
-                        msg += "Password does not match the confirm password"
+                if email is "" or password is "" or confirm is ""
+                    $('#msg').html "Incomplete form"
+                    return
+                if evalEmail isnt true
+                    msg += "Invalid email<br/>"
+                if evalPassword isnt true
+                    msg += "Password must be at least 5 characters<br/>"
+                if password isnt confirm
+                    msg += "Password does not match the confirm password"
                 $('#msg').html msg
-                if evalEmail && evalPassword && password == confirm
-                        $('#msg').html "Registration confirmed."
-                        $.ajax {
-                                type: "POST",
-                                url: "/user",
-                                data: { "mail": email, "password": password },
-                                dataType: "json"
-                        }
+                if evalEmail and evalPassword and password is confirm
+                    $("#signup_form").submit()
 
 $(window).load ->
     home = new Home
