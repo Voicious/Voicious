@@ -23,14 +23,29 @@ Config      = require './config'
 Database    = require './database'
 PopulateDB  = require './populateDB'
 
+# Just implement a _currying_ system, it will be used for routes
+Function.prototype.curry = () ->
+    if arguments.length < 1
+        return this
+    _method = this
+    args    = Array.prototype.slice.call arguments
+    () ->
+        _method.apply this, (args.concat Array.prototype.slice.call arguments)
+
+# Main class  
+# It define the application, populate the database, load all the routes and launch the listenning
 class Voicious  
     constructor     : () ->
         @app            = do Express
         @configured     = no
         @connectedToDb  = no
 
+    # Retrieve all routes from all services and register them in __Express__  
+    # All routes are preprocessed by __Session.withCurrentUser__
     setAllRoutes    : () =>
-        @app.get '/', (req, res) =>
+        # We can't require this before since it'll load its schema in the database
+        {Session}       = require '../services/session'
+        @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
                 title   : 'Voicious'
             res.render 'home', options
@@ -41,8 +56,9 @@ class Voicious
                 for method of service.Routes
                     if @app[method]?
                         for route of service.Routes[method]
-                            @app.get route, service.Routes[method][route]
+                            @app[method] route, Session.withCurrentUser, service.Routes[method][route]
 
+    # Configure the __Express__ instance
     configure       : () =>
         if not @connectedToDb
             return
@@ -60,6 +76,9 @@ class Voicious
         do @setAllRoutes
         @configured = yes
         
+    # Main function  
+    # It'll populate the database, fetch the configuration and launch the listenning  
+    # It also add a listener which properly close the database on _SIGINT_
     start       : () =>
         do Database.connect
         Database.Db.on 'connected', () =>
@@ -67,11 +86,14 @@ class Voicious
             PopulateDB.PopulateDB.populate () =>
                 if not @configured
                     do @configure
+                process.on 'SIGINT', @end
                 (Http.createServer @app).listen (@app.get 'port'), () =>
                     console.log "Server ready on port #{Config.Port}"
 
+    # A callback closing the database before exiting
     end     : () ->
+        console.log "Exiting..."
         do Database.close
-        do @server.close
+        do process.exit
 
 exports.Voicious = Voicious

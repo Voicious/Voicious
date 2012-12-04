@@ -15,8 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Schema  = (require 'jugglingdb').Schema
-Config  = require './config'
+{Schema}    = require 'jugglingdb'
+Config      = require './config'
 
 class _Database
     constructor: () ->

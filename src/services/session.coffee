@@ -15,24 +15,60 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Database    = require '../core/database'
-User        = require './user'
-
-class Session
-    @default    : () ->
-        return
+Database        = require '../core/database'
+{User}          = require './user'
+{BaseService}   = require './service'
 
 class Model
-    @_name      : 'session'
-    @_schema    : {}
-    @_instance  : undefined
+    @_name      : do () ->
+        return {
+            get : () => 'session'
+        }
+
+    @_schema    : do () ->
+        return {
+            get : () => { }
+        }
+
+    @_instance  : do () ->
+        instance    = undefined
+        return {
+            get : ()    =>
+                return instance
+            set : (val) =>
+                instance    = val
+        }
+
     @get        : () ->
-        if @instance == undefined
-            @instance   = Database.createTable @_name, @_schema
-            @instance.belongsTo User.Model,
+        if do @_instance.get == undefined
+            definition  = Database.createTable @_name, @_schema
+            definition.belongsTo User.Model,
                 as          : 'user'
                 foreignKey  : 'uid'
-        @instance
+            @_instance.set definition
+        do @_instance.get
 
-exports.Session = Session
-exports.Model   = do Model.get
+class _Session extends BaseService
+    constructor     : () ->
+        @Model  = do Model.get
+
+    # Middleware which load the current user informations in __req.currentUser__
+    withCurrentUser : (req, res, next) =>
+        req.currentUser = undefined
+        if req.session? and req.session.uid?
+            User.get req.session.uid, (err, u) =>
+                req.currentUser = u
+                console.log u
+                do next
+        else
+            do next
+
+    # Middleware-like function which will call it's __next__ argument if __req.currentUser__ exists  
+    # It'll redirect to _'/'_ if not
+    ifUser          : (next, req, res) =>
+        if req.currentUser
+            next req, res
+        else
+            res.redirect '/'
+
+exports.Session = new _Session

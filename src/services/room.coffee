@@ -15,6 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+{Session}   = require './session'
+
 class Room
         @default: (req, res) ->
             options =
@@ -24,5 +26,4 @@ class Room
 
 exports.Routes  =
     get :
-        '/room' : Room.default
-
+      '/room' : Session.ifUser.curry Room.default

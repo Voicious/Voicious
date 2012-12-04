@@ -73,19 +73,4 @@ class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
 
-class User
-    @instance   : do () ->
-        instance    = undefined
-        return {
-            get : () =>
-                return instance
-            set : (val) =>
-                instance    = val
-        }
-
-    @get        : () ->
-        if do @instance.get is undefined
-            @instance.set new _User
-        do @instance.get
-
-exports.User    = do User.get
+exports.User    = new _User

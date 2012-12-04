@@ -5,8 +5,8 @@
         "stdout"    : true
     },
     "database"  : {
-        "connector" : "sqlite3",
-        "database"  : "/tmp/voicious.sqlite"
+        "connector" : "mongodb",
+        "database"  : "voicious"
     },
     "acl"       : ["administrator", "registered", "temporary"],
     "roles"     : ["operator", "owner"]
