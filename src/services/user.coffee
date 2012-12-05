@@ -64,7 +64,7 @@ class Model
     @get        : () ->
         if do @_instance.get == undefined
             definition = Database.createTable do @_name.get, do @_schema.get
-            definition.validatesPresenceOf 'name', 'mail', 'password', 'id_acl', 'id_role'
+            definition.validatesPresenceOf 'name', 'id_acl', 'id_role'
             definition.validatesUniquenessOf 'mail',
                 message : 'This mail address is already used.'
             definition.validatesUniquenessOf 'name',
