@@ -8,8 +8,7 @@
         "jade"          : "0.27.x",
         "moment"        : "1.7.x",
         "jugglingdb"    : "0.1.x",
-	    "sqlite3"       : "2.x",
-        "MD5"      : "1.0.x"
+        "MD5"           : "1.0.x"
     },
     "directories"   : {
         "lib"       : "./www/lib"

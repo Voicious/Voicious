@@ -22,8 +22,9 @@ The Voicious server requires the following Node.js modules to run :
 
 * Express (=> 3.x)
 * Jade (>= 0.27.x)
-* Moment (>= 1.7.2)
 * JugglingDB (>= 0.1.x)
+* MD5 (>= 1.0x)
+* Moment (>= 1.7.2)
 
 
 To build Voicious you will also need a working CoffeeScript installation

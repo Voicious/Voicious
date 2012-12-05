@@ -41,7 +41,6 @@ class ChoiceForm
         (do @_jqElem.get).fadeIn 600
 
     onSubmit    : (event) =>
-        do event.preventDefault
 
 class SignUpForm extends ChoiceForm
     onSubmit    : (event) =>
