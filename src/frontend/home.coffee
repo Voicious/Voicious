@@ -41,7 +41,6 @@ class ChoiceForm
         (do @_jqElem.get).fadeIn 600
 
     onSubmit    : (event) =>
-        console.log "choiceform"
         do event.preventDefault
 
 class SignUpForm extends ChoiceForm
@@ -49,12 +48,13 @@ class SignUpForm extends ChoiceForm
         mail    = do ((do @_jqForm.get).find 'input#signup_email').val
         passwd  = do ((do @_jqForm.get).find 'input#signup_password').val
         confirm = do ((do @_jqForm.get).find 'input#signup_password_confirm').val
-        err     = ""
-        err     += "Missing field : Email<br />" if not mail
+        err     = (if not mail then "Missing field : Email<br />" else "")
         if not passwd
             err += "Missing field : Password<br />"
         else if not confirm
             err += "Missing field : Password<br />"
+        else if confirm isnt passwd
+            err += "Password and confirmation do not match !<br />"
         if err
             do event.preventDefault
             ($ '#msg').html err

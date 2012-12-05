@@ -77,33 +77,42 @@ class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
 
+    errorOnRegistration : (err, req, res) =>
+        options =
+            error   : err
+            hash    : '#signUp'
+            email   : req.body.mail || ''
+        res.render 'home', options
+
     default : (req, res, next) =>
         param = req.body
-        if param.mail? and param.password?
-            param.password = md5(param.password)
-            param.name = param.mail
-            param.id_acl = 0 #TO DO : put the right value
-            param.id_role = 0 #TO DO : put the right value
-            user = new @Model param
-            user.isValid (valid) =>
-                if not valid
-                    for key, value of user.errors
-                        if value?
-                            options =
-                                error   : value[0]
-                                hash    : '#signUp'
-                                email   : param.mail
-                            console.log options
-                            return res.render 'home', options
-                else
-                    @Model.create user, (err, data) =>
-                        if err
-                            return (next (new Errors.Error err[0]))
-                        res.redirect '/room'
+        if param.mail? and param.password? and param.passwordconfirm?
+            if param.passwordconfirm isnt param.password
+                @errorOnRegistration "Password and confirmation do not match !<br />", req, res
+            else
+                param.password = md5(param.password)
+                param.name = param.mail
+                param.id_acl = 0 #TO DO : put the right value
+                param.id_role = 0 #TO DO : put the right value
+                user = new @Model param
+                user.isValid (valid) =>
+                    if not valid
+                        for key, value of user.errors
+                            if value?
+                                return @errorOnRegistration value[0], req, res
+                    else
+                        @Model.create user, (err, data) =>
+                            if err
+                                return (next (new Errors.Error err[0]))
+                            res.redirect '/room'
         else
-            throw new Errors.error "Internal Server Error"
-
-
+            error   = ''
+            error   += 'Missing field : Email<br />' if not param.mail
+            if not param.password
+                err += 'Missing field : Password<br />'
+            else if not param.passwordconfirm
+                err += 'Missing field : Password<br />'
+            @errorOnRegistration err, req, res
 
     login : (req, res, next) =>
         param = req.body
