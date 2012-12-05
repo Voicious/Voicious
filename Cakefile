@@ -15,8 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{exec}      = require 'child_process'
-Path        = require 'path'
+{spawn, exec}   = require 'child_process'
+Path            = require 'path'
 
 toCompile   = [
     {
@@ -78,8 +78,11 @@ task 'clean', 'Delete all compile files', ->
         exec "rmdir #{Path.join __dirname, elem.destDir}"
     console.log "Done."
 
-task 'doc', 'Build documentation',              ->
-    docco   = spawn 'docco', [ (Path.join sourceDir, '*.coffee'), (Path.join sourceDir, coreDir, '*.coffee'), (Path.join sourceDir, servicesDir, '*.coffee') ]
+task 'doc', 'Build documentation', ->
+    allDirs = []
+    for elem in toCompile
+        allDirs.push (Path.join elem.sourceDir, '*.coffee')
+    docco   = spawn 'docco', allDirs
     docco.stderr.on 'data', (data)  =>
         process.stderr.write (do data.toString)
     docco.stdout.on 'data', (data)  =>

@@ -27,7 +27,7 @@ The Voicious server requires the following Node.js modules to run :
 * Moment (>= 1.7.2)
 
 
-To build Voicious you will also need a working CoffeeScript installation
+To build Voicious you will also need a working CoffeeScript installation  
 To build Voicious' documentation, you will also need Docco and Pygments
 
 ## Licensing
