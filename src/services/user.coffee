@@ -104,6 +104,7 @@ class _User extends BaseService
                         @Model.create user, (err, data) =>
                             if err
                                 return (next (new Errors.Error err[0]))
+                            req.session.uid = data.id
                             res.redirect '/room'
         else
             error   = ''
@@ -121,6 +122,7 @@ class _User extends BaseService
                 if err
                     return (next (new Errors.Error err[0]))
                 else if data[0] isnt undefined
+                    req.session.uid = data[0].id
                     res.redirect '/room'
                 else
                     options =
