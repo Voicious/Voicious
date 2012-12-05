@@ -15,63 +15,67 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{spawn, exec}   = require 'child_process'
-fs              = require 'fs'
-Path            = require 'path'
+{exec}      = require 'child_process'
+Path        = require 'path'
 
-sourceDir   = "src"
-destDir     = "www/lib"
-sourceFiles = [
-    "start"
+toCompile   = [
+    {
+        sourceDir   : 'src'
+        destDir     : (Path.join 'www', 'lib')
+        files       : [ 'start' ]
+    }
+    {
+        sourceDir   : (Path.join 'src', 'core')
+        destDir     : (Path.join 'www', 'lib', 'core')
+        files       : [
+            'config'
+            'database'
+            'errors'
+            'populateDB'
+            'voicious'
+        ]
+    }
+    {
+        sourceDir   : (Path.join 'src', 'services')
+        destDir     : (Path.join 'www', 'lib', 'services')
+        files       : [
+            'api'
+            'room'
+            'service'
+            'session'
+            'user'
+        ]
+    }
+    {
+        sourceDir   : (Path.join 'src', 'frontend')
+        destDir     : (Path.join 'www', 'public', 'js')
+        files       : [
+            "global"
+            "home"
+        ]
+    }
 ]
 
-coreDir     = "core"
-coreFiles   = [
-    "config"
-    "database"
-    "populateDB"
-    "voicious"
-]
-
-servicesDir = "services"
-services    = [
-    "api"
-    "room"
-    "service"
-    "session"
-    "user"
-]
-
-
-compile     = (file, subDir = '.')              ->
+compile     = (sourceDir, destDir, file) ->
     sourceFile  = Path.join __dirname, sourceDir, file + ".coffee"
     destFile    = Path.join __dirname, destDir, file + ".js"
-    console.log "Processing...  [" + (Path.join sourceDir, file + ".coffee") + "] -> [" + (Path.join destDir, file + ".js") + "]"
-    exec 'coffee --compile --output ' + (Path.join destDir, subDir) + ' ' + sourceFile, (err, stdout, stderr) ->
+    console.log "Processing...  [#{sourceFile}] -> [#{destFile}]"
+    exec "coffee --compile --output #{destDir} #{sourceFile}", (err, stdout, stderr) ->
         throw err if err
 
-remove      = (file)                            ->
-    console.log "Removing... [" + (Path.join destDir, file + ".js") + "]"
-    exec 'rm -f ' + (Path.join __dirname, destDir, file + ".js"), (err, stdout, stderr) ->
-
-task 'build', 'Build project',                  ->
-    exec 'mkdir ' + (Path.join __dirname, destDir) if not fs.exists (Path.join __dirname, destDir)
-    compile file for file in sourceFiles
-    exec 'mkdir ' + (Path.join __dirname, destDir, coreDir) if not fs.exists (Path.join __dirname, destDir, coreDir)
-    compile (Path.join coreDir, file), coreDir for file in coreFiles
-    for service in services
-        compile (Path.join servicesDir, service), servicesDir
+task 'build', 'Build project', ->
+    for elem in toCompile
+        exec "mkdir #{Path.join __dirname, elem.destDir}"
+        for file in elem.files
+            compile elem.sourceDir, elem.destDir, file
     console.log "Done."
 
-
-task 'clean', 'Remove all Javascript files',    ->
-    remove file for file in sourceFiles
-    remove (Path.join coreDir, file) for file in coreFiles
-    for service in services
-        remove (Path.join servicesDir, service, service)
-        exec 'rmdir ' + (Path.join __dirname, destDir, servicesDir, service)
-    exec 'rmdir ' + (Path.join __dirname, destDir, coreDir)
-    exec 'rmdir ' + (Path.join __dirname, destDir, servicesDir)
+task 'clean', 'Delete all compile files', ->
+    for elem in toCompile
+        for file in elem.files
+            console.log "Deleting... [#{Path.join __dirname, elem.destDir, file}.js]"
+            exec "rm #{Path.join __dirname, elem.destDir, file}.js"
+        exec "rmdir #{Path.join __dirname, elem.destDir}"
     console.log "Done."
 
 task 'doc', 'Build documentation',              ->

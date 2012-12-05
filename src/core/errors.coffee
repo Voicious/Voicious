@@ -15,15 +15,15 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{Session}   = require './session'
+class Errors
+    @NotFound   : (msg = "404 Not Found") ->
+        @name   = 'NotFound'
+        Error.call this, msg
+        Error.captureStackTrace this, arguments.callee
 
-class Room
-        @default : (req, res) ->
-            options =
-                title   : 'Voicious'
-                login   : 'Paulloz'
-            res.render 'room/room', options
+    @Error      : (msg) ->
+        @name   = 'InternalServerError'
+        Error.call this, msg
+        Error.captureStackTrace this, arguments.callee
 
-exports.Routes  =
-    get :
-        '/room' : Session.ifUser.curry Room.default
+exports.Errors  = Errors

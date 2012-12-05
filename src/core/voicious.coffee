@@ -22,6 +22,7 @@ Fs      = require 'fs'
 Config      = require './config'
 Database    = require './database'
 PopulateDB  = require './populateDB'
+{Errors}    = require './errors'
 
 # Just implement a _currying_ system, it will be used for routes
 Function.prototype.curry = () ->
@@ -34,7 +35,7 @@ Function.prototype.curry = () ->
 
 # Main class  
 # It define the application, populate the database, load all the routes and launch the listenning
-class Voicious  
+class Voicious
     constructor     : () ->
         @app            = do Express
         @configured     = no
@@ -47,7 +48,10 @@ class Voicious
         {Session}       = require '../services/session'
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
-                title   : 'Voicious'
+                title   : 'Voicious',
+                error   : ''
+                hash    : ''
+                email   : ''
             res.render 'home', options
         servicesNames   = Fs.readdirSync Config.Paths.Services
         for serviceName in servicesNames
@@ -57,6 +61,8 @@ class Voicious
                     if @app[method]?
                         for route of service.Routes[method]
                             @app[method] route, Session.withCurrentUser, service.Routes[method][route]
+        @app.all /^(?!\/public)\/*/, (req, res) =>
+            throw new Errors.NotFound
 
     # Configure the __Express__ instance
     configure       : () =>
@@ -65,6 +71,7 @@ class Voicious
         @app.set 'port', Config.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
+        @app.set 'title', 'Voicious'
         @app.use do Express.favicon
         @app.use Express.logger 'dev'
         @app.use do Express.bodyParser
@@ -74,6 +81,13 @@ class Voicious
         @app.use @app.router
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
+        @app.use (err, req, res, next) =>
+            if err instanceof Errors.NotFound
+                res.status 404
+                res.render 'error/404.jade'
+            else
+                res.status 500
+                res.render 'error/500.jade'
         @configured = yes
         
     # Main function  

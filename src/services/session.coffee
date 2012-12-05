@@ -58,7 +58,6 @@ class _Session extends BaseService
         if req.session? and req.session.uid?
             User.get req.session.uid, (err, u) =>
                 req.currentUser = u
-                console.log u
                 do next
         else
             do next

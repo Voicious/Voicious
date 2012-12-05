@@ -15,15 +15,23 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{Session}   = require './session'
+class PrivateValue
+    GetOnly    : (initValue) =>
+        value   = initValue
+        return {
+            get : () => value
+        }
+    
+    GetSet     : (initValue = undefined) =>
+        value   = initValue
+        return {
+            get : ()            => value
+            set : (newValue)    => value    = newValue
+        }
 
-class Room
-        @default : (req, res) ->
-            options =
-                title   : 'Voicious'
-                login   : 'Paulloz'
-            res.render 'room/room', options
+PV  = new PrivateValue
 
-exports.Routes  =
-    get :
-        '/room' : Session.ifUser.curry Room.default
+if window?
+    window.PrivateValue     = PV
+if exports?
+    exports.PrivateValue    = PV
