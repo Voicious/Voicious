@@ -89,7 +89,12 @@ class _User extends BaseService
                 if not valid
                     for key, value of user.errors
                         if value?
-                            return res.render 'home', {error: value[0]}
+                            options =
+                                error   : value[0]
+                                hash    : '#signUp'
+                                email   : param.mail
+                            console.log options
+                            return res.render 'home', options
                 else
                     @Model.create user, (err, data) =>
                         if err
@@ -109,7 +114,11 @@ class _User extends BaseService
                 else if data[0] isnt undefined
                     res.redirect '/room'
                 else
-                    res.render 'home', {error: "Incorrect email or password"}
+                    options =
+                        error   : 'Incorrect email or password'
+                        hash    : '#logIn'
+                        email   : ''
+                    res.render 'home', options
         else
             throw new Errors.error "Internal Server Error"
 

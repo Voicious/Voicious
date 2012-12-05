@@ -35,6 +35,8 @@ class Voicious
             options =
                 title   : 'Voicious',
                 error   : ''
+                hash    : ''
+                email   : ''
             res.render 'home', options
         servicesNames   = Fs.readdirSync Config.Paths.Services
         for serviceName in servicesNames

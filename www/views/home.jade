@@ -1,7 +1,12 @@
 extends main
 
 block scripts
+    script(type="text/javascript")
+        console.log("#{hash}");
+        window.location.hash    = "#{hash}";
     script(type="text/javascript", src="/public/js/home.js")
+    script(type="text/javascript")
+        $(document).ready(function() { $('p#msg').text('#{error}'); });
 
 block content
     div#logo.no-selec
@@ -41,7 +46,7 @@ block content
         a(href="#password") Forgot password?
       div#signUp.no-selec
         form#signup_form(method="POST", action="/user")
-          input#signup_email.brdr(name="mail", type="email", placeholder="Email")
+          input#signup_email.brdr(name="mail", type="email", placeholder="Email", value="#{email}")
           input#signup_password.brdr(name="password", type="password", placeholder="Password")
           input#signup_password_confirm.brdr(type="password", placeholder="Confirm Password")
         button#signup-btn.light-blue.btn-submit.txt-shd(type="submit", form="signup_form") Sign Up
