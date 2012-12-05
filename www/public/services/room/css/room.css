@@ -13,12 +13,25 @@
     box-shadow: 0 1px rgba(255, 255, 255, 0.05);
 }
 
+@font-face {
+    font-family: "BreeSerif-Regular";
+    src: url(../fonts/BreeSerif-Regular.ttf) format("truetype");
+}
+@font-face {
+    font-family: "OpenSans-Regular";
+    src: url(../fonts/OpenSans-Regular.ttf) format("truetype");
+}
+@font-face {
+    font-family: "OpenSans-Bold";
+    src: url(../fonts/OpenSans-Bold.ttf) format("truetype");
+}
+
 #room_logo {
     position: absolute;
-    height: 25px; width: 7em;
-    margin-left: 0.8%; margin-top: 25.8%;
-    background-repeat: no-repeat;
-    background-image: url(../pictures/voicious_logo.png);
+    margin-left: 0.8%; margin-top: 8.8%;
+    font-family: 'BreeSerif-Regular';
+    color: white;
+    font-size: 30px;
 }
 
 #options_first {
@@ -39,8 +52,16 @@
     position: absolute;
     color: #51626f;
     margin-top: 4px;
-    font-family: 'Open Sans', 'Helvetica', sans-serif;
+    font-family: 'OpenSans-Regular';
     font-size: 11px;
+}
+
+#room_url, #login {
+    color: white;
+}
+
+#login {
+    left: 76px;
 }
 
 .options button {
@@ -48,7 +69,7 @@
     width: auto;
     color: white;
     height: 25px;
-    font-family: 'Open Sans', 'Helvetica', sans-serif;
+    font-family: 'OpenSans-Bold';
     font-size: 65%;
     font-weight: bold;
     background-color: #1E2123;
@@ -57,15 +78,15 @@
 }
 
 #password {
-    right: 111px;
+    right: 116px;
 }
 #plugins {
-    right: 2%
+    right: 1%
 }
 
 
 #contacts {
-    right: 74px;
+    right: 80px;
 }
 #settings {
     right: 2%
