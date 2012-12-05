@@ -20,7 +20,7 @@ class Errors
         @name   = 'NotFound'
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
-    
+
     @Error      : (msg) ->
         @name   = 'InternalServerError'
         Error.call this, msg

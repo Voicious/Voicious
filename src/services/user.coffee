@@ -15,8 +15,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Database    = require '../core/database'
-BaseService = (require './service').BaseService
+Database        = require '../core/database'
+BaseService     = (require './service').BaseService
+{Errors}        = require '../core/errors'
+md5             = require 'MD5'
 
 class Model
     @_name      : do () ->
@@ -78,6 +80,7 @@ class _User extends BaseService
     default : (req, res) =>
         param = req.body
         if param.mail? and param.password?
+            param.password = md5(param.password)
             param.name = param.mail
             param.id_acl = 0 #TO DO : put the right value
             param.id_role = 0 #TO DO : put the right value
@@ -90,19 +93,25 @@ class _User extends BaseService
                 else
                     @Model.create user, (err, data) =>
                         if err
-                            console.log err
+                            throw new Errors.error err[0]
                         res.redirect '/room'
+        else
+            throw new Errors.error "Internal Server Error"
+
+
 
     login : (req, res) =>
         param = req.body
         if param.mail? and param.password?
-            @Model.all {where: {mail: param.mail, password: param.password}}, (err, data) =>
+            @Model.all {where: {mail: param.mail, password: md5(param.password)}}, (err, data) =>
                 if err
-                    console.log err #TO DO -> handle errors.
+                    throw new Errors.error err[0]
                 else if data[0] isnt undefined
                     res.redirect '/room'
                 else
                     res.render 'home', {error: "Incorrect email or password"}
+        else
+            throw new Errors.error "Internal Server Error"
 
 class User
     @instance   : do () ->
