@@ -77,7 +77,7 @@ class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
 
-    default : (req, res) =>
+    default : (req, res, next) =>
         param = req.body
         if param.mail? and param.password?
             param.password = md5(param.password)
@@ -93,19 +93,19 @@ class _User extends BaseService
                 else
                     @Model.create user, (err, data) =>
                         if err
-                            throw new Errors.error err[0]
+                            return (next (new Errors.Error err[0]))
                         res.redirect '/room'
         else
             throw new Errors.error "Internal Server Error"
 
 
 
-    login : (req, res) =>
+    login : (req, res, next) =>
         param = req.body
         if param.mail? and param.password?
             @Model.all {where: {mail: param.mail, password: md5(param.password)}}, (err, data) =>
                 if err
-                    throw new Errors.error err[0]
+                    return (next (new Errors.Error err[0]))
                 else if data[0] isnt undefined
                     res.redirect '/room'
                 else
