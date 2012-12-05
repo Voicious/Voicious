@@ -1,47 +1,48 @@
 extends main
 
 block scripts
-    script(type="text/javascript", src="/public/js/lib/home.js")
+    script(type="text/javascript", src="/public/js/home.js")
 
 block content
     div#logo.no-selec
     div#desc.no-selec web voice chat application
     div#choices.no-selec
       ul.clean
-        li.choice.txt-shd Jump in
-        li.choice.middle-choice.txt-shd Log in
-        li.choice.txt-shd Sign up
+        li#jumpInBtn.choice.txt-shd Jump in
+        li#logInBtn.choice.middle-choice.txt-shd Log in
+        li#signUpBtn.choice.txt-shd Sign up
       ul
-    div#quick.no-selec
-      div#stepOne
-        button#newRoomBtn.med-green.btn-submit.txt-shd
-          span Create a new Room
-        button#joinRoomBtn.blue-green.btn-submit.txt-shd
-          span Join an existing Room
-      div#newRoom
-        form
-          input#newNickname.brdr(type="text", placeholder="Nickname")
-        button#newRoomCommit.light-blue.btn-submit.txt-shd
-          span Create the Room
-        button#newRoomCancel.grey-blue.btn-submit.txt-shd
-          span Cancel
-      div#joinRoom
-        form
-          input#joinNickname.brdr(type="text", placeholder="Nickname")
-          input#joinUrl.no-brdr(type="text", placeholder="Room URL")
-        button#joinRoomCommit.light-blue.btn-submit.txt-shd Join the Room
-        button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
-    div#signin.no-selec
-      form#login_form(method="POST", action="/user/login")
-        input#login_email.brdr(name="mail", type="email", placeholder="Email")
-        input#login_password.no-brdr(name="password", type="password", placeholder="Password")
-      button#login-btn.light-blue.btn-submit.txt-shd
-        span Log in
-      a(href="#password") Forgot password?
-    div#signup.no-selec
-      form#signup_form(method="POST", action="/user")
-        input#signup_email.brdr(name="mail", type="email", placeholder="Email")
-        input#signup_password.brdr(name="password", type="password", placeholder="Password")
-        input#signup_password_confirm.brdr(type="password", placeholder="Confirm Password")
-      button#signup-btn.light-blue.btn-submit.txt-shd Sign Up
-    p#msg #{error}
+    span#choicesContainer
+      div#jumpIn.no-selec
+        div#stepOne
+          button#newRoomBtn.med-green.btn-submit.txt-shd
+            span Create a new Room
+          button#joinRoomBtn.blue-green.btn-submit.txt-shd
+            span Join an existing Room
+        div#newRoom
+          form
+            input#newNickname.brdr(type="text", placeholder="Nickname")
+          button#newRoomCommit.light-blue.btn-submit.txt-shd
+            span Create the Room
+          button#newRoomCancel.grey-blue.btn-submit.txt-shd
+            span Cancel
+        div#joinRoom
+          form
+            input#joinNickname.brdr(type="text", placeholder="Nickname")
+            input#joinUrl.no-brdr(type="text", placeholder="Room URL")
+          button#joinRoomCommit.light-blue.btn-submit.txt-shd Join the Room
+          button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
+      div#logIn.no-selec
+        form#login_form(method="POST", action="/user/login")
+          input#login_email.brdr(name="mail", type="email", placeholder="Email")
+          input#login_password.no-brdr(name="password", type="password", placeholder="Password")
+        button#login-btn.light-blue.btn-submit.txt-shd(type="submit", form="login_form")
+          span Log in
+        a(href="#password") Forgot password?
+      div#signUp.no-selec
+        form#signup_form(method="POST", action="/user")
+          input#signup_email.brdr(name="mail", type="email", placeholder="Email")
+          input#signup_password.brdr(name="password", type="password", placeholder="Password")
+          input#signup_password_confirm.brdr(type="password", placeholder="Confirm Password")
+        button#signup-btn.light-blue.btn-submit.txt-shd(type="submit", form="signup_form") Sign Up
+      p#msg #{error}
