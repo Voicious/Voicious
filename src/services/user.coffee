@@ -77,7 +77,7 @@ class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
 
-    # Render the home page  
+    # Render the home page
     # This function is called when there is an error during registration
     errorOnRegistration : (err, req, res) =>
         options =
@@ -86,8 +86,8 @@ class _User extends BaseService
             email   : req.body.mail || ''
         res.render 'home', options
 
-    # Called for registering a user  
-    # Check sanity of all values and render the home page if any value is wrong  
+    # Called for registering a user
+    # Check sanity of all values and render the home page if any value is wrong
     # If everything is ok, create the user, log him in and redirect into room (must redirect into dashboard in the future)
     register : (req, res, next) =>
         param = req.body
@@ -141,5 +141,5 @@ class _User extends BaseService
 exports.User    = new _User
 exports.Routes  =
     post :
-        '/user'         : exports.User.default
+        '/user'         : exports.User.register
         '/login'        : exports.User.login

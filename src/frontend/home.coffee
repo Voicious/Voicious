@@ -78,6 +78,6 @@ class Choice
         '#jumpIn'   : new Choice 'jumpIn'
         '#logIn'    : new Choice 'logIn'
         '#signUp'   : new Choice 'signUp', SignUpForm
-    
+
     if window.location.hash? and choices[window.location.hash]?
         do choices[window.location.hash].onClick
