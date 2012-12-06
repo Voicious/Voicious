@@ -23,6 +23,28 @@ FadeIn  = () =>
         marginTop   : '+=20'
     }, 600
 
+class JumpInStep
+    constructor : (@father, @name) ->
+        @_jqBtn     = PrivateValue.GetOnly ($ '#' + @name + 'Btn')
+        @_jqDiv     = PrivateValue.GetOnly ($ 'div#' + @name)
+        @_jqCancel  = PrivateValue.GetOnly ((do @_jqDiv.get).find '#' + @name + 'Cancel')
+        (do @_jqBtn.get).click @display
+        (do @_jqCancel.get).click @hide
+
+    display : (event) =>
+        do @father.hide
+        (do @_jqDiv.get).fadeTo 0.01
+        (do @_jqDiv.get).animate {
+            left    : '-=290'
+        }, 600
+
+    hide    : (event) =>
+        do @father.show
+        (do @_jqDiv.get).fadeTo 0.99
+        (do @_jqDiv.get).animate {
+            left    : '+=290'
+        }, 600
+
 class ChoiceForm
     constructor : (@name) ->
         @_jqElem    = PrivateValue.GetOnly ($ '#' + @name)
@@ -41,6 +63,27 @@ class ChoiceForm
         (do @_jqElem.get).fadeIn 600
 
     onSubmit    : (event) =>
+
+class JumpInForm extends ChoiceForm
+    constructor : (@name) ->
+        super @name
+        @_jqFirstStep   = PrivateValue.GetOnly (do @_jqElem.get).find '#stepOne'
+        @steps  = [
+            new JumpInStep this, 'newRoom'
+            new JumpInStep this, 'joinRoom'
+        ]
+
+    hide : () =>
+        (do @_jqFirstStep.get).fadeTo 0.99
+        (do @_jqFirstStep.get).animate {
+            left    : '-=290'
+        }, 600
+
+    show : () =>
+        (do @_jqFirstStep.get).fadeTo 0.01
+        (do @_jqFirstStep.get).animate {
+            left    : '+=290'
+        }, 600
 
 class SignUpForm extends ChoiceForm
     onSubmit    : (event) =>
@@ -75,7 +118,7 @@ class Choice
     do ($ 'span#choicesContainer > div div').show
     do FadeIn
     choices =
-        '#jumpIn'   : new Choice 'jumpIn'
+        '#jumpIn'   : new Choice 'jumpIn', JumpInForm
         '#logIn'    : new Choice 'logIn'
         '#signUp'   : new Choice 'signUp', SignUpForm
 
