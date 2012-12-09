@@ -52,6 +52,7 @@ class Voicious
                 error   : ''
                 hash    : ''
                 email   : ''
+                name    : ''
             res.render 'home', options
         servicesNames   = Fs.readdirSync Config.Paths.Services
         for serviceName in servicesNames
@@ -89,7 +90,7 @@ class Voicious
                 res.status 500
                 res.render 'error/500.jade'
         @configured = yes
-        
+
     # Main function  
     # It'll populate the database, fetch the configuration and launch the listenning  
     # It also add a listener which properly close the database on _SIGINT_
