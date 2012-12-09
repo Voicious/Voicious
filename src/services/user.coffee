@@ -86,6 +86,32 @@ class _User extends BaseService
             email   : req.body.mail || ''
         res.render 'home', options
 
+    # Render the home page
+    # This function is called when there is an error during quick log in
+    errorOnQuickLogin : (err, req, res) =>
+        options =
+            error   : err
+            hash    : '#jumpIn'
+            name    : req.body.name || ''
+        res.render 'home', options
+
+    newUser : (req, res, param, errorCallback) =>
+        console.log "In new User"
+        user = new @Model param
+        user.isValid (valid) =>
+            console.log "In callback isValid"
+            if not valid
+                for key, value of user.errors
+                    if value?
+                        console.log value
+                        return errorCallback value[0], req, res
+            else
+                @Model.create user, (err, data) =>
+                    if err
+                        return (next (new Errors.Error err[0]))
+                    req.session.uid = data.id
+                    res.redirect '/room'
+
     # Called for registering a user
     # Check sanity of all values and render the home page if any value is wrong
     # If everything is ok, create the user, log him in and redirect into room (must redirect into dashboard in the future)
@@ -99,21 +125,10 @@ class _User extends BaseService
                 param.name = param.mail
                 param.id_acl = 0 #TO DO : put the right value
                 param.id_role = 0 #TO DO : put the right value
-                user = new @Model param
-                user.isValid (valid) =>
-                    if not valid
-                        for key, value of user.errors
-                            if value?
-                                return @errorOnRegistration value[0], req, res
-                    else
-                        @Model.create user, (err, data) =>
-                            if err
-                                return (next (new Errors.Error err[0]))
-                            req.session.uid = data.id
-                            res.redirect '/room'
+                @newUser req, res, param, @errorOnRegistration
         else
-            error   = ''
-            error   += 'Missing field : Email<br />' if not param.mail
+            err   = ''
+            err   += 'Missing field : Email<br />' if not param.mail
             if not param.password
                 err += 'Missing field : Password<br />'
             else if not param.passwordconfirm
@@ -138,8 +153,18 @@ class _User extends BaseService
         else
             throw new Errors.error "Internal Server Error"
 
+    quickLogin : (req, res, next) =>
+        param = req.body
+        if param.name?
+            param.id_acl = 0 #TO DO : put the right value
+            param.id_role = 0 #TO DO : put the right value
+            @newUser req, res, param, @errorOnQuickLogin
+        else
+            @errorOnQuickLogin 'Missing field : Nickname<br />', req, res
+
 exports.User    = new _User
 exports.Routes  =
     post :
         '/user'         : exports.User.register
         '/login'        : exports.User.login
+        '/quickLogin'   : exports.User.quickLogin
