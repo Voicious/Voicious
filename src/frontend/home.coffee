@@ -28,20 +28,31 @@ class JumpInStep
         @_jqBtn     = PrivateValue.GetOnly ($ '#' + @name + 'Btn')
         @_jqDiv     = PrivateValue.GetOnly ($ 'div#' + @name)
         @_jqCancel  = PrivateValue.GetOnly ((do @_jqDiv.get).find '#' + @name + 'Cancel')
+        @_jqElem    = PrivateValue.GetOnly (do @_jqDiv.get).find 'button'
         (do @_jqBtn.get).click @display
         (do @_jqCancel.get).click @hide
 
     display : (event) =>
+        for elem in do (do @_jqDiv.get).siblings
+            elemName = $(elem).attr 'id'
+            if elemName isnt @name and elemName isnt (do @father._jqFirstStep.get).attr 'id'
+                do $(elem).hide
+        for btn in (do @_jqElem.get)
+            $(btn).attr 'disabled', off
         do @father.hide
         (do @_jqDiv.get).fadeTo 0.01
         (do @_jqDiv.get).animate {
+            opacity : 1
             left    : '-=290'
         }, 600
 
     hide    : (event) =>
+        for btn in (do @_jqElem.get)
+            $(btn).attr 'disabled', on
         do @father.show
         (do @_jqDiv.get).fadeTo 0.99
         (do @_jqDiv.get).animate {
+            opacity : 0
             left    : '+=290'
         }, 600
 
@@ -68,20 +79,27 @@ class JumpInForm extends ChoiceForm
     constructor : (@name) ->
         super @name
         @_jqFirstStep   = PrivateValue.GetOnly (do @_jqElem.get).find '#stepOne'
+        @_jqBtn         = PrivateValue.GetOnly (do @_jqFirstStep.get).find 'button'
         @steps  = [
             new JumpInStep this, 'newRoom'
             new JumpInStep this, 'joinRoom'
         ]
 
     hide : () =>
+        for btn in (do @_jqBtn.get)
+            $(btn).attr 'disabled', on
         (do @_jqFirstStep.get).fadeTo 0.99
         (do @_jqFirstStep.get).animate {
+            opacity : 0
             left    : '-=290'
         }, 600
 
     show : () =>
+        for btn in (do @_jqBtn.get)
+            $(btn).attr 'disabled', off
         (do @_jqFirstStep.get).fadeTo 0.01
         (do @_jqFirstStep.get).animate {
+            opacity : 1
             left    : '+=290'
         }, 600
 
