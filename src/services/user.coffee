@@ -167,6 +167,7 @@ class _User extends BaseService
     quickLogin : (req, res, next) =>
         param = req.body
         if param.name? and param.name isnt ""
+            param.mail = param.name + do Date.now
             param.id_acl = 0 #TO DO : put the right value
             param.id_role = 0 #TO DO : put the right value
             @newUser req, res, param, @errorOnQuickLogin
