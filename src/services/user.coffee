@@ -77,18 +77,48 @@ class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
 
-    # Render the home page  
+    # Render the home page
     # This function is called when there is an error during registration
     errorOnRegistration : (err, req, res) =>
         options =
             error   : err
             hash    : '#signUp'
             email   : req.body.mail || ''
+            name    : ''
         res.render 'home', options
 
-    # Called for registering a user  
-    # Check sanity of all values and render the home page if any value is wrong  
-    # If everything is ok, create the user, log him in and redirect into room (must redirect into dashboard in the future)
+    # Render the home page
+    # This function is called when there is an error during quick log in
+    errorOnQuickLogin : (err, req, res) =>
+        console.log "On quick Login Error"
+        options =
+            error   : err
+            hash    : '#jumpIn'
+            email   : ''
+            name    : req.body.name || ''
+        console.log options
+        res.render 'home', options
+
+    # Called for inserting a new user in database
+    # Check Validity of all the values (mail, name, etc)
+    # If everything is ok, create the user, log him in and redirect into room (only room for the moment)
+    newUser : (req, res, param, errorCallback) =>
+        user = new @Model param
+        user.isValid (valid) =>
+            if not valid
+                for key, value of user.errors
+                    if value?
+                        return errorCallback value[0], req, res
+            else
+                @Model.create user, (err, data) =>
+                    if err
+                        return (next (new Errors.Error err[0]))
+                    req.session.uid = data.id
+                    res.redirect '/room'
+
+    # Called for registering a user
+    # Check sanity of all values and called the method newUser to create a new user
+    # if something went wrong, render the home page with the errors setted
     register : (req, res, next) =>
         param = req.body
         if param.mail? and param.password? and param.passwordconfirm?
@@ -99,27 +129,19 @@ class _User extends BaseService
                 param.name = param.mail
                 param.id_acl = 0 #TO DO : put the right value
                 param.id_role = 0 #TO DO : put the right value
-                user = new @Model param
-                user.isValid (valid) =>
-                    if not valid
-                        for key, value of user.errors
-                            if value?
-                                return @errorOnRegistration value[0], req, res
-                    else
-                        @Model.create user, (err, data) =>
-                            if err
-                                return (next (new Errors.Error err[0]))
-                            req.session.uid = data.id
-                            res.redirect '/room'
+                @newUser req, res, param, @errorOnRegistration
         else
-            error   = ''
-            error   += 'Missing field : Email<br />' if not param.mail
+            err   = ''
+            err   += 'Missing field : Email<br />' if not param.mail
             if not param.password
                 err += 'Missing field : Password<br />'
             else if not param.passwordconfirm
                 err += 'Missing field : Password<br />'
             @errorOnRegistration err, req, res
 
+    # Called for loging in a user
+    # Check sanity of all values and render the home page if any value is wrong
+    # if everything is ok, log the user in and redirect him into room
     login : (req, res, next) =>
         param = req.body
         if param.mail? and param.password?
@@ -134,12 +156,27 @@ class _User extends BaseService
                         error   : 'Incorrect email or password'
                         hash    : '#logIn'
                         email   : ''
+                        name    : ''
                     res.render 'home', options
         else
             throw new Errors.error "Internal Server Error"
 
+    # Called when non registered user create a Room
+    # Check if the name of the user is correctly set, if not render the home page
+    # if everything is ok, create and log the user in and redirect him into room
+    quickLogin : (req, res, next) =>
+        param = req.body
+        if param.name? and param.name isnt ""
+            param.mail = param.name + do Date.now
+            param.id_acl = 0 #TO DO : put the right value
+            param.id_role = 0 #TO DO : put the right value
+            @newUser req, res, param, @errorOnQuickLogin
+        else
+            @errorOnQuickLogin 'Missing field : Nickname', req, res
+
 exports.User    = new _User
 exports.Routes  =
     post :
-        '/user'         : exports.User.default
+        '/user'         : exports.User.register
         '/login'        : exports.User.login
+        '/quickLogin'   : exports.User.quickLogin

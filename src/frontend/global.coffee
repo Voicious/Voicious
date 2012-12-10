@@ -21,7 +21,7 @@ class PrivateValue
         return {
             get : () => value
         }
-    
+
     GetSet     : (initValue = undefined) =>
         value   = initValue
         return {

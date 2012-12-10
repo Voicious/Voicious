@@ -26,9 +26,9 @@ block content
           button#joinRoomBtn.blue-green.btn-submit.txt-shd
             span Join an existing Room
         div#newRoom
-          form
-            input#newNickname.brdr(type="text", placeholder="Nickname")
-          button#newRoomCommit.light-blue.btn-submit.txt-shd
+          form#quickLogin_form(method="POST", action='/quickLogin')
+            input#newNickname.brdr(name="name", type="text", placeholder="Nickname", value="#{name}")
+          button#newRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickLogin_form")
             span Create the Room
           button#newRoomCancel.grey-blue.btn-submit.txt-shd
             span Cancel
