@@ -8,7 +8,7 @@
 #menu {
     position: relative;
     margin: auto;
-    height: 57px;
+    height: 53px;
     background: rgba(0, 0, 0, 0.3);
     box-shadow: 0 1px rgba(255, 255, 255, 0.05);
 }
@@ -28,7 +28,7 @@
 
 #room_logo {
     position: absolute;
-    margin-left: 0.8%; margin-top: 8.8%;
+    margin-left: 0.8%; margin-top: 4px;/*8.8%;*/
     font-family: 'BreeSerif-Regular';
     color: white;
     font-size: 30px;
@@ -44,7 +44,7 @@
 .options {
     position: absolute;
     width: 23%;
-    margin-top: 28%;
+    margin-top: 15px;
     font-weight: bold;
 }
 
@@ -69,7 +69,9 @@
     position: absolute;
     width: auto;
     color: white;
-    height: 25px;
+    height: 23px;
+    padding-left: 10px;
+    padding-right: 10px;
     font-family: 'OpenSans-Bold';
     font-size: 65%;
     font-weight: bold;
@@ -82,7 +84,7 @@
 }
 
 #password {
-    right: 112px;
+    right: 119px;
 }
 #plugins {
     right: 0%
@@ -90,7 +92,7 @@
 
 
 #contacts {
-    right: 80px;
+    right: 86px;
 }
 #settings {
     right: 2%
