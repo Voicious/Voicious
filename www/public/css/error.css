@@ -1,0 +1,54 @@
+body {
+  background: #1e2123;
+  color: #ffffff;
+}
+
+div#page {
+    width: 580px;
+    position: relative;
+    top: 154px;
+    left: 50%;
+    margin-left: -290px;
+}
+
+div#content {
+    background: #14191d;
+    width: 454px;
+    padding: 40px 63px;
+    text-align: center;
+    font-family: 'Inconsolata', sans-serif;
+    clear: both;
+}
+
+div#content > h1 {
+    font-weight: 700;
+    font-size: 120px;
+}
+
+div#content > h2 {
+    font-weight: 400;
+    font-size: 30px;
+}
+
+div#content > p {
+    text-align: left;
+    font-weight: 400;
+    margin: 40px 0 20px 0;
+    font-size: 14px;
+}
+
+.errorGreenText {
+    color: #7de240;
+}
+
+div#footer {
+    position: relative;
+    top: 5px;
+    left: 20px;
+}
+
+div#footer > p > span#copyright {
+    position: relative;
+    bottom: 4px;
+    left: 10px;
+}
