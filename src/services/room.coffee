@@ -15,14 +15,51 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{Session}   = require './session'
+Database        = require '../core/database'
+BaseService     = (require './service').BaseService
+{Session}       = require './session'
+
+class Model
+        @_name : do () ->
+                return {
+                        get : () => 'room'
+                }
+
+        @_schema : do () ->
+                return {
+                        get : () ->
+                                return {
+                                        name :
+                                                type   : String
+                                                length : 255
+                                        id_owner :
+                                                type   : Number
+                                }
+                }
+
+        @_instance : do () ->
+                instance = undefined
+                return {
+                        get : () =>
+                                return instance
+                        set : (val) =>
+                                instance = val
+                }
+
+        @get : () ->
+                if do @_instance.get == undefined
+                        definition = Database.createTable do @_name.get, do @_schema.get
+                        definition.validatesPresenceOf 'name', 'id_owner'
+                        definition.validatesNumericalityOf 'id_owner'
+                        @_instance.set definition
+                do @_instance.get
 
 class Room
         @default : (req, res) ->
-            options =
-                title   : 'Voicious'
-                login   : 'Paulloz'
-            res.render 'room/room', options
+                options =
+                        title   : 'Voicious'
+                        login   : 'Paulloz'
+                res.render 'room/room', options
 
 exports.Routes  =
     get :
