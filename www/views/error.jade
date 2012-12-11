@@ -1,12 +1,4 @@
-extends main
+extends ../main
 
-block body
-    div
-      h1 #{httpErrorCode} #{httpErrorMsg}
-      br
-      div
-        label #{errno}
-        br
-        label #{syscall}
-        br
-        label #{text}
+block content
+    p 404 Not Found !
