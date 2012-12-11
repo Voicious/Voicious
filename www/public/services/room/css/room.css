@@ -13,19 +13,6 @@
     box-shadow: 0 1px rgba(255, 255, 255, 0.05);
 }
 
-@font-face {
-    font-family: "BreeSerif-Regular";
-    src: url(../fonts/BreeSerif-Regular.ttf) format("truetype");
-}
-@font-face {
-    font-family: "OpenSans-Regular";
-    src: url(../fonts/OpenSans-Regular.ttf) format("truetype");
-}
-@font-face {
-    font-family: "OpenSans-Bold";
-    src: url(../fonts/OpenSans-Bold.ttf) format("truetype");
-}
-
 #room_logo {
     position: absolute;
     margin-left: 0.8%; margin-top: 4px;/*8.8%;*/
@@ -37,6 +24,7 @@
 #options_first {
     left: 162px;
 }
+
 #options_second {
     right: 0%;
 }
@@ -86,6 +74,7 @@
 #password {
     right: 119px;
 }
+
 #plugins {
     right: 0%
 }
@@ -94,6 +83,7 @@
 #contacts {
     right: 86px;
 }
+
 #settings {
     right: 2%
 }
