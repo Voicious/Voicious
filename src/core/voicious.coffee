@@ -48,7 +48,7 @@ class Voicious
         {Session}       = require '../services/session'
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
-                title   : 'Voicious',
+                title   : (@app.get 'title'),
                 error   : ''
                 hash    : ''
                 email   : ''
@@ -72,7 +72,7 @@ class Voicious
         @app.set 'port', Config.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
-        @app.set 'title', 'Voicious'
+        @app.set 'title', 'voıċıoųs'
         @app.use do Express.favicon
         @app.use Express.logger 'dev'
         @app.use do Express.bodyParser
@@ -88,11 +88,12 @@ class Voicious
                 res.status 404
                 options.status      = "404"
                 options.statusText  = "not_found"
-                res.render 'error/404.jade'
+                options.errorMsg    = "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
             else
                 res.status 500
                 options.status      = "500"
                 options.statusText  = "server_error"
+            options.title   = (@app.get 'title') + " | " + options.status + " " + options.statusText
             res.render 'error.jade', options
         @configured = yes
 
