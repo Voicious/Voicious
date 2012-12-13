@@ -17,7 +17,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Database        = require '../core/database'
 BaseService     = (require './service').BaseService
+{User}          = require './user'
 {Session}       = require './session'
+md5             = require 'MD5'
 
 class Model
         @_name : do () ->
@@ -32,8 +34,6 @@ class Model
                                         name :
                                                 type   : String
                                                 length : 255
-                                        id_owner :
-                                                type   : Number
                                 }
                 }
 
@@ -49,18 +49,38 @@ class Model
         @get : () ->
                 if do @_instance.get == undefined
                         definition = Database.createTable do @_name.get, do @_schema.get
-                        definition.validatesPresenceOf 'name', 'id_owner'
-                        definition.validatesNumericalityOf 'id_owner'
+                        definition.belongsTo User.Model,
+                                as         : 'param'
+                                foreignKey : 'oid'
+                        definition.validatesPresenceOf 'name'
                         @_instance.set definition
                 do @_instance.get
 
-class Room
-        @default : (req, res) ->
+class _Room extends BaseService
+        @default : (req, res, param) ->
+                user = req.currentUser
                 options =
                         title   : 'Voicious'
                         login   : 'Paulloz'
+                        room    : 'rgz4zgzr'
                 res.render 'room/room', options
 
+        constructor : () ->
+                @Model = do Model.get
+
+        newRoom : (req, res, param, errorCallback) =>
+                room = new @Model param
+                room.isValid (valid) =>
+                        if not valid
+                                for key, value of room.errors
+                                        if value?
+                                                return errorCallback value[0], req, res
+                        else
+                                @Model.create room, (err, data) =>
+                                        if err
+                                                return (next (new Errors.Error err[0]))
+                                        res.redirect '/room'
+exports.Room    = new _Room
 exports.Routes  =
     get :
-        '/room' : Session.ifUser.curry Room.default
+        '/room' : Session.ifUser.curry _Room.default

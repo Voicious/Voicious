@@ -13,6 +13,7 @@ See the GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License along with this
 program. If not, see <http://www.gnu.org/licenses/>.
 
+
 ###
 
 Database        = require '../core/database'
@@ -76,7 +77,7 @@ class Model
 class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
-
+        
     # Render the home page
     # This function is called when there is an error during registration
     errorOnRegistration : (err, req, res) =>
@@ -104,6 +105,7 @@ class _User extends BaseService
     # If everything is ok, create the user, log him in and redirect into room (only room for the moment)
     newUser : (req, res, param, errorCallback) =>
         user = new @Model param
+        {Room} = require('./room')
         user.isValid (valid) =>
             if not valid
                 for key, value of user.errors
@@ -114,7 +116,10 @@ class _User extends BaseService
                     if err
                         return (next (new Errors.Error err[0]))
                     req.session.uid = data.id
-                    res.redirect '/room'
+                    param.room = md5(do Date.now)
+                    param.name = param.room
+                    param.oid = data.id
+                    Room.newRoom req, res, param, @errorOnQuickLogin
 
     # Called for registering a user
     # Check sanity of all values and called the method newUser to create a new user
