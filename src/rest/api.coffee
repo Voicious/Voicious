@@ -1,0 +1,121 @@
+###
+
+Copyright (c) 2011-2012  Voicious
+
+This program is free software: you can redistribute it and/or modify it under the terms of the
+GNU Affero General Public License as published by the Free Software Foundation, either version
+3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this
+program. If not, see <http://www.gnu.org/licenses/>.
+
+###
+
+Http        = require 'http'
+Express     = require 'express'
+{Schema}    = require 'jugglingdb'
+Fs          = require 'fs'
+
+class Api
+    constructor     : () ->
+        @app            = do Express
+        @db             = new Schema 'mongodb', {
+            connector   : 'mongodb'
+            database    : 'testdb'
+        }
+        @models         = []
+        @configured     = false
+    
+    defineGet       : (model) =>
+        @app.get '/api/' + model, (req, res) =>
+            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            # TODO set filters, expands etc.
+            @db.models[model].all (err, all) =>
+                res.json all
+        @app.get '/api/' + model + '/:id', (req, res) =>
+            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            try
+                @db.models[model].find req.params.id, (err, obj) =>
+                    if obj?
+                        res.json obj
+                    else
+                        res.send 404
+            catch e
+                res.send 400
+
+    definePost      : (model) =>
+        @app.post '/api/' + model, (req, res) =>
+            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            obj = new @models[model] req.body
+            obj.isValid (valid) =>
+                if valid
+                    @models[model].create obj
+                    res.json obj
+                else
+                    res.send 400
+
+    defineDelete    : (model) =>
+        @app.delete '/api/' + model + '/:id', (req, res) =>
+            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            try
+                @db.models[model].find req.params.id, (err, obj) =>
+                    if obj?
+                        obj.destroy () =>
+                            res.send 200
+                    else
+                        res.send 404
+            catch e
+                res.send 400
+
+    definePut       : (model) =>
+        @app.put '/api/' + model + '/:id', (req, res) =>
+            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+
+    defineAllRoutes : () =>
+        ressources  = []
+        for model of @db.models
+            ressources.push model
+            @defineGet model
+            @definePost model
+            @defineDelete model
+            @definePut model
+        @app.get '/api', (req, res) => res.json ressources
+
+    defineAllModels : () =>
+        # TODO replace with path variable
+        modelsPath  = '../models'
+        modelsNames = Fs.readdirSync modelsPath
+        for modelName in modelsNames
+            if (modelName.split '.')[1] == "js"
+                {
+                    ModelDef
+                    AfterModelDef
+                }   = require '../models/' + modelName
+                name            = (modelName.split '.')[0]
+                @models[name]   = @db.define name, ModelDef
+                AfterModelDef @models[name]
+        u   = new @models.user
+        u.name  = "Paul"
+        @models.user.create u
+
+    configure       : () =>
+        @app.set 'port', 8173
+        @app.use Express.logger 'dev'
+        @app.use do Express.bodyParser
+        @app.use do Express.methodOverride
+        @app.use @app.router
+        do @defineAllModels
+        do @defineAllRoutes
+        @configured = true
+
+    start       : () =>
+        @db.on 'connected', () =>
+            do @configure if not @configured
+            (Http.createServer @app).listen (@app.get 'port'), () =>
+                console.log "Server ready on port #{@app.get 'port'}"
+
+do (new Api).start
