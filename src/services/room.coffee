@@ -57,12 +57,12 @@ class Model
                 do @_instance.get
 
 class _Room extends BaseService
-        @default : (req, res, param) ->
+        @default : (req, res) ->
                 user = req.currentUser
                 options =
                         title   : 'Voicious'
-                        login   : 'Paulloz'
-                        room    : 'rgz4zgzr'
+                        login   : user.name
+                        room    : req.params.roomid
                 res.render 'room/room', options
 
         constructor : () ->
@@ -79,8 +79,9 @@ class _Room extends BaseService
                                 @Model.create room, (err, data) =>
                                         if err
                                                 return (next (new Errors.Error err[0]))
-                                        res.redirect '/room'
+                                        res.redirect '/room/' + param.room
+
 exports.Room    = new _Room
 exports.Routes  =
     get :
-        '/room' : Session.ifUser.curry _Room.default
+        '/room/:roomid' : Session.ifUser.curry _Room.default
