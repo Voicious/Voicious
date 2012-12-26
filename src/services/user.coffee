@@ -116,7 +116,7 @@ class _User extends BaseService
                     if err
                         return (next (new Errors.Error err[0]))
                     req.session.uid = data.id
-                    param.room = md5(do Date.now)
+                    param.room = (md5(do Date.now)).substr 0, 10
                     param.name = param.room
                     param.oid = data.id
                     Room.newRoom req, res, param, @errorOnQuickLogin
