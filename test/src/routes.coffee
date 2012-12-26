@@ -41,7 +41,8 @@ api         =
         return context
 
 ((Vows.describe "Voicious' Routes").addBatch
-    'GET /room'                     : api.respondsWith 302
+    'GET /room'                     : api.respondsWith 404
+    'GET /room/homeWhenNotLogged'   : api.respondsWith 302
     'GET /aRouteThatShouldNotExist' : api.respondsWith 404
     'GET /'                         : api.respondsWith 200
 ).export module

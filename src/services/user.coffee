@@ -16,10 +16,11 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+md5             = require 'MD5'
+
 Database        = require '../core/database'
 BaseService     = (require './service').BaseService
 {Errors}        = require '../core/errors'
-md5             = require 'MD5'
 
 class Model
     @_name      : do () ->
@@ -77,7 +78,7 @@ class Model
 class _User extends BaseService
     constructor : () ->
         @Model  = do Model.get
-        
+
     # Render the home page
     # This function is called when there is an error during registration
     errorOnRegistration : (err, req, res) =>

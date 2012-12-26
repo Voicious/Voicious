@@ -19,7 +19,6 @@ Database        = require '../core/database'
 BaseService     = (require './service').BaseService
 {User}          = require './user'
 {Session}       = require './session'
-md5             = require 'MD5'
 
 class Model
         @_name : do () ->
