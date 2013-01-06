@@ -34,8 +34,21 @@ class Api
         @app.get '/api/' + model, (req, res) =>
             res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
             # TODO set filters, expands etc.
-            @db.models[model].all (err, all) =>
-                res.json all
+            if req.query
+                objs = {}
+                for k, v of req.query
+                    objs[k] = v
+                try
+                    @db.models[model].all {where: objs}, (err, objs) =>
+                        if objs?
+                            res.json objs
+                        else
+                            res.send 404
+                catch e
+                    res.send 400
+            else
+                @db.models[model].all (err, all) =>
+                    res.json all
         @app.get '/api/' + model + '/:id', (req, res) =>
             res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
             try
