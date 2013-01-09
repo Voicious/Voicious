@@ -15,13 +15,33 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+DisplayError    = (erroron, error) =>
+    jqElem  = null
+    switch erroron
+        when "login_email"      then jqElem = ($ "input#login_email")
+        when "login_password"   then jqElem = ($ "input#login_password")
+    jqElem.addClass 'error'
+    jqErrorElem  = ($ '<div>', { id : "errorMsg" }).html error
+    jqErrorElem.css 'position', 'absolute'
+    ($ 'body').append jqErrorElem
+    topPosition     = (do jqElem.offset).top + ((do jqElem.innerHeight) / 2) - ((do jqErrorElem.innerHeight) / 2)
+    leftPosition    = (do jqElem.offset).left + (do jqElem.position).left + (do jqElem.innerWidth) - (do jqErrorElem.innerWidth) - 10
+    jqErrorElem.css {
+        top         : topPosition
+        left        : leftPosition
+    }
+
 FadeIn  = () =>
     ($ '#logo').fadeIn 1600
     (($ '#desc').delay 100).fadeIn 800
     ((($ '#choices').delay 100).fadeTo 0.01).animate {
         opacity     : 1,
         marginTop   : '+=20'
-    }, 600
+    }, 600, () =>
+        if window.erroron? and window.error?
+            DisplayError erroron, error
+            window.erroron  = undefined
+            window.error    = undefined
 
 class JumpInStep
     constructor : (@father, @name) ->
@@ -65,10 +85,12 @@ class ChoiceForm
     display     : () =>
         do ($ '#msg').empty
         ($ 'span#choicesContainer div.displayed').hide 0, () ->
+            do ($ 'div#errorMsg').remove
             ($ this).removeClass 'displayed'
             (($ this).find 'form').each () ->
                 (($ this).find 'input').each () ->
-                    ($ this).val ""
+                    ($ this).val ''
+                    ($ this).removeClass 'error'
         (do @_jqElem.get).addClass 'displayed'
         window.location.hash    = @name
         (do @_jqElem.get).fadeIn 600
@@ -109,12 +131,10 @@ class SignUpForm extends ChoiceForm
         passwd  = do ((do @_jqForm.get).find 'input#signup_password').val
         confirm = do ((do @_jqForm.get).find 'input#signup_password_confirm').val
         err     = (if not mail then "Missing field : Email<br />" else "")
-        if not passwd
-            err += "Missing field : Password<br />"
-        else if not confirm
-            err += "Missing field : Password<br />"
-        else if confirm isnt passwd
-            err += "Password and confirmation do not match !<br />"
+        if not passwd or not confirm or confirm isnt passwd
+            ((do @_jqForm.get).find 'input#signup_password').addClass 'error'
+            ((do @_jqForm.get).find 'input#signup_password_confirm').addClass 'error'
+            err = "ee"
         if err
             do event.preventDefault
             ($ '#msg').html err

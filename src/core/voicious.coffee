@@ -49,7 +49,6 @@ class Voicious
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
                 title   : (@app.get 'title'),
-                error   : ''
                 hash    : ''
                 email   : ''
                 name    : ''

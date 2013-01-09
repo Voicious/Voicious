@@ -143,23 +143,31 @@ class _User extends BaseService
     # Check sanity of all values and render the home page if any value is wrong
     # if everything is ok, log the user in and redirect him into room
     login : (req, res, next) =>
-        param = req.body
+        param       = req.body
+        errorOpts   =
+            hash    : '#logIn'
+            email   : ''
+            name    : ''
+            title   : 'Voicious'
         if param.mail? and param.password?
-            @Model.all {where: {mail: param.mail, password: md5(param.password)}}, (err, data) =>
+            errorOpts.email = param.mail
+            @Model.all {where: {mail: param.mail}}, (err, data) =>
                 if err
                     return (next (new Errors.Error err[0]))
                 else if data[0] isnt undefined
-                    req.session.uid = data[0].id
-                    res.redirect '/room'
+                    if data[0].password is md5(param.password)
+                        req.session.uid = data[0].id
+                        res.redirect '/room'
+                    else
+                        errorOpts.error     = 'Invalid password'
+                        errorOpts.erroron   = 'login_password'
+                        res.render 'home', errorOpts
                 else
-                    options =
-                        error   : 'Incorrect email or password'
-                        hash    : '#logIn'
-                        email   : ''
-                        name    : ''
-                    res.render 'home', options
+                    errorOpts.error     = 'Invalid email'
+                    errorOpts.erroron   = 'login_email'
+                    res.render 'home', errorOpts
         else
-            throw new Errors.error "Internal Server Error"
+            res.render 'home', errorOpts
 
     # Called when non registered user create a Room
     # Check if the name of the user is correctly set, if not render the home page

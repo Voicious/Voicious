@@ -118,6 +118,10 @@ input[type="text"], input[type="email"], input[type="password"] {
     font-weight: bold;
 }
 
+input[type="text"].error, input[type="email"].error, input[type="password"].error {
+    background-color: rgba(215,180,186,100);
+}
+
 input:focus, textarea:focus {
     outline: none;
 }
@@ -172,4 +176,13 @@ ul.clean {
     color: #636f75;
     font-family: 'Open Sans', 'Helvetica', sans-serif;
     font-size: 13px;
+}
+
+div#errorMsg {
+    background-color: #ea1d24;
+    color: #fff;
+    padding: 4px;
+    -moz-border-radius: 0.2em;
+    -webkit-border-radius: 0.2em;
+    border-radius: 0.2em;
 }

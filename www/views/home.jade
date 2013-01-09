@@ -8,9 +8,14 @@ block scripts
         if ("#{hash}" !== "") {
             window.location.hash    = "#{hash}";
         }
+
     script(type="text/javascript", src="/public/js/home.js")
-    script(type="text/javascript")
-        $(document).ready(function() { $('p#msg').html('#{error}'); });
+    if locals.error
+        script(type="text/javascript")
+            this.error      = "#{error}"
+    if locals.erroron
+        script(type="text/javascript")
+            this.erroron    = "#{erroron}";
 
 block content
     div#logo.no-selec
@@ -43,7 +48,7 @@ block content
           button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
       div#logIn.no-selec
         form#login_form(method="POST", action="/login")
-          input#login_email.brdr(name="mail", type="email", placeholder="Email")
+          input#login_email.brdr(name="mail", type="email", placeholder="Email", value="#{email}")
           input#login_password.no-brdr(name="password", type="password", placeholder="Password")
         button#login-btn.light-blue.btn-submit.txt-shd(type="submit", form="login_form")
           span Log in
@@ -54,4 +59,5 @@ block content
           input#signup_password.brdr(name="password", type="password", placeholder="Password")
           input#signup_password_confirm.brdr(name="passwordconfirm", type="password", placeholder="Confirm Password")
         button#signup-btn.light-blue.btn-submit.txt-shd(type="submit", form="signup_form") Sign Up
-      p#msg #{error}
+      if locals.error
+        p#msg #{error}
