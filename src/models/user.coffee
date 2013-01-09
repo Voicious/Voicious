@@ -39,39 +39,5 @@ ModelDef =
 AfterModelDef   = (m) =>
     m.validatesPresenceOf 'name', 'mail'
 
-###
-Room    = Db.define 'room', {
-    slug    :
-        type    : String
-        length  : 100
-        index   : true
-}
-
-Room.hasMany User, {
-    as          : 'users',
-    foreignKey  : 'room_id'
-}
-
-Room.
-
-u       = new User
-u.name  = "TEST"
-User.create u
-
-console.log Room
-console.log User
-
-r       = new Room
-r.slug  = "TESTROOM"
-Room.create r, (err) =>
-    console.log r
-    u.room_id   = r.id
-    do u.save
-    r.users () =>
-        console.log arguments
-
-do Db.automigrate
-###
-
 exports.ModelDef        = ModelDef
 exports.AfterModelDef   = AfterModelDef

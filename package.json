@@ -14,8 +14,6 @@
         "lib"       : "./www/lib"
     },
     "scripts"       : {
-        "install"   : "cake build",
-        "start"     : "node ./www/lib/start.js",
-        "test"      : "cd test && npm start"
+        "install"   : "cake build"
     }
 }

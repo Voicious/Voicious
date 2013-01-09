@@ -20,6 +20,8 @@ Express     = require 'express'
 {Schema}    = require 'jugglingdb'
 Fs          = require 'fs'
 
+Config      = require '../common/config'
+
 class Api
     constructor     : () ->
         @app            = do Express
@@ -32,7 +34,7 @@ class Api
     
     defineGet       : (model) =>
         @app.get '/api/' + model, (req, res) =>
-            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            res.set 'Access-Control-Allow-Origin', '*'
             # TODO set filters, expands etc.
             if req.query
                 objs = {}
@@ -43,14 +45,14 @@ class Api
                         if objs?
                             res.json objs
                         else
-                            res.send 404
+                            res.json []
                 catch e
                     res.send 400
             else
                 @db.models[model].all (err, all) =>
                     res.json all
         @app.get '/api/' + model + '/:id', (req, res) =>
-            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            res.set 'Access-Control-Allow-Origin', '*'
             try
                 @db.models[model].find req.params.id, (err, obj) =>
                     if obj?
@@ -60,20 +62,9 @@ class Api
             catch e
                 res.send 400
 
-    definePost      : (model) =>
-        @app.post '/api/' + model, (req, res) =>
-            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
-            obj = new @models[model] req.body
-            obj.isValid (valid) =>
-                if valid
-                    @models[model].create obj
-                    res.json obj
-                else
-                    res.send 400
-
     defineDelete    : (model) =>
         @app.delete '/api/' + model + '/:id', (req, res) =>
-            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            res.set 'Access-Control-Allow-Origin', '*'
             try
                 @db.models[model].find req.params.id, (err, obj) =>
                     if obj?
@@ -83,10 +74,24 @@ class Api
                         res.send 404
             catch e
                 res.send 400
+    updateOrCreate  : (model, req, res) =>
+        obj = new @models[model] req.body
+        obj.isValid (valid) =>
+            if valid
+                @models[model].updateOrCreate obj
+                res.json obj
+            else
+                res.send 400
+
+    definePost      : (model) =>
+        @app.post '/api/' + model, (req, res) =>
+            res.set 'Access-Control-Allow-Origin', '*'
+            @updateOrCreate model, req, res
 
     definePut       : (model) =>
         @app.put '/api/' + model + '/:id', (req, res) =>
-            res.set 'Access-Control-Allow-Origin', 'http://localhost:4242'
+            res.set 'Access-Control-Allow-Origin', '*'
+            @updateOrCreate model, req, res
 
     defineAllRoutes : () =>
         ressources  = []

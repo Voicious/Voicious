@@ -19,7 +19,7 @@ Http    = require 'http'
 Express = require 'express'
 Fs      = require 'fs'
 
-Config      = require './config'
+Config      = require '../common/config'
 Database    = require './database'
 PopulateDB  = require './populateDB'
 {Errors}    = require './errors'

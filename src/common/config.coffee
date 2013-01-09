@@ -47,7 +47,7 @@ class _Config
 
     constructor         : ()            ->
         @Paths   =
-            Webroot : Path.join __dirname, '..', '..'
+            Webroot : Path.join __dirname, '..', '..', 'www'
         @Paths.Approot          = Path.join @Paths.Webroot, '..'
         @Paths.Config           = Path.join @Paths.Approot, 'etc'
         @Paths.Views            = Path.join @Paths.Webroot, 'views'

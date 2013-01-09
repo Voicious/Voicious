@@ -16,7 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 {Schema}    = require 'jugglingdb'
-Config      = require './config'
+Config      = require '../common/config'
 
 class _Database
     constructor: () ->

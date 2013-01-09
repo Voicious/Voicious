@@ -15,7 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Config = require './config'
+Config = require '../common/config'
 Database = require './database'
 
 class PopulateDB
