@@ -20,6 +20,8 @@ DisplayError    = (erroron, error) =>
     switch erroron
         when "login_email"      then jqElem = ($ "input#login_email")
         when "login_password"   then jqElem = ($ "input#login_password")
+        when "signup_password"  then jqElem = ($ "input#signup_password")
+        when "signup_email"     then jqElem = ($ "input#signup_email")
     jqElem.addClass 'error'
     jqErrorElem  = ($ '<div>', { id : "errorMsg" }).html error
     jqErrorElem.css 'position', 'absolute'
@@ -130,14 +132,14 @@ class SignUpForm extends ChoiceForm
         mail    = do ((do @_jqForm.get).find 'input#signup_email').val
         passwd  = do ((do @_jqForm.get).find 'input#signup_password').val
         confirm = do ((do @_jqForm.get).find 'input#signup_password_confirm').val
-        err     = (if not mail then "Missing field : Email<br />" else "")
-        if not passwd or not confirm or confirm isnt passwd
+        if not mail
+            do event.preventDefault
+            DisplayError 'signup_email', 'Invalid email'
+        else if not passwd or not confirm or confirm isnt passwd
+            do event.preventDefault
             ((do @_jqForm.get).find 'input#signup_password').addClass 'error'
             ((do @_jqForm.get).find 'input#signup_password_confirm').addClass 'error'
-            err = "ee"
-        if err
-            do event.preventDefault
-            ($ '#msg').html err
+            DisplayError 'signup_password', 'Invalid password'
 
 class Choice
     constructor  : (@name, formType = ChoiceForm) ->
