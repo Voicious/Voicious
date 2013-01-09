@@ -46,7 +46,8 @@ class _Config
         @Roles      = tmpJSON.roles
 
     constructor         : ()            ->
-        @Paths   =
+        @Title  = 'voıċıoųs'
+        @Paths  =
             Webroot : Path.join __dirname, '..', '..', 'www'
         @Paths.Approot          = Path.join @Paths.Webroot, '..'
         @Paths.Config           = Path.join @Paths.Approot, 'etc'

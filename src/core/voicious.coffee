@@ -68,7 +68,7 @@ class Voicious
         @app.set 'port', Config.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
-        @app.set 'title', 'voıċıoųs'
+        @app.set 'title', Config.Title
         @app.use do Express.favicon
         @app.use Express.logger 'dev'
         @app.use do Express.bodyParser
