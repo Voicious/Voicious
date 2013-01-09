@@ -116,9 +116,6 @@ class Api
                 name            = (modelName.split '.')[0]
                 @models[name]   = @db.define name, ModelDef
                 AfterModelDef @models[name]
-        u   = new @models.user
-        u.name  = "Paul"
-        @models.user.create u
 
     configure       : () =>
         @app.set 'port', 8173

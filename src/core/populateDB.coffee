@@ -16,15 +16,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Config = require '../common/config'
-Database = require './database'
 
 class PopulateDB
     @populate: (callback) ->
-        User    = (require '../services/user').User
-        Database.flushTable () =>
-            u   = new User.Model
-                name    : "Paul"
-            User.save u, () =>
-                do callback
+        do callback
 
 exports.PopulateDB = PopulateDB
