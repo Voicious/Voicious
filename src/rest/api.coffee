@@ -34,7 +34,6 @@ class Api
     
     defineGet       : (model) =>
         @app.get '/api/' + model, (req, res) =>
-            res.set 'Access-Control-Allow-Origin', '*'
             # TODO set filters, expands etc.
             if req.query
                 objs = {}
@@ -52,7 +51,6 @@ class Api
                 @db.models[model].all (err, all) =>
                     res.json all
         @app.get '/api/' + model + '/:id', (req, res) =>
-            res.set 'Access-Control-Allow-Origin', '*'
             try
                 @db.models[model].find req.params.id, (err, obj) =>
                     if obj?
@@ -64,7 +62,6 @@ class Api
 
     defineDelete    : (model) =>
         @app.delete '/api/' + model + '/:id', (req, res) =>
-            res.set 'Access-Control-Allow-Origin', '*'
             try
                 @db.models[model].find req.params.id, (err, obj) =>
                     if obj?
@@ -85,12 +82,10 @@ class Api
 
     definePost      : (model) =>
         @app.post '/api/' + model, (req, res) =>
-            res.set 'Access-Control-Allow-Origin', '*'
             @updateOrCreate model, req, res
 
     definePut       : (model) =>
         @app.put '/api/' + model + '/:id', (req, res) =>
-            res.set 'Access-Control-Allow-Origin', '*'
             @updateOrCreate model, req, res
 
     defineAllRoutes : () =>
@@ -118,10 +113,16 @@ class Api
                 AfterModelDef @models[name]
 
     configure       : () =>
-        @app.set 'port', 8173
+        @app.set 'port', Config.RestAPI.Port
         @app.use Express.logger 'dev'
         @app.use do Express.bodyParser
         @app.use do Express.methodOverride
+        @app.use (req, res, next) ->
+            if req.headers.origin?
+                if req.headers.origin in Config.RestAPI.AllowedHosts or
+                '*' in Config.RestAPI.AllowedHosts
+                    res.set 'Access-Control-Allow-Origin', req.headers.origin
+            do next
         @app.use @app.router
         do @defineAllModels
         do @defineAllRoutes
