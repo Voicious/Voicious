@@ -1,13 +1,16 @@
 {
-    "port"      : 4242,
-    "logger"    : {
-        "level"     : "debug",
-        "stdout"    : true
+    "voicious"  : {
+        "hostname"  : "localhost",
+        "port"      : 4242,
+        "acl"       : ["administrator", "registered", "temporary"],
+        "roles"     : ["operator", "owner"]
+    },
+    "restapi"   : {
+        "hostname"      : "localhost",
+        "port"          : 8173,
+        "allowed-hosts" : "*"
     },
     "database"  : {
-        "connector" : "mongodb",
-        "database"  : "voicious"
-    },
-    "acl"       : ["administrator", "registered", "temporary"],
-    "roles"     : ["operator", "owner"]
+        "connector" : "mongodb"
+    }
 }
