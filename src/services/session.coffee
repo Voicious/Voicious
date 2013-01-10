@@ -15,48 +15,17 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Database        = require '../core/database'
+Request         = require 'request'
 {User}          = require './user'
-{BaseService}   = require './service'
 
-class Model
-    @_name      : do () ->
-        return {
-            get : () => 'session'
-        }
-
-    @_schema    : do () ->
-        return {
-            get : () => { }
-        }
-
-    @_instance  : do () ->
-        instance    = undefined
-        return {
-            get : ()    =>
-                return instance
-            set : (val) =>
-                instance    = val
-        }
-
-    @get        : () ->
-        if do @_instance.get == undefined
-            definition  = Database.createTable @_name, @_schema
-            definition.belongsTo User.Model,
-                as          : 'user'
-                foreignKey  : 'uid'
-            @_instance.set definition
-        do @_instance.get
-
-class _Session extends BaseService
+class _Session
     constructor     : () ->
-        @Model  = do Model.get
 
     # Middleware which load the current user informations in __req.currentUser__
     withCurrentUser : (req, res, next) =>
         req.currentUser = undefined
         if req.session? and req.session.uid?
-            User.get req.session.uid, (err, u) =>
+            Request.get "http://localhost:8173/api/user/#{req.session.uid}", (e, r, u) =>
                 req.currentUser = u
                 do next
         else

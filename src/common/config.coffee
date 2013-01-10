@@ -28,8 +28,16 @@ class _Config
             password    : dbConfig.password
             database    : dbConfig.database
 
-        if not { "mongodb" : "" , "sqlite3" : "" }.hasOwnProperty @Database.connector
-            throw new (Error "Your database connector is not supported (yet) !")
+    loadRestApiConfig   : (restApiConfig) ->
+        @RestAPI    =
+            Host            : restApiConfig.hostname
+            Port            : restApiConfig.port
+            AllowedHosts    : [ "http://#{@HostName}:#{@Port}" ]
+        if (typeof restApiConfig["allowed-hosts"]) is (typeof [])
+            for allowedHost in restApiConfig["allowed-hosts"]
+                @RestAPI.AllowedHosts.push allowedHost
+        else if (typeof restApiConfig["allowed-hosts"]) is (typeof "")
+            @RestAPI.AllowedHosts.push restApiConfig["allowed-hosts"]
 
     loadConfigJSON      : ()            ->
         fileToOpen  = 'config'
@@ -37,17 +45,21 @@ class _Config
             fileToOpen  += '.' + process.env.NODE_ENV
         tmpJSON     = require (Path.join @Paths.Config, fileToOpen + ".json")
 
-        @Port       = tmpJSON.port
+        @HostName   = tmpJSON.voicious.hostname
+        @Port       = tmpJSON.voicious.port
 
         @loadDatabaseConfig (tmpJSON.database || undefined)
 
-        @Acl        = tmpJSON.acl
+        @loadRestApiConfig (tmpJSON.restapi || undefined)
 
-        @Roles      = tmpJSON.roles
+        @Acl        = tmpJSON.voicious.acl
+
+        @Roles      = tmpJSON.voicious.roles
 
     constructor         : ()            ->
-        @Paths   =
-            Webroot : Path.join __dirname, '..', '..'
+        @Title  = 'voıċıoųs'
+        @Paths  =
+            Webroot : Path.join __dirname, '..', '..', 'www'
         @Paths.Approot          = Path.join @Paths.Webroot, '..'
         @Paths.Config           = Path.join @Paths.Approot, 'etc'
         @Paths.Views            = Path.join @Paths.Webroot, 'views'

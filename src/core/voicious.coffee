@@ -19,8 +19,7 @@ Http    = require 'http'
 Express = require 'express'
 Fs      = require 'fs'
 
-Config      = require './config'
-Database    = require './database'
+Config      = require '../common/config'
 PopulateDB  = require './populateDB'
 {Errors}    = require './errors'
 
@@ -39,7 +38,6 @@ class Voicious
     constructor     : () ->
         @app            = do Express
         @configured     = no
-        @connectedToDb  = no
 
     # Retrieve all routes from all services and register them in __Express__  
     # All routes are preprocessed by __Session.withCurrentUser__
@@ -67,12 +65,10 @@ class Voicious
 
     # Configure the __Express__ instance
     configure       : () =>
-        if not @connectedToDb
-            return
         @app.set 'port', Config.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
-        @app.set 'title', 'voıċıoųs'
+        @app.set 'title', Config.Title
         @app.use do Express.favicon
         @app.use Express.logger 'dev'
         @app.use do Express.bodyParser
@@ -93,28 +89,24 @@ class Voicious
                 res.status 500
                 options.status      = "500"
                 options.statusText  = "server_error"
+                options.errorMsg    = "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
             options.title   = (@app.get 'title') + " | " + options.status + " " + options.statusText
             res.render 'error.jade', options
         @configured = yes
 
     # Main function  
     # It'll populate the database, fetch the configuration and launch the listenning  
-    # It also add a listener which properly close the database on _SIGINT_
     start       : () =>
-        do Database.connect
-        Database.Db.on 'connected', () =>
-            @connectedToDb  = yes
-            PopulateDB.PopulateDB.populate () =>
-                if not @configured
-                    do @configure
-                process.on 'SIGINT', @end
-                (Http.createServer @app).listen (@app.get 'port'), () =>
-                    console.log "Server ready on port #{Config.Port}"
+        PopulateDB.PopulateDB.populate () =>
+            if not @configured
+                do @configure
+            process.on 'SIGINT', @end
+            (Http.createServer @app).listen (@app.get 'port'), () =>
+                console.log "Server ready on port #{Config.Port}"
 
     # A callback closing the database before exiting
     end     : () ->
         console.log "Exiting..."
-        do Database.close
         do process.exit
 
 exports.Voicious = Voicious

@@ -15,10 +15,29 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Config = require '../common/config'
+ModelDef =
+    name    :
+        type    : String
+        length  : 40
+        index   : true
+    mail    :
+        type    : String
+        length  : 40
+    password:
+        type    : String
+        length  : 255
+    id_acl  :
+        type    : Number
+    id_role :
+        type    : Number
+    c_date  :
+        type    : Date
+        default : Date.now
+    last_con    :
+        type    : Date
 
-class PopulateDB
-    @populate: (callback) ->
-        do callback
+AfterModelDef   = (m) =>
+    m.validatesPresenceOf 'name', 'mail'
 
-exports.PopulateDB = PopulateDB
+exports.ModelDef        = ModelDef
+exports.AfterModelDef   = AfterModelDef

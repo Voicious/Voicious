@@ -17,42 +17,43 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 {spawn, exec}   = require 'child_process'
 Path            = require 'path'
+Fs              = require 'fs'
 
 toCompile   = [
     {
         sourceDir   : 'src'
-        destDir     : (Path.join 'www', 'lib')
+        destDir     : 'lib'
         files       : [ 'start' ]
     }
     {
+        sourceDir   : (Path.join 'src', 'common')
+        destDir     : (Path.join 'lib', 'common')
+        files       : [ 'config' ]
+    }
+    {
         sourceDir   : (Path.join 'src', 'core')
-        destDir     : (Path.join 'www', 'lib', 'core')
-        files       : [
-            'config'
-            'database'
-            'errors'
-            'populateDB'
-            'voicious'
-        ]
+        destDir     : (Path.join 'lib', 'core')
+        files       : [ 'errors', 'populateDB', 'voicious' ]
+    }
+    {
+        sourceDir   : (Path.join 'src', 'rest')
+        destDir     : (Path.join 'lib', 'rest')
+        files       : [ 'api' ]
+    }
+    {
+        sourceDir   : (Path.join 'src', 'models')
+        destDir     : (Path.join 'lib', 'models')
+        files       : [ 'user' ]
     }
     {
         sourceDir   : (Path.join 'src', 'services')
-        destDir     : (Path.join 'www', 'lib', 'services')
-        files       : [
-            'api'
-            'room'
-            'service'
-            'session'
-            'user'
-        ]
+        destDir     : (Path.join 'lib', 'services')
+        files       : [ 'room', 'service', 'session', 'user' ]
     }
     {
         sourceDir   : (Path.join 'src', 'frontend')
         destDir     : (Path.join 'www', 'public', 'js')
-        files       : [
-            "global"
-            "home"
-        ]
+        files       : [ 'global', 'home' ]
     }
 ]
 

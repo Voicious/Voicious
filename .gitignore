@@ -1,8 +1,6 @@
-/www/*.js
-/www/lib
-/www/lib/*.js
-/www/lib/core/*.js
-/www/lib/services/*.js
+lib
+lib/*
+
 /www/public/js/*.js
 
 log/*

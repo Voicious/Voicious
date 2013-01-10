@@ -15,67 +15,13 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Database        = require '../core/database'
-BaseService     = (require './service').BaseService
-{Errors}        = require '../core/errors'
+Request         = require 'request'
 md5             = require 'MD5'
+{Errors}        = require '../core/errors'
+Config          = require '../common/config'
 
-class Model
-    @_name      : do () ->
-        return {
-            get : () -> 'user'
-        }
-
-    @_schema    : do () ->
-        return {
-            get : () ->
-                return {
-                    name    :
-                        type    : String
-                        length  : 255
-                        index   : true
-                    mail        :
-                        type    : String
-                        length  : 255
-                    password:
-                        type    : String
-                        length  : 255
-                    id_acl  :
-                        type    : Number
-                    id_role :
-                        type    : Number
-                    c_date  :
-                        type    : Date
-                        default : Date.now
-                    last_con:
-                        type    : Date
-                }
-        }
-
-    @_instance  : do () ->
-        instance    = undefined
-        return {
-            get : () =>
-                return instance
-            set : (val) =>
-                instance    = val
-        }
-
-    @get        : () ->
-        if do @_instance.get == undefined
-            definition = Database.createTable do @_name.get, do @_schema.get
-            definition.validatesPresenceOf 'name', 'id_acl', 'id_role'
-            definition.validatesUniquenessOf 'mail',
-                message : 'This mail address is already used.'
-            definition.validatesUniquenessOf 'name',
-                message : 'This name is already used.'
-            definition.validatesNumericalityOf 'id_acl', 'id_role'
-            @_instance.set definition
-        do @_instance.get
-
-class _User extends BaseService
+class _User
     constructor : () ->
-        @Model  = do Model.get
 
     # Render the home page
     # This function is called when there is an error during registration
@@ -85,6 +31,7 @@ class _User extends BaseService
             hash    : '#signUp'
             email   : req.body.mail || ''
             name    : ''
+            title   : Config.title
         res.render 'home', options
 
     # Render the home page
@@ -96,6 +43,7 @@ class _User extends BaseService
             hash    : '#jumpIn'
             email   : ''
             name    : req.body.name || ''
+            title   : Config.title
         console.log options
         res.render 'home', options
 
@@ -103,18 +51,26 @@ class _User extends BaseService
     # Check Validity of all the values (mail, name, etc)
     # If everything is ok, create the user, log him in and redirect into room (only room for the moment)
     newUser : (req, res, param, errorCallback) =>
-        user = new @Model param
-        user.isValid (valid) =>
-            if not valid
-                for key, value of user.errors
-                    if value?
-                        return errorCallback value[0], req, res
-            else
-                @Model.create user, (err, data) =>
-                    if err
-                        return (next (new Errors.Error err[0]))
-                    req.session.uid = data.id
-                    res.redirect '/room'
+        Request.post {
+            json    : param
+            url     : 'http://localhost:8173/api/user'
+        }, (e, r, body) =>
+            if e? or r.statusCode > 200
+                return (next (new Errors.Error e[0]))
+            req.session.uid = body.id
+            res.redirect '/room'
+        #user = new @Model param
+        #user.isValid (valid) =>
+        #    if not valid
+        #        for key, value of user.errors
+        #            if value?
+        #                return errorCallback value[0], req, res
+        #    else
+        #        @Model.create user, (err, data) =>
+        #            if err
+        #                return (next (new Errors.Error err[0]))
+        #            req.session.uid = data.id
+        #            res.redirect '/room'
 
     # Called for registering a user
     # Check sanity of all values and called the method newUser to create a new user
@@ -143,23 +99,26 @@ class _User extends BaseService
     # Check sanity of all values and render the home page if any value is wrong
     # if everything is ok, log the user in and redirect him into room
     login : (req, res, next) =>
-        param = req.body
+        param       = req.body
+        errorOpts   =
+            error   : 'Incorrect email or password'
+            hash    : '#logIn'
+            email   : ''
+            name    : ''
+            title   : Config.Title
         if param.mail? and param.password?
-            @Model.all {where: {mail: param.mail, password: md5(param.password)}}, (err, data) =>
-                if err
-                    return (next (new Errors.Error err[0]))
-                else if data[0] isnt undefined
+            Request.get "http://localhost:8173/api/user?mail=#{param.mail}&password=#{md5(param.password)}", (e, r, data) =>
+                if (typeof data) is (typeof "")
+                    data    = JSON.parse data
+                if e
+                    return (next (new Errors.Error e[0]))
+                else if data.length > 0
                     req.session.uid = data[0].id
                     res.redirect '/room'
                 else
-                    options =
-                        error   : 'Incorrect email or password'
-                        hash    : '#logIn'
-                        email   : ''
-                        name    : ''
-                    res.render 'home', options
+                    res.render 'home', errorOpts
         else
-            throw new Errors.error "Internal Server Error"
+            res.render 'home', errorOpts
 
     # Called when non registered user create a Room
     # Check if the name of the user is correctly set, if not render the home page
