@@ -19,6 +19,7 @@ Http        = require 'http'
 Express     = require 'express'
 {Schema}    = require 'jugglingdb'
 Fs          = require 'fs'
+Path        = require 'path'
 
 Config      = require '../common/config'
 
@@ -100,7 +101,7 @@ class Api
 
     defineAllModels : () =>
         # TODO replace with path variable
-        modelsPath  = '../models'
+        modelsPath  = Path.join __dirname, '../models'
         modelsNames = Fs.readdirSync modelsPath
         for modelName in modelsNames
             if (modelName.split '.')[1] == "js"
