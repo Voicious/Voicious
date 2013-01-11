@@ -111,6 +111,11 @@ span.stateGroup > span.errorMessage {
     font-size: 12px;
     padding: 2px 5px;
     border-top: 1px solid #ff3038;
+    box-shadow: 0 0 3px #191d1e;
+    -moz-box-shadow: 0 0 3px #191d1e;
+    -webkit-box-shadow: 0 0 3px #191d1e;
+    -o-box-shadow: 0 0 3px #191d1e;
+    -ms-box-shadow: 0 0 3px #191d1e;
 }
 
 .btn-submit {
@@ -210,13 +215,4 @@ ul.clean {
     color: #636f75;
     font-family: 'Open Sans', 'Helvetica', sans-serif;
     font-size: 13px;
-}
-
-div#errorMsg {
-    background-color: #ea1d24;
-    color: #fff;
-    padding: 4px;
-    -moz-border-radius: 0.2em;
-    -webkit-border-radius: 0.2em;
-    border-radius: 0.2em;
 }
