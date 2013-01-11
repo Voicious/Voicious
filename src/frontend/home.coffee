@@ -15,35 +15,18 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-DisplayError    = (erroron, error) =>
-    jqElem  = null
-    switch erroron
-        when "login_email"      then jqElem = ($ "input#login_email")
-        when "login_password"   then jqElem = ($ "input#login_password")
-        when "signup_password"  then jqElem = ($ "input#signup_password")
-        when "signup_email"     then jqElem = ($ "input#signup_email")
-    jqElem.addClass 'error'
-    jqErrorElem  = ($ '<div>', { id : "errorMsg" }).html error
-    jqErrorElem.css 'position', 'absolute'
-    ($ 'body').append jqErrorElem
-    topPosition     = (do jqElem.offset).top + ((do jqElem.innerHeight) / 2) - ((do jqErrorElem.innerHeight) / 2)
-    leftPosition    = (do jqElem.offset).left + (do jqElem.position).left + (do jqElem.innerWidth) - (do jqErrorElem.innerWidth) - 10
-    jqErrorElem.css {
-        top         : topPosition
-        left        : leftPosition
-    }
-
-FadeIn  = () =>
+FadeIn = () =>
     ($ '#logo').fadeIn 1600
     (($ '#desc').delay 100).fadeIn 800
     ((($ '#choices').delay 100).fadeTo 0.01).animate {
         opacity     : 1,
         marginTop   : '+=20'
-    }, 600, () =>
-        if window.erroron? and window.error?
-            DisplayError erroron, error
-            window.erroron  = undefined
-            window.error    = undefined
+    }, 600
+
+HideAllStates = () =>
+    (($ document).find 'span.stateGroup > span.stateIcon').removeClass 'icon-ok icon-notok'
+    (($ document).find 'span.stateGroup > span.errorMessage').removeClass 'inline'
+    (($ document).find 'span.stateGroup > span.errorMessage').addClass 'none'
 
 class JumpInStep
     constructor : (@father, @name) ->
@@ -68,9 +51,10 @@ class JumpInStep
             left    : '-=290'
         }, 600
 
-    hide    : (event) =>
+    hide : (event) =>
         for btn in (do @_jqElem.get)
             $(btn).attr 'disabled', on
+        do HideAllStates
         do @father.show
         (do @_jqDiv.get).fadeTo 0.99
         (do @_jqDiv.get).animate {
@@ -83,11 +67,13 @@ class ChoiceForm
         @_jqElem    = PrivateValue.GetOnly ($ '#' + @name)
         @_jqForm    = PrivateValue.GetOnly (do @_jqElem.get).find 'form'
         (do @_jqForm.get).submit @onSubmit
+        for input in ((do @_jqForm.get).find 'input')
+            ($ input).bind 'blur', @onFieldBlur
 
-    display     : () =>
+    display : () =>
         do ($ '#msg').empty
-        ($ 'span#choicesContainer div.displayed').hide 0, () ->
-            do ($ 'div#errorMsg').remove
+        ($ 'div#choicesContainer div.displayed').hide 0, () ->
+            do HideAllStates
             ($ this).removeClass 'displayed'
             (($ this).find 'form').each () ->
                 (($ this).find 'input').each () ->
@@ -96,8 +82,33 @@ class ChoiceForm
         (do @_jqElem.get).addClass 'displayed'
         window.location.hash    = @name
         (do @_jqElem.get).fadeIn 600
+ 
+    displayFieldIcon : (field, ok) =>
+        jqIcon      = ($ 'body').find "span.stateIcon[rel=#{field}]"
+        jqMessage   = ($ 'body').find "span.errorMessage[rel=#{field}]"
+        jqIcon.removeClass 'icon-ok icon-notok'
+        jqMessage.removeClass 'inline none'
+        if not ok
+            jqIcon.addClass 'icon-notok'
+            jqMessage.addClass 'inline'
+        else
+            jqIcon.addClass 'icon-ok'
+            jqMessage.addClass 'none'
 
-    onSubmit    : (event) =>
+    checkFieldValuePresence : (field, displayError) =>
+        valid   = ((do @_jqForm.get).find "input##{field}")[0].validity.valid
+        if not valid
+            if displayError
+                @displayFieldIcon field, no
+            return false
+        if displayError
+            @displayFieldIcon field, yes
+        return true
+
+    onSubmit : (event) =>
+
+    onFieldBlur : (event) =>
+        @checkFieldValuePresence (($ event.target).attr 'id'), yes
 
 class JumpInForm extends ChoiceForm
     constructor : (@name) ->
@@ -128,34 +139,41 @@ class JumpInForm extends ChoiceForm
         }, 600
 
 class SignUpForm extends ChoiceForm
-    onSubmit    : (event) =>
-        mail    = do ((do @_jqForm.get).find 'input#signup_email').val
+    onSubmit : (event) =>
+        if not (do @checkPasswordConfirmation)
+            do event.preventDefault
+
+    checkPasswordConfirmation : () =>
         passwd  = do ((do @_jqForm.get).find 'input#signup_password').val
         confirm = do ((do @_jqForm.get).find 'input#signup_password_confirm').val
-        if not mail
-            do event.preventDefault
-            DisplayError 'signup_email', 'Invalid email'
-        else if not passwd or not confirm or confirm isnt passwd
-            do event.preventDefault
-            ((do @_jqForm.get).find 'input#signup_password').addClass 'error'
-            ((do @_jqForm.get).find 'input#signup_password_confirm').addClass 'error'
-            DisplayError 'signup_password', 'Invalid password'
+        if not passwd or not confirm or confirm isnt passwd
+            return false
+        return yes
+
+    onFieldBlur : (event) =>
+        field   = ($ event.target).attr 'id'
+        super event
+        if field isnt 'signup_email'
+            ok = if (do @checkPasswordConfirmation) then yes else no
+            @displayFieldIcon 'signup_password', ok
+            @displayFieldIcon 'signup_password_confirm', ok
 
 class Choice
-    constructor  : (@name, formType = ChoiceForm) ->
+    constructor : (@name, formType = ChoiceForm) ->
         @_jqElem    = PrivateValue.GetOnly ($ '#' + @name + 'Btn')
         (do @_jqElem.get).click @onClick
 
         @_form      = PrivateValue.GetOnly (new formType @name)
 
-    onClick     : (event) =>
+    onClick : (event) =>
         ($ 'div#choices li.selected').removeClass 'selected'
         (do @_jqElem.get).addClass 'selected'
         do (do @_form.get).display
 
 ($ document).ready () =>
     do ($ 'div').hide
-    do ($ 'span#choicesContainer > div div').show
+    do ($ 'div#choicesContainer').show
+    do ($ 'div#choicesContainer > div div').show
     do FadeIn
     choices =
         '#jumpIn'   : new Choice 'jumpIn', JumpInForm
