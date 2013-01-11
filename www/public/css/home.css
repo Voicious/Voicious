@@ -67,7 +67,6 @@ div#choicesContainer {
 
 #jumpIn form, #logIn form, #signUp form {
     background-color: #d2dade;
-    -moz-border-radius: 0.3em;
     border-radius: 0.3em;
     -o-border-radius: 0.3em;
     -ms-border-radius: 0.3em;
@@ -112,10 +111,8 @@ span.stateGroup > span.errorMessage {
     padding: 2px 5px;
     border-top: 1px solid #ff3038;
     box-shadow: 0 0 3px #191d1e;
-    -moz-box-shadow: 0 0 3px #191d1e;
-    -webkit-box-shadow: 0 0 3px #191d1e;
-    -o-box-shadow: 0 0 3px #191d1e;
-    -ms-box-shadow: 0 0 3px #191d1e;
+    border-top-right-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
 }
 
 .btn-submit {
@@ -128,7 +125,6 @@ span.stateGroup > span.errorMessage {
     display: block;
     width: 100%;
     margin-bottom: 4px;
-    -moz-border-radius: 0.4em;
     border-radius: 0.4em;
     border: solid 1px #000000;
     box-shadow: inset 0 1px rgba(255,255,255,0.4);
@@ -151,8 +147,6 @@ input[type="text"], input[type="email"], input[type="password"] {
     font-family: 'Open Sans', 'Helvetica', sans-serif;
     font-size: 14px;
     border: none;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-weight: bold;
 }
@@ -184,7 +178,6 @@ li.choice {
     margin: 0;
     background-color: rgba(0,107,207,0.8);
     box-shadow: inset 0 1px rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.2);
-    -moz-border-radius: 0.2em;
     border-radius: 0.2em;
     cursor: pointer;
     -webkit-transition: background-color 0.16s;
