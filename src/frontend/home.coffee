@@ -42,8 +42,6 @@ class JumpInStep
             elemName = $(elem).attr 'id'
             if elemName isnt @name and elemName isnt (do @father._jqFirstStep.get).attr 'id'
                 do $(elem).hide
-        for btn in (do @_jqElem.get)
-            $(btn).attr 'disabled', off
         do @father.hide
         (do @_jqDiv.get).fadeTo 0.01
         (do @_jqDiv.get).animate {
@@ -52,8 +50,6 @@ class JumpInStep
         }, 600
 
     hide : (event) =>
-        for btn in (do @_jqElem.get)
-            $(btn).attr 'disabled', on
         do HideAllStates
         do @father.show
         (do @_jqDiv.get).fadeTo 0.99
@@ -69,9 +65,13 @@ class ChoiceForm
         (do @_jqForm.get).submit @onSubmit
         for input in ((do @_jqForm.get).find 'input')
             ($ input).bind 'blur', @onFieldBlur
+        console.log ((do @_jqElem.get).find 'button[type=submit]')
+        ((do @_jqElem.get).find 'button[type=submit]').click (event) =>
+            ((do @_jqElem.get).find 'input').each () ->
+                ($ @).trigger 'blur'
 
     display : () =>
-        do ($ '#msg').empty
+        ($ document).trigger 'hideAllForms'
         ($ 'div#choicesContainer div.displayed').hide 0, () ->
             do HideAllStates
             ($ this).removeClass 'displayed'
@@ -121,8 +121,6 @@ class JumpInForm extends ChoiceForm
         ]
 
     hide : () =>
-        for btn in (do @_jqBtn.get)
-            $(btn).attr 'disabled', on
         (do @_jqFirstStep.get).fadeTo 0.99
         (do @_jqFirstStep.get).animate {
             opacity : 0
@@ -130,8 +128,6 @@ class JumpInForm extends ChoiceForm
         }, 600
 
     show : () =>
-        for btn in (do @_jqBtn.get)
-            $(btn).attr 'disabled', off
         (do @_jqFirstStep.get).fadeTo 0.01
         (do @_jqFirstStep.get).animate {
             opacity : 1
@@ -179,6 +175,10 @@ class Choice
         '#jumpIn'   : new Choice 'jumpIn', JumpInForm
         '#logIn'    : new Choice 'logIn'
         '#signUp'   : new Choice 'signUp', SignUpForm
+
+    ($ document).on 'hideAllForms', (event) =>
+        for c of choices
+            do (do (do choices[c]._form.get)._jqElem.get).hide
 
     if window.location.hash? and choices[window.location.hash]?
         do choices[window.location.hash].onClick
