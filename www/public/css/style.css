@@ -10,10 +10,50 @@
     font-family: "OpenSans-Bold";
     src: url(../fonts/OpenSans-Bold.ttf) format("truetype");
 }
+@font-face {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/PTSans.woff') format('woff');
+}
+@font-face {
+    font-family: "FontAwesome";
+    src: url(../fonts/fontawesome-webfont.woff) format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon-ok, .icon-notok {
+    font-family : "FontAwesome";
+    font-size: 20px;
+}
+
+.icon-ok {
+    color: #39b74c;
+}
+
+.icon-notok {
+    color: #ed1c22;
+}
+
+.icon-ok:before { content : '\f058'; }
+.icon-notok:before { content : '\f057'; }
 
 * {
     margin: 0;
     padding: 0;
+}
+
+.block {
+    display: block;
+}
+
+.inline {
+    display: inline;
+}
+
+.none {
+    display: none;
 }
 
 .voiciouslogo {

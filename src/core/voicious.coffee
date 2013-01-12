@@ -46,11 +46,11 @@ class Voicious
         {Session}       = require '../services/session'
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
-                title   : (@app.get 'title'),
-                error   : ''
-                hash    : ''
-                email   : ''
-                name    : ''
+                title           : (@app.get 'title'),
+                hash            : ''
+                login_email     : ''
+                signup_email    : ''
+                name            : ''
             res.render 'home', options
         servicesNames   = Fs.readdirSync Config.Paths.Services
         for serviceName in servicesNames

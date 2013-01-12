@@ -8,9 +8,11 @@ block scripts
         if ("#{hash}" !== "") {
             window.location.hash    = "#{hash}";
         }
+
     script(type="text/javascript", src="/public/js/home.js")
-    script(type="text/javascript")
-        $(document).ready(function() { $('p#msg').html('#{error}'); });
+    if locals.erroron
+        script(type="text/javascript")
+            this.erroron    = JSON.parse('!{erroron}');
 
 block content
     div#logo.no-selec
@@ -21,7 +23,35 @@ block content
         li#logInBtn.choice.middle-choice.txt-shd Log in
         li#signUpBtn.choice.txt-shd Sign up
       ul
-    span#choicesContainer
+    div#choicesContainer
+      span
+        span
+          span.stateGroup(rel="newNickname", style="top:5px;")
+            span.stateIcon(rel="newNickname")
+            span.errorMessage.none(rel="newNickname") Invalid Nickname
+          span
+            span.stateGroup(rel="joinNickName", style="top:5px;")
+              span.stateIcon(rel="joinNickName")
+              span.errorMessage.none(rel="joinNickName") Invalid Nickname
+            span.stateGroup(rel="joinUrl", style="top:37px;")
+              span.stateIcon(rel="joinUrl")
+              span.errorMessage.none(rel="joinUrl") Invalid URL
+        span
+          span.stateGroup(rel="login_email", style="top:10px;")
+            span.stateIcon(rel="login_email")
+            span.errorMessage.none(rel="login_email") Invalid Email
+          span.stateGroup(rel="login_password", style="top:42px;")
+            span.stateIcon(rel="login_password")
+            span.errorMessage.none(rel="login_password") Invalid Password
+        span
+          span.stateGroup(rel="signup_email", style="top:10px;")
+            span.stateIcon(rel="signup_email")
+            span.errorMessage.none(rel="signup_email") Invalid Email
+          span.stateGroup(rel="signup_password", style="top:43px;")
+            span.stateIcon(rel="signup_password")
+            span.errorMessage.none(rel="signup_password", style="top:14px;") Invalid Password
+          span.stateGroup(rel="signup_password_confirm", style="top:75px;")
+            span.stateIcon(rel="signup_password_confirm")
       div#jumpIn.no-selec
         div#stepOne
           button#newRoomBtn.med-green.btn-submit.txt-shd
@@ -30,28 +60,29 @@ block content
             span Join an existing Room
         div#newRoom
           form#quickLogin_form(method="POST", action='/quickLogin')
-            input#newNickname.brdr(name="name", type="text", placeholder="Nickname", value="#{name}")
+            input#newNickname.brdr(name="name", type="text", placeholder="Nickname", value="#{name}", required="true")
           button#newRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickLogin_form")
             span Create the Room
           button#newRoomCancel.grey-blue.btn-submit.txt-shd
             span Cancel
         div#joinRoom
           form
-            input#joinNickname.brdr(type="text", placeholder="Nickname")
-            input#joinUrl.no-brdr(type="text", placeholder="Room URL")
+            input#joinNickname.brdr(type="text", placeholder="Nickname", required="true")
+            input#joinUrl.no-brdr(type="text", placeholder="Room URL", required="true")
           button#joinRoomCommit.light-blue.btn-submit.txt-shd Join the Room
           button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
       div#logIn.no-selec
         form#login_form(method="POST", action="/login")
-          input#login_email.brdr(name="mail", type="email", placeholder="Email")
-          input#login_password.no-brdr(name="password", type="password", placeholder="Password")
+          input#login_email.brdr(name="mail", type="email", placeholder="Email", value="#{login_email}", required="true")
+          input#login_password.no-brdr(name="password", type="password", placeholder="Password", required="true")
         button#login-btn.light-blue.btn-submit.txt-shd(type="submit", form="login_form")
           span Log in
         a(href="#password") Forgot password?
       div#signUp.no-selec
         form#signup_form(method="POST", action="/user")
-          input#signup_email.brdr(name="mail", type="email", placeholder="Email", value="#{email}")
-          input#signup_password.brdr(name="password", type="password", placeholder="Password")
-          input#signup_password_confirm.brdr(name="passwordconfirm", type="password", placeholder="Confirm Password")
+          input#signup_email.brdr(name="mail", type="email", placeholder="Email", value="#{signup_email}", required="true")
+          input#signup_password.brdr(name="password", type="password", placeholder="Password", required="true")
+          input#signup_password_confirm.brdr(name="passwordconfirm", type="password", placeholder="Confirm Password", required="true")
         button#signup-btn.light-blue.btn-submit.txt-shd(type="submit", form="signup_form") Sign Up
-      p#msg #{error}
+      if locals.error
+        p#msg #{error}
