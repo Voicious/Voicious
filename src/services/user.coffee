@@ -81,22 +81,22 @@ class _User extends BaseService
     # This function is called when there is an error during registration
     errorOnRegistration : (err, req, res) =>
         options =
-            error   : err
-            hash    : '#signUp'
-            email   : req.body.mail || ''
-            name    : ''
+            erroron         : err
+            hash            : '#signUp'
+            login_email     : ''
+            signup_email    : req.body.mail || ''
+            name            : ''
+            title           : 'Voicious'
         res.render 'home', options
 
     # Render the home page
     # This function is called when there is an error during quick log in
     errorOnQuickLogin : (err, req, res) =>
-        console.log "On quick Login Error"
         options =
             error   : err
             hash    : '#jumpIn'
             email   : ''
             name    : req.body.name || ''
-        console.log options
         res.render 'home', options
 
     # Called for inserting a new user in database
@@ -120,23 +120,24 @@ class _User extends BaseService
     # Check sanity of all values and called the method newUser to create a new user
     # if something went wrong, render the home page with the errors setted
     register : (req, res, next) =>
-        param = req.body
-        if param.mail? and param.password? and param.passwordconfirm?
-            if param.passwordconfirm isnt param.password
-                @errorOnRegistration "Password and confirmation do not match !<br />", req, res
+        param   = req.body
+        err     = []
+        if param.mail?
+            if param.password? and param.passwordconfirm?
+                if param.passwordconfirm isnt param.password
+                    err.push "signup_password"
+                else
+                    param.password = md5(param.password)
+                    param.name = param.mail
+                    param.id_acl = 0 #TO DO : put the right value
+                    param.id_role = 0 #TO DO : put the right value
+                    @newUser req, res, param, @errorOnRegistration
             else
-                param.password = md5(param.password)
-                param.name = param.mail
-                param.id_acl = 0 #TO DO : put the right value
-                param.id_role = 0 #TO DO : put the right value
-                @newUser req, res, param, @errorOnRegistration
+                err.push 'signup_password'
         else
-            err   = ''
-            err   += 'Missing field : Email<br />' if not param.mail
-            if not param.password
-                err += 'Missing field : Password<br />'
-            else if not param.passwordconfirm
-                err += 'Missing field : Password<br />'
+            err.push 'signup_email'
+        if err.length > 0
+            err = JSON.stringify err
             @errorOnRegistration err, req, res
 
     # Called for loging in a user
@@ -145,28 +146,32 @@ class _User extends BaseService
     login : (req, res, next) =>
         param       = req.body
         errorOpts   =
-            hash    : '#logIn'
-            email   : ''
-            name    : ''
-            title   : 'Voicious'
-        if param.mail? and param.password?
-            errorOpts.email = param.mail
-            @Model.all {where: {mail: param.mail}}, (err, data) =>
-                if err
-                    return (next (new Errors.Error err[0]))
-                else if data[0] isnt undefined
-                    if data[0].password is md5(param.password)
-                        req.session.uid = data[0].id
-                        res.redirect '/room'
+            hash            : '#logIn'
+            login_email     : ''
+            signup_email    : ''
+            name            : ''
+            title           : 'Voicious'
+            erroron         : []
+        if param.mail?
+            if param.password?
+                errorOpts.email = param.mail
+                @Model.all {where: {mail: param.mail}}, (err, data) =>
+                    if err
+                        return (next (new Errors.Error err[0]))
+                    else if data[0] isnt undefined
+                        if data[0].password is md5(param.password)
+                            req.session.uid = data[0].id
+                            res.redirect '/room'
+                        else
+                            errorOpts.erroron.push 'login_password'
                     else
-                        errorOpts.error     = 'Invalid password'
-                        errorOpts.erroron   = 'login_password'
-                        res.render 'home', errorOpts
-                else
-                    errorOpts.error     = 'Invalid email'
-                    errorOpts.erroron   = 'login_email'
-                    res.render 'home', errorOpts
+                        errorOpts.erroron.push 'login_email'
+            else
+                errorOpts.erroron.push 'login_password'
         else
+            errorOpts.erroron.push 'login_email'
+        if errorOpts.erroron.length > 0
+            errorOpts.erroron   = JSON.stringify errorOpts.erroron
             res.render 'home', errorOpts
 
     # Called when non registered user create a Room

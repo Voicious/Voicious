@@ -65,7 +65,6 @@ class ChoiceForm
         (do @_jqForm.get).submit @onSubmit
         for input in ((do @_jqForm.get).find 'input')
             ($ input).bind 'blur', @onFieldBlur
-        console.log ((do @_jqElem.get).find 'button[type=submit]')
         ((do @_jqElem.get).find 'button[type=submit]').click (event) =>
             ((do @_jqElem.get).find 'input').each () ->
                 ($ @).trigger 'blur'
@@ -146,13 +145,17 @@ class SignUpForm extends ChoiceForm
             return false
         return yes
 
+    displayFieldIcon : (field, ok) =>
+        super field, ok
+        if field is "signup_password"
+            super "signup_password_confirm", ok
+
     onFieldBlur : (event) =>
         field   = ($ event.target).attr 'id'
         super event
         if field isnt 'signup_email'
             ok = if (do @checkPasswordConfirmation) then yes else no
             @displayFieldIcon 'signup_password', ok
-            @displayFieldIcon 'signup_password_confirm', ok
 
 class Choice
     constructor : (@name, formType = ChoiceForm) ->
@@ -182,3 +185,7 @@ class Choice
 
     if window.location.hash? and choices[window.location.hash]?
         do choices[window.location.hash].onClick
+        if window.erroron?
+            if window.erroron.length > 0
+                for error in erroron
+                    (do choices[window.location.hash]._form.get).displayFieldIcon error
