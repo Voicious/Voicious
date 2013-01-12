@@ -109,10 +109,36 @@ span.stateGroup > span.errorMessage {
     font-family: 'PT Sans';
     font-size: 12px;
     padding: 2px 5px;
-    border-top: 1px solid #ff3038;
-    box-shadow: 0 0 3px #191d1e;
+    border: 1px solid #ff3038;
+    box-shadow: 1px 0 3px #191d1e;
     border-top-right-radius: 0.2em;
     border-bottom-right-radius: 0.2em;
+}
+
+span.stateGroup > span.errorMessage:after, span.stateGroup > span.errorMessage:before {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+span.stateGroup > span.errorMessage:after {
+    border-color: rgba(237, 27, 36, 0);
+    border-right-color: #ed1b24;
+    border-width: 5px;
+    top: 50%;
+    margin-top: -5px;
+}
+
+span.stateGroup > span.errorMessage:before {
+    border-color: rgba(255, 48, 56, 0);
+    border-right-color: #ff3038;
+    border-width: 6px;
+    top: 50%;
+    margin-top: -6px;
 }
 
 .btn-submit {
