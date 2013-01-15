@@ -23,13 +23,17 @@ Config      = require '../common/config'
 class _Room
         constructor : () ->
 
-        roomPage : (req, res) =>
-            user    = req.currentUser
-            options =
-                    title   : 'Voicious'
-                    login   : user.name
-                    room    : req.params.roomid
-            res.render 'room', options
+        roomPage : (req, res, next) =>
+            Request.get "#{Config.RestAPI.Url}/room/#{req.params.roomid}", (e, r, body) =>
+                if e? or r.statusCode > 200
+                    Errors.RenderNotFound req, res
+                else
+                    user    = req.currentUser
+                    options =
+                            title   : 'Voicious'
+                            login   : user.name
+                            room    : req.params.roomid
+                    res.render 'room', options
 
         newRoom : (req, res, param) =>
             Request.post {

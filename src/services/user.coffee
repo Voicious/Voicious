@@ -130,11 +130,22 @@ class _User
             param.id_acl = 0 #TO DO : put the right value
             param.id_role = 0 #TO DO : put the right value
             @newUser req, res, param, ((req, res) =>
-                {Room}          = require './room'
+                {Room}  = require './room'
                 Room.newRoom req, res, { }
             ), @errorOnQuickLogin
         else
             @errorOnQuickLogin 'Missing field : Nickname', req, res
+
+    quickJoin : (req, res, next) =>
+        param = req.body
+        if param.name? and param.name isnt ""
+            if param.room? and param.room isnt ""
+                param.mail      = param.name + do Date.now
+                param.id_acl    = 0
+                param.id_role   = 0
+                @newUser req, res, param, ((req, res) =>
+                    res.redirect "/room/#{param.room}"
+                ), @errorOnQuickLogin
 
 exports.User    = new _User
 exports.Routes  =
@@ -142,3 +153,4 @@ exports.Routes  =
         '/user'         : exports.User.register
         '/login'        : exports.User.login
         '/quickLogin'   : exports.User.quickLogin
+        '/quickJoin'    : exports.User.quickJoin

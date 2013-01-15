@@ -79,19 +79,11 @@ class Voicious
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
         @app.use (err, req, res, next) =>
-            options = {}
+            console.log err
             if err instanceof Errors.NotFound
-                res.status 404
-                options.status      = "404"
-                options.statusText  = "not_found"
-                options.errorMsg    = "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
+                Errors.RenderNotFound req, res
             else
-                res.status 500
-                options.status      = "500"
-                options.statusText  = "server_error"
-                options.errorMsg    = "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
-            options.title   = (@app.get 'title') + " | " + options.status + " " + options.statusText
-            res.render 'error.jade', options
+                Errors.RenderError req, res
         @configured = yes
 
     # Main function  

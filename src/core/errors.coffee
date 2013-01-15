@@ -15,15 +15,36 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+Config  = require '../common/config'
+
 class Errors
-    @NotFound   : (msg = "404 Not Found") ->
+    @NotFound : (msg = "404 Not Found") ->
         @name   = 'NotFound'
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
 
-    @Error      : (msg) ->
+    @Error : (msg) ->
         @name   = 'InternalServerError'
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
+
+    @RenderNotFound : (req, res) ->
+        res.status 404
+        options =
+            status      : "404"
+            statusText  : "not_found"
+            errorMsg    : "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
+        options.title = Config.Title + " | " + options.status + " " + options.statusText
+        res.render 'error.jade', options
+
+    @RenderError : (req, res) ->
+        res.status 500
+        options =
+            status      : "500"
+            statusText  :"server_error"
+            errorMsg    : "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
+        options.title = Config.Title + " | " + options.status + " " + options.statusText
+        res.render 'error.jade', options
+
 
 exports.Errors  = Errors
