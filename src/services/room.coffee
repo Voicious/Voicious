@@ -15,15 +15,72 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{Session}   = require './session'
+Database        = require '../core/database'
+BaseService     = (require './service').BaseService
+{User}          = require './user'
+{Session}       = require './session'
 
-class Room
+class Model
+        @_name : do () ->
+                return {
+                        get : () => 'room'
+                }
+
+        @_schema : do () ->
+                return {
+                        get : () ->
+                                return {
+                                        name :
+                                                type   : String
+                                                length : 255
+                                }
+                }
+
+        @_instance : do () ->
+                instance = undefined
+                return {
+                        get : () =>
+                                return instance
+                        set : (val) =>
+                                instance = val
+                }
+
+        @get : () ->
+                if do @_instance.get == undefined
+                        definition = Database.createTable do @_name.get, do @_schema.get
+                        definition.belongsTo User.Model,
+                                as         : 'param'
+                                foreignKey : 'oid'
+                        definition.validatesPresenceOf 'name'
+                        @_instance.set definition
+                do @_instance.get
+
+class _Room extends BaseService
         @default : (req, res) ->
-            options =
-                title   : 'Voicious'
-                login   : 'Paulloz'
-            res.render 'room/room', options
+                user = req.currentUser
+                options =
+                        title   : 'Voicious'
+                        login   : user.name
+                        room    : req.params.roomid
+                res.render 'room/room', options
 
+        constructor : () ->
+                @Model = do Model.get
+
+        newRoom : (req, res, param, errorCallback) =>
+                room = new @Model param
+                room.isValid (valid) =>
+                        if not valid
+                                for key, value of room.errors
+                                        if value?
+                                                return errorCallback value[0], req, res
+                        else
+                                @Model.create room, (err, data) =>
+                                        if err
+                                                return (next (new Errors.Error err[0]))
+                                        res.redirect '/room/' + param.room
+
+exports.Room    = new _Room
 exports.Routes  =
     get :
-        '/room' : Session.ifUser.curry Room.default
+        '/room/:roomid' : Session.ifUser.curry _Room.default
