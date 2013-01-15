@@ -33,6 +33,7 @@ class _Config
             Host            : restApiConfig.hostname
             Port            : restApiConfig.port
             AllowedHosts    : [ "http://#{@HostName}:#{@Port}" ]
+            Url             : "http://#{restApiConfig.hostname}:#{restApiConfig.port}/api"
         if (typeof restApiConfig["allowed-hosts"]) is (typeof [])
             for allowedHost in restApiConfig["allowed-hosts"]
                 @RestAPI.AllowedHosts.push allowedHost

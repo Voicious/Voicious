@@ -17,6 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Request         = require 'request'
 {User}          = require './user'
+Config          = require '../common/config'
 
 class _Session
     constructor     : () ->
@@ -25,8 +26,8 @@ class _Session
     withCurrentUser : (req, res, next) =>
         req.currentUser = undefined
         if req.session? and req.session.uid?
-            Request.get "http://localhost:8173/api/user/#{req.session.uid}", (e, r, u) =>
-                req.currentUser = u
+            Request.get "#{Config.RestAPI.Url}/user/#{req.session.uid}", (e, r, u) =>
+                req.currentUser = JSON.parse u
                 do next
         else
             do next

@@ -50,15 +50,19 @@ class _User
     # Called for inserting a new user in database
     # Check Validity of all the values (mail, name, etc)
     # If everything is ok, create the user, log him in and redirect into room (only room for the moment)
-    newUser : (req, res, param, errorCallback) =>
+    newUser : (req, res, param, callback, errorCallback) =>
         Request.post {
             json    : param
-            url     : 'http://localhost:8173/api/user'
+            url     : "#{Config.RestAPI.Url}/user"
         }, (e, r, body) =>
             if e? or r.statusCode > 200
-                return (next (new Errors.Error e[0]))
-            req.session.uid = body.id
-            res.redirect '/room'
+                errorCallback e, req, res
+            else
+                req.session.uid = body.id
+                callback req, res
+
+    redirtoroom : (req, res) =>
+        res.redirect '/room'
 
     # Called for registering a user
     # Check sanity of all values and called the method newUser to create a new user
@@ -75,7 +79,7 @@ class _User
                     param.name = param.mail
                     param.id_acl = 0 #TO DO : put the right value
                     param.id_role = 0 #TO DO : put the right value
-                    @newUser req, res, param, @errorOnRegistration
+                    @newUser req, res, param, @redirtoroom, @errorOnRegistration
             else
                 err.push 'signup_password'
         else
@@ -98,7 +102,7 @@ class _User
             title           : Config.Title
         if param.mail?
             if param.password?
-                Request.get "http://localhost:8173/api/user?mail=#{param.mail}&password=#{md5(param.password)}", (e, r, data) =>
+                Request.get "#{Config.RestAPI.Url}/user?mail=#{param.mail}&password=#{md5(param.password)}", (e, r, data) =>
                     if (typeof data) is (typeof "")
                         data    = JSON.parse data
                     if e
@@ -125,7 +129,10 @@ class _User
             param.mail = param.name + do Date.now
             param.id_acl = 0 #TO DO : put the right value
             param.id_role = 0 #TO DO : put the right value
-            @newUser req, res, param, @errorOnQuickLogin
+            @newUser req, res, param, ((req, res) =>
+                {Room}          = require './room'
+                Room.newRoom req, res, { }
+            ), @errorOnQuickLogin
         else
             @errorOnQuickLogin 'Missing field : Nickname', req, res
 

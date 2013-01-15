@@ -15,72 +15,33 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Database        = require '../core/database'
-BaseService     = (require './service').BaseService
-{User}          = require './user'
-{Session}       = require './session'
+Request     = require 'request'
+Config      = require '../common/config'
+{Session}   = require './session'
+{Errors}    = require '../core/errors'
 
-class Model
-        @_name : do () ->
-                return {
-                        get : () => 'room'
-                }
-
-        @_schema : do () ->
-                return {
-                        get : () ->
-                                return {
-                                        name :
-                                                type   : String
-                                                length : 255
-                                }
-                }
-
-        @_instance : do () ->
-                instance = undefined
-                return {
-                        get : () =>
-                                return instance
-                        set : (val) =>
-                                instance = val
-                }
-
-        @get : () ->
-                if do @_instance.get == undefined
-                        definition = Database.createTable do @_name.get, do @_schema.get
-                        definition.belongsTo User.Model,
-                                as         : 'param'
-                                foreignKey : 'oid'
-                        definition.validatesPresenceOf 'name'
-                        @_instance.set definition
-                do @_instance.get
-
-class _Room extends BaseService
-        @default : (req, res) ->
-                user = req.currentUser
-                options =
-                        title   : 'Voicious'
-                        login   : user.name
-                        room    : req.params.roomid
-                res.render 'room/room', options
-
+class _Room
         constructor : () ->
-                @Model = do Model.get
 
-        newRoom : (req, res, param, errorCallback) =>
-                room = new @Model param
-                room.isValid (valid) =>
-                        if not valid
-                                for key, value of room.errors
-                                        if value?
-                                                return errorCallback value[0], req, res
-                        else
-                                @Model.create room, (err, data) =>
-                                        if err
-                                                return (next (new Errors.Error err[0]))
-                                        res.redirect '/room/' + param.room
+        roomPage : (req, res) =>
+            user    = req.currentUser
+            options =
+                    title   : 'Voicious'
+                    login   : user.name
+                    room    : req.params.roomid
+            res.render 'room', options
+
+        newRoom : (req, res, param) =>
+            Request.post {
+                json    : param
+                url     : "#{Config.RestAPI.Url}/room"
+            }, (e, r, body) =>
+                if e? or r.statusCode > 200
+                    throw new Errors.Error
+                else
+                    res.redirect "/room/#{body.id}"
 
 exports.Room    = new _Room
 exports.Routes  =
     get :
-        '/room/:roomid' : Session.ifUser.curry _Room.default
+        '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage)
