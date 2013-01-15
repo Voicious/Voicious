@@ -33,7 +33,7 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'core')
         destDir     : (Path.join 'lib', 'core')
-        files       : [ 'errors', 'populateDB', 'voicious' ]
+        files       : [ 'errors', 'populateDB', 'room', 'session', 'user', 'voicious' ]
     }
     {
         sourceDir   : (Path.join 'src', 'rest')
@@ -44,11 +44,6 @@ toCompile   = [
         sourceDir   : (Path.join 'src', 'models')
         destDir     : (Path.join 'lib', 'models')
         files       : [ 'user' , 'room' ]
-    }
-    {
-        sourceDir   : (Path.join 'src', 'services')
-        destDir     : (Path.join 'lib', 'services')
-        files       : [ 'room', 'service', 'session', 'user' ]
     }
     {
         sourceDir   : (Path.join 'src', 'frontend')

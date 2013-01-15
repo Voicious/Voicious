@@ -43,7 +43,7 @@ class Voicious
     # All routes are preprocessed by __Session.withCurrentUser__
     setAllRoutes    : () =>
         # We can't require this before since it'll load its schema in the database
-        {Session}       = require '../services/session'
+        {Session}       = require './session'
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
                 title           : (@app.get 'title'),
@@ -54,7 +54,7 @@ class Voicious
             res.render 'home', options
         servicesNames   = Fs.readdirSync Config.Paths.Services
         for serviceName in servicesNames
-            service = require '../services/' + serviceName
+            service = require './' + serviceName
             if service.Routes?
                 for method of service.Routes
                     if @app[method]?

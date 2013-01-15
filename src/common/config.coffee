@@ -65,7 +65,7 @@ class _Config
         @Paths.Config           = Path.join @Paths.Approot, 'etc'
         @Paths.Views            = Path.join @Paths.Webroot, 'views'
         @Paths.Static           = Path.join @Paths.Webroot, 'public'
-        @Paths.Services         = Path.join __dirname, '..', 'services'
+        @Paths.Services         = Path.join __dirname, '..', 'core'
 
         do @loadConfigJSON
 

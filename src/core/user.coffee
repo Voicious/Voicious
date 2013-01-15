@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Request         = require 'request'
 md5             = require 'MD5'
-{Errors}        = require '../core/errors'
+{Errors}        = require './errors'
 Config          = require '../common/config'
 
 class _User

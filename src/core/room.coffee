@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Request     = require 'request'
 Config      = require '../common/config'
 {Session}   = require './session'
-{Errors}    = require '../core/errors'
+{Errors}    = require './errors'
 
 class _Room
         constructor : () ->
