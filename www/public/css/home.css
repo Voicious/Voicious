@@ -68,9 +68,6 @@ div#choicesContainer {
 #jumpIn form, #logIn form, #signUp form {
     background-color: #d2dade;
     border-radius: 0.3em;
-    -o-border-radius: 0.3em;
-    -ms-border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
     box-shadow: inset 0 0 8px rgba(0,0,0,0.6),0 1px rgba(255,255,255,0.1);
     border: solid 1px #000000;
     margin-bottom: 16px;
@@ -175,10 +172,6 @@ input[type="text"], input[type="email"], input[type="password"] {
     border: none;
     box-sizing: border-box;
     font-weight: bold;
-}
-
-input[type="text"].error, input[type="email"].error, input[type="password"].error {
-    background-color: rgba(215,180,186,100);
 }
 
 input:focus, textarea:focus {

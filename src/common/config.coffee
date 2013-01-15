@@ -33,6 +33,7 @@ class _Config
             Host            : restApiConfig.hostname
             Port            : restApiConfig.port
             AllowedHosts    : [ "http://#{@HostName}:#{@Port}" ]
+            Url             : "http://#{restApiConfig.hostname}:#{restApiConfig.port}/api"
         if (typeof restApiConfig["allowed-hosts"]) is (typeof [])
             for allowedHost in restApiConfig["allowed-hosts"]
                 @RestAPI.AllowedHosts.push allowedHost
@@ -64,7 +65,7 @@ class _Config
         @Paths.Config           = Path.join @Paths.Approot, 'etc'
         @Paths.Views            = Path.join @Paths.Webroot, 'views'
         @Paths.Static           = Path.join @Paths.Webroot, 'public'
-        @Paths.Services         = Path.join __dirname, '..', 'services'
+        @Paths.Services         = Path.join __dirname, '..', 'core'
 
         do @loadConfigJSON
 

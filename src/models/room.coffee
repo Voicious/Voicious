@@ -15,15 +15,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{Session}   = require './session'
+ModelDef = { }
 
-class Room
-        @default : (req, res) ->
-            options =
-                title   : 'Voicious'
-                login   : 'Paulloz'
-            res.render 'room/room', options
+AfterModelDef   = (m) =>
 
-exports.Routes  =
-    get :
-        '/room' : Session.ifUser.curry Room.default
+exports.ModelDef        = ModelDef
+exports.AfterModelDef   = AfterModelDef

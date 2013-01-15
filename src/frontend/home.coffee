@@ -58,6 +58,13 @@ class JumpInStep
             left    : '+=290'
         }, 600
 
+    fireAllBlurOnSubmit : () =>
+        form    = (do @_jqDiv.get).children 'form'
+        btn     = (do @_jqDiv.get).children 'button[type=submit]'
+        btn.click (event) =>
+            (form.find 'input').each () ->
+                ($ @).trigger 'blur'
+
 class ChoiceForm
     constructor : (@name) ->
         @_jqElem    = PrivateValue.GetOnly ($ '#' + @name)
@@ -65,6 +72,9 @@ class ChoiceForm
         (do @_jqForm.get).submit @onSubmit
         for input in ((do @_jqForm.get).find 'input')
             ($ input).bind 'blur', @onFieldBlur
+        do @fireAllBlurOnSubmit
+
+    fireAllBlurOnSubmit : () =>
         ((do @_jqElem.get).find 'button[type=submit]').click (event) =>
             ((do @_jqElem.get).find 'input').each () ->
                 ($ @).trigger 'blur'
@@ -111,13 +121,17 @@ class ChoiceForm
 
 class JumpInForm extends ChoiceForm
     constructor : (@name) ->
-        super @name
-        @_jqFirstStep   = PrivateValue.GetOnly (do @_jqElem.get).find '#stepOne'
-        @_jqBtn         = PrivateValue.GetOnly (do @_jqFirstStep.get).find 'button'
         @steps  = [
             new JumpInStep this, 'newRoom'
             new JumpInStep this, 'joinRoom'
         ]
+        super @name
+        @_jqFirstStep   = PrivateValue.GetOnly (do @_jqElem.get).find '#stepOne'
+        @_jqBtn         = PrivateValue.GetOnly (do @_jqFirstStep.get).find 'button'
+
+    fireAllBlurOnSubmit : () =>
+        for step in @steps
+            do step.fireAllBlurOnSubmit
 
     hide : () =>
         (do @_jqFirstStep.get).fadeTo 0.99

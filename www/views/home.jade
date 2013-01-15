@@ -66,10 +66,10 @@ block content
           button#newRoomCancel.grey-blue.btn-submit.txt-shd
             span Cancel
         div#joinRoom
-          form
-            input#joinNickname.brdr(type="text", placeholder="Nickname", required="true")
-            input#joinUrl.no-brdr(type="text", placeholder="Room URL", required="true")
-          button#joinRoomCommit.light-blue.btn-submit.txt-shd Join the Room
+          form#quickJoin_form(method="POST", action="/quickJoin")
+            input#joinNickname.brdr(type="text", placeholder="Nickname", required="true", name="name")
+            input#joinUrl.no-brdr(type="text", placeholder="Room URL", required="true", name="room")
+          button#joinRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickJoin_form") Join the Room
           button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
       div#logIn.no-selec
         form#login_form(method="POST", action="/login")
