@@ -40,11 +40,12 @@ class _User
     # This function is called when there is an error during quick log in
     errorOnQuickLogin : (err, req, res) =>
         options =
-            error   : err
-            hash    : '#jumpIn'
-            email   : ''
-            name    : req.body.name || ''
-            title   : Config.Voicious.Title
+            error        : err
+            hash         : '#jumpIn'
+            login_email  : ''
+            signup_email : ''
+            name         : req.body.name || ''
+            title        : Config.Voicious.Title
         res.render 'home', options
 
     # Called for inserting a new user in database

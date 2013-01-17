@@ -18,19 +18,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Path    = require 'path'
 
 class _Config
-    loadRestApiConfig   : (restApiConfig) ->
-        @RestAPI    =
-            Enabled         : restApiConfig.enabled
-            Host            : restApiConfig.hostname
-            Port            : restApiConfig.port
-            AllowedHosts    : [ "http://#{@HostName}:#{@Port}" ]
-            Url             : "http://#{restApiConfig.hostname}:#{restApiConfig.port}/api"
-        if (typeof restApiConfig["allowed-hosts"]) is (typeof [])
-            for allowedHost in restApiConfig["allowed-hosts"]
-                @RestAPI.AllowedHosts.push allowedHost
-        else if (typeof restApiConfig["allowed-hosts"]) is (typeof "")
-            @RestAPI.AllowedHosts.push restApiConfig["allowed-hosts"]
-
     checkCoreConfig : () ->
         @Voicious.Enabled  = 0           if not @Voicious.Enabled?
         @Voicious.Hostname = 'localhost' if not @Voicious.Hostname?
@@ -47,6 +34,7 @@ class _Config
             if (typeof @Restapi['Allowed-hosts']) is (typeof "")
                 @Restapi['Allowed-hosts'] = [ @Restapi['Allowed-hosts'] ]
             @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname}:#{@Voicious.Port}"
+            @Restapi.Url = "http://#{@Restapi.Hostname}:#{@Restapi.Port}/api"
 
     loadJSONConfig : () ->
         fileToOpen  = 'config'
