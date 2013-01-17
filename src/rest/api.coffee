@@ -72,12 +72,13 @@ class Api
                         res.send 404
             catch e
                 res.send 400
+
     updateOrCreate  : (model, req, res) =>
         obj = new @models[model] req.body
         obj.isValid (valid) =>
             if valid
-                @models[model].updateOrCreate obj
-                res.json obj
+                @models[model].updateOrCreate req.body, (err, inst) =>
+                    res.json inst
             else
                 res.send 400
 
@@ -122,6 +123,7 @@ class Api
             if req.headers.origin?
                 if req.headers.origin in Config.RestAPI.AllowedHosts or
                 '*' in Config.RestAPI.AllowedHosts
+                    res.set 'Access-Control-Allow-Methods', 'PUT, DELETE'
                     res.set 'Access-Control-Allow-Origin', req.headers.origin
             do next
         @app.use @app.router
