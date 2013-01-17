@@ -74,13 +74,16 @@ class Api
                 res.send 400
 
     updateOrCreate  : (model, req, res) =>
-        obj = new @models[model] req.body
-        obj.isValid (valid) =>
-            if valid
-                @models[model].updateOrCreate req.body, (err, inst) =>
-                    res.json inst
-            else
-                res.send 400
+        if not req.body.id or req.body.id is req.params.id
+            obj = new @models[model] req.body
+            obj.isValid (valid) =>
+                if valid
+                    @models[model].updateOrCreate req.body, (err, inst) =>
+                        res.json inst
+                else
+                    res.send 400
+        else
+            res.send 400
 
     definePost      : (model) =>
         @app.post '/api/' + model, (req, res) =>
@@ -99,6 +102,7 @@ class Api
             @defineDelete model
             @definePut model
         @app.get '/api', (req, res) => res.json ressources
+        @app.options /.*/, (req, res) => res.send 200
 
     defineAllModels : () =>
         # TODO replace with path variable
