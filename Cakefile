@@ -23,7 +23,7 @@ toCompile   = [
     {
         sourceDir   : 'src'
         destDir     : 'lib'
-        files       : [ 'start' ]
+        files       : [ 'startup' ]
     }
     {
         sourceDir   : (Path.join 'src', 'common')

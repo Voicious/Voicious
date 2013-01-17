@@ -30,6 +30,7 @@ class _Config
 
     loadRestApiConfig   : (restApiConfig) ->
         @RestAPI    =
+            Enabled         : restApiConfig.enabled
             Host            : restApiConfig.hostname
             Port            : restApiConfig.port
             AllowedHosts    : [ "http://#{@HostName}:#{@Port}" ]
@@ -48,6 +49,7 @@ class _Config
 
         @HostName   = tmpJSON.voicious.hostname
         @Port       = tmpJSON.voicious.port
+        @Enabled    = tmpJSON.voicious.enabled
 
         @loadDatabaseConfig (tmpJSON.database || undefined)
 

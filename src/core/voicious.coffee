@@ -101,4 +101,5 @@ class Voicious
         console.log "Exiting..."
         do process.exit
 
-exports.Voicious = Voicious
+voicious = new Voicious
+do voicious.start

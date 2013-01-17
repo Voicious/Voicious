@@ -3,12 +3,14 @@
         "hostname"  : "localhost",
         "port"      : 4242,
         "acl"       : ["administrator", "registered", "temporary"],
-        "roles"     : ["operator", "owner"]
+        "roles"     : ["operator", "owner"],
+        "enabled"   : 1
     },
     "restapi"   : {
         "hostname"      : "localhost",
         "port"          : 8173,
-        "allowed-hosts" : "*"
+        "allowed-hosts" : "*",
+        "enabled"       : 1
     },
     "database"  : {
         "connector" : "mongodb"
