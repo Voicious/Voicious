@@ -43,8 +43,6 @@ class _Config
 
     loadConfigJSON      : ()            ->
         fileToOpen  = 'config'
-        if process.env.NODE_ENV
-            fileToOpen  += '.' + process.env.NODE_ENV
         tmpJSON     = require (Path.join @Paths.Config, fileToOpen + ".json")
 
         @HostName   = tmpJSON.voicious.hostname
