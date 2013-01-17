@@ -18,6 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Http    = require 'http'
 Express = require 'express'
 Fs      = require 'fs'
+Path    = require 'path'
 
 Config      = require '../common/config'
 PopulateDB  = require './populateDB'
@@ -52,7 +53,7 @@ class Voicious
                 signup_email    : ''
                 name            : ''
             res.render 'home', options
-        servicesNames   = Fs.readdirSync Config.Paths.Services
+        servicesNames   = Fs.readdirSync (Path.join Config.Paths.Libroot, 'core')
         for serviceName in servicesNames
             service = require './' + serviceName
             if service.Routes?
@@ -65,7 +66,7 @@ class Voicious
 
     # Configure the __Express__ instance
     configure       : () =>
-        @app.set 'port', Config.Port
+        @app.set 'port', Config.Voicious.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
         @app.set 'title', Config.Title
@@ -94,7 +95,7 @@ class Voicious
                 do @configure
             process.on 'SIGINT', @end
             (Http.createServer @app).listen (@app.get 'port'), () =>
-                console.log "Server ready on port #{Config.Port}"
+                console.log "Server ready on port #{@app.get 'port'}"
 
     # A callback closing the database before exiting
     end     : () ->

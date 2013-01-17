@@ -1,18 +1,18 @@
 {
-    "voicious"  : {
-        "hostname"  : "localhost",
-        "port"      : 4242,
-        "acl"       : ["administrator", "registered", "temporary"],
-        "roles"     : ["operator", "owner"],
-        "enabled"   : 1
+    "Voicious"  : {
+        "Hostname"  : "localhost",
+        "Port"      : 4242,
+        "Acl"       : ["administrator", "registered", "temporary"],
+        "Roles"     : ["operator", "owner"],
+        "Enabled"   : 1
     },
-    "restapi"   : {
-        "hostname"      : "localhost",
-        "port"          : 8173,
-        "allowed-hosts" : "*",
-        "enabled"       : 1
-    },
-    "database"  : {
-        "connector" : "mongodb"
+    "Restapi"   : {
+        "Hostname"      : "localhost",
+        "Port"          : 8173,
+        "Allowed-hosts" : "*",
+        "Enabled"       : 1,
+        "Database"      : {
+            "Connector" : "mongodb"
+        }
     }
 }

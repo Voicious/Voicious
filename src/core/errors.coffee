@@ -34,7 +34,7 @@ class Errors
             status      : "404"
             statusText  : "not_found"
             errorMsg    : "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
-        options.title = Config.Title + " | " + options.status + " " + options.statusText
+        options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         res.render 'error.jade', options
 
     @RenderError : (req, res) ->
@@ -43,7 +43,7 @@ class Errors
             status      : "500"
             statusText  :"server_error"
             errorMsg    : "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
-        options.title = Config.Title + " | " + options.status + " " + options.statusText
+        options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         res.render 'error.jade', options
 
 

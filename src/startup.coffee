@@ -21,16 +21,16 @@ Config  = require './common/config'
 
 processes = []
 
-if Config.Enabled
-    voicious = spawn 'node', [(Path.join Config.Approot, 'lib', 'core', 'voicious.js')]
+if Config.Voicious.Enabled
+    voicious = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'core', 'voicious.js')]
     voicious.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
     voicious.stderr.on 'data', (data) =>
         process.stderr.write "#{data}"
     processes.push voicious
 
-if Config.RestAPI.Enabled
-    rest     = spawn 'node', [(Path.join Config.Approot, 'lib', 'rest', 'api.js')]
+if Config.Restapi.Enabled
+    rest     = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'rest', 'api.js')]
     rest.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
     rest.stderr.on 'data', (data) =>

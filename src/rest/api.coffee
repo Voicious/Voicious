@@ -35,7 +35,6 @@ class Api
     
     defineGet       : (model) =>
         @app.get '/api/' + model, (req, res) =>
-            # TODO set filters, expands etc.
             if req.query
                 objs = {}
                 for k, v of req.query
@@ -105,7 +104,6 @@ class Api
         @app.options /.*/, (req, res) => res.send 200
 
     defineAllModels : () =>
-        # TODO replace with path variable
         modelsPath  = Path.join __dirname, '../models'
         modelsNames = Fs.readdirSync modelsPath
         for modelName in modelsNames
@@ -119,14 +117,14 @@ class Api
                 AfterModelDef @models[name]
 
     configure       : () =>
-        @app.set 'port', Config.RestAPI.Port
+        @app.set 'port', Config.Restapi.Port
         @app.use Express.logger 'dev'
         @app.use do Express.bodyParser
         @app.use do Express.methodOverride
         @app.use (req, res, next) ->
             if req.headers.origin?
-                if req.headers.origin in Config.RestAPI.AllowedHosts or
-                '*' in Config.RestAPI.AllowedHosts
+                if req.headers.origin in Config.Restapi.AllowedHosts or
+                '*' in Config.Restapi.AllowedHosts
                     res.set 'Access-Control-Allow-Methods', 'PUT, DELETE'
                     res.set 'Access-Control-Allow-Origin', req.headers.origin
             do next

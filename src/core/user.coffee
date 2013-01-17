@@ -33,7 +33,7 @@ class _User
             login_email     : ''
             signup_email    : req.body.mail || ''
             name            : ''
-            title           : Config.title
+            title           : Config.Voicious.Title
         res.render 'home', options
 
     # Render the home page
@@ -44,7 +44,7 @@ class _User
             hash    : '#jumpIn'
             email   : ''
             name    : req.body.name || ''
-            title   : Config.title
+            title   : Config.Voicious.Title
         res.render 'home', options
 
     # Called for inserting a new user in database
@@ -53,7 +53,7 @@ class _User
     newUser : (req, res, param, callback, errorCallback) =>
         Request.post {
             json    : param
-            url     : "#{Config.RestAPI.Url}/user"
+            url     : "#{Config.Restapi.Url}/user"
         }, (e, r, body) =>
             if e? or r.statusCode > 200
                 errorCallback e, req, res
@@ -99,10 +99,10 @@ class _User
             signup_email    : ''
             name            : ''
             erroron         : []
-            title           : Config.Title
+            title           : Config.Voicious.Title
         if param.mail?
             if param.password?
-                Request.get "#{Config.RestAPI.Url}/user?mail=#{param.mail}&password=#{md5(param.password)}", (e, r, data) =>
+                Request.get "#{Config.Restapi.Url}/user?mail=#{param.mail}&password=#{md5(param.password)}", (e, r, data) =>
                     if (typeof data) is (typeof "")
                         data    = JSON.parse data
                     if e

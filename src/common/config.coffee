@@ -18,16 +18,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Path    = require 'path'
 
 class _Config
-    loadDatabaseConfig  : (dbConfig)    ->
-        if dbConfig is undefined
-            throw new (Error "A database must be configured in etc/config.json !")
-
-        @Database   =
-            connector   : dbConfig.connector
-            user        : dbConfig.user
-            password    : dbConfig.password
-            database    : dbConfig.database
-
     loadRestApiConfig   : (restApiConfig) ->
         @RestAPI    =
             Enabled         : restApiConfig.enabled
@@ -41,34 +31,41 @@ class _Config
         else if (typeof restApiConfig["allowed-hosts"]) is (typeof "")
             @RestAPI.AllowedHosts.push restApiConfig["allowed-hosts"]
 
-    loadConfigJSON      : ()            ->
+    checkCoreConfig : () ->
+        @Voicious.Enabled  = 0           if not @Voicious.Enabled?
+        @Voicious.Hostname = 'localhost' if not @Voicious.Hostname?
+        @Voicious.Port     = 4242        if not @Voicious.Port?
+
+    checkRestConfig : () ->
+        @Restapi.Enabled = 0 if not @Restapi.Enabled?
+        if @Restapi.Enabled
+            if not @Restapi.Database.Connector?
+                throw "Must provice a database connector if enabling REST API."
+            @Restapi.Hostname         = 'localhost' if not @Restapi.Hostname?
+            @Restapi.Port             = 4243        if not @Restapi.Hostname?
+            @Restapi['Allowed-hosts'] = [ ]         if not @Restapi.Hostname?
+            if (typeof @Restapi['Allowed-hosts']) is (typeof "")
+                @Restapi['Allowed-hosts'] = [ @Restapi['Allowed-hosts'] ]
+            @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname}:#{@Voicious.Port}"
+
+    loadJSONConfig : () ->
         fileToOpen  = 'config'
         tmpJSON     = require (Path.join @Paths.Config, fileToOpen + ".json")
+        for key, val of tmpJSON
+            @[key]  = val
+        do @checkCoreConfig
+        do @checkRestConfig
 
-        @HostName   = tmpJSON.voicious.hostname
-        @Port       = tmpJSON.voicious.port
-        @Enabled    = tmpJSON.voicious.enabled
-
-        @loadDatabaseConfig (tmpJSON.database || undefined)
-
-        @loadRestApiConfig (tmpJSON.restapi || undefined)
-
-        @Acl        = tmpJSON.voicious.acl
-
-        @Roles      = tmpJSON.voicious.roles
-
-    constructor         : ()            ->
-        @Title  = 'voıċıoųs'
-        @Paths  =
-            Webroot : Path.join __dirname, '..', '..', 'www'
-        @Paths.Approot          = Path.join @Paths.Webroot, '..'
-        @Paths.Config           = Path.join @Paths.Approot, 'etc'
+    constructor : () ->
+        @Paths  = {}
+        @Paths.Root             = Path.join __dirname, '..', '..'
+        @Paths.Config           = Path.join @Paths.Root, 'etc'
+        @Paths.Webroot          = Path.join @Paths.Root, 'www'
+        @Paths.Libroot          = Path.join @Paths.Root, 'lib'
         @Paths.Views            = Path.join @Paths.Webroot, 'views'
-        @Paths.Static           = Path.join @Paths.Webroot, 'public'
-        @Paths.Services         = Path.join __dirname, '..', 'core'
 
-        do @loadConfigJSON
-
+        do @loadJSONConfig
+        @Voicious.Title = 'voıċıoųs'
 
 class Config
     @_instance  = undefined
