@@ -48,7 +48,12 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'frontend')
         destDir     : (Path.join 'www', 'public', 'js')
-        files       : [ 'global', 'home' ]
+        files       : [ 'global', 'home', 'mediaStream' ]
+    }
+    {
+        sourceDir   : (Path.join 'src', 'ws')
+        destDir     : (Path.join 'lib', 'ws')
+        files       : [ 'webSocketServer' ]
     }
 ]
 
