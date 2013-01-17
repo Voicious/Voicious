@@ -12,7 +12,8 @@
         "Allowed-hosts" : "*",
         "Enabled"       : 1,
         "Database"      : {
-            "Connector" : "mongodb"
+            "Connector" : "mongodb",
+            "Database"  : "voicious"
         }
     }
 }

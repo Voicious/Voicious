@@ -26,9 +26,9 @@ Config      = require '../common/config'
 class Api
     constructor     : () ->
         @app            = do Express
-        @db             = new Schema 'mongodb', {
-            connector   : 'mongodb'
-            database    : 'testdb'
+        @db             = new Schema Config.Restapi.Database.Connector, {
+            connector   : Config.Restapi.Database.Connector
+            database    : Config.Restapi.Database.Database
         }
         @models         = []
         @configured     = false
