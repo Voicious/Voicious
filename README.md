@@ -13,6 +13,9 @@ Otherwise, you can manually install all dependencies and run :
 
 ## Run
 
+Run the following command from the root directory to run the Voicious server :  
+<pre><code>npm start</code></pre>
+
 ## Dependencies
 
 The Voicious server requires the following Node.js modules to run :
