@@ -1,7 +1,0 @@
-{
-    "port"      : 4242,
-    "logger"    : {
-        "level"     : "warn",
-        "stdout"    : false
-    }
-}

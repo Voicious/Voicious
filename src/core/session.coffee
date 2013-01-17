@@ -26,7 +26,7 @@ class _Session
     withCurrentUser : (req, res, next) =>
         req.currentUser = undefined
         if req.session? and req.session.uid?
-            Request.get "#{Config.RestAPI.Url}/user/#{req.session.uid}", (e, r, u) =>
+            Request.get "#{Config.Restapi.Url}/user/#{req.session.uid}", (e, r, u) =>
                 req.currentUser = JSON.parse u
                 do next
         else

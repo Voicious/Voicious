@@ -24,7 +24,7 @@ class _Room
         constructor : () ->
 
         roomPage : (req, res, next) =>
-            Request.get "#{Config.RestAPI.Url}/room/#{req.params.roomid}", (e, r, body) =>
+            Request.get "#{Config.Restapi.Url}/room/#{req.params.roomid}", (e, r, body) =>
                 if e? or r.statusCode > 200
                     Errors.RenderNotFound req, res
                 else
@@ -38,7 +38,7 @@ class _Room
         newRoom : (req, res, param) =>
             Request.post {
                 json    : param
-                url     : "#{Config.RestAPI.Url}/room"
+                url     : "#{Config.Restapi.Url}/room"
             }, (e, r, body) =>
                 if e? or r.statusCode > 200
                     throw new Errors.Error
