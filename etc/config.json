@@ -6,6 +6,11 @@
         "Roles"     : ["operator", "owner"],
         "Enabled"   : 1
     },
+    "WSServer"  : {
+        "Hostname"  : "localhost",
+        "Port"      : 1337,
+        "Enabled"   : 1
+    },
     "Restapi"   : {
         "Hostname"      : "localhost",
         "Port"          : 8173,

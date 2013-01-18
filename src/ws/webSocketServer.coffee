@@ -15,100 +15,141 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-http = require('http')
-port = 1337
+Request     = require 'request'
+Config      = require '../common/config'
+{Errors}    = require '../core/errors'
 
+webSocketServer = require('websocket').server
+http            = require('http')
+
+# Create basic http server.
 server = http.createServer((request, response) ->
-  return )
-
-
-server.listen(port, () ->
-    console.log((new Date()) + " Server is listening on port " + port)
+  console.log((new Date()) + ' Received request for ' + request.url)
+  response.writeHead(404)
+  response.end()
 )
 
-# Create new WebSocket server.
-WebSocketServer = require('ws').Server
-ws = new WebSocketServer({server: server})
+server.listen(Config.WSServer.Port, () ->
+    console.log((new Date()) + " Server is listening on port " + Config.WSServer.Port)
+)
+
+# Create WebSocket server.
+wsServer = new webSocketServer({httpServer: server})
 
 # List of the peers connected to the server.
 sockets = []
+rooms   = {}
 
-sockets.find = (id) ->
-  for i in [0...sockets.length] by 1
-    socket = sockets[i]
-    if (id is socket.id)
-      return socket
+roomValidation = (roomId) ->
+  Request.get "#{Config.Restapi.Url}/room/#{roomId}", (e, r, datas) =>
+    if e
+        Errors.error(e[0])
+        return false
+    else
+        return true
+
+getClientDatas = (clientId) ->
+  Request.get "#{Config.Restapi.Url}/user/#{clientId}", (e, r, datas) =>
+    if e
+        Errors.error(e[0])
+        return null
+    else
+      datas = JSON.parse(datas)
+      return datas
 
 # On connection of a new peer.
-ws.on('connection', (socket) ->
-  console.log("Connection on WebSocket server used to connect peers")
+wsServer.on('request', (request) ->
+  
+  console.log "New client has arrived from : " + request.origin
+
+  socket = request.accept(null, request.origin)
+  
+  socket.clientId = -1
+  socket.roomId   = -1
+  socket.enable   = false
+  
+  sockets.push(socket)
   
   # On received message from a peer.
-  socket.onmessage = (message) ->
-    args = JSON.parse(message.data)
+  socket.on('message', (message) ->
+    if message.type == 'utf8'
+      args = JSON.parse(message.utf8Data)
 
-    eventName = args[0]
-    socketId  = args[1]
+      eventName = args[0]
+      roomId    = args[1]
 
-    sock = sockets.find(socketId)
-    if (sock)
-      console.log(eventName)
+      if (socket.enable and rooms[roomId])
+        clientToSendId  = args[2]
 
-      args[1] = socket.id
+        console.log(eventName)
+        sock = room[clientToSendId]
+        if sock?
+          args[1] = socket.clientId
 
-      sock.send(JSON.stringify(args), (error) ->
-        if(error)
-          console.log(error)
-      )
+          sock.sendUTF(JSON.stringify(args), (error) ->
+            if(error)
+              console.log(error))
+      else
+        if eventName == 'authentification'
+          clientId  = args[2]
+
+          console.log "Authentification"
+
+          if roomValidation?
+            console.log "Room" + roomId + " is valid"
+            datas = getClientDatas(clientId)
+            if datas?
+              socket.roomId   = roomId
+              socket.clientId = clientId
+
+              rooms[roomId] = socket
+              socket.enable = true
+            else
+              socket.close()
+          else
+            socket.close()
+        else
+          socket.close()
+    )
 
   #On closed socket.
-  socket.onclose = () ->
-    console.log('close')
-
+  socket.on('close', () ->
+    if socket.enable == true
+      if socket.roomId != -1 && rooms[socket.roomId]
+        rooms[socket.roomId] = null
     sockets.splice(sockets.indexOf(socket), 1)
+    console.log('close')
+    )
 
-    for i in [0...sockets.length] by 1
-        soc = sockets[i]
+#    sockets.splice(sockets.indexOf(socket), 1)
+#
+#    for i in [0...sockets.length] by 1
+#        soc = sockets[i]
+#
+#        console.log(soc.id)
+#
+#        soc.send(JSON.stringify(["peer.remove", socket.id]),
+#        (error) ->
+#          if (error)
+#            console.log(error)
+#        )
+#
+#  connectionsId = []
+#
+#  for i in [0...sockets.length] by 1
+#    sock = sockets[i]
+#    
+#    connectionsId.push(sock.id)
+#
+#    sock.send(JSON.stringify(["peer.create", socket.id]),
+#    (error) ->
+#      if (error)
+#        console.log(error))
 
-        console.log(soc.id)
-
-        soc.send(JSON.stringify(["peer.remove", socket.id]),
-        (error) ->
-          if (error)
-            console.log(error)
-        )
-
-  # Generate new ID.
-  S4 = () ->
-    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-
-  generateRandomId = () ->
-    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" +
-            S4() + "-" + S4() + S4() + S4())
-
-  socket.id = generateRandomId()
-  
-  console.log("new socket got id: " + socket.id)
-
-  connectionsId = []
-
-  for i in [0...sockets.length] by 1
-    sock = sockets[i]
-    
-    connectionsId.push(sock.id)
-
-    sock.send(JSON.stringify(["peer.create", socket.id]),
-    (error) ->
-      if (error)
-        console.log(error))
-
-  # Notify the new peer the list of the existing peers.
-  socket.send(JSON.stringify(["peers", connectionsId]),
-  (error) ->
-    if(error)
-      console.log(error)
-  )
-
-  # Add the new peer in peers list.
-  sockets.push(socket)
+#  # Notify the new peer the list of the existing peers.
+#  socket.send(JSON.stringify(["peers", connectionsId]),
+#  (error) ->
+#    if(error)
+#      console.log(error)
+#  )
 )

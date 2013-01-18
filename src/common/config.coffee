@@ -22,6 +22,8 @@ class _Config
         @Voicious.Enabled  = 0           if not @Voicious.Enabled?
         @Voicious.Hostname = 'localhost' if not @Voicious.Hostname?
         @Voicious.Port     = 4242        if not @Voicious.Port?
+        
+        @WSServer.Port     = 1337        if not @WSServer.Port?
 
     checkRestConfig : () ->
         @Restapi.Enabled = 0 if not @Restapi.Enabled?

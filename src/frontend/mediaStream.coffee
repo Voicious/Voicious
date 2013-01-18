@@ -23,14 +23,18 @@ peerConnections.find = (uid) ->
     if (peerInfos.uid is uid)
       return peerInfos
 
-socket = new WebSocket('ws://192.168.52.134:1337/')
-
 sendMessage = (message) ->
-  mymsg = JSON.stringify(message)
-  trace("SEND: " + mymsg)
-  socket.send(mymsg)
+  msg = JSON.stringify(message)
+  trace("SEND: " + msg)
+  socket.send(msg)
 
-onMessage = (evt) ->
+socket = new WebSocket('ws://192.168.52.134:1337/')
+socket.onopen = () ->
+  roomId = $("#room_url").attr("room_id")
+  console.log roomId
+  sendMessage(["authentification", roomId, "50f807068bff277e29000001"])
+
+socket.onmessage = (evt) ->
   trace("RECEIVED: " + evt.data)
   processSignalingMessage(evt.data)
 
@@ -38,15 +42,15 @@ trace = (text) ->
   console.log "#{text}"
 
 $(document).ready ->
-  socket.addEventListener("message", onMessage, false)
+  #socket.addEventListener("message", onMessage, false)
 
   localVideo = $('#localVideo')
 
-  btn1.disabled = false
-  btn2.disabled = true
-
-  $('#btn1').click () =>
-     joinConference()
+#  btn1.disabled = false
+#  btn2.disabled = true
+#
+#  $('#btn1').click () =>
+#     joinConference()
 #  $('#btn2').click () =>
 #     hangUp()
 

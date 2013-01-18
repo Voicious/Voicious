@@ -1,7 +1,10 @@
 extends main
 
-block scripts
+block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/services/room/css/room.css")
+
+block scripts
+    script(type="text/javascript", src="/public/js/mediaStream.js")
 
 block content
     body
@@ -9,7 +12,7 @@ block content
         div#menu
             p#room_logo voıċıoųs
             div#options_first.options
-                p#room_url room #{room}
+                p(room_id='#{room}')#room_url room #{room}
                 button#password manage password
                 button#plugins manage plugins
             div#options_second.options
