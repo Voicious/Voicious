@@ -9,7 +9,7 @@
     "Websocket"  : {
         "Hostname"  : "localhost",
         "Port"      : 1337,
-        "Enabled"   : 1
+        "Enabled"   : 0
     },
     "Restapi"   : {
         "Hostname"      : "localhost",

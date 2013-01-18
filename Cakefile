@@ -33,7 +33,7 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'core')
         destDir     : (Path.join 'lib', 'core')
-        files       : [ 'errors', 'populateDB', 'room', 'session', 'user', 'voicious' ]
+        files       : [ 'errors', 'populateDB', 'room', 'session', 'user', 'voicious', 'token' ]
     }
     {
         sourceDir   : (Path.join 'src', 'rest')
@@ -53,7 +53,7 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'ws')
         destDir     : (Path.join 'lib', 'ws')
-        files       : [ 'webSocketServer' ]
+        files       : [ 'websocket' ]
     }
 ]
 

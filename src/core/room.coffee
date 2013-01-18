@@ -19,25 +19,15 @@ Request     = require 'request'
 Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require './errors'
+{Token}     = require './token'
 
 class _Room
         constructor : () ->
+              @token  = Token
 
         renderRoom : (param, options, res) ->
               options.token = param.token
               res.render 'room', options
-
-        createToken : (param, options, res) ->
-            Request.post {
-                json    : param
-                url     : "#{Config.Restapi.Url}/token"
-            }, (e, r, body) =>
-                if e? or r.statusCode > 200
-                    throw new Errors.Error
-                else
-                    param.token = body.id
-                    @renderRoom param, options, res
-                    
 
         roomPage : (req, res, next) =>
             Request.get "#{Config.Restapi.Url}/room/#{req.params.roomid}", (e, r, body) =>
@@ -52,7 +42,7 @@ class _Room
                                 title   : 'Voicious'
                                 login   : user.name
                                 room    : req.params.roomid
-                    @createToken tokenParam, options, res
+                    @token.createToken tokenParam, options, res, @renderRoom
 
         newRoom : (req, res, param) =>
             Request.post {

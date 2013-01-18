@@ -36,6 +36,14 @@ if Config.Restapi.Enabled
     rest.stderr.on 'data', (data) =>
         process.stderr.write "#{data}"
     processes.push voicious
+    
+if Config.Websocket.Enabled
+    voicious = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'ws', 'websocket.js')]
+    voicious.stdout.on 'data', (data) =>
+        process.stdout.write "#{data}"
+    voicious.stderr.on 'data', (data) =>
+        process.stderr.write "#{data}"
+    processes.push voicious
 
 process.on 'SIGINT', () =>
     for proc in processes

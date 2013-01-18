@@ -29,9 +29,8 @@ server = http.createServer((request, response) ->
   response.end()
 )
 
-server.listen(Config.Websocket.Port, () ->
-    console.log (new Date) + " Server is listening on port " + Config.Websocket.Port
-)
+server.listen Config.Websocket.Port, () ->
+    console.log "Server ready on port " + Config.Websocket.Port
 
 # Create WebSocket server.
 wsServer = new webSocketServer {httpServer: server}
