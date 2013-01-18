@@ -6,7 +6,7 @@
         "Roles"     : ["operator", "owner"],
         "Enabled"   : 1
     },
-    "WSServer"  : {
+    "Websocket"  : {
         "Hostname"  : "localhost",
         "Port"      : 1337,
         "Enabled"   : 1

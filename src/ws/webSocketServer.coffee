@@ -29,43 +29,97 @@ server = http.createServer((request, response) ->
   response.end()
 )
 
-server.listen(Config.WSServer.Port, () ->
-    console.log((new Date()) + " Server is listening on port " + Config.WSServer.Port)
+server.listen(Config.Websocket.Port, () ->
+    console.log (new Date) + " Server is listening on port " + Config.Websocket.Port
 )
 
 # Create WebSocket server.
-wsServer = new webSocketServer({httpServer: server})
+wsServer = new webSocketServer {httpServer: server}
 
 # List of the peers connected to the server.
 sockets = []
 rooms   = {}
 
-roomValidation = (roomId) ->
-  Request.get "#{Config.Restapi.Url}/room/#{roomId}", (e, r, datas) =>
-    if e
-        Errors.error(e[0])
-        return false
-    else
-        return true
+# Generate new ID.
+S4 = () ->
+  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
 
-getClientDatas = (clientId) ->
-  Request.get "#{Config.Restapi.Url}/user/#{clientId}", (e, r, datas) =>
-    if e
-        Errors.error(e[0])
-        return null
-    else
-      datas = JSON.parse(datas)
-      return datas
+generateRandomId = () ->
+  return (S4() + S4() + "-" + S4() + "-" + S4() + "-" +
+          S4() + "-" + S4() + S4() + S4())
 
-# On connection of a new peer.
+# Notify the error and close the socket.
+errorCallback = (param, error) ->
+    console.log error
+    Errors.Error error
+    param.socket.close
+
+# Delete token from database
+deleteToken = (token) ->
+  Request.del "#{Config.Restapi.Url}/token/#{token}", (e, r, data) =>
+    if e? or r.statusCode > 200
+      Errors.Error error "Failed to delete token"
+    else
+      console.log "Token has been deleted"
+
+# Authentification functions.
+clientValidation = (param) ->
+  Request.get "#{Config.Restapi.Url}/user/#{param.idClient}", (e, r, data) =>
+    if e? or r.statusCode > 200
+      param.errorCallback param, "Invalid client id"
+    else
+      data = JSON.parse(data)
+      # if param.idRoom == data.id_room
+      acceptPeer param
+      
+
+roomValidation = (param) ->
+  Request.get "#{Config.Restapi.Url}/room/#{param.idRoom}", (e, r, data) =>
+    if e? or r.statusCode > 200
+      param.errorCallback param, "Invalid room id"
+    else
+      clientValidation param
+
+tokenValidation = (param) ->
+  infos = {}
+  Request.get "#{Config.Restapi.Url}/token/#{param.token}", (e, r, data) =>
+    if e? or r.statusCode > 200
+      param.errorCallback param, "Invalid token"
+    else
+      deleteToken param.token
+      data = JSON.parse(data)
+      if param.idRoom == data.id_room
+        param.idClient = data.id_user
+        roomValidation param
+      else
+        param.errorCallback param, "Invalid room id"
+
+#Enable peer on the server.
+acceptPeer = (param) ->
+  idClient        = generateRandomId()
+  socket          = param.socket
+  socket.idRoom   = param.idRoom
+  socket.idClient = idClient
+  socket.enable   = true
+
+  if not rooms[param.idRoom]
+    roomSockets                   = {}
+    roomSockets[idClient]         = socket
+    rooms[param.idRoom]           = roomSockets
+  else
+    rooms[param.idRoom][idClient] = socket
+  console.log "Peer accepted"
+  console.log rooms
+
+# On a new connection.
 wsServer.on('request', (request) ->
   
   console.log "New client has arrived from : " + request.origin
 
-  socket = request.accept(null, request.origin)
+  socket = request.accept null, request.origin
   
-  socket.clientId = -1
-  socket.roomId   = -1
+  socket.idClient = -1
+  socket.idRoom   = -1
   socket.enable   = false
   
   sockets.push(socket)
@@ -73,58 +127,47 @@ wsServer.on('request', (request) ->
   # On received message from a peer.
   socket.on('message', (message) ->
     if message.type == 'utf8'
-      args = JSON.parse(message.utf8Data)
+      args = JSON.parse message.utf8Data
 
       eventName = args[0]
-      roomId    = args[1]
-
-      if (socket.enable and rooms[roomId])
-        clientToSendId  = args[2]
-
-        console.log(eventName)
-        sock = room[roomId][clientToSendId]
-        if sock?
-          args[1] = socket.clientId
-
-          sock.sendUTF(JSON.stringify(args), (error) ->
-            if(error)
-              console.log(error))
+      idRoom    = args[1]
+      
+      console.log eventName
+      if socket.enable
+        console.log eventName
+#        clientToSendId = args[2]
+#
+#        console.log(eventName)
+#        sock = room[idRoom][clientToSendId]
+#        if sock?
+#          args[2] = socket.idClient
+#
+#          sock.sendUTF JSON.stringify(args), (error) ->
+#            if error
+#              console.log error
       else
         if eventName == 'authentification'
-          console.log "Authentification"
-
-          clientId  = args[2]
+#          console.log "Authentification"
+          token     = args[2]
           
-          if roomValidation?
-            console.log "Room" + roomId + " is valid"
-            datas = getClientDatas(clientId)
-            if datas?
-              socket.roomId   = roomId
-              socket.clientId = clientId
-              socket.enable         = true
-
-              if not rooms[roomId]
-                roomSockets             = {}
-                roomSockets[clientId]   = socket
-                rooms[roomId]           = roomSockets
-              else
-                rooms[roomId][clientId] = socket
-                
-              console.log rooms
-            else
-              socket.close()
-          else
-            socket.close()
+          param   =
+              socket          : socket
+              token           : token
+              idRoom          : idRoom
+              errorCallback   : errorCallback
+          
+          tokenValidation(param)
         else
-          socket.close()
+          console.log "authentification failed"
+          socket.close
     )
 
   #On closed socket.
   socket.on('close', () ->
     if socket.enable == true
-      if socket.roomId != -1 && rooms[socket.roomId]
-        rooms[socket.roomId][socket.clientId] = null
-    sockets.splice(sockets.indexOf(socket), 1)
+      if socket.idRoom != -1 && rooms[socket.idRoom]
+        rooms[socket.idRoom][socket.idClient] = null
+    sockets.splice sockets.indexOf(socket), 1
     console.log('close')
     )
 

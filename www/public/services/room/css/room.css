@@ -76,14 +76,17 @@
 }
 
 #plugins {
-    right: 0%
+    right: 0%;
 }
-
 
 #contacts {
     right: 86px;
 }
 
 #settings {
-    right: 2%
+    right: 2%;
+}
+
+#infos {
+    display:none;
 }

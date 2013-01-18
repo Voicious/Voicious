@@ -61,7 +61,7 @@ class Api
                 res.send 400
 
     defineDelete    : (model) =>
-        @app.delete '/api/' + model + '/:id', (req, res) =>
+        @app.del '/api/' + model + '/:id', (req, res) =>
             try
                 @db.models[model].find req.params.id, (err, obj) =>
                     if obj?

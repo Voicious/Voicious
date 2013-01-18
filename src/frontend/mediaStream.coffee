@@ -14,25 +14,26 @@ You should have received a copy of the GNU Affero General Public License along w
 program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
-localStream = 0
+localStream           = 0
 
-peerConnections = []
-peerConnections.find = (uid) ->
+peerConnections       = []
+peerConnections.find  = (uid) ->
   for i in [0...peerConnections.length] by 1
     peerInfos = peerConnections[i]
     if (peerInfos.uid is uid)
       return peerInfos
 
 sendMessage = (message) ->
-  msg = JSON.stringify(message)
+  msg = JSON.stringify message
   trace("SEND: " + msg)
   socket.send(msg)
 
-socket = new WebSocket('ws://192.168.52.134:1337/')
+socket = new WebSocket 'ws://192.168.52.134:1337/'
+
 socket.onopen = () ->
-  roomId = $("#room_url").attr("room_id")
-  console.log roomId
-  sendMessage(["authentification", roomId, "50f807068bff277e29000001"])
+  roomId = $("#infos").attr("room")
+  token = $("#infos").attr("token")
+  sendMessage ["authentification", roomId, token]
 
 socket.onmessage = (evt) ->
   trace("RECEIVED: " + evt.data)
@@ -42,11 +43,8 @@ trace = (text) ->
   console.log "#{text}"
 
 $(document).ready ->
-  #socket.addEventListener("message", onMessage, false)
-
   localVideo = $('#localVideo')
-
-#  btn1.disabled = false
+  btn1.disabled = false
 #  btn2.disabled = true
 #
 #  $('#btn1').click () =>

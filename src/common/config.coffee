@@ -22,8 +22,6 @@ class _Config
         @Voicious.Enabled  = 0           if not @Voicious.Enabled?
         @Voicious.Hostname = 'localhost' if not @Voicious.Hostname?
         @Voicious.Port     = 4242        if not @Voicious.Port?
-        
-        @WSServer.Port     = 1337        if not @WSServer.Port?
 
     checkRestConfig : () ->
         @Restapi.Enabled = 0 if not @Restapi.Enabled?
@@ -38,6 +36,11 @@ class _Config
             @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname}:#{@Voicious.Port}"
             @Restapi.Url = "http://#{@Restapi.Hostname}:#{@Restapi.Port}/api"
 
+    checkWebsocketConfig: () ->
+      @Websocket.Enabled  = 0           if not @Websocket.Enabled?
+      @Websocket.Hostname = 'localhost' if not @Websocket.Hostname?
+      @Websocket.Port     = 1337        if not @Websocket.Port?
+
     loadJSONConfig : () ->
         fileToOpen  = 'config'
         tmpJSON     = require (Path.join @Paths.Config, fileToOpen + ".json")
@@ -45,6 +48,7 @@ class _Config
             @[key]  = val
         do @checkCoreConfig
         do @checkRestConfig
+        do @checkWebsocketConfig
 
     constructor : () ->
         @Paths  = {}
