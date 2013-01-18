@@ -82,7 +82,7 @@ wsServer.on('request', (request) ->
         clientToSendId  = args[2]
 
         console.log(eventName)
-        sock = room[clientToSendId]
+        sock = room[roomId][clientToSendId]
         if sock?
           args[1] = socket.clientId
 
@@ -91,19 +91,26 @@ wsServer.on('request', (request) ->
               console.log(error))
       else
         if eventName == 'authentification'
-          clientId  = args[2]
-
           console.log "Authentification"
 
+          clientId  = args[2]
+          
           if roomValidation?
             console.log "Room" + roomId + " is valid"
             datas = getClientDatas(clientId)
             if datas?
               socket.roomId   = roomId
               socket.clientId = clientId
+              socket.enable         = true
 
-              rooms[roomId] = socket
-              socket.enable = true
+              if not rooms[roomId]
+                roomSockets             = {}
+                roomSockets[clientId]   = socket
+                rooms[roomId]           = roomSockets
+              else
+                rooms[roomId][clientId] = socket
+                
+              console.log rooms
             else
               socket.close()
           else
@@ -116,7 +123,7 @@ wsServer.on('request', (request) ->
   socket.on('close', () ->
     if socket.enable == true
       if socket.roomId != -1 && rooms[socket.roomId]
-        rooms[socket.roomId] = null
+        rooms[socket.roomId][socket.clientId] = null
     sockets.splice(sockets.indexOf(socket), 1)
     console.log('close')
     )
