@@ -22,7 +22,6 @@ Config            = require '../common/config'
 {Errors}          = require '../core/errors'
 {Token}           = require '../core/token'
 
-# Generate new ID.
 randNb            = () ->
   return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
 
@@ -35,15 +34,22 @@ class Websocket
             @sockets    = []
             @rooms      = {}
             @token      = Token
-        
-        # Notify the error and close the socket.
+
         errorCallback     : (param, error) ->
             console.log error
             Errors.Error error
             param.socket.close
 
         notifyNewPeer     : (socket) ->
+            peersId   = []
+            sockets   = @rooms[socket.idRoom]
             
+            for key, val of sockets
+                sock  = val
+                peersId.push sock.idClient
+                @socketOnSend sock, ["peer.create", socket.idClient]
+
+            @socketOnSend socket, ["peers", peersId]
 
         acceptPeer        : (param) ->
             idClient        = generateRandomId()
@@ -52,14 +58,14 @@ class Websocket
             socket.idClient = idClient
             socket.enable   = true
 
+            @notifyNewPeer socket
+
             if not @rooms[param.idRoom]
               roomSockets                   = {}
               roomSockets[idClient]         = socket
               @rooms[param.idRoom]           = roomSockets
             else
               @rooms[param.idRoom][idClient] = socket
-            console.log "Peer accepted"
-            @notifyNewPeer socket
 
         clientValidation  : (param) ->
             that = this
@@ -76,37 +82,59 @@ class Websocket
             that = this
             Request.get "#{Config.Restapi.Url}/room/#{param.idRoom}", (e, r, data) =>
               if e? or r.statusCode > 200
-                param.errorCallback param, "Invalid room id"
+                  param.errorCallback param, "Invalid room id"
               else
-                that.clientValidation param
+                  that.clientValidation param
 
         tokenValidation   : (param) ->
             that = this
             Request.get "#{Config.Restapi.Url}/token/#{param.token}", (e, r, data) =>
               if e? or r.statusCode > 200
-                param.errorCallback param, "Invalid token"
+                  param.errorCallback param, "Invalid token"
               else
-                @token.deleteToken param.token
-                data = JSON.parse(data)
-                if param.idRoom == data.id_room
-                  param.idClient = data.id_user
-                  that.roomValidation param
-                else
-                  param.errorCallback param, "Invalid room id"
-        
+                  @token.deleteToken param.token
+                  data = JSON.parse(data)
+                  if param.idRoom == data.id_room
+                    param.idClient = data.id_user
+                    that.roomValidation param
+                  else
+                    param.errorCallback param, "Invalid room id"
+
+        peerRemove        : (socket) ->
+            sockets   = @rooms[socket.idRoom]
+
+            for key, val of sockets
+                sock = val
+
+                console.log(sock.idClient)
+                @socketOnSend sock, ["peer.remove", socket.idClient]
+
+        socketOnSend      : (socket, msg) ->
+            msg = JSON.stringify(msg)
+            console.log "Send : #{msg}"
+
+            socket.send msg, (error) ->
+                if (error)
+                    console.log(error)
+
         socketOnMessage   : (socket, message) ->
             if message.type == 'utf8'
                 args = JSON.parse message.utf8Data
             else if message.type == 'binary'
                 return
-            eventName = args[0]
-            idRoom    = args[1]
 
-            console.log eventName
+            event = args[0]
+
             if socket.enable
-                console.log eventName
-            else if eventName == 'authentification'
-                param   =
+                sock          = @room[socket.idRoom][args[1]]
+
+                if sock?
+                    args[1]   = socket.idClient
+                    @onSocketSend sock, args
+
+            else if event? and event == 'authentification'
+                idRoom    = args[1]
+                param     =
                     socket          : socket
                     token           : args[2]
                     idRoom          : idRoom
@@ -116,14 +144,14 @@ class Websocket
 
         socketOnClose     : (socket) ->
             if socket.enable == true
-                @rooms[socket.idRoom][socket.idClient] = null
-                # Send a messae to the other peers
-            @sockets.splice sockets.indexOf(socket), 1
+                delete @rooms[socket.idRoom][socket.idClient]
+                @peerRemove socket
+            @sockets.splice @sockets.indexOf(socket), 1
             console.log 'close'
-        
+
         serverOnRequest   : (request) ->
             console.log "New client has arrived from : " + request.origin
-            
+
             that            = this
             socket          = request.accept null, request.origin
 
@@ -137,7 +165,7 @@ class Websocket
                 that.socketOnClose socket
 
             @sockets.push socket
-        
+
         start       : () ->
             that       = this
             server     = Http.createServer((req, res) ->).listen Config.Websocket.Port, () ->
@@ -166,7 +194,7 @@ do websocket.start
 #
 #  for i in [0...sockets.length] by 1
 #    sock = sockets[i]
-#    
+#
 #    connectionsId.push(sock.id)
 #
 #    sock.send(JSON.stringify(["peer.create", socket.id]),
