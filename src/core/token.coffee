@@ -19,7 +19,7 @@ Request     = require 'request'
 Config      = require '../common/config'
 
 class _Token
-        Constructor : () ->
+        constructor : () ->
 
         createToken : (param, options, res, callback) ->
             Request.post {
@@ -31,5 +31,10 @@ class _Token
                 else
                     param.token = body.id
                     callback param, options, res
+        
+        deleteToken : (token) ->
+            Request.del "#{Config.Restapi.Url}/token/#{token}", (e, r, data) =>
+                if e? or r.statusCode > 200
+                  Errors.Error error "Failed to delete token"
 
 exports.Token   = new _Token
