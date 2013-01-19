@@ -87,6 +87,16 @@
     right: 2%;
 }
 
+
+#body {
+    position: relative;
+    margin: auto;
+}
+
 #infos {
     display:none;
 }
+
+.videoStream {
+        border: white 1px solid;
+    }

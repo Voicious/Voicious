@@ -48,7 +48,7 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'frontend')
         destDir     : (Path.join 'www', 'public', 'js')
-        files       : [ 'global', 'home', 'mediaStream' ]
+        files       : [ 'global', 'home', 'room', 'network', 'webRTC' ]
     }
     {
         sourceDir   : (Path.join 'src', 'ws')

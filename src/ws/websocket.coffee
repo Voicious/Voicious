@@ -16,12 +16,13 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Request           = require 'request'
-WebSocketServer   = require('websocket').server
+WebSocketServer   = require('ws').Server
 Http              = require('http')
 Config            = require '../common/config'
 {Errors}          = require '../core/errors'
 {Token}           = require '../core/token'
 
+# Generate random ID
 randNb            = () ->
   return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
 
@@ -29,6 +30,13 @@ generateRandomId  = () ->
   return (randNb() + randNb() + "-" + randNb() + "-" + randNb() + "-" +
           randNb() + "-" + randNb() + randNb() + randNb())
 
+# Variables tips:
+#
+# rid   -> roomID
+# cid   -> clientID
+# cinfo -> clientInfo
+
+# WebSocket server
 class Websocket
         constructor       : () ->
             @sockets    = []
@@ -41,46 +49,52 @@ class Websocket
             param.socket.close
 
         notifyNewPeer     : (socket) ->
-            peersId   = []
-            sockets   = @rooms[socket.idRoom]
+            clientsInfos    = []
+            sockets         = @rooms[socket.rid]
             
             for key, val of sockets
-                sock  = val
-                peersId.push sock.idClient
-                @socketOnSend sock, ["peer.create", socket.idClient]
+                sock        = val
+                clientsInfos.push sock.cinfo
+                @socketOnSend sock, ["peer.create", socket.cinfo]
 
-            @socketOnSend socket, ["peers", peersId]
+            @socketOnSend socket, ["peers", clientsInfos]
 
         acceptPeer        : (param) ->
-            idClient        = generateRandomId()
-            socket          = param.socket
-            socket.idRoom   = param.idRoom
-            socket.idClient = idClient
-            socket.enable   = true
+            cid               = generateRandomId()
+            socket            = param.socket
+            socket.rid        = param.rid
+            socket.cinfo      = param.cinfo
+            socket.enable     = true
+
+            socket.cinfo.cid  = cid
 
             @notifyNewPeer socket
 
-            if not @rooms[param.idRoom]
+            if not @rooms[param.rid]
               roomSockets                   = {}
-              roomSockets[idClient]         = socket
-              @rooms[param.idRoom]           = roomSockets
+              roomSockets[cid]              = socket
+              @rooms[param.rid]             = roomSockets
             else
-              @rooms[param.idRoom][idClient] = socket
+              @rooms[param.rid][cid]        = socket
 
         clientValidation  : (param) ->
             that = this
-            Request.get "#{Config.Restapi.Url}/user/#{param.idClient}", (e, r, data) =>
+            Request.get "#{Config.Restapi.Url}/user/#{param.cid}", (e, r, data) =>
               if e? or r.statusCode > 200
                 param.errorCallback param, "Invalid client id"
               else
                 data = JSON.parse(data)
-                # if param.idRoom == data.id_room
+                # if param.rid == data.id_room
+                client =
+                    name  : data.name
+                    
+                param.cinfo  = client
                 that.acceptPeer param
 
 
         roomValidation    : (param) ->
             that = this
-            Request.get "#{Config.Restapi.Url}/room/#{param.idRoom}", (e, r, data) =>
+            Request.get "#{Config.Restapi.Url}/room/#{param.rid}", (e, r, data) =>
               if e? or r.statusCode > 200
                   param.errorCallback param, "Invalid room id"
               else
@@ -94,20 +108,20 @@ class Websocket
               else
                   @token.deleteToken param.token
                   data = JSON.parse(data)
-                  if param.idRoom == data.id_room
-                    param.idClient = data.id_user
+                  if param.rid == data.id_room
+                    param.cid = data.id_user
                     that.roomValidation param
                   else
                     param.errorCallback param, "Invalid room id"
 
         peerRemove        : (socket) ->
-            sockets   = @rooms[socket.idRoom]
+            sockets  = @rooms[socket.rid]
 
             for key, val of sockets
                 sock = val
 
-                console.log(sock.idClient)
-                @socketOnSend sock, ["peer.remove", socket.idClient]
+                console.log(sock.cinfo.cid)
+                @socketOnSend sock, ["peer.remove", socket.cinfo]
 
         socketOnSend      : (socket, msg) ->
             msg = JSON.stringify(msg)
@@ -118,93 +132,63 @@ class Websocket
                     console.log(error)
 
         socketOnMessage   : (socket, message) ->
-            if message.type == 'utf8'
-                args = JSON.parse message.utf8Data
-            else if message.type == 'binary'
+            if not message.data
                 return
-
+            args = JSON.parse message.data
+            
+            console.log "Received : #{args}"
+            
             event = args[0]
 
             if socket.enable
-                sock          = @room[socket.idRoom][args[1]]
+                cinfo = args[1]
+                if @rooms? and @rooms[socket.rid]? and cinfo?
+                    sock = @rooms[socket.rid][cinfo.cid]
 
-                if sock?
-                    args[1]   = socket.idClient
-                    @onSocketSend sock, args
+                    if sock?
+                        args[1] = socket.cinfo
+                        @socketOnSend sock, args
 
             else if event? and event == 'authentification'
-                idRoom    = args[1]
-                param     =
+                rid    = args[1]
+                param  =
                     socket          : socket
                     token           : args[2]
-                    idRoom          : idRoom
+                    rid             : rid
                     errorCallback   : @errorCallback
 
                 @tokenValidation(param)
 
         socketOnClose     : (socket) ->
-            if socket.enable == true
-                delete @rooms[socket.idRoom][socket.idClient]
+            if socket.enable == true and @rooms[socket.rid]?
+                delete @rooms[socket.rid][socket.cinfo.cid]
                 @peerRemove socket
             @sockets.splice @sockets.indexOf(socket), 1
-            console.log 'close'
+            console.log 'Socket closed'
 
-        serverOnRequest   : (request) ->
-            console.log "New client has arrived from : " + request.origin
+        serverOnConnection   : (socket) ->
+            console.log 'New client has arrived'
 
             that            = this
-            socket          = request.accept null, request.origin
 
-            socket.idClient = -1
-            socket.idRoom   = -1
+            socket.cid      = -1
+            socket.rid      = -1
             socket.enable   = false
 
-            socket.on 'message', (message) ->
+            socket.onmessage = (message) ->
                 that.socketOnMessage socket, message
-            socket.on 'close', () ->
+            socket.onclose = () ->
                 that.socketOnClose socket
 
             @sockets.push socket
 
         start       : () ->
-            that       = this
-            server     = Http.createServer((req, res) ->).listen Config.Websocket.Port, () ->
+            that        = this
+            server      = Http.createServer((req, res) ->).listen Config.Websocket.Port, () ->
                 console.log "Server ready on port #{Config.Websocket.Port}"
-            @wsServer   = new WebSocketServer {httpServer: server}
-            @wsServer.on 'request', (request) ->
-                that.serverOnRequest request
+            @wsServer   = new WebSocketServer {server: server}
+            @wsServer.on 'connection', (socket) ->
+                that.serverOnConnection socket
 
 websocket = new Websocket
 do websocket.start
-
-#    sockets.splice(sockets.indexOf(socket), 1)
-#
-#    for i in [0...sockets.length] by 1
-#        soc = sockets[i]
-#
-#        console.log(soc.id)
-#
-#        soc.send(JSON.stringify(["peer.remove", socket.id]),
-#        (error) ->
-#          if (error)
-#            console.log(error)
-#        )
-#
-#  connectionsId = []
-#
-#  for i in [0...sockets.length] by 1
-#    sock = sockets[i]
-#
-#    connectionsId.push(sock.id)
-#
-#    sock.send(JSON.stringify(["peer.create", socket.id]),
-#    (error) ->
-#      if (error)
-#        console.log(error))
-
-#  # Notify the new peer the list of the existing peers.
-#  socket.send(JSON.stringify(["peers", connectionsId]),
-#  (error) ->
-#    if(error)
-#      console.log(error)
-#  )
