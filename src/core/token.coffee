@@ -21,16 +21,16 @@ Config      = require '../common/config'
 class _Token
         constructor : () ->
 
-        createToken : (param, options, res, callback) ->
+        createToken : (req, res, options, next) ->
             Request.post {
-                json    : param
+                json    : req
                 url     : "#{Config.Restapi.Url}/token"
             }, (e, r, body) =>
                 if e? or r.statusCode > 200
                     throw new Errors.Error
                 else
-                    param.token = body.id
-                    callback param, options, res
+                    options.token = body.id
+                    next res, options
         
         deleteToken : (token) ->
             Request.del "#{Config.Restapi.Url}/token/#{token}", (e, r, data) =>

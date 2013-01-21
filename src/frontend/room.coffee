@@ -36,13 +36,14 @@ class Room
         $('#joinConference').click () =>
            @joinConference()
 
-room = new Room
+room                    = new Room
 
 failLoadMedia     = (e) ->
     trace "Video or audio are not available#{e}."
 
 successLoadMedia  = (stream) ->
     trace "Success to load video."
+    window.localStream   = stream
     joinConference.disabled = true
     room.networkManager.negociatePeersOffer stream
 

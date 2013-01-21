@@ -26,7 +26,8 @@ class NetworkManager
     createPeerConnection : (options) ->
         that              = this
         cid               = options.cinfo.cid
-
+        localStream       = window.localStream
+        
         if localStream?
             options.stream  = localStream
 
@@ -34,11 +35,13 @@ class NetworkManager
             trace "Add new stream"
             baliseVideoId   = 'video' + cid
             baliseBlockId   = "block" + cid
-            $("#videos").append('<div id="' + baliseBlockId + '" class="video-block">
-                  <p>Callee - ' + cid + '</p>
-                  <video id="' + baliseVideoId + '" autoplay="autoplay" class="videoStream"></video>
-                </div>')
-            baliseName = '#' + baliseVideoId
+            $("#videos").append(
+                '<div id="' + baliseBlockId + '" class="video-block">
+                 <p>Callee - ' + cid + '</p>
+                 <video id="' + baliseVideoId + '" autoplay="autoplay" class="videoStream"></video>
+                 </div>'
+                )
+            baliseName      = '#' + baliseVideoId
             $(baliseName).attr('src', window.URL.createObjectURL(event.stream));
 
         options.removestream = (event) ->

@@ -25,8 +25,7 @@ class _Room
         constructor : () ->
               @token  = Token
 
-        renderRoom : (param, options, res) ->
-              options.token = param.token
+        renderRoom : (res, options) ->
               res.render 'room', options
 
         roomPage : (req, res, next) =>
@@ -35,14 +34,14 @@ class _Room
                     Errors.RenderNotFound req, res
                 else
                     user          = req.currentUser
-                    tokenParam    =
-                                id_room : req.params.roomid
-                                id_user : user.id
                     options       =
                                 title   : 'Voicious'
                                 login   : user.name
                                 room    : req.params.roomid
-                    @token.createToken tokenParam, options, res, @renderRoom
+                    req           =
+                                id_room : req.params.roomid
+                                id_user : user.id
+                    @token.createToken req, res, options, @renderRoom
 
         newRoom : (req, res, param) =>
             Request.post {

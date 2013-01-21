@@ -84,7 +84,7 @@ class Websocket
                 param.errorCallback param, "Invalid client id"
               else
                 data = JSON.parse(data)
-                # if param.rid == data.id_room
+                # if param.rid == data.id_room # check client id room to avoid multiple same client
                 client =
                     name  : data.name
                     

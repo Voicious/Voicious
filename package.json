@@ -10,7 +10,7 @@
         "jugglingdb"    : "0.1.x",
         "MD5"           : "1.0.x",
         "request"       : "2.12.x",
-	"ws"		: "0.4.x"
+        "ws"            : "0.4.x"
     },
     "directories"   : {
         "lib"       : "./www/lib"
