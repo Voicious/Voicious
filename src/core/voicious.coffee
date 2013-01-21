@@ -80,7 +80,6 @@ class Voicious
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
         @app.use (err, req, res, next) =>
-            console.log err
             if err instanceof Errors.NotFound
                 Errors.RenderNotFound req, res
             else

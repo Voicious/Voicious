@@ -8,12 +8,16 @@
     },
     "Restapi"   : {
         "Hostname"      : "localhost",
-        "Port"          : 8173,
+        "Port"          : 4243,
         "Allowed-hosts" : "*",
         "Enabled"       : 1,
         "Database"      : {
             "Connector" : "mongodb",
             "Database"  : "voicious"
+        },
+        "Ssl"           : {
+            "Key"         : "voicious.key",
+            "Certificate" : "voicious.crt"
         }
     }
 }

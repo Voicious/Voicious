@@ -13,8 +13,9 @@ Otherwise, you can manually install all dependencies and run :
 
 ## Run
 
-Run the following command from the root directory to run the Voicious server :  
-<pre><code>npm start</code></pre>
+Run one of the following commands from the root directory to run the Voicious server :  
+<pre><code>npm start
+node ./lib/startup.js</code></pre>
 
 ## Dependencies
 

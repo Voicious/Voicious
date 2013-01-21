@@ -34,7 +34,16 @@ class _Config
             if (typeof @Restapi['Allowed-hosts']) is (typeof "")
                 @Restapi['Allowed-hosts'] = [ @Restapi['Allowed-hosts'] ]
             @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname}:#{@Voicious.Port}"
-            @Restapi.Url = "http://#{@Restapi.Hostname}:#{@Restapi.Port}/api"
+            if @Restapi.Ssl?
+                if @Restapi.Ssl.Key? and @Restapi.Ssl.Certificate?
+                    @Restapi.Ssl.Enabled = 1
+                else
+                    @Restapi.Ssl.Enabled = 0
+            else
+                @Restapi.Ssl =
+                    Enabled : 0
+            protocol     = if @Restapi.Ssl.Enabled then 'https' else 'http'
+            @Restapi.Url = "#{protocol}://#{@Restapi.Hostname}:#{@Restapi.Port}/api"
 
     loadJSONConfig : () ->
         fileToOpen  = 'config'

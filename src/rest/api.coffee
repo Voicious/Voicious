@@ -16,6 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Http        = require 'http'
+Https       = require 'https'
 Express     = require 'express'
 {Schema}    = require 'jugglingdb'
 Fs          = require 'fs'
@@ -136,7 +137,15 @@ class Api
     start       : () =>
         @db.on 'connected', () =>
             do @configure if not @configured
-            (Http.createServer @app).listen (@app.get 'port'), () =>
-                console.log "Server ready on port #{@app.get 'port'}"
+            if Config.Restapi.Ssl.Enabled
+                ssl =
+                    key  : do (Fs.readFileSync (Path.join Config.Paths.Config, Config.Restapi.Ssl.Key)).toString
+                    cert : do (Fs.readFileSync (Path.join Config.Paths.Config, Config.Restapi.Ssl.Certificate)).toString
+                (Https.createServer ssl, @app).listen (@app.get 'port'), () =>
+                    console.log "Server ready on port #{@app.get 'port'} (SSL)"
+            else
+                (Http.createServer @app).listen (@app.get 'port'), () =>
+                    console.log "Server ready on port #{@app.get 'port'}"
+
 
 do (new Api).start
