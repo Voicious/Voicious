@@ -41,7 +41,7 @@ class NetworkManager
                  </div>'
                 )
             baliseName      = '#' + baliseVideoId
-            $(baliseName).attr('src', window.URL.createObjectURL(event.stream));
+            $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
 
         options.removestream = (event) =>
             trace "Remove stream"
@@ -69,11 +69,13 @@ class NetworkManager
 
     negociatePeersOffer : (stream) =>
         for key, val of @connections
-            trace "Call addStream"
-            peer = val.peerConnection
-            peer.addStream(stream)
-            peer.peerCreateOffer (offer) =>
-                @onSend ["offer", val.cinfo, offer.sdp]
+            console.log "Negociate new offer" + key
+            do (key, val) =>
+                trace "Call addStream" + key
+                peer = val.peerConnection
+                peer.addStream(stream)
+                peer.peerCreateOffer (offer) =>
+                    @onSend ["offer", val.cinfo, offer.sdp]
 
     onOpen              : () =>
         roomId = $("#infos").attr("room")
@@ -91,15 +93,13 @@ class NetworkManager
         switch (eventName)
             when 'peers'
                 trace "on peers"
-                for i in [0...cinfos.length] by 1
-                  cinfo = cinfos[i]
+                cinfos.forEach (cinfo, i) =>
+                    options =
+                      cinfo     : cinfo
+                      onoffer   : (offer) =>
+                        @onSend ["offer", cinfo, offer.sdp]
 
-                  options =
-                    cinfo     : cinfo
-                    onoffer   : (offer) =>
-                      @onSend ["offer", cinfo, offer.sdp]
-
-                  @createPeerConnection(options)
+                    @createPeerConnection(options)
             when 'peer.create'
                 trace "on peer create"
 
@@ -114,12 +114,13 @@ class NetworkManager
                 cinfo     = cinfos
                 peerInfos = @connections[cinfo.cid]
 
+#                if peerInfos? and peerInfos.peerConnection?
                 peerInfos.peerConnection.close()
 
                 baliseBlockId = "#block" + cinfo.cid
                 $(baliseBlockId).remove()
 
-                #delete peerInfos.peerConnection
+                    #delete peerInfos.peerConnection
                 delete @connections[cinfo.cid]
 
             when 'offer'
@@ -144,10 +145,9 @@ class NetworkManager
                 trace "add ice candidate"
 
                 cinfo     = cinfos
-                peerInfos = @connections[cinfo.cid]
-                if peerInfos?
-                    peer = peerInfos.peerConnection
-                    peer.addice(sdp)
+                peer  = @connections[cinfo.cid].peerConnection
+                
+                peer.addice(sdp)
     
     onSend              : (message) ->
         msg = JSON.stringify message

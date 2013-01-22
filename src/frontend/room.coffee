@@ -20,15 +20,15 @@ trace = (text) ->
 
 class Room
     constructor       : () ->
-        @networkManager = NetworkManager 'localhost', 1337
+        @networkManager = NetworkManager '192.168.52.135', 1337
 
     joinConference    : () =>
         options =
-            video       : localVideo
+            video       : '#localVideo'
             onsuccess   : (stream) =>
                 trace "Success to load video."
-                window.localStream   = stream
-                @joinConference.disabled = true
+                window.localStream          = stream
+                @joinConference.disabled    = true
                 @networkManager.negociatePeersOffer stream
             onerror     : (e) =>
                 trace "Video or audio are not available#{e}."
@@ -43,7 +43,6 @@ class Room
 room              = new Room
 
 $(document).ready ->
-    localVideo  = 'localVideo'
     do room.start
 
 if window?

@@ -88,20 +88,17 @@ getUserMedia = (options) ->
     URL = window.webkitURL || window.URL
 
     if navigator.getUserMedia?
-      navigator.getUserMedia(options.constraints || { audio: true, video: true },
-        (stream) ->
-            if (options.video)
-                if (!navigator.mozGetUserMedia)
-                    options.video.src = @URL.createObjectURL(stream)
-                else
-                    options.video.mozSrcObject = stream
-            if options.onsuccess?
-                options.onsuccess(stream)
-            return stream
-
+        navigator.getUserMedia(options.constraints || { audio: true, video: true },
+            (stream) =>
+                if (options.video)
+                    if (!navigator.mozGetUserMedia)
+                        $(options.video).attr 'src', window.URL.createObjectURL(stream)
+                    else
+                        $(options.video).attr 'src', stream
+                    options.onsuccess(stream)
         , options.onerror)
     else
-      console.log "GetUserMedia is not available"
+        console.log "GetUserMedia is not available"
             
 PC  = createPeerConnection
 M   = getUserMedia
