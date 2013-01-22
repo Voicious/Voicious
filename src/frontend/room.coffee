@@ -20,7 +20,7 @@ trace = (text) ->
 
 class Room
     constructor       : () ->
-        @networkManager = NetworkManager
+        @networkManager = NetworkManager 'localhost', 1337
 
     joinConference    : () ->
         that    = this

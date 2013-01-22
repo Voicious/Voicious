@@ -77,8 +77,7 @@ class Websocket
             else
               @rooms[param.rid][cid]        = socket
 
-        clientValidation  : (param) ->
-            that = this
+        clientValidation  : (param) =>
             Request.get "#{Config.Restapi.Url}/user/#{param.cid}", (e, r, data) =>
               if e? or r.statusCode > 200
                 param.errorCallback param, "Invalid client id"
@@ -89,19 +88,17 @@ class Websocket
                     name  : data.name
                     
                 param.cinfo  = client
-                that.acceptPeer param
+                @acceptPeer param
 
 
-        roomValidation    : (param) ->
-            that = this
+        roomValidation    : (param) =>
             Request.get "#{Config.Restapi.Url}/room/#{param.rid}", (e, r, data) =>
               if e? or r.statusCode > 200
                   param.errorCallback param, "Invalid room id"
               else
-                  that.clientValidation param
+                  @clientValidation param
 
-        tokenValidation   : (param) ->
-            that = this
+        tokenValidation   : (param) =>
             Request.get "#{Config.Restapi.Url}/token/#{param.token}", (e, r, data) =>
               if e? or r.statusCode > 200
                   param.errorCallback param, "Invalid token"
@@ -109,12 +106,12 @@ class Websocket
                   @token.deleteToken param.token
                   data = JSON.parse(data)
                   if param.rid == data.id_room
-                    param.cid = data.id_user
-                    that.roomValidation param
+                    param.cid = data.id_client
+                    @roomValidation param
                   else
                     param.errorCallback param, "Invalid room id"
 
-        peerRemove        : (socket) ->
+        peerRemove        : (socket) =>
             sockets  = @rooms[socket.rid]
 
             for key, val of sockets
@@ -123,7 +120,7 @@ class Websocket
                 console.log(sock.cinfo.cid)
                 @socketOnSend sock, ["peer.remove", socket.cinfo]
 
-        socketOnSend      : (socket, msg) ->
+        socketOnSend      : (socket, msg) =>
             msg = JSON.stringify(msg)
             console.log "Send : #{msg}"
 
@@ -131,7 +128,7 @@ class Websocket
                 if (error)
                     console.log(error)
 
-        socketOnMessage   : (socket, message) ->
+        socketOnMessage   : (socket, message) =>
             if not message.data
                 return
             args = JSON.parse message.data
@@ -159,14 +156,14 @@ class Websocket
 
                 @tokenValidation(param)
 
-        socketOnClose     : (socket) ->
+        socketOnClose     : (socket) =>
             if socket.enable == true and @rooms[socket.rid]?
                 delete @rooms[socket.rid][socket.cinfo.cid]
                 @peerRemove socket
             @sockets.splice @sockets.indexOf(socket), 1
             console.log 'Socket closed'
 
-        serverOnConnection   : (socket) ->
+        serverOnConnection   : (socket) =>
             console.log 'New client has arrived'
 
             that            = this
@@ -182,7 +179,7 @@ class Websocket
 
             @sockets.push socket
 
-        start       : () ->
+        start       : () =>
             that        = this
             server      = Http.createServer((req, res) ->).listen Config.Websocket.Port, () ->
                 console.log "Server ready on port #{Config.Websocket.Port}"

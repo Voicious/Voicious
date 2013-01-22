@@ -25,7 +25,7 @@ class _Room
         constructor : () ->
               @token  = Token
 
-        renderRoom : (res, options) ->
+        renderRoom : (res, options) =>
               res.render 'room', options
 
         roomPage : (req, res, next) =>
@@ -38,10 +38,10 @@ class _Room
                                 title   : 'Voicious'
                                 login   : user.name
                                 room    : req.params.roomid
-                    req           =
-                                id_room : req.params.roomid
-                                id_user : user.id
-                    @token.createToken req, res, options, @renderRoom
+                    @token.createToken user.id, req.params.roomid,
+                        (token) =>
+                            options.token = token
+                            @renderRoom res, options
 
         newRoom : (req, res, param) =>
             Request.post {

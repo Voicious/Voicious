@@ -15,23 +15,22 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-networkConfig   =
-            hostname  : '192.168.52.134'
-            port      : 1337
-
 class NetworkManager
-    constructor   : () ->
-        @connections = {}
+    constructor   : (hostname, port) ->
+        @networkConfig            = {}
+        @networkConfig.hostname   = hostname
+        @networkConfig.port       = port
+        
+        @connections              = {}
 
-    createPeerConnection : (options) ->
-        that              = this
+    createPeerConnection : (options) =>
         cid               = options.cinfo.cid
         localStream       = window.localStream
         
         if localStream?
             options.stream  = localStream
 
-        options.gotstream = (event) ->
+        options.gotstream = (event) =>
             trace "Add new stream"
             baliseVideoId   = 'video' + cid
             baliseBlockId   = "block" + cid
@@ -44,12 +43,12 @@ class NetworkManager
             baliseName      = '#' + baliseVideoId
             $(baliseName).attr('src', window.URL.createObjectURL(event.stream));
 
-        options.removestream = (event) ->
+        options.removestream = (event) =>
             trace "Remove stream"
 
-        options.getice = (event) ->
+        options.getice = (event) =>
             if (event.candidate)
-              that.onSend ["candidate", options.cinfo,
+              @onSend ["candidate", options.cinfo,
               {
               type: 'candidate',
               label: event.candidate.sdpMLineIndex,
@@ -58,8 +57,8 @@ class NetworkManager
             else
               trace "End of candidates."
 
-        options.onCreateAnswer = (sessionDescription) ->
-            that.onSend ["answer", options.cinfo, sessionDescription.sdp]
+        options.onCreateAnswer = (sessionDescription) =>
+            @onSend ["answer", options.cinfo, sessionDescription.sdp]
 
         pc  = WRTCPeerConnection options
 
@@ -77,12 +76,12 @@ class NetworkManager
             peer.peerCreateOffer (offer) ->
                 that.onSend ["offer", val.cinfo, offer.sdp]
 
-    onOpen    : () ->
+    onOpen              : () ->
         roomId = $("#infos").attr("room")
         token = $("#infos").attr("token") # delete token from the infos
         @onSend ["authentification", roomId, token]
 
-    onMessage : (message) ->
+    onMessage           : (message) ->
         args        = JSON.parse(message.data)
 
         eventName   = args[0]
@@ -152,21 +151,21 @@ class NetworkManager
                 peer = peerInfos.peerConnection
                 peer.addice(sdp)
     
-    onSend        : (message) ->
+    onSend              : (message) ->
         msg = JSON.stringify message
         console.log "Send : #{msg}"
         @tunnel.send msg
     
-    connection    : () ->
-        that              = this
-        @socket           = new WebSocket "ws://#{networkConfig.hostname}:#{networkConfig.port}/"
+    connection          : () =>
+        @socket           = new WebSocket "ws://#{@networkConfig.hostname}:#{@networkConfig.port}/"
         @tunnel           = @socket
-        @socket.onopen    = () ->
-            do that.onOpen
-        @socket.onmessage = (message) ->
-            that.onMessage message
+        @socket.onopen    = () =>
+            do @onOpen
+        @socket.onmessage = (message) =>
+            @onMessage message
 
-NM  = new NetworkManager
+NM  = (hostname, port) ->
+    new NetworkManager hostname, port
 
 if window?
     window.NetworkManager     = NM

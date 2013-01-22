@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ModelDef =
     id_room   :
           type  : Number
-    id_user   :
+    id_client :
           type :  Number
 
 AfterModelDef   = (m) =>
