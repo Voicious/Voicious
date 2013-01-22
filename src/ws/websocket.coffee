@@ -43,23 +43,18 @@ class Websocket
             @rooms      = {}
             @token      = Token
 
-        errorCallback     : (param, error) ->
-            console.log error
-            Errors.Error error
-            param.socket.close
-
-        notifyNewPeer     : (socket) ->
+        notifyNewPeer     : (socket) =>
             clientsInfos    = []
             sockets         = @rooms[socket.rid]
             
             for key, val of sockets
-                sock        = val
+                sock = val
                 clientsInfos.push sock.cinfo
                 @socketOnSend sock, ["peer.create", socket.cinfo]
 
             @socketOnSend socket, ["peers", clientsInfos]
 
-        acceptPeer        : (param) ->
+        acceptPeer        : (param) =>
             cid               = generateRandomId()
             socket            = param.socket
             socket.rid        = param.rid
@@ -152,7 +147,10 @@ class Websocket
                     socket          : socket
                     token           : args[2]
                     rid             : rid
-                    errorCallback   : @errorCallback
+                    errorCallback   : () =>
+                        console.log error
+                        Errors.Error error
+                        param.socket.close
 
                 @tokenValidation(param)
 
@@ -166,26 +164,23 @@ class Websocket
         serverOnConnection   : (socket) =>
             console.log 'New client has arrived'
 
-            that            = this
-
             socket.cid      = -1
             socket.rid      = -1
             socket.enable   = false
 
-            socket.onmessage = (message) ->
-                that.socketOnMessage socket, message
-            socket.onclose = () ->
-                that.socketOnClose socket
+            socket.onmessage = (message) =>
+                @socketOnMessage socket, message
+            socket.onclose = () =>
+                @socketOnClose socket
 
             @sockets.push socket
 
         start       : () =>
-            that        = this
-            server      = Http.createServer((req, res) ->).listen Config.Websocket.Port, () ->
+            server      = Http.createServer((req, res) ->).listen Config.Websocket.Port, () =>
                 console.log "Server ready on port #{Config.Websocket.Port}"
             @wsServer   = new WebSocketServer {server: server}
-            @wsServer.on 'connection', (socket) ->
-                that.serverOnConnection socket
+            @wsServer.on 'connection', (socket) =>
+                @serverOnConnection socket
 
 websocket = new Websocket
 do websocket.start

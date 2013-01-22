@@ -22,30 +22,25 @@ class Room
     constructor       : () ->
         @networkManager = NetworkManager 'localhost', 1337
 
-    joinConference    : () ->
-        that    = this
+    joinConference    : () =>
         options =
             video       : localVideo
-            onsuccess   : successLoadMedia
-            onerror     : failLoadMedia
+            onsuccess   : (stream) =>
+                trace "Success to load video."
+                window.localStream   = stream
+                @joinConference.disabled = true
+                @networkManager.negociatePeersOffer stream
+            onerror     : (e) =>
+                trace "Video or audio are not available#{e}."
 
         Media(options)
 
-    start             : () ->
+    start             : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
            @joinConference()
 
-room                    = new Room
-
-failLoadMedia     = (e) ->
-    trace "Video or audio are not available#{e}."
-
-successLoadMedia  = (stream) ->
-    trace "Success to load video."
-    window.localStream   = stream
-    joinConference.disabled = true
-    room.networkManager.negociatePeersOffer stream
+room              = new Room
 
 $(document).ready ->
     localVideo  = 'localVideo'

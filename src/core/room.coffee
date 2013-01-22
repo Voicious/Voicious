@@ -23,10 +23,10 @@ Config      = require '../common/config'
 
 class _Room
         constructor : () ->
-              @token  = Token
+            @token  = Token
 
         renderRoom : (res, options) =>
-              res.render 'room', options
+            res.render 'room', options
 
         roomPage : (req, res, next) =>
             Request.get "#{Config.Restapi.Url}/room/#{req.params.roomid}", (e, r, body) =>
@@ -35,9 +35,9 @@ class _Room
                 else
                     user          = req.currentUser
                     options       =
-                                title   : 'Voicious'
-                                login   : user.name
-                                room    : req.params.roomid
+                            title   : 'Voicious'
+                            login   : user.name
+                            room    : req.params.roomid
                     @token.createToken user.id, req.params.roomid,
                         (token) =>
                             options.token = token

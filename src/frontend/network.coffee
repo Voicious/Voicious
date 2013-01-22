@@ -67,21 +67,20 @@ class NetworkManager
           cinfo           : options.cinfo
         @connections[cid] = obj
 
-    negociatePeersOffer : (stream) ->
-        that = this
+    negociatePeersOffer : (stream) =>
         for key, val of @connections
             trace "Call addStream"
             peer = val.peerConnection
             peer.addStream(stream)
-            peer.peerCreateOffer (offer) ->
-                that.onSend ["offer", val.cinfo, offer.sdp]
+            peer.peerCreateOffer (offer) =>
+                @onSend ["offer", val.cinfo, offer.sdp]
 
-    onOpen              : () ->
+    onOpen              : () =>
         roomId = $("#infos").attr("room")
         token = $("#infos").attr("token") # delete token from the infos
         @onSend ["authentification", roomId, token]
 
-    onMessage           : (message) ->
+    onMessage           : (message) =>
         args        = JSON.parse(message.data)
 
         eventName   = args[0]
@@ -91,65 +90,64 @@ class NetworkManager
         trace "Received : #{args}"
         switch (eventName)
             when 'peers'
-              trace "on peers"
-              for i in [0...cinfos.length] by 1
-                cinfo = cinfos[i]
+                trace "on peers"
+                for i in [0...cinfos.length] by 1
+                  cinfo = cinfos[i]
 
-                that    = this
-                options =
-                  cinfo     : cinfo
-                  onoffer   : (offer) ->
-                    that.onSend ["offer", cinfo, offer.sdp]
+                  options =
+                    cinfo     : cinfo
+                    onoffer   : (offer) =>
+                      @onSend ["offer", cinfo, offer.sdp]
+
+                  @createPeerConnection(options)
+            when 'peer.create'
+                trace "on peer create"
+
+                options   =
+                    cinfo   : cinfos
 
                 @createPeerConnection(options)
-            when 'peer.create'
-              trace "on peer create"
-
-              options   =
-                  cinfo   : cinfos
-
-              @createPeerConnection(options)
 
             when 'peer.remove'
-              trace "on peer remove"
+                trace "on peer remove"
 
-              cinfo     = cinfos
-              peerInfos = @connections[cinfo.cid]
+                cinfo     = cinfos
+                peerInfos = @connections[cinfo.cid]
 
-              peerInfos.peerConnection.close()
+                peerInfos.peerConnection.close()
 
-              baliseBlockId = "#block" + cinfo.cid
-              $(baliseBlockId).remove()
+                baliseBlockId = "#block" + cinfo.cid
+                $(baliseBlockId).remove()
 
-              #delete peerInfos.peerConnection
-              delete @connections[cinfo.cid]
+                #delete peerInfos.peerConnection
+                delete @connections[cinfo.cid]
 
             when 'offer'
-              trace('on offer')
+                trace('on offer')
 
-              cinfo = cinfos
-              peer  = @connections[cinfo.cid].peerConnection
+                cinfo = cinfos
+                peer  = @connections[cinfo.cid].peerConnection
 
-              peer.peerCreateAnswer {sdp: sdp, type: 'offer'}
+                peer.peerCreateAnswer {sdp: sdp, type: 'offer'}
 
             when 'answer'
-              trace "on answer"
+                trace "on answer"
 
-              cinfo     = cinfos
-              peerInfos = @connections[cinfo.cid]
+                cinfo     = cinfos
+                peerInfos = @connections[cinfo.cid]
 
-              if peerInfos?
-                peer = peerInfos.peerConnection
-                peer.onanswer {sdp: sdp, type: 'answer'}
+                if peerInfos?
+                  peer = peerInfos.peerConnection
+                  peer.onanswer {sdp: sdp, type: 'answer'}
 
             when 'candidate'
-              trace "add ice candidate"
+                trace "add ice candidate"
 
-              cinfo     = cinfos
-              peerInfos = @connections[cinfo.cid]
-              if peerInfos?
-                peer = peerInfos.peerConnection
-                peer.addice(sdp)
+                cinfo     = cinfos
+                peerInfos = @connections[cinfo.cid]
+                if peerInfos?
+                    peer = peerInfos.peerConnection
+                    peer.addice(sdp)
     
     onSend              : (message) ->
         msg = JSON.stringify message

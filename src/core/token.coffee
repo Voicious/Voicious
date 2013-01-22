@@ -21,7 +21,7 @@ Config      = require '../common/config'
 class _Token
         constructor : () ->
 
-        createToken : (clientId, roomId, callback) ->
+        createToken : (clientId, roomId, callback) =>
             Request.post {
                 json    : {
                     id_room   : roomId
@@ -34,7 +34,7 @@ class _Token
                 else
                     callback body.id
         
-        deleteToken : (token) ->
+        deleteToken : (token) =>
             Request.del "#{Config.Restapi.Url}/token/#{token}", (e, r, data) =>
                 if e? or r.statusCode > 200
                   Errors.Error error "Failed to delete token"

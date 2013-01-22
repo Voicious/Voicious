@@ -36,10 +36,10 @@ class _Config
             @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname}:#{@Voicious.Port}"
             @Restapi.Url = "http://#{@Restapi.Hostname}:#{@Restapi.Port}/api"
 
-    checkWebsocketConfig: () ->
-      @Websocket.Enabled  = 0           if not @Websocket.Enabled?
-      @Websocket.Hostname = 'localhost' if not @Websocket.Hostname?
-      @Websocket.Port     = 1337        if not @Websocket.Port?
+    checkWebsocketConfig : () ->
+        @Websocket.Enabled  = 0           if not @Websocket.Enabled?
+        @Websocket.Hostname = 'localhost' if not @Websocket.Hostname?
+        @Websocket.Port     = 1337        if not @Websocket.Port?
 
     loadJSONConfig : () ->
         fileToOpen  = 'config'
