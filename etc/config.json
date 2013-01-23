@@ -6,6 +6,11 @@
         "Roles"     : ["operator", "owner"],
         "Enabled"   : 1
     },
+    "Websocket"  : {
+        "Hostname"  : "localhost",
+        "Port"      : 1337,
+        "Enabled"   : 0
+    },
     "Restapi"   : {
         "Hostname"      : "localhost",
         "Port"          : 4243,

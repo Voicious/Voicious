@@ -1,7 +1,12 @@
 extends main
 
-block scripts
+block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/services/room/css/room.css")
+
+block scripts
+    script(type="text/javascript", src="/public/js/webRTC.js")
+    script(type="text/javascript", src="/public/js/network.js")
+    script(type="text/javascript", src="/public/js/room.js")
 
 block content
     body
@@ -9,6 +14,7 @@ block content
         div#menu
             p#room_logo voıċıoųs
             div#options_first.options
+                p(room='#{room}', token='#{token}')#infos
                 p#room_url room #{room}
                 button#password manage password
                 button#plugins manage plugins
@@ -17,3 +23,11 @@ block content
                 p#login #{login}
                 button#contacts contacts
                 button#settings settings
+        div#body
+            div
+                button#joinConference.btn Start Conference
+                //button#btn2.btn Hang Up
+            div#videos.video_container
+                div
+                    p Caller
+                    video(autoplay)#localVideo.videoStream

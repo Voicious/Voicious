@@ -19,21 +19,29 @@ Request     = require 'request'
 Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require './errors'
+{Token}     = require './token'
 
 class _Room
         constructor : () ->
+            @token  = Token
+
+        renderRoom : (res, options) =>
+            res.render 'room', options
 
         roomPage : (req, res, next) =>
             Request.get "#{Config.Restapi.Url}/room/#{req.params.roomid}", (e, r, body) =>
                 if e? or r.statusCode > 200
                     Errors.RenderNotFound req, res
                 else
-                    user    = req.currentUser
-                    options =
+                    user          = req.currentUser
+                    options       =
                             title   : 'Voicious'
                             login   : user.name
                             room    : req.params.roomid
-                    res.render 'room', options
+                    @token.createToken user.id, req.params.roomid,
+                        (token) =>
+                            options.token = token
+                            @renderRoom res, options
 
         newRoom : (req, res, param) =>
             Request.post {

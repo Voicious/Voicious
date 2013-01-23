@@ -45,6 +45,11 @@ class _Config
             protocol     = if @Restapi.Ssl.Enabled then 'https' else 'http'
             @Restapi.Url = "#{protocol}://#{@Restapi.Hostname}:#{@Restapi.Port}/api"
 
+    checkWebsocketConfig : () ->
+        @Websocket.Enabled  = 0           if not @Websocket.Enabled?
+        @Websocket.Hostname = 'localhost' if not @Websocket.Hostname?
+        @Websocket.Port     = 1337        if not @Websocket.Port?
+
     loadJSONConfig : () ->
         fileToOpen  = 'config'
         tmpJSON     = require (Path.join @Paths.Config, fileToOpen + ".json")
@@ -52,6 +57,7 @@ class _Config
             @[key]  = val
         do @checkCoreConfig
         do @checkRestConfig
+        do @checkWebsocketConfig
 
     constructor : () ->
         @Paths  = {}
