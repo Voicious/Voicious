@@ -15,7 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-window.PeerConnection = window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection
+window.RTCPeerConnection = window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection
 window.SessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.RTCSessionDescription
 window.IceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.RTCIceCandidate
 
@@ -26,40 +26,42 @@ window.defaults = {
     constraints: { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
 }
 
-createPeerConnection = (options) ->
-    iceServers      = options.iceServers || defaults.iceServers
-    constraints     = options.constraints || defaults.constraints
+PeerConnection = (options) ->
+    iceServers              = options.iceServers || defaults.iceServers
+    constraints             = options.constraints || defaults.constraints
 
-    peerConnection  = new PeerConnection iceServers
+    peerConnection          = new RTCPeerConnection iceServers
+
+    peerConnection.tunnel   = options.tunnel
 
     onicecandidate  = (event) ->
         if !event.candidate || !peerConnection
             return
         if options.getice
-            options.getice event
+            options.getice peerConnection.tunnel, event
 
-    onaddstream = (event) ->
+    onaddstream     = (event) ->
         if options.gotstream?
             options.gotstream event
 
-    onremovestream = (event) ->
-        console.log "on remove stream"
+    onremovestream  = (event) ->
+        trace "on remove stream"
         if options.removestream?
             options.removestream event
 
-    peerConnection.onicecandidate = onicecandidate
-    peerConnection.onaddstream = onaddstream
-    peerConnection.onremovestream = onremovestream
+    peerConnection.onicecandidate   = onicecandidate
+    peerConnection.onaddstream      = onaddstream
+    peerConnection.onremovestream   = onremovestream
 
     if options.stream
-        console.log "add stream"
+        trace "add stream"
         peerConnection.addStream options.stream
 
     peerConnection.peerCreateOffer = (onoffer) ->
         if onoffer?
             peerConnection.createOffer (sessionDescription) ->
                 peerConnection.setLocalDescription(sessionDescription)
-                onoffer(sessionDescription)
+                onoffer(peerConnection.tunnel, sessionDescription)
             , null, constraints
     peerConnection.peerCreateOffer options.onoffer
 
@@ -68,16 +70,16 @@ createPeerConnection = (options) ->
             peerConnection.setRemoteDescription new SessionDescription(offer)
             peerConnection.createAnswer (sessionDescription) ->
                 peerConnection.setLocalDescription(sessionDescription)
-                options.onCreateAnswer(sessionDescription)
+                options.onCreateAnswer(peerConnection.tunnel, sessionDescription)
             , (error) ->
-                console.log error
+                trace error
             , constraints
     peerConnection.peerCreateAnswer options.offer
 
-    peerConnection.onanswer = (sdp) ->
+    peerConnection.onanswer         = (sdp) ->
           peerConnection.setRemoteDescription new SessionDescription(sdp)
 
-    peerConnection.addice = (candidate) -> 
+    peerConnection.addice           = (candidate) -> 
           peerConnection.addIceCandidate(new IceCandidate {
                 sdpMLineIndex: candidate.sdpMLineIndex,
                 candidate: candidate.candidate
@@ -98,14 +100,14 @@ getUserMedia = (options) ->
                     options.onsuccess(stream)
         , options.onerror)
     else
-        console.log "GetUserMedia is not available"
+        trace "GetUserMedia is not available"
             
-PC  = createPeerConnection
+PC  = PeerConnection
 M   = getUserMedia
 
 if window?
-    window.WRTCPeerConnection   = PC
-    window.Media                = M
+    window.PeerConnection   = PC
+    window.Media            = M
 if exports?
-    exports.WRTCPeerConnection  = PC
-    exports.Media               = M
+    exports.PeerConnection  = PC
+    exports.Media           = M

@@ -16,17 +16,16 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 trace = (text) ->
-    console.log "#{text}"
+
 
 class Room
     constructor       : () ->
-        @networkManager = NetworkManager '192.168.52.135', 1337
+        @networkManager = NetworkManager '192.168.52.136', 1337
 
     joinConference    : () =>
         options =
             video       : '#localVideo'
             onsuccess   : (stream) =>
-                trace "Success to load video."
                 window.localStream          = stream
                 @joinConference.disabled    = true
                 @networkManager.negociatePeersOffer stream
@@ -40,9 +39,8 @@ class Room
         $('#joinConference').click () =>
            @joinConference()
 
-room              = new Room
-
 $(document).ready ->
+    room = new Room
     do room.start
 
 if window?

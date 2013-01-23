@@ -66,11 +66,12 @@ class Websocket
             @notifyNewPeer socket
 
             if not @rooms[param.rid]
-              roomSockets                   = {}
-              roomSockets[cid]              = socket
-              @rooms[param.rid]             = roomSockets
+                roomSockets                   = {}
+                roomSockets[cid]              = socket
+                @rooms[param.rid]             = roomSockets
             else
-              @rooms[param.rid][cid]        = socket
+                @rooms[param.rid][cid]        = socket
+            console.log "New client has been accepted as #{cid} in room #{param.rid}"
 
         clientValidation  : (param) =>
             Request.get "#{Config.Restapi.Url}/user/#{param.cid}", (e, r, data) =>
@@ -78,7 +79,6 @@ class Websocket
                 param.errorCallback param, "Invalid client id"
               else
                 data = JSON.parse(data)
-                # if param.rid == data.id_room # check client id room to avoid multiple same client
                 client =
                     name  : data.name
                     
@@ -112,12 +112,10 @@ class Websocket
             for key, val of sockets
                 sock = val
 
-                console.log(sock.cinfo.cid)
                 @socketOnSend sock, ["peer.remove", socket.cinfo]
 
         socketOnSend      : (socket, msg) =>
             msg = JSON.stringify(msg)
-            console.log "Send : #{msg}"
 
             socket.send msg, (error) ->
                 if (error)
@@ -127,8 +125,6 @@ class Websocket
             if not message.data
                 return
             args = JSON.parse message.data
-            
-            console.log "Received : #{args}"
             
             event = args[0]
 
@@ -147,8 +143,7 @@ class Websocket
                     socket          : socket
                     token           : args[2]
                     rid             : rid
-                    errorCallback   : () =>
-                        console.log error
+                    errorCallback   : (error) =>
                         Errors.Error error
                         param.socket.close
 
@@ -156,14 +151,12 @@ class Websocket
 
         socketOnClose     : (socket) =>
             if socket.enable == true and @rooms[socket.rid]?
+                console.log "Client #{socket.cinfo.cid} has been disconnected from room #{socket.rid}"
                 delete @rooms[socket.rid][socket.cinfo.cid]
                 @peerRemove socket
             @sockets.splice @sockets.indexOf(socket), 1
-            console.log 'Socket closed'
 
         serverOnConnection   : (socket) =>
-            console.log 'New client has arrived'
-
             socket.cid      = -1
             socket.rid      = -1
             socket.enable   = false

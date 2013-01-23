@@ -28,9 +28,11 @@ class NetworkManager
         localStream       = window.localStream
         
         if localStream?
-            options.stream  = localStream
+            options.stream = localStream
 
-        options.gotstream = (event) =>
+        options.tunnel          = @socket
+
+        options.gotstream       = (event) =>
             trace "Add new stream"
             baliseVideoId   = 'video' + cid
             baliseBlockId   = "block" + cid
@@ -40,15 +42,15 @@ class NetworkManager
                  <video id="' + baliseVideoId + '" autoplay="autoplay" class="videoStream"></video>
                  </div>'
                 )
-            baliseName      = '#' + baliseVideoId
+            baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
 
-        options.removestream = (event) =>
+        options.removestream    = (event) =>
             trace "Remove stream"
 
-        options.getice = (event) =>
+        options.getice          = (tunnel, event) =>
             if (event.candidate)
-              @onSend ["candidate", options.cinfo,
+              @onSend tunnel, ["candidate", options.cinfo,
               {
               type: 'candidate',
               label: event.candidate.sdpMLineIndex,
@@ -57,10 +59,10 @@ class NetworkManager
             else
               trace "End of candidates."
 
-        options.onCreateAnswer = (sessionDescription) =>
-            @onSend ["answer", options.cinfo, sessionDescription.sdp]
+        options.onCreateAnswer  = (tunnel, sessionDescription) =>
+            @onSend tunnel, ["answer", options.cinfo, sessionDescription.sdp]
 
-        pc  = WRTCPeerConnection options
+        pc  = PeerConnection options
 
         obj =
           peerConnection  : pc
@@ -69,18 +71,18 @@ class NetworkManager
 
     negociatePeersOffer : (stream) =>
         for key, val of @connections
-            console.log "Negociate new offer" + key
+            trace "Negociate new offer" + key
             do (key, val) =>
                 trace "Call addStream" + key
-                peer = val.peerConnection
-                peer.addStream(stream)
-                peer.peerCreateOffer (offer) =>
-                    @onSend ["offer", val.cinfo, offer.sdp]
+                pc = val.peerConnection
+                pc.addStream(stream)
+                pc.peerCreateOffer (tunnel, offer) =>
+                    @onSend tunnel, ["offer", val.cinfo, offer.sdp]
 
     onOpen              : () =>
         roomId = $("#infos").attr("room")
         token = $("#infos").attr("token") # delete token from the infos
-        @onSend ["authentification", roomId, token]
+        @onSend @socket, ["authentification", roomId, token]
 
     onMessage           : (message) =>
         args        = JSON.parse(message.data)
@@ -95,18 +97,18 @@ class NetworkManager
                 trace "on peers"
                 cinfos.forEach (cinfo, i) =>
                     options =
-                      cinfo     : cinfo
-                      onoffer   : (offer) =>
-                        @onSend ["offer", cinfo, offer.sdp]
+                        cinfo     : cinfo
+                        onoffer   : (tunnel, offer) =>
+                            @onSend tunnel, ["offer", cinfo, offer.sdp]
 
-                    @createPeerConnection(options)
+                    @createPeerConnection options
             when 'peer.create'
                 trace "on peer create"
 
                 options   =
                     cinfo   : cinfos
 
-                @createPeerConnection(options)
+                @createPeerConnection options
 
             when 'peer.remove'
                 trace "on peer remove"
@@ -127,9 +129,9 @@ class NetworkManager
                 trace('on offer')
 
                 cinfo = cinfos
-                peer  = @connections[cinfo.cid].peerConnection
+                pc    = @connections[cinfo.cid].peerConnection
 
-                peer.peerCreateAnswer {sdp: sdp, type: 'offer'}
+                pc.peerCreateAnswer {sdp: sdp, type: 'offer'}
 
             when 'answer'
                 trace "on answer"
@@ -138,21 +140,21 @@ class NetworkManager
                 peerInfos = @connections[cinfo.cid]
 
                 if peerInfos?
-                  peer = peerInfos.peerConnection
-                  peer.onanswer {sdp: sdp, type: 'answer'}
+                    pc = peerInfos.peerConnection
+                    pc.onanswer {sdp: sdp, type: 'answer'}
 
             when 'candidate'
                 trace "add ice candidate"
 
-                cinfo     = cinfos
-                peer  = @connections[cinfo.cid].peerConnection
+                cinfo       = cinfos
+                pc          = @connections[cinfo.cid].peerConnection
                 
-                peer.addice(sdp)
+                pc.addice(sdp)
     
-    onSend              : (message) ->
+    onSend              : (tunnel, message) ->
         msg = JSON.stringify message
-        console.log "Send : #{msg}"
-        @tunnel.send msg
+        trace "Send : #{msg}"
+        tunnel.send msg
     
     connection          : () =>
         @socket           = new WebSocket "ws://#{@networkConfig.hostname}:#{@networkConfig.port}/"
