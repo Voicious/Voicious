@@ -75,36 +75,36 @@ class Websocket
 
         clientValidation  : (param) =>
             Request.get "#{Config.Restapi.Url}/user/#{param.cid}", (e, r, data) =>
-              if e? or r.statusCode > 200
-                param.errorCallback param, "Invalid client id"
-              else
-                data = JSON.parse(data)
-                client =
-                    name  : data.name
-                    
-                param.cinfo  = client
-                @acceptPeer param
+                if e? or r.statusCode > 200
+                    param.errorCallback param, "Invalid client id"
+                else
+                    data = JSON.parse(data)
+                    client =
+                        name  : data.name
+
+                    param.cinfo  = client
+                    @acceptPeer param
 
 
         roomValidation    : (param) =>
             Request.get "#{Config.Restapi.Url}/room/#{param.rid}", (e, r, data) =>
-              if e? or r.statusCode > 200
-                  param.errorCallback param, "Invalid room id"
-              else
-                  @clientValidation param
+                if e? or r.statusCode > 200
+                    param.errorCallback param, "Invalid room id"
+                else
+                    @clientValidation param
 
         tokenValidation   : (param) =>
             Request.get "#{Config.Restapi.Url}/token/#{param.token}", (e, r, data) =>
-              if e? or r.statusCode > 200
-                  param.errorCallback param, "Invalid token"
-              else
-                  @token.deleteToken param.token
-                  data = JSON.parse(data)
-                  if param.rid == data.id_room
-                    param.cid = data.id_client
-                    @roomValidation param
-                  else
-                    param.errorCallback param, "Invalid room id"
+                if e? or r.statusCode > 200
+                    param.errorCallback param, "Invalid token"
+                else
+                    @token.deleteToken param.token
+                    data = JSON.parse(data)
+                    if param.rid == data.id_room
+                      param.cid = data.id_client
+                      @roomValidation param
+                    else
+                      param.errorCallback param, "Invalid room id"
 
         peerRemove        : (socket) =>
             sockets  = @rooms[socket.rid]
