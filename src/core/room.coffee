@@ -38,10 +38,18 @@ class _Room
                             title   : 'Voicious'
                             login   : user.name
                             room    : req.params.roomid
-                    @token.createToken user.id, req.params.roomid,
-                        (token) =>
-                            options.token = token
-                            @renderRoom res, options
+                    user.id_room = req.params.roomid
+                    Request.put {
+                        json    : user
+                        url     : "#{Config.Restapi.Url}/user/#{user.id}"
+                        }, (e, r, body) =>
+                            if e? or r.statusCode > 200
+                                throw new Errors.Errors
+                            else
+                                @token.createToken user.id, req.params.roomid,
+                                    (token) =>
+                                        options.token = token
+                                        @renderRoom res, options
 
         newRoom : (req, res, param) =>
             Request.post {

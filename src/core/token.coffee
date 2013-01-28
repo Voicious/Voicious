@@ -33,7 +33,7 @@ class _Token
                     throw new Errors.Error
                 else
                     callback body.id
-        
+
         deleteToken : (token) =>
             Request.del "#{Config.Restapi.Url}/token/#{token}", (e, r, data) =>
                 if e? or r.statusCode > 200
