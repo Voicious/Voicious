@@ -26,6 +26,9 @@ ModelDef =
     password:
         type    : String
         length  : 255
+    id_room:
+        type    : String
+        length  : 255
     id_acl  :
         type    : Number
     id_role :
