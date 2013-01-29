@@ -17,10 +17,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 trace = (text) ->
 
-
 class Room
     constructor       : () ->
-        @networkManager = NetworkManager '192.168.52.136', 1337
+        @networkManager = NetworkManager '192.168.52.139', 1337
 
     joinConference    : () =>
         options =
@@ -37,7 +36,7 @@ class Room
     start             : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
-           @joinConference()
+            @joinConference()
 
 $(document).ready ->
     room = new Room

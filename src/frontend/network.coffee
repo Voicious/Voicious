@@ -16,26 +16,29 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class NetworkManager
-    constructor   : (hostname, port) ->
+    constructor             : (hostname, port) ->
         @networkConfig            = {}
         @networkConfig.hostname   = hostname
         @networkConfig.port       = port
         
         @connections              = {}
 
-    createPeerConnection : (options) =>
+    createPeerConnection    : (options) =>
         cid               = options.cinfo.cid
         localStream       = window.localStream
         
         if localStream?
             options.stream = localStream
 
-        options.tunnel          = @socket
-
-        options.gotstream       = (event) =>
+        options.tunnel              = @socket
+        options.onChannelOpen       = @onChannelOpen
+        options.onChannelMessage    = (message) =>
+            @onMessage message, @onChannelMessage
+        options.onChannelClose      = @onChannelClose
+        options.gotstream           = (event) =>
             trace "Add new stream"
-            baliseVideoId   = 'video' + cid
-            baliseBlockId   = "block" + cid
+            baliseVideoId       = 'video' + cid
+            baliseBlockId       = "block" + cid
             $("#videos").append(
                 '<div id="' + baliseBlockId + '" class="video-block">
                  <p>Callee - ' + cid + '</p>
@@ -44,54 +47,76 @@ class NetworkManager
                 )
             baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
-
-        options.removestream    = (event) =>
+            $('#joinConference').disabled = true
+        options.removestream        = (event) =>
             trace "Remove stream"
-
-        options.getice          = (tunnel, event) =>
+        options.getice              = (tunnel, event) =>
             if (event.candidate)
-              @onSend tunnel, ["candidate", options.cinfo,
-              {
-              type: 'candidate',
-              label: event.candidate.sdpMLineIndex,
-              id: event.candidate.sdpMid, candidate: event.candidate.candidate
-              }]
+                @onSend tunnel, ["candidate", options.cinfo,
+                {
+                    type: 'candidate',
+                    label: event.candidate.sdpMLineIndex,
+                    id: event.candidate.sdpMid, candidate: event.candidate.candidate
+                }]
             else
-              trace "End of candidates."
-
-        options.onCreateAnswer  = (tunnel, sessionDescription) =>
+                trace "End of candidates."
+        options.onCreateAnswer      = (tunnel, sessionDescription) =>
             @onSend tunnel, ["answer", options.cinfo, sessionDescription.sdp]
 
         pc  = PeerConnection options
+        
+        pc.socket = @socket
 
         obj =
           peerConnection  : pc
           cinfo           : options.cinfo
         @connections[cid] = obj
 
-    negociatePeersOffer : (stream) =>
+    sendToAll                   : (message) =>
+        trace "Send to all"
         for key, val of @connections
-            trace "Negociate new offer" + key
             do (key, val) =>
-                trace "Call addStream" + key
+                pc = val.peerConnection
+                @onSend pc.tunnel, message
+
+    negociatePeersOffer         : (stream) =>
+        for key, val of @connections
+            trace "Negociate new offer"
+            do (key, val) =>
+                trace "Call addStream"
                 pc = val.peerConnection
                 pc.addStream(stream)
                 pc.peerCreateOffer (tunnel, offer) =>
                     @onSend tunnel, ["offer", val.cinfo, offer.sdp]
 
-    onOpen              : () =>
+    onSocketOpen                : () =>
         roomId = $("#infos").attr("room")
         token = $("#infos").attr("token") # delete token from the infos
         @onSend @socket, ["authentification", roomId, token]
 
-    onMessage           : (message) =>
+    onChannelOpen               : () =>
+        trace "On channel open"
+
+    onMessage                   : (message, callback) =>
         args        = JSON.parse(message.data)
 
         eventName   = args[0]
         cinfos      = args[1]
-        sdp         = args[2]
+        infos       = args[2]
         
         trace "Received : #{args}"
+        callback eventName, cinfos, infos
+
+    onSocketMessage             : (eventName, cinfos, infos) =>
+        @onMessagePeers eventName, cinfos
+        @onMessageExchangeOffer eventName, cinfos, infos
+        @onMessageText eventName, cinfos, infos
+
+    onChannelMessage            : (eventName, cinfos, infos) =>
+        @onMessageExchangeOffer eventName, cinfos, infos
+        @onMessageText eventName, cinfos, infos
+
+    onMessagePeers              : (eventName, cinfos) =>
         switch (eventName)
             when 'peers'
                 trace "on peers"
@@ -116,15 +141,15 @@ class NetworkManager
                 cinfo     = cinfos
                 peerInfos = @connections[cinfo.cid]
 
-#                if peerInfos? and peerInfos.peerConnection?
                 peerInfos.peerConnection.close()
 
                 baliseBlockId = "#block" + cinfo.cid
                 $(baliseBlockId).remove()
 
-                    #delete peerInfos.peerConnection
                 delete @connections[cinfo.cid]
 
+    onMessageExchangeOffer      : (eventName, cinfos, sdp) =>
+        switch (eventName)
             when 'offer'
                 trace('on offer')
 
@@ -149,20 +174,35 @@ class NetworkManager
                 cinfo       = cinfos
                 pc          = @connections[cinfo.cid].peerConnection
                 
-                pc.addice(sdp)
+                pc.addice sdp
     
-    onSend              : (tunnel, message) ->
+    onMessageText               : (eventName, cinfos, msg) =>
+        switch (eventName)
+            when 'msg'
+                trace "#{msg}"
+
+    onSocketClose               : () =>
+        trace "Socket has been closed"
+
+    onChannelClose              : (event) =>
+        trace "Data Channel has been closed"
+
+    onSend                      : (tunnel, message) ->
         msg = JSON.stringify message
         trace "Send : #{msg}"
-        tunnel.send msg
+        if msg.length < 1100
+            tunnel.send msg
+        else
+            @socket.send msg
     
-    connection          : () =>
-        @socket           = new WebSocket "ws://#{@networkConfig.hostname}:#{@networkConfig.port}/"
-        @tunnel           = @socket
-        @socket.onopen    = () =>
-            do @onOpen
-        @socket.onmessage = (message) =>
-            @onMessage message
+    connection                  : () =>
+        @socket             = new WebSocket "ws://#{@networkConfig.hostname}:#{@networkConfig.port}/"
+        @socket.onopen      = () =>
+            do @onSocketOpen
+        @socket.onmessage   = (message) =>
+            @onMessage message, @onSocketMessage
+        @socket.onclose     = () =>
+            do @onSocketClose
 
 NM  = (hostname, port) ->
     new NetworkManager hostname, port

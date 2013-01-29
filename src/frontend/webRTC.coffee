@@ -22,64 +22,101 @@ window.IceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || win
 navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia
 
 window.defaults = {
-    iceServers: { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] },
+#    iceServers: { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] },
+    iceServers: { "iceServers": [{ "url": "stun:stun.ekiga.org" }] },
     constraints: { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
+    optional: { optional: [{ RtpDataChannels: true}] }
 }
 
 PeerConnection = (options) ->
-    iceServers              = options.iceServers || defaults.iceServers
-    constraints             = options.constraints || defaults.constraints
+    iceServers              = options.iceServers or defaults.iceServers
+    constraints             = options.constraints or defaults.constraints
+    optional                = options.optional or defaults.optional  
 
-    peerConnection          = new RTCPeerConnection iceServers
+    peerConnection          = new RTCPeerConnection iceServers, optional
 
     peerConnection.tunnel   = options.tunnel
+    peerConnection.channel  = null
 
-    onicecandidate  = (event) ->
-        if !event.candidate || !peerConnection
+    setDataChannel          = (channel) =>
+        channel.onopen = () =>
+            if options.onChannelOpen?
+                do options.onChannelOpen
+                peerConnection.tunnel = channel
+        channel.onmessage = (message) =>
+            if options.onChannelMessage?
+                options.onChannelMessage message
+        channel.onclose = () =>
+            if options.onChannelClose?
+                options.onChannelClose
+                peerConnection.tunnel = peerConnection.socket
+                peerConnection.channel = null
+        channel.onerror = () =>
+            if options.onChannelError?
+                options.onChannelError
+        peerConnection.channel = channel
+
+    createDataChannel       = () =>
+        if !peerConnection and !peerConnection.createDataChannel
+            return
+        channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
+        setDataChannel channel
+
+    if options.onoffer?
+        do createDataChannel
+
+    onicecandidate          = (event) =>
+        if !event or !event.candidate or !peerConnection
             return
         if options.getice
             options.getice peerConnection.tunnel, event
 
-    onaddstream     = (event) ->
+    onaddstream             = (event) =>
         if options.gotstream?
             options.gotstream event
 
-    onremovestream  = (event) ->
+    onremovestream          = (event) =>
         trace "on remove stream"
         if options.removestream?
             options.removestream event
+            
+    ondatachannel           = (event) =>
+        setDataChannel event.channel
 
     peerConnection.onicecandidate   = onicecandidate
     peerConnection.onaddstream      = onaddstream
     peerConnection.onremovestream   = onremovestream
+    peerConnection.ondatachannel    = ondatachannel
 
     if options.stream
         trace "add stream"
         peerConnection.addStream options.stream
 
-    peerConnection.peerCreateOffer = (onoffer) ->
+    peerConnection.peerCreateOffer = (onoffer) =>
         if onoffer?
-            peerConnection.createOffer (sessionDescription) ->
+            peerConnection.createOffer (sessionDescription) =>
                 peerConnection.setLocalDescription(sessionDescription)
                 onoffer(peerConnection.tunnel, sessionDescription)
-            , null, constraints
+            , (error) =>
+                trace error
+            , constraints
     peerConnection.peerCreateOffer options.onoffer
 
-    peerConnection.peerCreateAnswer = (offer) ->
+    peerConnection.peerCreateAnswer = (offer) =>
         if offer?
             peerConnection.setRemoteDescription new SessionDescription(offer)
-            peerConnection.createAnswer (sessionDescription) ->
+            peerConnection.createAnswer (sessionDescription) =>
                 peerConnection.setLocalDescription(sessionDescription)
                 options.onCreateAnswer(peerConnection.tunnel, sessionDescription)
-            , (error) ->
+            , (error) =>
                 trace error
             , constraints
     peerConnection.peerCreateAnswer options.offer
 
-    peerConnection.onanswer         = (sdp) ->
+    peerConnection.onanswer         = (sdp) =>
           peerConnection.setRemoteDescription new SessionDescription(sdp)
 
-    peerConnection.addice           = (candidate) -> 
+    peerConnection.addice           = (candidate) => 
           peerConnection.addIceCandidate(new IceCandidate {
                 sdpMLineIndex: candidate.sdpMLineIndex,
                 candidate: candidate.candidate
