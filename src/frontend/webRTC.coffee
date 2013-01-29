@@ -22,7 +22,6 @@ window.IceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || win
 navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia
 
 window.defaults = {
-#    iceServers: { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] },
     iceServers: { "iceServers": [{ "url": "stun:stun.ekiga.org" }] },
     constraints: { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
     optional: { optional: [{ RtpDataChannels: true}] }
