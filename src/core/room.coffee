@@ -61,7 +61,11 @@ class _Room
                 else
                     res.redirect "/room/#{body.id}"
 
+        redirectRoom : (req, res) =>
+            if req.params.roomid?
+                res.redirect "/?roomid=#{req.params.roomid}&hash=#jumpIn"
+
 exports.Room    = new _Room
 exports.Routes  =
     get :
-        '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage)
+        '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage, exports.Room.redirectRoom)

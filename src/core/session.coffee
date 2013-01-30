@@ -34,9 +34,11 @@ class _Session
 
     # Middleware-like function which will call it's __next__ argument if __req.currentUser__ exists  
     # It'll redirect to _'/'_ if not
-    ifUser          : (next, req, res) =>
+    ifUser          : (next, cb, req, res) =>
         if req.currentUser
             next req, res
+        else if cb?
+            cb req, res
         else
             res.redirect '/'
 

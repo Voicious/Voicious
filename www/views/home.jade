@@ -14,6 +14,13 @@ block scripts
         script(type="text/javascript")
             this.erroron    = JSON.parse('!{erroron}');
 
+    if locals.roomid
+        script(type="text/javascript")
+            $(document).ready(function () {
+              $("#joinRoomBtn").click();
+              $("#joinUrl").val("!{roomid}");
+            });
+
 block content
     div#logo.no-selec
     div#desc.no-selec web voice chat application
@@ -68,13 +75,13 @@ block content
         div#joinRoom
           form#quickJoin_form(method="POST", action="/quickJoin")
             input#joinNickname.brdr(type="text", placeholder="Nickname", required="true", name="name")
-            input#joinUrl.no-brdr(type="text", placeholder="Room URL", required="true", name="room")
+            input#joinUrl.brdr(type="text", placeholder="Room URL", required="true", name="room")
           button#joinRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickJoin_form") Join the Room
           button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
       div#logIn.no-selec
         form#login_form(method="POST", action="/login")
           input#login_email.brdr(name="mail", type="email", placeholder="Email", value="#{login_email}", required="true")
-          input#login_password.no-brdr(name="password", type="password", placeholder="Password", required="true")
+          input#login_password.brdr(name="password", type="password", placeholder="Password", required="true")
         button#login-btn.light-blue.btn-submit.txt-shd(type="submit", form="login_form")
           span Log in
         a(href="#password") Forgot password?
