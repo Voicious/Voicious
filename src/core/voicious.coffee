@@ -48,10 +48,11 @@ class Voicious
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
                 title           : (@app.get 'title'),
-                hash            : ''
+                hash            : req.query.hash || ''
                 login_email     : ''
                 signup_email    : ''
                 name            : ''
+                roomid          : req.query.roomid || ''
             res.render 'home', options
         servicesNames   = Fs.readdirSync (Path.join Config.Paths.Libroot, 'core')
         for serviceName in servicesNames
