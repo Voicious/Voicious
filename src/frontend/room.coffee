@@ -17,31 +17,35 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 trace = (text) ->
 
-
 class Room
     constructor       : () ->
-        @networkManager = NetworkManager '192.168.52.136', 1337
+        @networkManager = NetworkManager '192.168.52.139', 1337
 
     joinConference    : () =>
         options =
             video       : '#localVideo'
             onsuccess   : (stream) =>
                 window.localStream          = stream
-                @joinConference.disabled    = true
                 @networkManager.negociatePeersOffer stream
+                $('#joinConference').attr "disabled", "disabled"
             onerror     : (e) =>
                 trace "Video or audio are not available#{e}."
 
-        Media(options)
+        WebRTC.getUserMedia(options)
 
     start             : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
-           @joinConference()
+            @joinConference()
+
+$(window).load ->
 
 $(document).ready ->
-    room = new Room
-    do room.start
+    if WebRTC.runnable?
+        room = new Room
+        do room.start
+    else
+        alert "To use Voicious you need to use the latest Chrome version"
 
 if window?
     window.trace     = trace
