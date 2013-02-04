@@ -21,10 +21,10 @@ window.IceCandidate = window.RTCIceCandidate or window.mozRTCIceCandidate or win
 
 navigator.getUserMedia = navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.getUserMedia
 
-window.defaults         = {
-    iceServers  : { "iceServers": [{ "url": "stun:stun..org" }] },
-    constraints : { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
-    optional    : { optional: [{ RtpDataChannels: true}] }
+window.defaults = {
+    iceServers: { "iceServers": [{ "url": "stun:stun.ekiga.org" }] },
+    constraints: { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
+    optional: { optional: [{ RtpDataChannels: true}] }
 }
 
 Runnable                = () ->
@@ -151,4 +151,9 @@ WebRTC  =
 if window?
     window.WebRTC   = WebRTC
 if exports?
+<<<<<<< HEAD
     exports.WebRTC  = WebRTC
+=======
+    exports.PeerConnection  = PC
+    exports.Media           = M
+>>>>>>> 44228b5f90fec33b90f84aa23e35c9075c34588b
