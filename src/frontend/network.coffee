@@ -47,7 +47,6 @@ class NetworkManager
                 )
             baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
-            $('#joinConference').disabled = true
         options.removestream        = (event) =>
             trace "Remove stream"
         options.getice              = (tunnel, event) =>
@@ -63,14 +62,15 @@ class NetworkManager
         options.onCreateAnswer      = (tunnel, sessionDescription) =>
             @onSend tunnel, ["answer", options.cinfo, sessionDescription.sdp]
 
-        pc  = PeerConnection options
+        pc  = WebRTC.peerConnection options
         
-        pc.socket = @socket
+        if pc?
+            pc.socket = @socket
 
-        obj =
-          peerConnection  : pc
-          cinfo           : options.cinfo
-        @connections[cid] = obj
+            obj =
+              peerConnection  : pc
+              cinfo           : options.cinfo
+            @connections[cid] = obj
 
     sendToAll                   : (message) =>
         trace "Send to all"
@@ -108,13 +108,16 @@ class NetworkManager
         callback eventName, cinfos, infos
 
     onSocketMessage             : (eventName, cinfos, infos) =>
-        @onMessagePeers eventName, cinfos
-        @onMessageExchangeOffer eventName, cinfos, infos
-        @onMessageText eventName, cinfos, infos
+        if eventName? and cinfos?
+            @onMessagePeers eventName, cinfos
+            if infos?
+                @onMessageExchangeOffer eventName, cinfos, infos
+                @onMessageText eventName, cinfos, infos
 
     onChannelMessage            : (eventName, cinfos, infos) =>
-        @onMessageExchangeOffer eventName, cinfos, infos
-        @onMessageText eventName, cinfos, infos
+        if eventName? and cinfos? and infos?
+            @onMessageExchangeOffer eventName, cinfos, infos
+            @onMessageText eventName, cinfos, infos
 
     onMessagePeers              : (eventName, cinfos) =>
         switch (eventName)
@@ -183,6 +186,7 @@ class NetworkManager
 
     onSocketClose               : () =>
         trace "Socket has been closed"
+        alert "Cannot reach the server please try to refresh the page"
 
     onChannelClose              : (event) =>
         trace "Data Channel has been closed"

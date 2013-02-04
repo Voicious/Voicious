@@ -15,25 +15,32 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-window.RTCPeerConnection = window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.RTCPeerConnection
-window.SessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.RTCSessionDescription
-window.IceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.RTCIceCandidate
+window.RTCPeerConnection = window.webkitRTCPeerConnection or window.mozRTCPeerConnection or window.RTCPeerConnection
+window.SessionDescription = window.RTCSessionDescription or window.mozRTCSessionDescription or window.RTCSessionDescription
+window.IceCandidate = window.RTCIceCandidate or window.mozRTCIceCandidate or window.RTCIceCandidate
 
-navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia
+navigator.getUserMedia = navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.getUserMedia
 
-window.defaults = {
-#    iceServers: { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] },
-    iceServers: { "iceServers": [{ "url": "stun:stun.ekiga.org" }] },
-    constraints: { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
-    optional: { optional: [{ RtpDataChannels: true}] }
+window.defaults         = {
+    iceServers  : { "iceServers": [{ "url": "stun:stun..org" }] },
+    constraints : { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
+    optional    : { optional: [{ RtpDataChannels: true}] }
 }
 
-PeerConnection = (options) ->
+Runnable                = () ->
+        if RTCPeerConnection? and navigator.getUserMedia?
+            return true
+        return false
+
+PeerConnection          = (options) ->
     iceServers              = options.iceServers or defaults.iceServers
     constraints             = options.constraints or defaults.constraints
     optional                = options.optional or defaults.optional  
 
     peerConnection          = new RTCPeerConnection iceServers, optional
+    
+    if !peerConnection
+        return null
 
     peerConnection.tunnel   = options.tunnel
     peerConnection.channel  = null
@@ -43,6 +50,7 @@ PeerConnection = (options) ->
             if options.onChannelOpen?
                 do options.onChannelOpen
                 peerConnection.tunnel = channel
+                peerConnection.channel = channel
         channel.onmessage = (message) =>
             if options.onChannelMessage?
                 options.onChannelMessage message
@@ -54,13 +62,13 @@ PeerConnection = (options) ->
         channel.onerror = () =>
             if options.onChannelError?
                 options.onChannelError
-        peerConnection.channel = channel
 
     createDataChannel       = () =>
-        if !peerConnection and !peerConnection.createDataChannel
-            return
-        channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
-        setDataChannel channel
+        if RTCPeerConnection.prototype.createDataChannel?
+            channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
+            setDataChannel channel
+        else
+            trace "DataChannels are not available on this browser"
 
     if options.onoffer?
         do createDataChannel
@@ -89,7 +97,6 @@ PeerConnection = (options) ->
     peerConnection.ondatachannel    = ondatachannel
 
     if options.stream
-        trace "add stream"
         peerConnection.addStream options.stream
 
     peerConnection.peerCreateOffer = (onoffer) =>
@@ -123,28 +130,25 @@ PeerConnection = (options) ->
                 })
     return peerConnection
 
-getUserMedia = (options) ->
-    URL = window.webkitURL || window.URL
+GetUserMedia            = (options) ->
+    URL = window.webkitURL or window.URL
 
-    if navigator.getUserMedia?
-        navigator.getUserMedia(options.constraints || { audio: true, video: true },
-            (stream) =>
-                if (options.video)
-                    if (!navigator.mozGetUserMedia)
-                        $(options.video).attr 'src', window.URL.createObjectURL(stream)
-                    else
-                        $(options.video).attr 'src', stream
-                    options.onsuccess(stream)
-        , options.onerror)
-    else
-        trace "GetUserMedia is not available"
-            
-PC  = PeerConnection
-M   = getUserMedia
+    navigator.getUserMedia(options.constraints or { audio: true, video: true },
+        (stream) =>
+            if (options.video)
+                if (!navigator.mozGetUserMedia)
+                    $(options.video).attr 'src', window.URL.createObjectURL(stream)
+                else
+                    $(options.video).attr 'src', stream
+                options.onsuccess(stream)
+    , options.onerror)
+
+WebRTC  =
+    runnable        : Runnable
+    peerConnection  : PeerConnection
+    getUserMedia    : GetUserMedia
 
 if window?
-    window.PeerConnection   = PC
-    window.Media            = M
+    window.WebRTC   = WebRTC
 if exports?
-    exports.PeerConnection  = PC
-    exports.Media           = M
+    exports.WebRTC  = WebRTC
