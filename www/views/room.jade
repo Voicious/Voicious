@@ -13,16 +13,30 @@ block content
         div#header
         div#menu
             p#room_logo voıċıoųs
-            div#options_first.options
-                p(room='#{room}', token='#{token}')#infos
-                p#room_url room #{room}
-                button#password manage password
-                button#plugins manage plugins
-            div#options_second.options
-                p connected as
-                p#login #{login}
-                button#contacts contacts
-                button#settings settings
+            div#room_control
+              p(room='#{room}', token='#{token}')#infos
+              div#room_url_box
+                span#share.icon.icon-share
+                p#room_url
+                  span#room_text voicious.com/eF7Pw
+                button#shutdown.icon.icon-off
+              div#btnCtrlBox
+                button.roomBtnCtrl
+                  span.icon.icon-lock
+                  span.textBtn MANAGE ACCESS
+                button.roomBtnCtrl
+                  span.icon.icon-check-empty
+                  span.textBtn MANAGE PLUGINS
+                button.roomBtnCtrl
+                  span.icon.icon-plus
+                  span.textBtn INVITE CONTACTS
+            div#userControl
+              span.icon.icon-user
+              p#login.textBtn #{login},
+                span#acl user
+                button#dashboard.roomBtnCtrl
+                  span.icon.icon-dashboard
+                  span.textBtn DASHBOARD
         div#body
             div
                 button#joinConference.btn Start Conference

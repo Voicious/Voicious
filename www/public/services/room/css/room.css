@@ -15,46 +15,140 @@
 
 #room_logo {
     position: absolute;
-    margin-left: 0.8%; margin-top: 4px;/*8.8%;*/
+    margin-left: 0.8%; margin-top: 2px;
     font-family: 'BreeSerif-Regular';
     color: white;
     font-size: 30px;
 }
 
-#options_first {
-    left: 162px;
-}
-
-#options_second {
-    right: 0%;
-}
-
-.options {
+#room_control {
+    margin-top: 10px;
     position: absolute;
-    width: 23%;
-    margin-top: 15px;
-    font-weight: bold;
+    width: 75%;
+    height: 40px;
+    left: 140px;
 }
 
-.options p {
+#infos {
+    display:none;
+}
+
+#room_url_box {
     position: absolute;
-    color: #51626f;
-    margin-top: 4px;
+    width: auto;
+    height: 40px;
+}
+
+#share {
+    color: #ffffff;
+    position: relative;
+    left: 23px;
+    margin-left: 0px;
+}
+
+#room_url {
+    display: inline-block;
     font-family: 'OpenSans-Regular';
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    padding: 3px 20px 3px;
+    text-shadow: 0 1px #16181a;
+    -webkit-box-shadow: inset 0 1px #272a2c;
+    -moz-box-shadow: inset 0 1px #272a2c;
+    box-shadow: inset 0 1px #272a2c;
+    border-top: solid 4px #111;
+    border-left: solid 4px #111;
+    border-bottom: solid 4px #111;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+#room_text {
+    margin-left: 11px;
+}
+
+#shutdown {
+    font-size: 12px;
+    width: 25px;
+    height: 31px;
+    color: #FFFFFF;
+    background-color: #C9282D;
+    -webkit-box-shadow: inset 0 1px #FF3A68;
+    -moz-box-shadow: inset 0 1px #FF3A68;
+    box-shadow: inset 0 1px #FF3A68;
+    border-top: solid 4px #111;
+    border-right: solid 4px #111;
+    border-bottom: solid 4px #111;
+    border-left: solid 0px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+#btnCtrlBox {
+    position: absolute;
+    left: 228px;
+}
+
+.roomBtnCtrl {
+    width: auto;
+    color: #FFFFFF;
+    background-color: #00aeef;
+    font-family: 'OpenSans-Bold';
+    text-align: center;
+    padding: 3px 20px 3px;
+    -webkit-box-shadow: inset 0 1px #15DBCB;
+    -moz-box-shadow: inset 0 1px #15DBCB;
+    box-shadow: inset 0 1px #15DBCB;
+    border: solid 4px #111;
+    border-radius: 6px;
+    margin-left: 5px;
+}
+
+.icon {
+    font-family: 'FontAwesome';
+    margin-left: -10px;
     font-size: 11px;
 }
 
-#room_url, #login {
-    color: white;
+.textBtn {
+    font-family: 'OpenSans-Bold';
+    color: #ffffff;
+    font-size: 11px;
+    margin-left: 7px;
+}
+
+#userControl {
+    margin-right: 10px;
+    margin-top: 8px;
+    float: right;
 }
 
 #login {
-    left: 77px;
-    font-family: 'OpenSans-Bold';
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 12px;
 }
 
-.options button {
-    position: absolute;
+#acl {
+    color: #00aeef;
+    font-family: 'OpenSans-Regular';
+    font-weight: bold;
+    margin-left: 7px;
+}
+
+#dashboard {
+    width: 110px;
+    -webkit-box-shadow: inset 0 1px #51626f;
+    -moz-box-shadow: inset 0 1px #51626f;
+    box-shadow: inset 0 1px #51626f;
+    border: solid 1px #111;
+    border-radius: 3px;
+    background-color: #43535a;
+    margin-left: 20px;
+}
+
+#joinConference {
     width: auto;
     color: white;
     height: 23px;
@@ -71,32 +165,11 @@
     box-shadow: 0px 1px 4px #222528;
 }
 
-#password {
-    right: 119px;
-}
-
-#plugins {
-    right: 0%;
-}
-
-#contacts {
-    right: 86px;
-}
-
-#settings {
-    right: 2%;
-}
-
-
 #body {
     position: relative;
     margin: auto;
 }
 
-#infos {
-    display:none;
-}
-
 .videoStream {
-        border: white 1px solid;
-    }
+    border: white 1px solid;
+}
