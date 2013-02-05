@@ -16,12 +16,21 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 trace = (text) ->
+    console.log "#{text}"
 
 class Room
-    constructor       : () ->
-        @networkManager = NetworkManager '192.168.52.139', 1337
+    constructor         : () ->
+        @userList       = new UserList
+        @networkManager = NetworkManager '192.168.52.140', 1337
+        do @configureEvents
 
-    joinConference    : () =>
+    configureEvents     : () =>
+        EventManager.addEvent "fillUsersList", (users) =>
+            @userList.fill users
+        EventManager.addEvent "updateUserList", (user, event) =>
+            @userList.update user, event
+
+    joinConference      : () =>
         options =
             video       : '#localVideo'
             onsuccess   : (stream) =>
@@ -33,7 +42,7 @@ class Room
 
         WebRTC.getUserMedia(options)
 
-    start             : () =>
+    start               : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
             @joinConference()

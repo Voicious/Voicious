@@ -71,6 +71,8 @@ class NetworkManager
               peerConnection  : pc
               cinfo           : options.cinfo
             @connections[cid] = obj
+            return obj
+        return null
 
     sendToAll                   : (message) =>
         trace "Send to all"
@@ -130,19 +132,30 @@ class NetworkManager
                             @onSend tunnel, ["offer", cinfo, offer.sdp]
 
                     @createPeerConnection options
+                event = EventManager.getEvent "fillUsersList"
+                if event?
+                    event @peerConnections
             when 'peer.create'
                 trace "on peer create"
 
                 options   =
                     cinfo   : cinfos
 
-                @createPeerConnection options
-
+                peerInfos = @createPeerConnection options
+                
+                if peerInfos?
+                    event = EventManager.getEvent "updateUserList"
+                    if event?
+                        event peerInfos, "create"
             when 'peer.remove'
                 trace "on peer remove"
 
                 cinfo     = cinfos
                 peerInfos = @connections[cinfo.cid]
+
+                event = EventManager.getEvent "updateUserList"
+                if event?
+                    event peerInfos, "remove"
 
                 peerInfos.peerConnection.close()
 
