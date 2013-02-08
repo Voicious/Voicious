@@ -54,14 +54,17 @@ PeerConnection          = (options) ->
         channel.onmessage = (message) =>
             if options.onChannelMessage?
                 options.onChannelMessage message
+        channel.onsend  = (message) =>
+            if options.onChannelSend?
+                options.onChannelSend channel, message
         channel.onclose = () =>
             if options.onChannelClose?
-                options.onChannelClose
+                do options.onChannelClose
                 peerConnection.tunnel = peerConnection.socket
                 peerConnection.channel = null
         channel.onerror = () =>
             if options.onChannelError?
-                options.onChannelError
+                do options.onChannelError
 
     createDataChannel       = () =>
         if RTCPeerConnection.prototype.createDataChannel?
@@ -89,6 +92,7 @@ PeerConnection          = (options) ->
             options.removestream event
             
     ondatachannel           = (event) =>
+        event.channel.binaryType = 'blob'
         setDataChannel event.channel
 
     peerConnection.onicecandidate   = onicecandidate

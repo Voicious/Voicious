@@ -21,7 +21,7 @@ trace = (text) ->
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @networkManager = NetworkManager '192.168.52.140', 1337
+        @networkManager = NetworkManager '192.168.52.141', 1337
         do @configureEvents
 
     configureEvents     : () =>
