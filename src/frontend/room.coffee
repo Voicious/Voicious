@@ -16,7 +16,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 trace = (text) ->
-    console.log "#{text}"
 
 class Room
     constructor         : () ->

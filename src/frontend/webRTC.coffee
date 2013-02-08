@@ -92,7 +92,6 @@ PeerConnection          = (options) ->
             options.removestream event
             
     ondatachannel           = (event) =>
-        event.channel.binaryType = 'blob'
         setDataChannel event.channel
 
     peerConnection.onicecandidate   = onicecandidate
