@@ -134,7 +134,7 @@ class NetworkManager
                     @createPeerConnection options
                 event = EventManager.getEvent "fillUsersList"
                 if event?
-                    event @peerConnections
+                    event @connections
             when 'peer.create'
                 trace "on peer create"
 
