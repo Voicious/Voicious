@@ -34,16 +34,25 @@
 }
 
 #room_url_box {
-    position: absolute;
-    width: auto;
-    height: 40px;
+    display: inline-block;
+    position: relative;
+    -webkit-box-shadow: inset 0 1px #272a2c;
+    -moz-box-shadow: inset 0 1px #272a2c;
+    box-shadow: inset 0 1px #272a2c;
+    border-top: solid 4px #111;
+    border-left: solid 4px #111;
+    border-right: solid 4px #111;
+    border-bottom: solid 4px #111;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 
 #share {
     color: #ffffff;
     position: relative;
     left: 23px;
-    margin-left: 0px;
 }
 
 #room_url {
@@ -54,14 +63,6 @@
     text-align: center;
     padding: 3px 20px 3px;
     text-shadow: 0 1px #16181a;
-    -webkit-box-shadow: inset 0 1px #272a2c;
-    -moz-box-shadow: inset 0 1px #272a2c;
-    box-shadow: inset 0 1px #272a2c;
-    border-top: solid 4px #111;
-    border-left: solid 4px #111;
-    border-bottom: solid 4px #111;
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
 }
 
 #room_text {
@@ -69,25 +70,22 @@
 }
 
 #shutdown {
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    border: none;
     font-size: 12px;
     width: 25px;
-    height: 31px;
+    height: 23px;
     color: #FFFFFF;
     background-color: #C9282D;
-    -webkit-box-shadow: inset 0 1px #FF3A68;
-    -moz-box-shadow: inset 0 1px #FF3A68;
-    box-shadow: inset 0 1px #FF3A68;
-    border-top: solid 4px #111;
-    border-right: solid 4px #111;
-    border-bottom: solid 4px #111;
-    border-left: solid 0px;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
 }
 
 #btnCtrlBox {
+    display: inline-block;
     position: absolute;
-    left: 228px;
+    margin-left: 30px
 }
 
 .roomBtnCtrl {
