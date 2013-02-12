@@ -147,27 +147,131 @@
 }
 
 #joinConference {
+    margin-top: 8px;
+    position: relative;
+    margin: 0 auto;
+    font-size: 10px;
     width: auto;
-    color: white;
-    height: 23px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-family: 'OpenSans-Bold';
-    font-size: 65%;
+    color: #FFFFFF;
+    background-color: #00aeef;
+    font-family: 'OpenSans-Regular';
     font-weight: bold;
-    border-color: black;
-    border-width: 1.5px;
-    border-radius: 3px;
-    background:#484d51;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#484d51 ), to(#222528));
-    box-shadow: 0px 1px 4px #222528;
+    text-align: center;
+    padding: 2px 5px;
+    -webkit-box-shadow: inset 0 1px #15DBCB;
+    -moz-box-shadow: inset 0 1px #15DBCB;
+    box-shadow: inset 0 1px #15DBCB;
+    border: solid 4px #111;
+    border-radius: 12px;
 }
 
 #body {
-    position: relative;
-    margin: auto;
+    position : absolute;
+    top: 59px;
+    bottom: 152px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.box {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+#userList {
+    border-top: #111 2px solid;
+    border-left: #111 2px solid;
+    border-bottom: #111 2px solid;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    float: right;
+    width: 10%;
+    height: 100%;
+}
+
+#userListTitle {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 .videoStream {
-    border: white 1px solid;
+    border: solid 2px #111;
+    border-radius: 4px;
+}
+
+#footer {
+    border-top: #111 2px solid;
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height: 125px;
+}
+
+#nbFeed {
+    color: #00aeef;
+    font-family: 'OpenSans-Regular';
+    font-weight: bold;
+}
+
+#localThumbnails {
+    margin-left: 10px;
+    margin-top: 12px;
+}
+
+#localVideoContainer {
+    position:absolute;
+    background: #111;
+    margin-top: 10px;
+    position: relative;
+    width: 97px;
+    height: 75px;
+    border: solid 3px #111;
+    border-radius: 6px;
+    vertical-align: center;
+}
+
+#localVideo {
+    width: 96px;
+    height: 75px;
+}
+
+#centeredLocal {
+    margin-top: 5px;
+}
+
+#centerButton {
+    margin-top: 7px;
+}
+
+#feedNotActivate {
+    color: #43535a;
+}
+
+#activateFeed {
+    margin-top: 8px;
+    position: relative;
+    margin: 0 auto;
+    font-size: 10px;
+    width: auto;
+    color: #FFFFFF;
+    background-color: #00aeef;
+    font-family: 'OpenSans-Regular';
+    font-weight: bold;
+    text-align: center;
+    padding: 2px 5px;
+    -webkit-box-shadow: inset 0 1px #15DBCB;
+    -moz-box-shadow: inset 0 1px #15DBCB;
+    box-shadow: inset 0 1px #15DBCB;
+    border: solid 4px #111;
+    border-radius: 12px;
+}
+
+.thumbnail {
+    margin-left: 20px;
+    margin-top: 12px;
+}
+
+html, body {
+    position: relative;
+    height: 100%;
 }
