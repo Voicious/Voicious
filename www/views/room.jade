@@ -13,21 +13,45 @@ block content
         div#header
         div#menu
             p#room_logo voıċıoųs
-            div#options_first.options
-                p(room='#{room}', token='#{token}')#infos
-                p#room_url room #{room}
-                button#password manage password
-                button#plugins manage plugins
-            div#options_second.options
-                p connected as
-                p#login #{login}
-                button#contacts contacts
-                button#settings settings
+              span#beta Beta
+            div#room_control
+              p(room='#{room}', token='#{token}')#infos
+              div#room_url_box
+                span#share.icon.icon-share
+                p#room_url
+                  span#room_text #{room}
+                button#shutdown.icon.icon-off
+              div#btnCtrlBox.hidden
+                button.roomBtnCtrl
+                  span.icon.icon-lock
+                  span.textBtn MANAGE ACCESS
+                button.roomBtnCtrl
+                  span.icon.icon-check-empty
+                  span.textBtn MANAGE PLUGINS
+                button.roomBtnCtrl
+                  span.icon.icon-plus
+                  span.textBtn INVITE CONTACTS
+            div#userControl
+              span.icon.icon-user
+              p#login.textBtn #{login},
+                span#acl user
+                button#dashboard.roomBtnCtrl.hidden
+                  span.icon.icon-dashboard
+                  span.textBtn DASHBOARD
         div#body
-            div
-                button#joinConference.btn Start Conference
-                //button#btn2.btn Hang Up
-            div#videos.video_container
-                div
-                    p Caller
-                    video(autoplay)#localVideo.videoStream
+          div.box#userListContainer
+            label.textBtn#userListTitle WHO'S HERE?
+            ul#userList
+              li.userBox.user #{login}
+        div.box#footer
+          div#localThumbnails.textBtn
+            label receiving&nbsp;
+              span#nbFeed 0
+            label &nbsp;feeds
+            div#localVideoContainer
+              div#notActivate
+                center#centeredLocal
+                  label#feedNotActivate your feed is inactive
+                center#centerButton
+                  button#joinConference activate
+              video(autoplay, hidden="true")#localVideo

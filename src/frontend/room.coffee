@@ -30,12 +30,13 @@ class Room
                 $('#joinConference').attr "disabled", "disabled"
             onerror     : (e) =>
                 trace "Video or audio are not available#{e}."
-
+        do $(options.video).show
         WebRTC.getUserMedia(options)
 
     start             : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
+            do $('#notActivate').hide
             @joinConference()
 
 $(window).load ->

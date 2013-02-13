@@ -48,7 +48,7 @@ class Voicious
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
                 title           : (@app.get 'title'),
-                hash            : req.query.hash || ''
+                hash            : '#jumpIn'
                 login_email     : ''
                 signup_email    : ''
                 name            : ''
