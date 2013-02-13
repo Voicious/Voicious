@@ -199,6 +199,16 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
+#mainCam {
+    margin-left: 26%;
+    float: left;
+}
+
+.mainCam {
+    border: solid 3px #111;
+    border-radius: 6px;
+    height: 100%;
+}
 #userListContainer {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
