@@ -55,6 +55,10 @@
     padding: 0;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .block {
     display: block;
 }

@@ -20,7 +20,7 @@ block content
                 p#room_url
                   span#room_text #{room}
                 button#shutdown.icon.icon-off
-              div#btnCtrlBox
+              div#btnCtrlBox.hidden
                 button.roomBtnCtrl
                   span.icon.icon-lock
                   span.textBtn MANAGE ACCESS
@@ -34,7 +34,7 @@ block content
               span.icon.icon-user
               p#login.textBtn #{login},
                 span#acl user
-                button#dashboard.roomBtnCtrl
+                button#dashboard.roomBtnCtrl.hidden
                   span.icon.icon-dashboard
                   span.textBtn DASHBOARD
         div#body
