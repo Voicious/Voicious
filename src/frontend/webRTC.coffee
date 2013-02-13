@@ -22,15 +22,15 @@ window.IceCandidate = window.RTCIceCandidate or window.mozRTCIceCandidate or win
 navigator.getUserMedia = navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.getUserMedia
 
 window.defaults = {
-    iceServers: { "iceServers": [{ "url": "stun:stun.ekiga.org" }] },
+    iceServers: { "iceServers": [{ "url": "stun:stun.ekiga.net" }] },
     constraints: { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
     optional: { optional: [{ RtpDataChannels: true}] }
 }
 
 Runnable                = () ->
-        if RTCPeerConnection? and navigator.getUserMedia?
-            return true
-        return false
+    if RTCPeerConnection? and navigator.getUserMedia?
+        return true
+    return false
 
 PeerConnection          = (options) ->
     iceServers              = options.iceServers or defaults.iceServers
@@ -38,7 +38,7 @@ PeerConnection          = (options) ->
     optional                = options.optional or defaults.optional  
 
     peerConnection          = new RTCPeerConnection iceServers, optional
-    
+
     if !peerConnection
         return null
 
@@ -46,29 +46,33 @@ PeerConnection          = (options) ->
     peerConnection.channel  = null
 
     setDataChannel          = (channel) =>
-        channel.onopen = () =>
+        channel.onopen      = () =>
             if options.onChannelOpen?
                 do options.onChannelOpen
                 peerConnection.tunnel = channel
                 peerConnection.channel = channel
-        channel.onmessage = (message) =>
+        channel.onmessage   = (message) =>
             if options.onChannelMessage?
                 options.onChannelMessage message
-        channel.onclose = () =>
+        channel.onsend      = (message) =>
+            if options.onChannelSend?
+                options.onChannelSend channel, message
+        channel.onclose     = () =>
             if options.onChannelClose?
-                options.onChannelClose
+                do options.onChannelClose
                 peerConnection.tunnel = peerConnection.socket
                 peerConnection.channel = null
-        channel.onerror = () =>
+        channel.onerror     = () =>
             if options.onChannelError?
-                options.onChannelError
+                do options.onChannelError
 
     createDataChannel       = () =>
-        if RTCPeerConnection.prototype.createDataChannel?
-            channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
-            setDataChannel channel
-        else
-            trace "DataChannels are not available on this browser"
+        try
+            if peerConnection.createDataChannel?
+                channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
+                setDataChannel channel
+        catch err
+            return
 
     if options.onoffer?
         do createDataChannel
@@ -84,7 +88,6 @@ PeerConnection          = (options) ->
             options.gotstream event
 
     onremovestream          = (event) =>
-        trace "on remove stream"
         if options.removestream?
             options.removestream event
             
@@ -105,9 +108,8 @@ PeerConnection          = (options) ->
                 peerConnection.setLocalDescription(sessionDescription)
                 onoffer(peerConnection.tunnel, sessionDescription)
             , (error) =>
-                trace error
+                return
             , constraints
-    peerConnection.peerCreateOffer options.onoffer
 
     peerConnection.peerCreateAnswer = (offer) =>
         if offer?
@@ -116,8 +118,10 @@ PeerConnection          = (options) ->
                 peerConnection.setLocalDescription(sessionDescription)
                 options.onCreateAnswer(peerConnection.tunnel, sessionDescription)
             , (error) =>
-                trace error
+                return
             , constraints
+
+    peerConnection.peerCreateOffer options.onoffer
     peerConnection.peerCreateAnswer options.offer
 
     peerConnection.onanswer         = (sdp) =>

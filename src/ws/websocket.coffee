@@ -71,6 +71,7 @@ class Websocket
                 @rooms[param.rid]             = roomSockets
             else
                 @rooms[param.rid][cid]        = socket
+            @socketOnSend socket, ["peer.authentification", socket.cinfo]
             console.log "New client has been accepted as #{cid} in room #{param.rid}"
 
         clientValidation  : (param) =>
@@ -79,12 +80,12 @@ class Websocket
                     param.errorCallback param, "Invalid client id"
                 else
                     data = JSON.parse(data)
-                    client =
-                        name  : data.name
+                    if param.rid == data.id_room
+                        client =
+                            name  : data.name
 
-                    param.cinfo  = client
-                    @acceptPeer param
-
+                        param.cinfo  = client
+                        @acceptPeer param
 
         roomValidation    : (param) =>
             Request.get "#{Config.Restapi.Url}/room/#{param.rid}", (e, r, data) =>
@@ -124,7 +125,11 @@ class Websocket
         socketOnMessage   : (socket, message) =>
             if not message.data
                 return
-            args = JSON.parse message.data
+            try
+                args = JSON.parse message.data
+            catch err
+                console.log "#{err}"
+                return
             
             event = args[0]
 
