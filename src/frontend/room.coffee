@@ -16,11 +16,12 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 trace = (text) ->
+    console.log "#{text}"
 
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @networkManager = NetworkManager '192.168.52.141', 1337
+        @networkManager = NetworkManager '192.168.52.142', 1337
         do @configureEvents
 
     configureEvents     : () =>
@@ -37,7 +38,7 @@ class Room
                 @networkManager.negociatePeersOffer stream
                 $('#joinConference').attr "disabled", "disabled"
             onerror     : (e) =>
-                trace "Video or audio are not available#{e}."
+                trace "Video or audio are not available #{e}."
 
         WebRTC.getUserMedia(options)
 
@@ -45,8 +46,6 @@ class Room
         do @networkManager.connection
         $('#joinConference').click () =>
             @joinConference()
-
-$(window).load ->
 
 $(document).ready ->
     if WebRTC.runnable?

@@ -38,7 +38,7 @@ PeerConnection          = (options) ->
     optional                = options.optional or defaults.optional  
 
     peerConnection          = new RTCPeerConnection iceServers, optional
-    
+
     if !peerConnection
         return null
 
@@ -46,32 +46,35 @@ PeerConnection          = (options) ->
     peerConnection.channel  = null
 
     setDataChannel          = (channel) =>
-        channel.onopen = () =>
+        channel.onopen      = () =>
             if options.onChannelOpen?
                 do options.onChannelOpen
                 peerConnection.tunnel = channel
                 peerConnection.channel = channel
-        channel.onmessage = (message) =>
+        channel.onmessage   = (message) =>
             if options.onChannelMessage?
                 options.onChannelMessage message
-        channel.onsend  = (message) =>
+        channel.onsend      = (message) =>
             if options.onChannelSend?
                 options.onChannelSend channel, message
-        channel.onclose = () =>
+        channel.onclose     = () =>
             if options.onChannelClose?
                 do options.onChannelClose
                 peerConnection.tunnel = peerConnection.socket
                 peerConnection.channel = null
-        channel.onerror = () =>
+        channel.onerror     = () =>
             if options.onChannelError?
                 do options.onChannelError
 
     createDataChannel       = () =>
-        if RTCPeerConnection.prototype.createDataChannel?
-            channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
-            setDataChannel channel
-        else
-            trace "DataChannels are not available on this browser"
+        try
+            if peerConnection.createDataChannel?
+                channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
+                setDataChannel channel
+            else
+                trace "DataChannels are not available on this browser"
+        catch err
+            trace "Data channel are not available on this browser"
 
     if options.onoffer?
         do createDataChannel
@@ -110,7 +113,6 @@ PeerConnection          = (options) ->
             , (error) =>
                 trace error
             , constraints
-    peerConnection.peerCreateOffer options.onoffer
 
     peerConnection.peerCreateAnswer = (offer) =>
         if offer?
@@ -121,6 +123,8 @@ PeerConnection          = (options) ->
             , (error) =>
                 trace error
             , constraints
+
+    peerConnection.peerCreateOffer options.onoffer
     peerConnection.peerCreateAnswer options.offer
 
     peerConnection.onanswer         = (sdp) =>

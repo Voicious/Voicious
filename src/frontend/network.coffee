@@ -264,10 +264,7 @@ class NetworkManager
             for elem in arr
                 trace "#{i} - #{elem.length} - #{elem}"
                 chunk = JSON.stringify ['chunkMsg', id, i, arr.length, elem]
-                try
-                    channel.send chunk
-                catch err
-                    trace err
+                channel.send chunk
                 i++
         else
             channel.send msg
