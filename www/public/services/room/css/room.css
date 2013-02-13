@@ -21,6 +21,14 @@
     font-size: 30px;
 }
 
+#beta {
+    position:absolute;
+    font-size: 10px;
+    color: #ffffff;
+    margin-top: 32px;
+    margin-left: -51px;
+}
+
 #room_control {
     margin-top: 10px;
     position: absolute;

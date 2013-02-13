@@ -8,6 +8,10 @@
     background-image: url(../pictures/voicious_logo_big.png);
 }
 
+#logoBeta {
+    margin-left: 82px;
+}
+
 #desc {
     position: relative;
     width: 275px;
