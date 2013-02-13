@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @networkManager = NetworkManager '192.168.52.142', 1337
+        @networkManager = NetworkManager '192.168.1.65', 1337
         do @configureEvents
 
     configureEvents     : () =>
