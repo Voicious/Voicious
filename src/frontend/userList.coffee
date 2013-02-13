@@ -17,15 +17,28 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class   UserList
     constructor     : () ->
-        @users = {}
+        @users  = []
+        @jqElem = ($ '#userList')
+        li      = @jqElem.children 'li'
+        @users.push (do li.text)
 
     fill            : (users) =>
-        
-    update          : (user, event) =>        
+        for user of users
+            @users.push users[user].cinfo.name
+        do @display
+
+    update          : (user, event) =>
+        switch event
+            when 'create' then @users.push user.cinfo.name
+            when 'remove' then @users.unset user.cinfo.name
+        do @display
+
+    display         : () =>
+        do @jqElem.empty
+        for user in @users
+            @jqElem.append (($ '<li>', { class : 'userBox user' }).text user)
 
 UL  = UserList
 
 if window?
     window.UserList     = UL
-if exports?
-    exports.UserList    = UL

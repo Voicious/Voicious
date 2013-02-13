@@ -31,6 +31,11 @@ class PrivateValue
 
 PV  = new PrivateValue
 
+Array.prototype.unset = (val) ->
+    index = @indexOf val
+    if index > -1
+        @splice index, 1
+
 if window?
     window.PrivateValue     = PV
 if exports?

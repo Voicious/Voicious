@@ -8,8 +8,8 @@
     },
     "Websocket"  : {
         "Hostname"  : "localhost",
-        "Port"      : 1337,
-        "Enabled"   : 0
+        "Port"      : 4244,
+        "Enabled"   : 1
     },
     "Restapi"   : {
         "Hostname"      : "localhost",
