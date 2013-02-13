@@ -20,15 +20,13 @@ class NetworkManager
         @networkConfig              = {}
         @networkConfig.hostname     = hostname
         @networkConfig.port         = port
-        
         @connections                = {}
-        
         @queue                      = new Queue
 
     createPeerConnection    : (options) =>
         cid               = options.cinfo.cid
         localStream       = window.localStream
-        
+
         if localStream?
             options.stream = localStream
 
@@ -42,10 +40,10 @@ class NetworkManager
             baliseVideoId       = 'video' + cid
             baliseBlockId       = "block" + cid
             $("#videos").append(
-                '<div id="' + baliseBlockId + '" class="video-block">
-                 <p>Callee - ' + cid + '</p>
-                 <video id="' + baliseVideoId + '" autoplay="autoplay" class="videoStream"></video>
-                 </div>'
+                '<li id="' + baliseBlockId + '" class="thumbnail">
+                    <p class="none">Callee - ' + cid + '</p>
+                     <video id="' + baliseVideoId + '" autoplay="autoplay" class="thumbnailVideo"></video>
+                 </li>'
                 )
             baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
@@ -63,7 +61,7 @@ class NetworkManager
             tunnel.onsend ["answer", options.cinfo, sessionDescription.sdp]
 
         pc  = WebRTC.peerConnection options
-        
+
         if pc?
             pc.socket = @socket
 

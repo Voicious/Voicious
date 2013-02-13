@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @networkManager = NetworkManager '192.168.52.142', 1337
+        @networkManager = NetworkManager '192.168.1.65', 1337
         do @configureEvents
 
     configureEvents     : () =>
@@ -46,6 +46,18 @@ class Room
             @joinConference()
 
 $(document).ready ->
+    $('#videos').delegate 'li.thumbnail', 'click', () ->
+        prevCam = $('#mainCam video')
+        prevId = -1
+        newId = $(this).find('video').attr('id')
+        if prevCam
+            prevId = prevCam.attr 'id'
+        if newId isnt prevId
+            do prevCam.remove
+            newCam = $(this).find('video').clone()
+            newCam.removeClass 'thumbnailVideo'
+            newCam.addClass 'mainCam'
+            $('#mainCam').append newCam
     if do WebRTC.runnable == true
         room = new Room
         do room.start

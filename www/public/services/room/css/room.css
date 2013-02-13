@@ -199,6 +199,16 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
+#mainCam {
+    margin-left: 26%;
+    float: left;
+}
+
+.mainCam {
+    border: solid 3px #111;
+    border-radius: 6px;
+    height: 100%;
+}
 #userListContainer {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
@@ -256,12 +266,12 @@
 }
 
 #localThumbnails {
+    display: inline-block;
     margin-left: 10px;
     margin-top: 12px;
 }
 
 #localVideoContainer {
-    position:absolute;
     background: #111;
     margin-top: 10px;
     position: relative;
@@ -269,7 +279,6 @@
     height: 75px;
     border: solid 3px #111;
     border-radius: 6px;
-    vertical-align: center;
 }
 
 #localVideo {
@@ -308,9 +317,25 @@
     border-radius: 12px;
 }
 
+#videos {
+    display: inline-block;
+    position: absolute;
+}
+
 .thumbnail {
+    display: inline-block;
+    position: relative;
     margin-left: 20px;
-    margin-top: 12px;
+    margin-top: 10px;
+    width: 136px;
+    height: 102px;
+    border: solid 3px #111;
+    border-radius: 6px;
+}
+
+.thumbnailVideo {
+    width: 136px;
+    height: 102px;
 }
 
 html, body {
