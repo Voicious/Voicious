@@ -28,9 +28,9 @@ window.defaults = {
 }
 
 Runnable                = () ->
-        if RTCPeerConnection? and navigator.getUserMedia?
-            return true
-        return false
+    if RTCPeerConnection? and navigator.getUserMedia?
+        return true
+    return false
 
 PeerConnection          = (options) ->
     iceServers              = options.iceServers or defaults.iceServers
@@ -71,10 +71,8 @@ PeerConnection          = (options) ->
             if peerConnection.createDataChannel?
                 channel = peerConnection.createDataChannel 'RTCDataChannel', { reliable: false }
                 setDataChannel channel
-            else
-                trace "DataChannels are not available on this browser"
         catch err
-            trace "Data channel are not available on this browser"
+            return
 
     if options.onoffer?
         do createDataChannel
@@ -90,7 +88,6 @@ PeerConnection          = (options) ->
             options.gotstream event
 
     onremovestream          = (event) =>
-        trace "on remove stream"
         if options.removestream?
             options.removestream event
             
@@ -111,7 +108,7 @@ PeerConnection          = (options) ->
                 peerConnection.setLocalDescription(sessionDescription)
                 onoffer(peerConnection.tunnel, sessionDescription)
             , (error) =>
-                trace error
+                return
             , constraints
 
     peerConnection.peerCreateAnswer = (offer) =>
@@ -121,7 +118,7 @@ PeerConnection          = (options) ->
                 peerConnection.setLocalDescription(sessionDescription)
                 options.onCreateAnswer(peerConnection.tunnel, sessionDescription)
             , (error) =>
-                trace error
+                return
             , constraints
 
     peerConnection.peerCreateOffer options.onoffer

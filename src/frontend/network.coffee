@@ -39,7 +39,6 @@ class NetworkManager
         options.onChannelSend       = @onChannelSend
         options.onChannelClose      = @onChannelClose
         options.gotstream           = (event) =>
-            trace "Add new stream"
             baliseVideoId       = 'video' + cid
             baliseBlockId       = "block" + cid
             $("#videos").append(
@@ -51,7 +50,7 @@ class NetworkManager
             baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
         options.removestream        = (event) =>
-            trace "Remove stream"
+            return
         options.getice              = (tunnel, event) =>
             if (event.candidate)
                 tunnel.onsend ["candidate", options.cinfo,
@@ -60,8 +59,6 @@ class NetworkManager
                     label: event.candidate.sdpMLineIndex,
                     id: event.candidate.sdpMid, candidate: event.candidate.candidate
                 }]
-            else
-                trace "End of candidates."
         options.onCreateAnswer      = (tunnel, sessionDescription) =>
             tunnel.onsend ["answer", options.cinfo, sessionDescription.sdp]
 
@@ -78,7 +75,6 @@ class NetworkManager
         return null
 
     sendToAll                   : (message) =>
-        trace "Send to all"
         for key, val of @connections
             do (key, val) =>
                 pc = val.peerConnection
@@ -86,9 +82,7 @@ class NetworkManager
 
     negociatePeersOffer         : (stream) =>
         for key, val of @connections
-            trace "Negociate new offer"
             do (key, val) =>
-                trace "Call addStream"
                 pc = val.peerConnection
                 pc.addStream(stream)
                 pc.peerCreateOffer (tunnel, offer) =>
@@ -96,24 +90,21 @@ class NetworkManager
 
     onSocketOpen                : () =>
         roomId = $("#infos").attr("room")
-        token = $("#infos").attr("token") # delete token from the infos
+        token = $("#infos").attr("token")
         @socket.onsend ["authentification", roomId, token]
 
     onChannelOpen               : () =>
-        trace "On channel open"
 
     onSocketMessage             : (message) =>
         try
             args        = JSON.parse(message.data)
         catch err
-            trace "#{err}"
             return
 
         eventName   = args[0]
         cinfos      = args[1]
         infos       = args[2]
         
-        trace "Receive onSocket: #{args}"
         if eventName? and cinfos?
             @onMessagePeers eventName, cinfos
             if infos?
@@ -142,10 +133,7 @@ class NetworkManager
         try
             args        = JSON.parse(message.data)
         catch err
-            trace "#{err}"
             return
-
-        trace "Receive onChannel: #{args}"
 
         msg         = null
         eventName   = args[0]
@@ -165,7 +153,6 @@ class NetworkManager
     onMessagePeers              : (eventName, cinfos) =>
         switch (eventName)
             when 'peers'
-                trace "on peers"
                 cinfos.forEach (cinfo, i) =>
                     options =
                         cinfo     : cinfo
@@ -177,11 +164,8 @@ class NetworkManager
                 if event?
                     event @connections
             when 'peer.authentification'
-                trace "on peer authentification"
                 @cinfo = cinfos
             when 'peer.create'
-                trace "on peer create"
-
                 options   =
                     cinfo   : cinfos
 
@@ -192,8 +176,6 @@ class NetworkManager
                     if event?
                         event peerInfos, "create"
             when 'peer.remove'
-                trace "on peer remove"
-
                 cinfo     = cinfos
                 peerInfos = @connections[cinfo.cid]
 
@@ -211,16 +193,12 @@ class NetworkManager
     onMessageExchangeOffer      : (eventName, cinfos, sdp) =>
         switch (eventName)
             when 'offer'
-                trace('on offer')
-
                 cinfo = cinfos
                 pc    = @connections[cinfo.cid].peerConnection
 
                 pc.peerCreateAnswer {sdp: sdp, type: 'offer'}
 
             when 'answer'
-                trace "on answer"
-
                 cinfo     = cinfos
                 peerInfos = @connections[cinfo.cid]
 
@@ -229,40 +207,29 @@ class NetworkManager
                     pc.onanswer {sdp: sdp, type: 'answer'}
 
             when 'candidate'
-                trace "add ice candidate"
-
                 cinfo       = cinfos
                 pc          = @connections[cinfo.cid].peerConnection
                 
                 pc.addice sdp
     
     onMessageText               : (eventName, cinfos, msg) =>
-        switch (eventName)
-            when 'msg'
-                trace "#{msg}"
 
     onSocketClose               : () =>
-        trace "Socket has been closed"
-        alert "Cannot reach the server please refresh the page"
 
     onChannelClose              : (event) =>
-        trace "Data Channel has been closed"
 
     onSocketSend                : (socket, message) =>
         msg = JSON.stringify message
-        trace "Send : #{msg}"
         socket.send msg
 
     onChannelSend               : (channel, message) =>
         message[1].cid = @cinfo.cid
         msg = JSON.stringify message
-        trace "Send : #{msg}"
         if msg.length > 1000
             arr = Utilities.splitString msg, 500
             id  = do Utilities.generateRandomId
             i   = 1
             for elem in arr
-                trace "#{i} - #{elem.length} - #{elem}"
                 chunk = JSON.stringify ['chunkMsg', id, i, arr.length, elem]
                 channel.send chunk
                 i++

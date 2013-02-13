@@ -20,11 +20,8 @@ class   UserList
         @users = {}
 
     fill            : (users) =>
-        trace "Fill list with users"
         
-    update          : (user, event) =>
-        trace "Create/remove user"
-        
+    update          : (user, event) =>        
 
 UL  = UserList
 

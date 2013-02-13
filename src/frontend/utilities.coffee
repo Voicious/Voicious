@@ -17,14 +17,14 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class   Utilities
     constructor         : () ->
-    
+
     randNb              : () =>
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
 
     generateRandomId    : () =>
         return (@randNb() + @randNb() + "-" + @randNb() + "-" + @randNb() +
                 "-" + @randNb() + "-" + @randNb() + @randNb() + @randNb())
-    
+
     splitString         : (str, len) =>
         size    = Math.ceil str.length / len 
         ret     = []
@@ -33,7 +33,7 @@ class   Utilities
         for i in [0...size] by 1
             ret[i] = str.slice lc, lc += len
 
-        return ret;
+        return ret
 
     getMapSize          : (map) =>
         i = 0
