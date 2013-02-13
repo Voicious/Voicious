@@ -177,10 +177,7 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
-#userList {
-    border-top: #111 2px solid;
-    border-left: #111 2px solid;
-    border-bottom: #111 2px solid;
+#userListContainer {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     float: right;
@@ -192,6 +189,29 @@
     float: right;
     margin-top: 10px;
     margin-right: 10px;
+}
+
+#userList {
+    margin-top: 35px;
+    margin-left: 20px;
+}
+
+.userBox:hover {
+    color: #555555;
+    background: #ffffff;
+}
+
+.userBox {
+    margin-top: 2px;
+    padding: 9px 20px;
+    border-left: solid 1px #1e1e1e;
+    border-top: solid 1px #1e1e1e;
+    border-bottom: solid 1px #1e1e1e;
+    border-radius: 3px;
+}
+
+.user {
+    color: #9c9c9c;
 }
 
 .videoStream {
@@ -274,4 +294,10 @@
 html, body {
     position: relative;
     height: 100%;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
