@@ -22,8 +22,12 @@ DefaultHostname = (hostname) =>
         'Internal' : 'localhost',
         'External' : 'localhost'
     if hostname?
-        h.Internal = hostname.Internal if hostname.Internal?
-        h.External = hostname.External if hostname.External?
+        if (typeof hostname) is (typeof "")
+            h.Internal = hostname
+            h.External = hostname
+        else
+            h.Internal = hostname.Internal if hostname.Internal?
+            h.External = hostname.External if hostname.External?
     return h
 
 class _Config
