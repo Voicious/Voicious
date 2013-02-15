@@ -120,7 +120,7 @@ class Websocket
 
             socket.send msg, (error) ->
                 if (error)
-                    console.log(error)
+                    console.error error
 
         socketOnMessage   : (socket, message) =>
             if not message.data
@@ -128,7 +128,7 @@ class Websocket
             try
                 args = JSON.parse message.data
             catch err
-                console.log "#{err}"
+                console.error "#{err}"
                 return
             
             event = args[0]
