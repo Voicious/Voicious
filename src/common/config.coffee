@@ -66,6 +66,7 @@ class _Config
         @Paths.Webroot          = Path.join @Paths.Root, 'www'
         @Paths.Libroot          = Path.join @Paths.Root, 'lib'
         @Paths.Views            = Path.join @Paths.Webroot, 'views'
+        @Paths.Logs             = Path.join @Paths.Root, 'logs'
 
         do @loadJSONConfig
         @Voicious.Title = 'voıċıoųs'
