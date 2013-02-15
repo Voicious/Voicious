@@ -29,8 +29,8 @@ class _Config
             if not @Restapi.Database.Connector?
                 throw "Must provice a database connector if enabling REST API."
             @Restapi.Hostname         = 'localhost' if not @Restapi.Hostname?
-            @Restapi.Port             = 4243        if not @Restapi.Hostname?
-            @Restapi['Allowed-hosts'] = [ ]         if not @Restapi.Hostname?
+            @Restapi.Port             = 4243        if not @Restapi.Port?
+            @Restapi['Allowed-hosts'] = [ ]         if not @Restapi['Allowed-hosts']?
             if (typeof @Restapi['Allowed-hosts']) is (typeof "")
                 @Restapi['Allowed-hosts'] = [ @Restapi['Allowed-hosts'] ]
             @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname}:#{@Voicious.Port}"
