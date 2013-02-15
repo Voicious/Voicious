@@ -1,18 +1,27 @@
 {
     "Voicious"  : {
-        "Hostname"  : "localhost",
+        "Hostname"  : {
+            "Internal" : "localhost",
+            "EXternal" : "localhost"
+        },
         "Port"      : 4242,
         "Acl"       : ["administrator", "registered", "temporary"],
         "Roles"     : ["operator", "owner"],
         "Enabled"   : 1
     },
     "Websocket"  : {
-        "Hostname"  : "localhost",
+        "Hostname"  : {
+            "Internal" : "localhost",
+            "External" : "localhost"
+        },
         "Port"      : 4244,
         "Enabled"   : 1
     },
     "Restapi"   : {
-        "Hostname"      : "localhost",
+        "Hostname"      : {
+            "Internal" : "localhost",
+            "External" : "localhost"
+        },
         "Port"          : 4243,
         "Allowed-hosts" : "*",
         "Enabled"       : 1,

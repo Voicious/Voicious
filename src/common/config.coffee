@@ -17,10 +17,23 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Path    = require 'path'
 
+DefaultHostname = (hostname) =>
+    h =
+        'Internal' : 'localhost',
+        'External' : 'localhost'
+    if hostname?
+        if (typeof hostname) is (typeof "")
+            h.Internal = hostname
+            h.External = hostname
+        else
+            h.Internal = hostname.Internal if hostname.Internal?
+            h.External = hostname.External if hostname.External?
+    return h
+
 class _Config
     checkCoreConfig : () ->
         @Voicious.Enabled  = 0           if not @Voicious.Enabled?
-        @Voicious.Hostname = 'localhost' if not @Voicious.Hostname?
+        @Voicious.Hostname = DefaultHostname @Voicious.Hostname
         @Voicious.Port     = 4242        if not @Voicious.Port?
 
     checkRestConfig : () ->
@@ -28,12 +41,13 @@ class _Config
         if @Restapi.Enabled
             if not @Restapi.Database.Connector?
                 throw "Must provice a database connector if enabling REST API."
-            @Restapi.Hostname         = 'localhost' if not @Restapi.Hostname?
-            @Restapi.Port             = 4243        if not @Restapi.Hostname?
-            @Restapi['Allowed-hosts'] = [ ]         if not @Restapi.Hostname?
+            @Restapi.Hostname         = DefaultHostname @Restapi.Hostname
+            @Restapi.Port             = 4243        if not @Restapi.Port?
+            @Restapi['Allowed-hosts'] = [ ]         if not @Restapi['Allowed-hosts']?
             if (typeof @Restapi['Allowed-hosts']) is (typeof "")
                 @Restapi['Allowed-hosts'] = [ @Restapi['Allowed-hosts'] ]
-            @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname}:#{@Voicious.Port}"
+            @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname.Internal}:#{@Voicious.Port}"
+            @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname.External}:#{@Voicious.Port}"
             if @Restapi.Ssl?
                 if @Restapi.Ssl.Key? and @Restapi.Ssl.Certificate?
                     @Restapi.Ssl.Enabled = 1
@@ -43,11 +57,11 @@ class _Config
                 @Restapi.Ssl =
                     Enabled : 0
             protocol     = if @Restapi.Ssl.Enabled then 'https' else 'http'
-            @Restapi.Url = "#{protocol}://#{@Restapi.Hostname}:#{@Restapi.Port}/api"
+            @Restapi.Url = "#{protocol}://#{@Restapi.Hostname.Internal}:#{@Restapi.Port}/api"
 
     checkWebsocketConfig : () ->
         @Websocket.Enabled  = 0           if not @Websocket.Enabled?
-        @Websocket.Hostname = 'localhost' if not @Websocket.Hostname?
+        @Websocket.Hostname = DefaultHostname @Websocket.Hostname
         @Websocket.Port     = 1337        if not @Websocket.Port?
 
     loadJSONConfig : () ->
