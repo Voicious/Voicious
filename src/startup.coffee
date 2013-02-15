@@ -18,7 +18,12 @@ program. If not, see <http://www.gnu.org/licenses/>.
 {spawn} = require 'child_process'
 Path    = require 'path'
 Fs      = require 'fs'
+Moment  = require 'moment'
 Config  = require './common/config'
+
+WriteLog  = (fd, data) =>
+    toLog = '[' + ((do Moment).format 'YYYY MMM DD hh:mm:ssa') + '] ' + data
+    Fs.writeSync fd, toLog, 0, toLog.length
 
 processes = []
 
@@ -28,10 +33,10 @@ if Config.Voicious.Enabled
     voicious          = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'core', 'voicious.js')]
     voicious.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
-        Fs.writeSync voiciousAccessLog, data, 0, data.length
+        WriteLog voiciousAccessLog, data
     voicious.stderr.on 'data', (data) =>
         process.stderr.write "#{data}"
-        Fs.writeSync voiciousErrorLog, data, 0, data.length
+        WriteLog voiciousErrorLog, data
     processes.push voicious
 
 if Config.Restapi.Enabled
@@ -40,10 +45,10 @@ if Config.Restapi.Enabled
     rest          = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'rest', 'api.js')]
     rest.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
-        Fs.writeSync restAccessLog, data, 0, data.length
+        WriteLog restAccessLog, data
     rest.stderr.on 'data', (data) =>
         process.stderr.write "#{data}"
-        Fs.writeSync restErrorLog, data, 0, data.length
+        WriteLog restErrorLog, data
     processes.push voicious
     
 if Config.Websocket.Enabled
@@ -52,10 +57,10 @@ if Config.Websocket.Enabled
     voicious    = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'ws', 'websocket.js')]
     voicious.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
-        Fs.writeSync wsAccessLog, data, 0, data.length
+        WriteLog wsAccessLog, data
     voicious.stderr.on 'data', (data) =>
         process.stderr.write "#{data}"
-        Fs.writeSync wsErrorLog, data, 0, data.length
+        WriteLog wsErrorLog, data
     processes.push voicious
 
 process.on 'SIGINT', () =>
