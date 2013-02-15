@@ -3,8 +3,6 @@ lib/*
 
 /www/public/js/*.js
 
-log/*
-
 docs/*
 
 node_modules
@@ -15,3 +13,4 @@ test/*.js
 *~
 .*.swp
 tags
+*.log
