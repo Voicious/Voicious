@@ -246,6 +246,87 @@
     color: #9c9c9c;
 }
 
+#textChatContainer {
+    position: relative;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 6px;
+    width: 30%;
+    height: 100%;
+}
+
+.boxHeader {
+    height: 30px;
+    width: 100%;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background: #111;
+}
+
+.textBoxHeader {
+    color: #fff;
+    font-family: 'OpenSans-Bold';
+    font-size: 16px;
+    margin-left: 15px;
+}
+
+#tcMessagesContainer {
+    width:100%;
+    position:absolute;
+    top:30px;
+    bottom:60px;
+    overflow:auto;
+    padding-top:20px;
+    padding-bottom:10px;
+}
+
+.msgBox {
+    margin:auto;
+    min-height: 40px;
+    max-width: 80%;
+}
+
+.message {
+    min-height:30px;
+    padding-left:4px;
+    border-radius:7px;    
+    background:#fff;
+    font-size:14px;
+}
+
+#tcInputBox {
+    position: absolute;
+    bottom: 0px;
+    height: 60px;
+    width: 100%;
+    background: #111;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    text-align:center;
+}
+
+#tcMessageInput {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius:5px;
+    margin-top:10px;
+    font-size: 15px;
+    height:50%;
+    width: 80%;
+    border:none;
+    padding-left:2px;
+}
+
+#tcSendMessageBtn {
+    border-radius:0;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+    margin-top:10px;
+    height:50%;
+    width: 15%;
+    border:none;
+    border-left: 1px solid #bbb;
+}
+
 .videoStream {
     border: solid 2px #111;
     border-radius: 4px;

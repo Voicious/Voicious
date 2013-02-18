@@ -18,7 +18,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @networkManager = NetworkManager '192.168.1.13', 4244
+        @textChat       = new TextChat
+        #@networkManager = NetworkManager '192.168.1.13', 4244
+        @networkManager = NetworkManager '127.0.0.1', 4244
         do @configureEvents
 
     configureEvents     : () =>
@@ -26,6 +28,10 @@ class Room
             @userList.fill users
         EventManager.addEvent "updateUserList", (user, event) =>
             @userList.update user, event
+        EventManager.addEvent "sendTextMessage", (message) =>
+            @networkManager.sendToAll message
+        EventManager.addEvent "receiveTextMessage", (message) =>
+            @textChat.update message
 
     joinConference      : () =>
         options =
