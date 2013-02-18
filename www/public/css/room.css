@@ -198,7 +198,7 @@ div#page {
     top: 0px;
     left: 0px;
     width: 100%;
-    margin: 15px 0; 
+    margin: 15px 0 15px 15px;
 }
 
 .box {
@@ -206,8 +206,8 @@ div#page {
 }
 
 #mainCam {
-    margin-left: 26%;
     float: left;
+    position:relative;
 }
 
 .mainCam {
@@ -253,27 +253,13 @@ div#page {
 }
 
 #textChatContainer {
+    float: left;
     position: relative;
-    margin-left: 15px;
-    margin-right: 15px;
+    /*margin-left: 15px;
+    margin-right: 15px;*/
     border-radius: 6px;
     width: 30%;
     height: 100%;
-}
-
-.boxHeader {
-    height: 30px;
-    width: 100%;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    background: #111;
-}
-
-.textBoxHeader {
-    color: #fff;
-    font-family: 'OpenSans-Bold';
-    font-size: 16px;
-    margin-left: 15px;
 }
 
 #tcMessagesContainer {
@@ -312,9 +298,9 @@ div.msgBox span.time {
 }
 
 #tcInputBox {
+    padding: 10px 0;
     position: absolute;
     bottom: 0px;
-    height: 60px;
     width: 100%;
     background: #111;
     border-bottom-left-radius: 6px;
@@ -323,25 +309,12 @@ div.msgBox span.time {
 }
 
 #tcMessageInput {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius:5px;
-    margin-top:10px;
+    border-radius: 5px;
     font-size: 15px;
-    height:50%;
+    height:30px;
     width: 80%;
     border:none;
     padding-left:2px;
-}
-
-#tcSendMessageBtn {
-    border-radius:0;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
-    margin-top:10px;
-    height:50%;
-    width: 15%;
-    border:none;
-    border-left: 1px solid #bbb;
 }
 
 .videoStream {

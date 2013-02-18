@@ -35,19 +35,19 @@ class   TextChat
         @addMessage message
     
     sendMessage     : (message) =>
-        message =
-            text : message
-            from : window.CurrentUser
-        event   = EventManager.getEvent "sendTextMessage"
-        if event?
-            event ['message', null, message]
-            @addMessage message
+        if message? and message isnt ""
+            message =
+                text : message
+                from : window.CurrentUser
+            event   = EventManager.getEvent "sendTextMessage"
+            if event?
+                event ['message', null, message]
+                @addMessage message
 
     addMessage      : (message) =>
         jqLastElem = do (@jqMessageBox.children 'div.msgBox').last
         prevTime = jqLastElem.attr 'rel'
         time     = new Date
-        console.log ( (do time.getTime) - prevTime)
         if (do (jqLastElem.find 'span.author').text) is message.from and ((do time.getTime) - prevTime) <= 120000
             jqLastElem.attr 'rel', do time.getTime
             (jqLastElem.children 'p.message').append ($ '<br />')
