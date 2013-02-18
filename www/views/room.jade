@@ -12,6 +12,10 @@ block scripts
     script(type="text/javascript", src="/public/js/utilities.js")
     script(type="text/javascript", src="/public/js/queue.js")
     script(type="text/javascript", src="/public/js/room.js")
+    script(type="text/javascript")
+        if ("#{login}" !== "") {
+            window.CurrentUser = "#{login}";
+        }
 
 block content
     body

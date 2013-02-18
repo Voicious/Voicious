@@ -16,7 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class   TextChat
-    constructor     : () ->
+    constructor     : (NetworkManager) ->
         @jqForm       = ($ 'form#chatForm')
         @jqMessageBox = ($ '#tcMessagesContainer')
         @jqInput      = ($ 'input#tcMessageInput')
@@ -26,26 +26,32 @@ class   TextChat
             @jqInput.val ''
             @sendMessage message
 
+        EventManager.addEvent "sendTextMessage", (message) =>
+            NetworkManager.sendToAll message
+        EventManager.addEvent "receiveTextMessage", (message) =>
+            @update message
+
     update          : (message) =>
         @addMessage message
     
     sendMessage     : (message) =>
-        event = EventManager.getEvent "sendTextMessage"
+        message =
+            text : message
+            from : window.CurrentUser
+        event   = EventManager.getEvent "sendTextMessage"
         if event?
             event ['message', null, message]
             @addMessage message
 
     addMessage      : (message) =>
         elem = ($ '<div>', {class : 'msgBox'})
-        #authorLine = ($ ('<p>')).append ($ '<span>', {class : 'author'}).html author
-        #authorLine.append ($ '<span>', {class : 'time'}).html time
-        #elem.append authorLine
-        elem.append ($ '<p>', {class : 'message'}).html message
+        authorLine = ($ ('<p>')).append ($ '<span>', {class : 'author'}).html message.from
+        #authorLine.append ($ '<span>', {class : 'time'}).html 
+        elem.append authorLine
+        elem.append ($ '<p>', {class : 'message'}).html message.text
         @jqMessageBox.append elem
 
 TC = TextChat
 
 if window?
     window.TextChat     = TC
-if  explorts?
-    exports.TextChat    = TC
