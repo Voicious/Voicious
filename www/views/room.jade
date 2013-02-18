@@ -1,9 +1,14 @@
 extends main
 
 block style
-    link(rel="stylesheet", media="screen", type="text/css", href="/public/services/room/css/room.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.ui.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/room.css")
 
 block scripts
+    script(type="text/javascript", src="/public/js/vendor/jquery.ui.js")
+    script(type="text/javascript", src="/public/js/vendor/jquery.sizes.js")
+    script(type="text/javascript", src="/public/js/vendor/jlayout.border.js")
+    script(type="text/javascript", src="/public/js/vendor/jquery.jlayout.js")
     script(type="text/javascript", src="/public/js/textChat.js")
     script(type="text/javascript", src="/public/js/event.js")
     script(type="text/javascript", src="/public/js/userList.js")
@@ -19,58 +24,57 @@ block scripts
 
 block content
     body
-        div#header
-        div#menu
-            p#room_logo voıċıoųs
-              span#beta Beta
-            div#room_control
-              p(room='#{room}', token='#{token}')#infos
-              div#room_url_box
-                span#share.icon.icon-share
-                p#room_url
-                  span#room_text #{room}
-                button#shutdown.icon.icon-off
-              div#btnCtrlBox.hidden
-                button.roomBtnCtrl
-                  span.icon.icon-lock
-                  span.textBtn MANAGE ACCESS
-                button.roomBtnCtrl
-                  span.icon.icon-check-empty
-                  span.textBtn MANAGE PLUGINS
-                button.roomBtnCtrl
-                  span.icon.icon-plus
-                  span.textBtn INVITE CONTACTS
-            div#userControl
-              span.icon.icon-user
-              p#login.textBtn #{login},
-                span#acl user
-                button#dashboard.roomBtnCtrl.hidden
-                  span.icon.icon-dashboard
-                  span.textBtn DASHBOARD
-        div#body
-          div#mainCam
-          div.box#userListContainer
-            label.textBtn#userListTitle WHO'S HERE?
-            ul#userList
-              li.userBox.user #{login}
-          div.box#textChatContainer
-            p.boxHeader
-                label.textBoxHeader text Chat
-            div#tcMessagesContainer
-            div#tcInputBox
-              form#chatForm
-                input(type='text')#tcMessageInput
-                button(type='submit')#tcSendMessageBtn Send!
-        div.box#footer
-          div#localThumbnails.textBtn
-            label receiving&nbsp;
-              span#nbFeed 0
-            label &nbsp;feeds
-            div#localVideoContainer
-              div#notActivate
-                center#centeredLocal
-                  label#feedNotActivate your feed is inactive
-                center#centerButton
-                  button#joinConference activate
-              video(autoplay, hidden="true")#localVideo
-          ul#videos
+        div#page.layout
+            div.north
+                div#header
+                div#menu
+                    p#room_logo voıċıoųs
+                      span#beta Beta
+                    div#room_control
+                      p(room='#{room}', token='#{token}')#infos
+                      div#room_url_box
+                        span#share.icon.icon-share
+                        p#room_url
+                          span#room_text #{room}
+                        button#shutdown.icon.icon-off
+                      div#btnCtrlBox.hidden
+                        button.roomBtnCtrl
+                          span.icon.icon-lock
+                          span.textBtn MANAGE ACCESS
+                        button.roomBtnCtrl
+                          span.icon.icon-check-empty
+                          span.textBtn MANAGE PLUGINS
+                        button.roomBtnCtrl
+                          span.icon.icon-plus
+                          span.textBtn INVITE CONTACTS
+                    div#userControl
+                      span.icon.icon-user
+                      p#login.textBtn #{login},
+                        span#acl user
+                        button#dashboard.roomBtnCtrl.hidden
+                          span.icon.icon-dashboard
+                          span.textBtn DASHBOARD
+            div#body.center
+              div.box#textChatContainer.west
+                div#tcMessagesContainer
+                div#tcInputBox
+                  form#chatForm
+                    input(type='text')#tcMessageInput
+              div#mainCam.center
+              div.box#userListContainer
+                label.textBtn#userListTitle WHO'S HERE?
+                ul#userList
+                  li.userBox.user #{login}
+            div.box#footer.south
+              div#localThumbnails.textBtn
+                label receiving&nbsp;
+                  span#nbFeed 0
+                label &nbsp;feeds
+                div#localVideoContainer.video
+                  div#notActivate
+                    center#centeredLocal
+                      label#feedNotActivate your feed is inactive
+                    center#centerButton
+                      button#joinConference activate
+                  video(autoplay, hidden="true")#localVideo
+              ul#videos
