@@ -17,9 +17,13 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class   TextChat
     constructor     : () ->
+        @jqForm       = ($ 'form#chatForm')
         @jqMessageBox = ($ '#tcMessagesContainer')
-        $('#tcSendMessageBtn').click () =>
-            message = do $('#tcMessageInput').val
+        @jqInput      = ($ 'input#tcMessageInput')
+        @jqForm.submit (event) =>
+            do event.preventDefault
+            message = do @jqInput.val
+            @jqInput.val ''
             @sendMessage message
 
     update          : (message) =>

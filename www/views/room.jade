@@ -54,8 +54,9 @@ block content
                 label.textBoxHeader text Chat
             div#tcMessagesContainer
             div#tcInputBox
-              input(type='text')#tcMessageInput
-              button(type='button')#tcSendMessageBtn Send!
+              form#chatForm
+                input(type='text')#tcMessageInput
+                button(type='submit')#tcSendMessageBtn Send!
         div.box#footer
           div#localThumbnails.textBtn
             label receiving&nbsp;
