@@ -16,7 +16,21 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 transDef =
-    newRoomBtn          : "Create a new Room"
-    joinRoomBtn         : "Join an existing Room"
+    forgotPass                  : "Forgot password?"
+    cancel                      : "Cancel"
+    joinRoomCommit              : "Join the Room"
+    newRoomCommit               : "Create the Room"
+    placeholderConfirmPass      : "Confirm Password"
+    placeholderPass             : "Password"
+    placeholderLogin            : "Nickname"
+    invalidNickname             : "Invalid Nickname"
+    invalidEmail                : "Invalid Email"
+    invalidPassword             : "Invalid Password"
+    invalidURL                  : "Invalid URL"
+    jumpInBtn                   : "Jump in"
+    logInBtn                    : "Log in"
+    signUpBtn                   : "Sign up"
+    newRoomBtn                  : "Create a new Room"
+    joinRoomBtn                 : "Join an existing Room"
 
 exports.transDef = transDef

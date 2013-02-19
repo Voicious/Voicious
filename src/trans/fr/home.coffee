@@ -16,7 +16,21 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 transDef =
-    newRoomBtn          : "Créer un Salon"
-    joinRoomBtn         : "Joindre un Salon"
+    forgotPass                  : "Mot de passe oublié?"
+    cancel                      : "Retour"
+    joinRoomCommit              : "Rejoindre le salon"
+    newRoomCommit               : "Créer le salon"
+    placeholderConfirmPass      : "Confirmer mot de passe"
+    placeholderPass             : "Mot de passe"
+    placeholderLogin            : "Pseudo"
+    invalidNickname             : "Pseudo invalide"
+    invalidEmail                : "Email invalide"
+    invalidPassword             : "Mot de passe invalide"
+    invalidURL                  : "URL invalide"
+    jumpInBtn                   : "Jump in" #No idea for a translation...
+    logInBtn                    : "Connexion"
+    signUpBtn                   : "Inscription"
+    newRoomBtn                  : "Créer un Salon"
+    joinRoomBtn                 : "Rejoindre un Salon"
 
 exports.transDef = transDef
