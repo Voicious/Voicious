@@ -18,7 +18,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Translator
     constructor         : () ->
 
-    getTrans            : (location, view) ->
+    getTrans            : (host, view) ->
+        location = host.split '.'
+        location = location[location.length - 1]
         if location is 'fr'
             return (require "../trans/fr/#{view}").transDef
         return (require "../trans/en/#{view}").transDef

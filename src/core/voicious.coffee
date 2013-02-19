@@ -47,8 +47,6 @@ class Voicious
         # We can't require this before since it'll load its schema in the database
         {Session}       = require './session'
         @app.get '/', Session.withCurrentUser, (req, res) =>
-            location = (req.host).split '.'
-            location = location[location.length - 1]
             options =
                 title           : (@app.get 'title'),
                 hash            : '#jumpIn'
@@ -56,7 +54,7 @@ class Voicious
                 signup_email    : ''
                 name            : ''
                 roomid          : req.query.roomid || ''
-            options.trans = Translator.getTrans(location, 'home')
+            options.trans = Translator.getTrans(req.host, 'home')
             res.render 'home', options
         servicesNames   = Fs.readdirSync (Path.join Config.Paths.Libroot, 'core')
         for serviceName in servicesNames
