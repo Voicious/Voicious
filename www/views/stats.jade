@@ -1,0 +1,26 @@
+extends main
+
+block style
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/stats.css")
+
+block scripts
+     script(type="text/javascript", src="/public/js/vendor/flot/jquery.flot.js")
+
+     script(type="text/javascript")
+        $(document).ready(function() {
+          $.plot($("#chart1"), [ { label: "Rooms", data: #{chart1}, color: "#00AEEF"}], { series: { lines: { show: true }, points: { show: true }}, xaxis: { minTickSize: [1, "day"], mode: "time", timeformat: "%y-%0m-%0d"}, grid: { hoverable: true } });
+          $.plot($("#chart2"), [ { label: "Users", data: #{chart2}, color: "#00AEEF"}], { series: {lines: { show: true }, points: { show: true }}, xaxis: { minTickSize: [1, "day"], mode: "time", timeformat: "%y-%0m-%0d"}, grid: { hoverable: true } });
+        });
+
+block content
+    body
+        div#header
+        div#menu
+            p#room_logo voıċıoųs
+              span#beta Beta
+        div#body
+          h1.title1 Voicious stats page
+          br
+          div#chartContainer
+            div#chart1.chart
+            div#chart2.chart

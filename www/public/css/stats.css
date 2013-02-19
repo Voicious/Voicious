@@ -1,0 +1,65 @@
+#header {
+    position: relative;
+    margin: auto;
+    height: 5px;
+    background: #00aeef;
+}
+
+#menu {
+    position: relative;
+    margin: auto;
+    height: 53px;
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px rgba(255, 255, 255, 0.05);
+}
+
+#room_logo {
+    position: absolute;
+    margin-left: 0.8%; margin-top: 2px;
+    font-family: 'BreeSerif-Regular';
+    color: white;
+    font-size: 30px;
+}
+
+#beta {
+    position:absolute;
+    font-size: 10px;
+    color: #ffffff;
+    margin-top: 32px;
+    margin-left: -51px;
+}
+
+#body {
+    position : absolute;
+    top: 59px;
+    bottom: 152px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.title1 {
+    font-family: "OpenSans-Bold";
+    font-size: 20px;
+    color: #ffffff;
+    margin: 5px;
+    margin-left: 20px;
+}
+
+.title2 {
+    font-family: "OpenSans-Bold";
+    font-size: 14px;
+    color: #9C9C9C;
+    margin: 5px;
+}
+
+.chart {
+    display: inline-block;
+    width: 45%;
+    height: 300px;
+    margin: 20px;
+}
+
+#chart2 {
+    float: right;
+    margin-right: 60px;
+}

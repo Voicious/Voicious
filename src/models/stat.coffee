@@ -16,9 +16,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 ModelDef =
-    c_date  :
-        type    : Date
-        default : Date.now
+    c_date :
+        type    : String
+    nb_user_tmp :
+        type    : Number
 
 AfterModelDef   = (m) =>
 

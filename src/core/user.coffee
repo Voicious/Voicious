@@ -20,6 +20,7 @@ Request         = require 'request'
 md5             = require 'MD5'
 {Errors}        = require './errors'
 Config          = require '../common/config'
+{Stats}         = require './stats'
 
 class _User
     constructor : () ->
@@ -60,7 +61,7 @@ class _User
                 errorCallback e, req, res
             else
                 req.session.uid = body.id
-                callback req, res
+                Stats.countTmpUser req, res, callback
 
     redirtoroom : (req, res) =>
         res.redirect '/room'
