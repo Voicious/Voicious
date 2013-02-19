@@ -75,6 +75,7 @@ class NetworkManager
     sendToAll                   : (message) =>
         for key, val of @connections
             do (key, val) =>
+                message[1] = val.cinfo
                 pc = val.peerConnection
                 pc.tunnel.onsend message
 
@@ -102,7 +103,6 @@ class NetworkManager
         eventName   = args[0]
         cinfos      = args[1]
         infos       = args[2]
-        
         if eventName? and cinfos?
             @onMessagePeers eventName, cinfos
             if infos?
@@ -211,6 +211,11 @@ class NetworkManager
                 pc.addice sdp
     
     onMessageText               : (eventName, cinfos, msg) =>
+        switch eventName
+            when 'message'
+                event = EventManager.getEvent 'receiveTextMessage'
+                if event?
+                    event msg
 
     onSocketClose               : () =>
 

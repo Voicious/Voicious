@@ -60,7 +60,7 @@ toCompile   = [
         sourceDir   : (Path.join 'src', 'frontend')
         destDir     : (Path.join 'www', 'public', 'js')
         files       : [ 'global', 'home', 'room', 'network', 'webRTC', 'event',
-                        'userList', 'utilities', 'queue', 'stats' ]
+                        'userList', 'utilities', 'queue', 'stats', 'textChat' ]
     }
     {
         sourceDir   : (Path.join 'src', 'ws')

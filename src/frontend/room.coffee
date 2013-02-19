@@ -18,7 +18,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @networkManager = NetworkManager '192.168.1.13', 4244
+        @networkManager = NetworkManager '127.0.0.1', 4244
+        @textChat       = new TextChat @networkManager
         do @configureEvents
 
     configureEvents     : () =>
@@ -45,6 +46,14 @@ class Room
             do $('#notActivate').hide
             @joinConference()
 
+Relayout    = (container) =>
+    options =
+        resize : no
+        type   : 'border'
+    container.layout options
+    return () =>
+        container.layout options
+
 $(document).ready ->
     $('#videos').delegate 'li.thumbnail', 'click', () ->
         prevCam = $('#mainCam video')
@@ -58,6 +67,20 @@ $(document).ready ->
             newCam.removeClass 'thumbnailVideo'
             newCam.addClass 'mainCam'
             $('#mainCam').append newCam
+            do window.Relayout
     if do WebRTC.runnable == true
         room = new Room
         do room.start
+
+    container   = ($ '#page')
+    relayout    = Relayout container
+    ($ window).resize relayout
+    if window?
+        window.Relayout = relayout
+###
+    ($ '#footer').resizable {
+        handles   : 'n',
+        stop      : relayout,
+        minHeight : 125
+    }
+###
