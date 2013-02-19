@@ -25,7 +25,7 @@ The Voicious server requires the following Node.js modules to run :
 * Jade (>= 0.27.x)
 * JugglingDB (>= 0.1.x)
 * MD5 (>= 1.0x)
-* Moment (>= 1.7.2)
+* Moment (>= 2.0.0)
 * Request (>= 2.12.0)
 
 
