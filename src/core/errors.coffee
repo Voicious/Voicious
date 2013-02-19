@@ -30,10 +30,16 @@ class Errors
 
     @RenderNotFound : (req, res) ->
         res.status 404
-        options =
-            status      : "404"
-            statusText  : "not_found"
-            errorMsg    : "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
+        if req.url is "/browser"
+            options =
+                status      : "Oops"
+                statusText  : "Wrong browser"
+                errorMsg    : "> Looks like you're using a browser that does not support WebRTC.<br />> Sorry, you can only use Google Chrome for the current beta."
+        else
+            options =
+                status      : "404"
+                statusText  : "not_found"
+                errorMsg    : "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         res.render 'error.jade', options
 
