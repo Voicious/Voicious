@@ -76,7 +76,7 @@ block content
         div#joinRoom
           form#quickJoin_form(method="POST", action="/quickJoin")
             input#joinNickname.brdr(type="text", placeholder="#{trans.placeholderLogin}", required="true", name="name")
-            input#joinUrl.brdr(type="text", placeholder="Room URL", required="true", name="room")
+            input#joinUrl.brdr(type="text", placeholder="#{trans.placeholderRoomURL}", required="true", name="room")
           button#joinRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickJoin_form") #{trans.joinRoomCommit}
           button#joinRoomCancel.grey-blue.btn-submit.txt-shd #{trans.cancel}
       div#logIn.no-selec

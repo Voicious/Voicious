@@ -20,6 +20,7 @@ transDef =
     cancel                      : "Cancel"
     joinRoomCommit              : "Join the Room"
     newRoomCommit               : "Create the Room"
+    placeholderRoomURL          : "Room URL"
     placeholderConfirmPass      : "Confirm Password"
     placeholderPass             : "Password"
     placeholderLogin            : "Nickname"
