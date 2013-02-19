@@ -26,9 +26,11 @@ class Chart
             if @prevPoint isnt item.dataIndex
                 @prevPoint = item.dataIndex
                 do $("#tooltip").remove
-                x = item.datapoint[0].toFixed 2
-                y = item.datapoint[1].toFixed 2
-                @showTooltip item.pageX, item.pageY, item.series.label + " number on " + Date(x) + " = " + y
+                x = item.datapoint[0]
+                y = item.datapoint[1]
+                date = new Date(x)
+                x = do date.toLocaleDateString
+                @showTooltip item.pageX, item.pageY, item.series.label + "' number on " + x + " : " + y
         else
             do $("#tooltip").remove
             @prevPoint = null
