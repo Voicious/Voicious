@@ -49,12 +49,12 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'trans', 'en')
         destDir     : (Path.join 'lib', 'trans', 'en')
-        files       : [ 'home' ]
+        files       : [ 'home', 'room' ]
     }
     {
         sourceDir   : (Path.join 'src', 'trans', 'fr')
         destDir     : (Path.join 'lib', 'trans', 'fr')
-        files       : [ 'home' ]
+        files       : [ 'home', 'room' ]
     }
     {
         sourceDir   : (Path.join 'src', 'frontend')
