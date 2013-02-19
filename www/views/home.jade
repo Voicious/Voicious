@@ -27,70 +27,71 @@ block content
       b#logoBeta Beta
     div#choices.no-selec
       ul.clean.hidden
-        li#jumpInBtn.choice.txt-shd Jump in
-        li#logInBtn.choice.middle-choice.txt-shd Log in
-        li#signUpBtn.choice.txt-shd Sign up
+        li#jumpInBtn.choice.txt-shd #{trans.jumpInBtn}
+        li#logInBtn.choice.middle-choice.txt-shd #{trans.logInBtn}
+        li#signUpBtn.choice.txt-shd #{trans.signUpBtn}
       ul
     div#choicesContainer
       span
         span
           span.stateGroup(rel="newNickname", style="top:5px;")
             span.stateIcon(rel="newNickname")
-            span.errorMessage.none(rel="newNickname") Invalid Nickname
+            span.errorMessage.none(rel="newNickname") #{trans.invalidNickname}
           span
             span.stateGroup(rel="joinNickName", style="top:5px;")
               span.stateIcon(rel="joinNickName")
-              span.errorMessage.none(rel="joinNickName") Invalid Nickname
+              span.errorMessage.none(rel="joinNickName") #{trans.invalidNickname}
             span.stateGroup(rel="joinUrl", style="top:37px;")
               span.stateIcon(rel="joinUrl")
-              span.errorMessage.none(rel="joinUrl") Invalid URL
+              span.errorMessage.none(rel="joinUrl") #{trans.invalidURL}
         span
           span.stateGroup(rel="login_email", style="top:10px;")
             span.stateIcon(rel="login_email")
-            span.errorMessage.none(rel="login_email") Invalid Email
+            span.errorMessage.none(rel="login_email") #{trans.invalidEmail}
           span.stateGroup(rel="login_password", style="top:42px;")
             span.stateIcon(rel="login_password")
-            span.errorMessage.none(rel="login_password") Invalid Password
+            span.errorMessage.none(rel="login_password") #{trans.invalidPassword}
         span
           span.stateGroup(rel="signup_email", style="top:10px;")
             span.stateIcon(rel="signup_email")
-            span.errorMessage.none(rel="signup_email") Invalid Email
+            span.errorMessage.none(rel="signup_email") #{trans.invalidEmail}
           span.stateGroup(rel="signup_password", style="top:43px;")
             span.stateIcon(rel="signup_password")
-            span.errorMessage.none(rel="signup_password", style="top:14px;") Invalid Password
+            span.errorMessage.none(rel="signup_password", style="top:14px;") #{trans.invalidPassword}
           span.stateGroup(rel="signup_password_confirm", style="top:75px;")
             span.stateIcon(rel="signup_password_confirm")
       div#jumpIn.no-selec
         div#stepOne
           button#newRoomBtn.med-green.btn-submit.txt-shd
-            span Create a new Room
+            span #{trans.newRoomBtn}
           button#joinRoomBtn.blue-green.btn-submit.txt-shd
-            span Join an existing Room
+            span #{trans.joinRoomBtn}
         div#newRoom
           form#quickLogin_form(method="POST", action='/quickLogin')
-            input#newNickname.brdr(name="name", type="text", placeholder="Nickname", value="#{name}", required="true")
+            input#newNickname.brdr(name="name", type="text", placeholder="#{trans.placeholderLogin}", value="#{name}", required="true")
           button#newRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickLogin_form")
-            span Create the Room
+            span #{trans.newRoomCommit}
           button#newRoomCancel.grey-blue.btn-submit.txt-shd
-            span Cancel
+            span #{trans.cancel}
         div#joinRoom
           form#quickJoin_form(method="POST", action="/quickJoin")
-            input#joinNickname.brdr(type="text", placeholder="Nickname", required="true", name="name")
-            input#joinUrl.brdr(type="text", placeholder="Room URL", required="true", name="room")
-          button#joinRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickJoin_form") Join the Room
-          button#joinRoomCancel.grey-blue.btn-submit.txt-shd Cancel
+            input#joinNickname.brdr(type="text", placeholder="#{trans.placeholderLogin}", required="true", name="name")
+            input#joinUrl.brdr(type="text", placeholder="#{trans.placeholderRoomURL}", required="true", name="room")
+          button#joinRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickJoin_form") #{trans.joinRoomCommit}
+          button#joinRoomCancel.grey-blue.btn-submit.txt-shd #{trans.cancel}
       div#logIn.no-selec
         form#login_form(method="POST", action="/login")
           input#login_email.brdr(name="mail", type="email", placeholder="Email", value="#{login_email}", required="true")
-          input#login_password.brdr(name="password", type="password", placeholder="Password", required="true")
+          input#login_password.brdr(name="password", type="password", placeholder="#{trans.placeholderPass}", required="true")
         button#login-btn.light-blue.btn-submit.txt-shd(type="submit", form="login_form")
-          span Log in
-        a(href="#password") Forgot password?
+          span #{trans.logInBtn}
+        a(href="#password") #{trans.forgotPass}
       div#signUp.no-selec
+
         form#signup_form(method="POST", action="/user")
           input#signup_email.brdr(name="mail", type="email", placeholder="Email", value="#{signup_email}", required="true")
-          input#signup_password.brdr(name="password", type="password", placeholder="Password", required="true")
-          input#signup_password_confirm.brdr(name="passwordconfirm", type="password", placeholder="Confirm Password", required="true")
-        button#signup-btn.light-blue.btn-submit.txt-shd(type="submit", form="signup_form") Sign Up
+          input#signup_password.brdr(name="password", type="password", placeholder="#{trans.placeholderPass}", required="true")
+          input#signup_password_confirm.brdr(name="passwordconfirm", type="password", placeholder="#{trans.placeholderConfirmPass}", required="true")
+        button#signup-btn.light-blue.btn-submit.txt-shd(type="submit", form="signup_form") #{trans.signUpBtn}
       if locals.error
         p#msg #{error}

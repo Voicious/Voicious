@@ -23,6 +23,7 @@ Path    = require 'path'
 Config      = require '../common/config'
 PopulateDB  = require './populateDB'
 {Errors}    = require './errors'
+{Translator} = require './trans'
 
 # Just implement a _currying_ system, it will be used for routes
 Function.prototype.curry = () ->
@@ -53,6 +54,7 @@ class Voicious
                 signup_email    : ''
                 name            : ''
                 roomid          : req.query.roomid || ''
+            options.trans = Translator.getTrans(req.host, 'home')
             res.render 'home', options
         servicesNames   = Fs.readdirSync (Path.join Config.Paths.Libroot, 'core')
         for serviceName in servicesNames
