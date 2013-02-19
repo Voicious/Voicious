@@ -20,12 +20,13 @@ Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require './errors'
 {Token}     = require './token'
-
+{Translator}= require './trans'
 class _Room
         constructor : () ->
             @token  = Token
 
-        renderRoom : (res, options) =>
+        renderRoom : (res, options, host) =>
+            options.trans = Translator.getTrans(host, 'room')
             res.render 'room', options
 
         roomPage : (req, res, next) =>
@@ -49,7 +50,7 @@ class _Room
                             @token.createToken user.id, req.params.roomid,
                                 (token) =>
                                     options.token = token
-                                    @renderRoom res, options
+                                    @renderRoom res, options, req.host
 
         newRoom : (req, res, param) =>
             Request.post {

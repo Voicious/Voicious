@@ -28,36 +28,36 @@ block content
               div#btnCtrlBox.hidden
                 button.roomBtnCtrl
                   span.icon.icon-lock
-                  span.textBtn MANAGE ACCESS
+                  span.textBtn #{trans.manageAcess}
                 button.roomBtnCtrl
                   span.icon.icon-check-empty
-                  span.textBtn MANAGE PLUGINS
+                  span.textBtn #{trans.managePlugins}
                 button.roomBtnCtrl
                   span.icon.icon-plus
-                  span.textBtn INVITE CONTACTS
+                  span.textBtn #{trans.inviteContacts}
             div#userControl
               span.icon.icon-user
               p#login.textBtn #{login},
-                span#acl user
+                span#acl #{trans.user}
                 button#dashboard.roomBtnCtrl.hidden
                   span.icon.icon-dashboard
-                  span.textBtn DASHBOARD
+                  span.textBtn #{trans.dashboard}
         div#body
           div#mainCam
           div.box#userListContainer
-            label.textBtn#userListTitle WHO'S HERE?
+            label.textBtn#userListTitle #{trans.userListTitle}
             ul#userList
               li.userBox.user #{login}
         div.box#footer
           div#localThumbnails.textBtn
-            label receiving&nbsp;
+            label #{trans.receiving}
               span#nbFeed 0
-            label &nbsp;feeds
+            label #{trans.feeds}
             div#localVideoContainer
               div#notActivate
                 center#centeredLocal
-                  label#feedNotActivate your feed is inactive
+                  label#feedNotActivate #{trans.feedNotActive}
                 center#centerButton
-                  button#joinConference activate
+                  button#joinConference #{trans.activateCam}
               video(autoplay, hidden="true")#localVideo
           ul#videos

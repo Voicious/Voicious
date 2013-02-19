@@ -19,10 +19,11 @@ class Translator
     constructor         : () ->
 
     getTrans            : (host, view) ->
-        location = host.split '.'
-        location = location[location.length - 1]
-        if location is 'fr'
-            return (require "../trans/fr/#{view}").transDef
+        if host isnt undefined
+            location = host.split '.'
+            location = location[location.length - 1]
+            if location is 'fr'
+                return (require "../trans/fr/#{view}").transDef
         return (require "../trans/en/#{view}").transDef
 
 exports.Translator = new Translator
