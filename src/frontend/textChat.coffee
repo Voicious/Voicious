@@ -20,6 +20,10 @@ class   TextChat
         @jqForm       = ($ 'form#chatForm')
         @jqMessageBox = ($ '#tcMessagesContainer')
         @jqInput      = ($ 'input#tcMessageInput')
+
+        @scrollPane   = do @jqMessageBox.jScrollPane
+        @scrollPane   = @jqMessageBox.data 'jsp'
+
         @jqForm.submit (event) =>
             do event.preventDefault
             message = do @jqInput.val
@@ -33,7 +37,7 @@ class   TextChat
 
     update          : (message) =>
         @addMessage message
-    
+
     sendMessage     : (message) =>
         if message? and message isnt ""
             message =
@@ -45,20 +49,22 @@ class   TextChat
                 @addMessage message
 
     addMessage      : (message) =>
-        jqLastElem = do (@jqMessageBox.children 'div.msgBox').last
-        prevTime = jqLastElem.attr 'rel'
-        time     = new Date
+        jqLastElem = do (@jqMessageBox.find 'div.msgBox').last
+        prevTime   = jqLastElem.attr 'rel'
+        time       = new Date
         if (do (jqLastElem.find 'span.author').text) is message.from and ((do time.getTime) - prevTime) <= 120000
             jqLastElem.attr 'rel', do time.getTime
-            (jqLastElem.children 'p.message').append ($ '<br />')
-            (jqLastElem.children 'p.message').append message.text
+            (jqLastElem.find 'p.message').append ($ '<br />')
+            (jqLastElem.find 'p.message').append message.text
         else
-            elem     = ($ '<div>', { class : 'msgBox', rel : do time.getTime })
+            elem       = ($ '<div>', { class : 'msgBox', rel : do time.getTime })
             authorLine = ($ ('<p>')).append ($ '<span>', { class : 'author' }).html message.from
             authorLine.append ($ '<span>', { class : 'time' }).html (do time.getHours + ':' + do time.getMinutes)
             elem.append authorLine
             elem.append ($ '<p>', {class : 'message'}).html message.text
-            @jqMessageBox.append elem
+            (do @scrollPane.getContentPane).append elem
+        do @scrollPane.reinitialise
+        @scrollPane.scrollToPercentY 100, no
 
 TC = TextChat
 
