@@ -34,7 +34,7 @@ toCompile   = [
         sourceDir   : (Path.join 'src', 'core')
         destDir     : (Path.join 'lib', 'core')
         files       : [ 'errors', 'populateDB', 'room', 'session', 'user',
-                        'voicious', 'token', 'trans' ]
+                        'voicious', 'token', 'trans', 'stats' ]
     }
     {
         sourceDir   : (Path.join 'src', 'rest')
@@ -44,7 +44,7 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'models')
         destDir     : (Path.join 'lib', 'models')
-        files       : [ 'user' , 'room', 'token' ]
+        files       : [ 'user' , 'room', 'token', 'stat']
     }
     {
         sourceDir   : (Path.join 'src', 'trans', 'en')
@@ -60,7 +60,7 @@ toCompile   = [
         sourceDir   : (Path.join 'src', 'frontend')
         destDir     : (Path.join 'www', 'public', 'js')
         files       : [ 'global', 'home', 'room', 'network', 'webRTC', 'event',
-                        'userList', 'utilities', 'queue' ]
+                        'userList', 'utilities', 'queue', 'stats' ]
     }
     {
         sourceDir   : (Path.join 'src', 'ws')
