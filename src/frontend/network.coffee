@@ -58,6 +58,9 @@ class NetworkManager
                 )
             baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
+            feed = $("#nbFeed").text()
+            feed = Number(feed) + 1
+            $("#nbFeed").text(feed)
             do @autoZoomWebcam
         options.removestream        = (event) =>
             return
@@ -189,13 +192,11 @@ class NetworkManager
             when 'peer.remove'
                 cinfo     = cinfos
                 peerInfos = @connections[cinfo.cid]
-
                 event = EventManager.getEvent "updateUserList"
                 if event?
                     event peerInfos, "remove"
 
                 peerInfos.peerConnection.close()
-
                 baliseBlockId = "#block" + cinfo.cid
                 $(baliseBlockId).remove()
                 mainCamId = $('#mainCam video').attr 'id'
@@ -203,6 +204,11 @@ class NetworkManager
                     $("#mainCam video").remove()
                     do @autoZoomWebcam
 
+                feed = $("#nbFeed").text()
+                feed = Number(feed) - 1
+                if feed < 0
+                    feed = 0
+                $("#nbFeed").text(feed)
                 delete @connections[cinfo.cid]
 
     onMessageExchangeOffer      : (eventName, cinfos, sdp) =>
