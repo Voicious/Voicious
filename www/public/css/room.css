@@ -156,7 +156,7 @@ div#page {
     margin-left: 7px;
 }
 
-#reportBugForm {
+#reportBugCtn {
     -webkit-box-shadow: inset 0 1px #51626f;
     -moz-box-shadow: inset 0 1px #51626f;
     box-shadow: inset 0 1px #51626f;

@@ -75,8 +75,8 @@ class Room
             do $('#notActivate').hide
             @joinConference()
 
-    sendReport          : (event) ->
-        $(this).attr 'disabled', on
+    sendReport          : () =>
+        $('#sendReport').attr 'disabled', on
         content = do $('#reportBugTextarea').val
         content = content.replace(/(^\s*)|(\s*$)/gi,"");
         content = content.replace(/[ ]{2,}/gi," ");
@@ -86,19 +86,23 @@ class Room
                 url: '/report'
                 data:
                     bug: content
-            $(this).attr 'disabled', off
+            do @removeReport
 
+    removeReport        : () =>
+        do $("#reportBugCtn").remove
+        do $('div.fullscreen').remove
 
     bugReport           : (event) =>
-        ($ 'body').append(
-            '<div id="reportBugForm" class="box">
+        ($ 'body').prepend(
+            '<div class="fullscreen"></div>
+            <div id="reportBugCtn" class="box">
                 <textarea id="reportBugTextarea"></textarea>
                 <center>
                     <button id="sendReport" class="roomBtnCtrl">Send report</button>
                 </center>
             </div>')
+        $('div.fullscreen').click @removeReport
         $('#sendReport').click @sendReport
-
 
     start               : () =>
         do @networkManager.connection
