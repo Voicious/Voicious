@@ -353,7 +353,7 @@ div.msgBox span.time {
     border-radius: 6px;
 }
 
-#localVideo {
+.localVideo {
     height: 100%;
 }
 

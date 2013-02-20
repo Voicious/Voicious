@@ -23,6 +23,17 @@ class NetworkManager
         @connections                = {}
         @queue                      = new Queue
 
+    autoZoomWebcam          : () =>
+        mainCamId = $('#mainCam video').attr 'id'
+        if not mainCamId
+            video = $('#videos li.thumbnail').first()
+            newCam = $(video).find("video").clone()
+            newCamId = newCam.attr 'id'
+            newCam.attr 'id', newCamId + "-mainCam"
+            newCam.removeClass 'thumbnailVideo'
+            newCam.addClass 'mainCam'
+            $('#mainCam').append newCam
+
     createPeerConnection    : (options) =>
         cid               = options.cinfo.cid
         localStream       = window.localStream
@@ -47,6 +58,7 @@ class NetworkManager
                 )
             baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
+            do @autoZoomWebcam
         options.removestream        = (event) =>
             return
         options.getice              = (tunnel, event) =>
@@ -103,6 +115,7 @@ class NetworkManager
         eventName   = args[0]
         cinfos      = args[1]
         infos       = args[2]
+
         if eventName? and cinfos?
             @onMessagePeers eventName, cinfos
             if infos?
@@ -114,7 +127,7 @@ class NetworkManager
         nb      = args[2]
         nbMax   = args[3]
         elem    = args[4]
-        
+
         @queue.addMsgInQueue id, nb, elem
 
         queueLength = Utilities.getMapSize @queue.queue[id]
@@ -143,7 +156,7 @@ class NetworkManager
             eventName   = args[0]
             cinfos      = args[1]
             infos       = args[2]
-            
+
             if eventName? and cinfos? and infos?
                 @onMessageExchangeOffer eventName, cinfos, infos
                 @onMessageText eventName, cinfos, infos
@@ -168,7 +181,7 @@ class NetworkManager
                     cinfo   : cinfos
 
                 peerInfos = @createPeerConnection options
-                
+
                 if peerInfos?
                     event = EventManager.getEvent "updateUserList"
                     if event?
@@ -185,6 +198,10 @@ class NetworkManager
 
                 baliseBlockId = "#block" + cinfo.cid
                 $(baliseBlockId).remove()
+                mainCamId = $('#mainCam video').attr 'id'
+                if mainCamId is "video" + cinfo.cid + "-mainCam"
+                    $("#mainCam video").remove()
+                    do @autoZoomWebcam
 
                 delete @connections[cinfo.cid]
 
@@ -207,9 +224,9 @@ class NetworkManager
             when 'candidate'
                 cinfo       = cinfos
                 pc          = @connections[cinfo.cid].peerConnection
-                
+
                 pc.addice sdp
-    
+
     onMessageText               : (eventName, cinfos, msg) =>
         switch eventName
             when 'message'

@@ -21,6 +21,8 @@ class Room
         @networkManager = NetworkManager '127.0.0.1', 4244
         @textChat       = new TextChat @networkManager
         do @configureEvents
+        do @enableZoomMyCam
+        do @enableZoomCam
 
     configureEvents     : () =>
         EventManager.addEvent "fillUsersList", (users) =>
@@ -36,9 +38,35 @@ class Room
                 @networkManager.negociatePeersOffer stream
                 $('#joinConference').attr "disabled", "disabled"
             onerror     : (e) =>
-        do $(options.video).show
+        $(options.video).removeClass 'hidden'
 
         WebRTC.getUserMedia(options)
+
+    checkZoom   : (context, htmlClass) =>
+        prevCam = $('#mainCam video')
+        prevId = -1
+        newId = $(context).attr('id')
+        if prevCam
+            prevId = prevCam.attr 'id'
+        if newId + "-mainCam" isnt prevId
+            do prevCam.remove
+            newCam = $(context).clone()
+            newCamId = newCam.attr 'id'
+            newCam.attr 'id', newCamId + "-mainCam"
+            newCam.removeClass htmlClass
+            newCam.addClass 'mainCam'
+            $('#mainCam').append newCam
+            do window.Relayout
+
+    enableZoomMyCam     : () =>
+        that = this
+        $('#localVideo:visible').click () ->
+            that.checkZoom this, 'localVideo'
+
+    enableZoomCam       : () =>
+        that = this
+        $('#videos').delegate 'li.thumbnail video', 'click', () ->
+            that.checkZoom this, 'thumbnailVideo'
 
     start               : () =>
         do @networkManager.connection
@@ -55,19 +83,6 @@ Relayout    = (container) =>
         container.layout options
 
 $(document).ready ->
-    $('#videos').delegate 'li.thumbnail', 'click', () ->
-        prevCam = $('#mainCam video')
-        prevId = -1
-        newId = $(this).find('video').attr('id')
-        if prevCam
-            prevId = prevCam.attr 'id'
-        if newId isnt prevId
-            do prevCam.remove
-            newCam = $(this).find('video').clone()
-            newCam.removeClass 'thumbnailVideo'
-            newCam.addClass 'mainCam'
-            $('#mainCam').append newCam
-            do window.Relayout
     if do WebRTC.runnable == true
         room = new Room
         do room.start
