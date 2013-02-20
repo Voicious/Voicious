@@ -457,6 +457,7 @@ ul {
     padding: 4px;
     left: 70px;
     top: -5px;
+    display:none;
 }
 #roomNameArrow:after, #roomNameArrow:before {
     bottom: 100%;
@@ -492,6 +493,7 @@ ul {
     padding: 4px;
     right: 149px;
     top: -58px;
+    display:none;
 }
 #reportBugArrow:after, #reportBugArrow:before {
     left: 100%;
@@ -526,6 +528,7 @@ ul {
     padding: 4px;
     bottom: 9px;
     left: 28.4%;
+    display:none;
 }
 #textChatArrow:after, #textChatArrow:before {
     right: 100%;
@@ -560,6 +563,7 @@ ul {
     padding: 4px;
     top: 79px;
     left: 107px;
+    display:none;
 }
 #activateArrow:after, #activateArrow:before {
     right: 100%;
@@ -594,6 +598,7 @@ ul {
     padding: 4px;
     right: 11.2%;
     top: 38px;
+    display:none;
 }
 #userListArrow:after, #userListArrow:before {
     left: 100%;
@@ -617,4 +622,17 @@ ul {
     border-width: 21px;
     top: 50%;
     margin-top: -21px;
+}
+
+#endMessage {
+    position: absolute;
+    display: none;
+    width: 109px;
+    padding: 4px;
+    border: 4px solid #00aeef;
+    background: #16181a;
+    font-family: 'OpenSans-Bold';
+    color: white;
+    left: 45%;
+    top: 51%;
 }

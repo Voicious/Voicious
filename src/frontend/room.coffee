@@ -72,11 +72,30 @@ class Room
 
     tutorialMode        : () =>
         $('div#body').append '<div id="roomNameArrow">Here is your room id. Share it with your friends if you want them to join! You can also share your browser url directly.</div>'
-        $('div#body').append '<div id="reportBugArrow" class="arrow_box">Click here if you want to report a bug.</div>'
-        $('div#body').append '<div id="textChatArrow" class="arrow_box">Here you can chat with you friends!</div>'
-        $('div#footer').append '<div id="activateArrow" class="arrow_box">Click here to activate your camera.</div>'
-        $('div#body').append '<div id="userListArrow" class="arrow_box">Here is a list of users currently in the room.</div>'
+        $('div#body').append '<div id="reportBugArrow">Click here if you want to report a bug.</div>'
+        $('div#body').append '<div id="textChatArrow">Here you can chat with you friends!</div>'
+        $('div#footer').append '<div id="activateArrow">Click here to activate your camera.</div>'
+        $('div#body').append '<div id="userListArrow">Here is a list of users currently in the room.</div>'
 
+        $('div#body').append '<div id="endMessage">Enjoy Voicious ;)</div>'
+        @startAnimation $("div[id$='Arrow']"), 1000, 400
+        
+    startAnimation       : (elems, interval, speed) =>
+        i = elems.length
+        fadeInTime = interval * 5
+        while i >= 0
+            $(elems[i]).delay(fadeInTime).fadeIn speed
+            fadeInTime -= interval
+            i--
+        i = elems.length
+        fadeOutTime = interval * 10
+        while i >= 0
+            $(elems[i]).delay(fadeOutTime).fadeOut speed
+            fadeOutTime -= interval
+            i--
+        $('div#endMessage').delay(interval * 10 + 4 * interval).fadeIn speed
+        $('div#endMessage').delay(interval * 10).fadeOut speed
+ 
     start               : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
