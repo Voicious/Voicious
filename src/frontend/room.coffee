@@ -41,17 +41,19 @@ class Room
         $(options.video).removeClass 'hidden'
 
         WebRTC.getUserMedia(options)
-    
-    checkZoom   : (context, id) =>
+
+    checkZoom   : (context, htmlClass) =>
         prevCam = $('#mainCam video')
         prevId = -1
         newId = $(context).attr('id')
         if prevCam
             prevId = prevCam.attr 'id'
-        if newId isnt prevId
+        if newId + "-mainCam" isnt prevId
             do prevCam.remove
             newCam = $(context).clone()
-            newCam.removeClass id
+            newCamId = newCam.attr 'id'
+            newCam.attr 'id', newCamId + "-mainCam"
+            newCam.removeClass htmlClass
             newCam.addClass 'mainCam'
             $('#mainCam').append newCam
             do window.Relayout
