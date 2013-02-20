@@ -44,7 +44,7 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'models')
         destDir     : (Path.join 'lib', 'models')
-        files       : [ 'user' , 'room', 'token', 'stat']
+        files       : [ 'user' , 'room', 'token', 'stat',  'bug' ]
     }
     {
         sourceDir   : (Path.join 'src', 'trans', 'en')
