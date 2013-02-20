@@ -52,6 +52,12 @@ class _Room
                                     options.token = token
                                     @renderRoom res, options, req.host
 
+        reportBug       : (req, res) =>
+            Request.post {
+                json    : req.body
+                url     : "#{Config.Restapi.Url}/bug"
+            }, null
+
         newRoom : (req, res, param) =>
             Request.post {
                 json    : param
@@ -70,3 +76,5 @@ exports.Room    = new _Room
 exports.Routes  =
     get :
         '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage, exports.Room.redirectRoom)
+    post :
+        '/report'       : exports.Room.reportBug
