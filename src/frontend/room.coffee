@@ -25,6 +25,7 @@ class Room
         do @configureEvents
         do @enableZoomMyCam
         do @enableZoomCam
+        do @tutorialMode
 
     configureEvents     : () =>
         EventManager.addEvent "fillUsersList", (users) =>
@@ -68,6 +69,13 @@ class Room
         that = this
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
+
+    tutorialMode        : () =>
+        $('div#body').append '<div id="roomNameArrow">Here is your room id. Share it with your friends if you want them to join! You can also share your browser url directly.</div>'
+        $('div#body').append '<div id="reportBugArrow" class="arrow_box">Click here if you want to report a bug.</div>'
+        $('div#body').append '<div id="textChatArrow" class="arrow_box">Here you can chat with you friends!</div>'
+        $('div#footer').append '<div id="activateArrow" class="arrow_box">Click here to activate your camera.</div>'
+        $('div#body').append '<div id="userListArrow" class="arrow_box">Here is a list of users currently in the room.</div>'
 
     start               : () =>
         do @networkManager.connection
