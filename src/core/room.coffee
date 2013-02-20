@@ -16,6 +16,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Request     = require 'request'
+nodemailer  = require 'nodemailer'
+moment      = require 'moment'
+
 Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require './errors'
@@ -23,6 +26,7 @@ Config      = require '../common/config'
 {Translator}= require './trans'
 class _Room
         constructor : () ->
+            @transport = nodemailer.createTransport('Sendmail');
             @token  = Token
 
         renderRoom : (res, options, host) =>
@@ -52,6 +56,21 @@ class _Room
                                     options.token = token
                                     @renderRoom res, options, req.host
 
+        reportBug       : (req, res) =>
+            @transport.sendMail({
+                from    : "Voicious bugs<no-reply@voicious.com>"
+                to      : 'voicious_2014@labeip.epitech.eu'
+                subject : 'Bug Report ' + moment().format()
+                text    : req.body.bug})
+            Request.post {
+                json    : req.body
+                url     : "#{Config.Restapi.Url}/bug"
+            }, (e, r, body) =>
+                if e? or r.statusCode > 200
+                    throw new Errors.Error
+                else
+                    res.send 200
+
         newRoom : (req, res, param) =>
             Request.post {
                 json    : param
@@ -70,3 +89,5 @@ exports.Room    = new _Room
 exports.Routes  =
     get :
         '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage, exports.Room.redirectRoom)
+    post :
+        '/report'       : exports.Room.reportBug

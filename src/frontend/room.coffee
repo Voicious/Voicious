@@ -18,8 +18,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @networkManager = NetworkManager '127.0.0.1', 4244
         @textChat       = new TextChat @networkManager
+        @networkManager = NetworkManager '192.168.1.65', 4244
+        $('#reportBug').click @bugReport
         do @configureEvents
         do @enableZoomMyCam
         do @enableZoomCam
@@ -67,6 +68,41 @@ class Room
         that = this
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
+
+    start               : () =>
+        do @networkManager.connection
+        $('#joinConference').click () =>
+            do $('#notActivate').hide
+            @joinConference()
+
+    sendReport          : () =>
+        $('#sendReport').attr 'disabled', on
+        content = do $('#reportBugTextarea').val
+        content = content.replace(/(^\s*)|(\s*$)/gi,"");
+        content = content.replace(/[ ]{2,}/gi," ");
+        if content isnt ""
+            $.ajax
+                type: 'POST'
+                url: '/report'
+                data:
+                    bug: content
+            do @removeReport
+
+    removeReport        : () =>
+        do $("#reportBugCtn").remove
+        do $('div.fullscreen').remove
+
+    bugReport           : (event) =>
+        ($ 'body').prepend(
+            '<div class="fullscreen"></div>
+            <div id="reportBugCtn" class="box">
+                <textarea id="reportBugTextarea"></textarea>
+                <center>
+                    <button id="sendReport" class="roomBtnCtrl">Send report</button>
+                </center>
+            </div>')
+        $('div.fullscreen').click @removeReport
+        $('#sendReport').click @sendReport
 
     start               : () =>
         do @networkManager.connection

@@ -33,7 +33,7 @@ class Api
         }
         @models         = []
         @configured     = false
-    
+
     defineGet       : (model) =>
         @app.get '/api/' + model, (req, res) =>
             if req.query

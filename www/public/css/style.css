@@ -55,6 +55,15 @@
     padding: 0;
 }
 
+.fullscreen {
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
 .hidden {
     visibility: hidden;
 }
