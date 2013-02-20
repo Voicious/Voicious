@@ -60,7 +60,7 @@ class Room
 
     enableZoomMyCam     : () =>
         that = this
-        $('#localVideo:visible').click () ->
+        $('#localVideo').click () ->
             that.checkZoom this, 'localVideo'
 
     enableZoomCam       : () =>
