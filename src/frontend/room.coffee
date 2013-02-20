@@ -39,8 +39,7 @@ class Room
                 @networkManager.negociatePeersOffer stream
                 $('#joinConference').attr "disabled", "disabled"
             onerror     : (e) =>
-        $(options.video).removeClass 'hidden'
-
+        $(options.video).removeClass 'none'
         WebRTC.getUserMedia(options)
 
     checkZoom   : (context, htmlClass) =>
