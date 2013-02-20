@@ -47,6 +47,13 @@ class NetworkManager
                 )
             baliseName          = '#' + baliseVideoId
             $(baliseName).attr 'src', window.URL.createObjectURL(event.stream)
+            mainCamId = $('#mainCam video').attr 'id'
+            if not mainCamId
+                video = $('#videos li.thumbnail').first()
+                newCam = $(video).find("video").clone()
+                newCam.removeClass 'thumbnailVideo'
+                newCam.addClass 'mainCam'
+                $('#mainCam').append newCam
         options.removestream        = (event) =>
             return
         options.getice              = (tunnel, event) =>
