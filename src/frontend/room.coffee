@@ -76,7 +76,6 @@ class Room
         $('div#body').append '<div id="textChatArrow">Here you can chat with you friends!</div>'
         $('div#footer').append '<div id="activateArrow">Click here to activate your camera.</div>'
         $('div#body').append '<div id="userListArrow">Here is a list of users currently in the room.</div>'
-
         $('div#body').append '<div id="endMessage">Enjoy Voicious ;)</div>'
         @startAnimation $("div[id$='Arrow']"), 1000, 400
         
@@ -95,7 +94,11 @@ class Room
             i--
         $('div#endMessage').delay(interval * 10 + 4 * interval).fadeIn speed
         $('div#endMessage').delay(interval * 10).fadeOut speed
- 
+        $('div#body').append '<div id="reportBugArrow" class="arrow_box">Click here if you want to report a bug.</div>'
+        $('div#body').append '<div id="textChatArrow" class="arrow_box">Here you can chat with you friends!</div>'
+        $('div#footer').append '<div id="activateArrow" class="arrow_box">Click here to activate your camera.</div>'
+        $('div#body').append '<div id="userListArrow" class="arrow_box">Here is a list of users currently in the room.</div>'
+
     start               : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
