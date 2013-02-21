@@ -77,7 +77,8 @@ class Room
 
     sendReport          : () =>
         $('#sendReport').attr 'disabled', on
-        content = do $('#reportBugTextarea').val
+        textArea = $('#reportBugTextarea')
+        content = do textArea.val
         content = content.replace(/(^\s*)|(\s*$)/gi,"");
         content = content.replace(/[ ]{2,}/gi," ");
         if content isnt ""
@@ -86,7 +87,9 @@ class Room
                 url: '/report'
                 data:
                     bug: content
+            textArea.val ""
             do @hideReport
+        $('#sendReport').attr 'disabled', off
 
     hideReport        : () =>
         $("#reportBugCtn").addClass 'none'
