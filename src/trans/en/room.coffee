@@ -28,5 +28,11 @@ transDef =
     activateCam         : "activate"
     reportBtn           : "report bug"
     sendReportBtn       : "send"
-
+    tutorialModeBtn     : "Tutorial"
+    roomNameArrow       : "Here is your room id. Share it with your friends if you want them to join! You can also share your browser url directly."
+    reportBugArrow      : "Click here if you want to report a bug."
+    textChatArrow       : "Here you can chat with you friends!"
+    activateArrow       : "Click here to activate your camera."
+    userListArrow       : "Here is a list of users currently in the room."
+    endMessage          : "Enjoy Voicious ;)"
 exports.transDef = transDef

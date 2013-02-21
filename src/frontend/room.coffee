@@ -22,10 +22,10 @@ class Room
             @networkManager = NetworkManager window.ws.Host, window.ws.Port
             @textChat       = new TextChat @networkManager
         $('#reportBug').click @bugReport
+        $('#tutorialMode').click @startTutorial 
         do @configureEvents
         do @enableZoomMyCam
         do @enableZoomCam
-        do @tutorialMode
 
     configureEvents     : () =>
         EventManager.addEvent "fillUsersList", (users) =>
@@ -115,6 +115,12 @@ class Room
         @startAnimation $("div[id$='Arrow']"), 1000, 400
         
     startAnimation       : (elems, interval, speed) =>
+
+    startTutorial      : () =>
+        $('#tutorialMode').attr 'disabled', 'disabled'
+        elems = $("div[id$='Arrow']")
+        interval = 1000
+        speed = 400
         i = elems.length
         fadeInTime = interval * 5
         while i >= 0
@@ -126,9 +132,13 @@ class Room
         while i < elems.length
             $(elems[i]).delay(fadeOutTime).fadeOut speed
             i++
-        $('div#endMessage').delay(fadeOutTime).fadeIn speed
-        $('div#endMessage').delay(3000).fadeOut speed
- 
+        $('div#endMessage').delay(fadeOutTime * 2).fadeIn speed
+        $('div#endMessage').delay(fadeOutTime * 2).fadeOut speed
+        setTimeout @enableTutorialBtn, fadeOutTime * 4
+
+    enableTutorialBtn   : () =>
+        $('#tutorialMode').removeAttr 'disabled'
+        
     start               : () =>
         do @networkManager.connection
         $('#joinConference').click () =>

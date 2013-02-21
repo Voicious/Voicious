@@ -51,14 +51,16 @@ block content
                         p#room_url
                           span#room_text #{room}
                         button#shutdown.icon.icon-off
-                      div#btnCtrlBox.hidden
-                        button.roomBtnCtrl
+                      div#btnCtrlBox
+                        button#tutorialMode.roomBtnCtrl
+                          span.textBtn #{trans.tutorialModeBtn}
+                        button.roomBtnCtrl.hidden
                           span.icon.icon-lock
                           span.textBtn #{trans.manageAcess}
-                        button.roomBtnCtrl
+                        button.roomBtnCtrl.hidden
                           span.icon.icon-check-empty
                           span.textBtn #{trans.managePlugins}
-                        button.roomBtnCtrl
+                        button.roomBtnCtrl.hidden
                           span.icon.icon-plus
                           span.textBtn #{trans.inviteContacts}
                     div#userControl
@@ -79,6 +81,11 @@ block content
                 label.textBtn#userListTitle #{trans.userListTitle}
                 ul#userList
                   li.userBox.user #{login}
+                div#roomNameArrow #{trans.roomNameArrow}
+                div#reportBugArrow #{trans.reportBugArrow}
+                div#textChatArrow #{trans.textChatArrow}
+                div#userListArrow #{trans.userListArrow}
+                div#endMessage #{trans.endMessage}
             div.box#footer.south
               div#localThumbnails.textBtn
                 label #{trans.receiving}
@@ -92,3 +99,4 @@ block content
                       button#joinConference #{trans.activateCam}
                   video(autoplay)#localVideo.localVideo.none
               ul#videos
+                div#activateArrow #{trans.activateArrow}

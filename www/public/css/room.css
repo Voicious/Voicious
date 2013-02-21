@@ -552,8 +552,9 @@ ul {
     color: white;
     border: 4px solid #00aeef;
     padding: 4px;
-    top: 79px;
-    left: 107px;
+    width: 241px;
+    top: 78px;
+    left: -4px;
     display:none;
 }
 #activateArrow:after, #activateArrow:before {
