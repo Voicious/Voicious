@@ -76,7 +76,8 @@ class Room
 
     sendReport          : () =>
         $('#sendReport').attr 'disabled', on
-        content = do $('#reportBugTextarea').val
+        textArea = $('#reportBugTextarea')
+        content = do textArea.val
         content = content.replace(/(^\s*)|(\s*$)/gi,"");
         content = content.replace(/[ ]{2,}/gi," ");
         if content isnt ""
@@ -85,22 +86,19 @@ class Room
                 url: '/report'
                 data:
                     bug: content
-            do @removeReport
+            textArea.val ""
+            do @hideReport
+        $('#sendReport').attr 'disabled', off
 
-    removeReport        : () =>
-        do $("#reportBugCtn").remove
-        do $('div.fullscreen').remove
+    hideReport        : () =>
+        $("#reportBugCtn").addClass 'none'
+        $('div.fullscreen').addClass 'none'
 
     bugReport           : (event) =>
-        ($ 'body').prepend(
-            '<div class="fullscreen"></div>
-            <div id="reportBugCtn" class="box">
-                <textarea id="reportBugTextarea"></textarea>
-                <center>
-                    <button id="sendReport" class="roomBtnCtrl">Send report</button>
-                </center>
-            </div>')
-        $('div.fullscreen').click @removeReport
+        fullscreen = $('div.fullscreen')
+        fullscreen.removeClass 'none'
+        fullscreen.click @hideReport
+        $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
     start               : () =>

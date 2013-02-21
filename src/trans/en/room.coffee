@@ -26,5 +26,7 @@ transDef =
     receiving           : "receiving "
     feeds               : " feeds"
     activateCam         : "activate"
+    reportBtn           : "report bug"
+    sendReportBtn       : "send"
 
 exports.transDef = transDef

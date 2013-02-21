@@ -18,12 +18,17 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Translator
     constructor         : () ->
 
-    getTrans            : (host, view) ->
+    getDomain           : (host) ->
+        location = undefined
         if host isnt undefined
             location = host.split '.'
             location = location[location.length - 1]
-            if location is 'fr'
-                return (require "../trans/fr/#{view}").transDef
+        return location
+
+    getTrans            : (host, view) ->
+        location = @getDomain host
+        if location is 'fr'
+            return (require "../trans/fr/#{view}").transDef
         return (require "../trans/en/#{view}").transDef
 
 exports.Translator = new Translator
