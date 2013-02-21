@@ -32,23 +32,26 @@ class Errors
         res.status 404
         if req.url is "/browser"
             options =
-                status      : "Oops"
-                statusText  : "Wrong browser"
-                errorMsg    : "> Looks like you're using a browser that does not support WebRTC.<br />> Sorry, you can only use Google Chrome for the current beta."
+                status          : "Oops"
+                statusText      : "Wrong browser"
+                errorMsg        : "> Looks like you're using a browser that does not support WebRTC.<br />> Sorry, you can only use Google Chrome for the current beta."
+                year            : do (new Date()).getFullYear
         else
             options =
-                status      : "404"
-                statusText  : "not_found"
-                errorMsg    : "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
+                status          : "404"
+                statusText      : "not_found"
+                errorMsg        : "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
+                year            : do (new Date()).getFullYear
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         res.render 'error.jade', options
 
     @RenderError : (req, res) ->
         res.status 500
         options =
-            status      : "500"
-            statusText  :"server_error"
-            errorMsg    : "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
+            status              : "500"
+            statusText          : "server_error"
+            errorMsg            : "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
+            year                : do (new Date()).getFullYear
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         res.render 'error.jade', options
 
