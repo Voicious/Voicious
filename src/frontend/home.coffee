@@ -38,6 +38,8 @@ class JumpInStep
         (do @_jqCancel.get).click @hide
 
     display : (event) =>
+        (do @_jqCancel.get).attr 'disabled', off
+        (do @_jqBtn.get).attr 'disabled', on
         for elem in do (do @_jqDiv.get).siblings
             elemName = $(elem).attr 'id'
             if elemName isnt @name and elemName isnt (do @father._jqFirstStep.get).attr 'id'
@@ -50,6 +52,8 @@ class JumpInStep
         }, 600
 
     hide : (event) =>
+        (do @_jqBtn.get).attr 'disabled', off
+        (do @_jqCancel.get).attr 'disabled', on
         do HideAllStates
         do @father.show
         (do @_jqDiv.get).fadeTo 0.99
@@ -91,7 +95,7 @@ class ChoiceForm
         (do @_jqElem.get).addClass 'displayed'
         window.location.hash    = @name
         (do @_jqElem.get).fadeIn 600
- 
+
     displayFieldIcon : (field, ok) =>
         jqIcon      = ($ 'body').find "span.stateIcon[rel=#{field}]"
         jqMessage   = ($ 'body').find "span.errorMessage[rel=#{field}]"
