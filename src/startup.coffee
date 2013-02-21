@@ -28,8 +28,8 @@ WriteLog  = (fd, data) =>
 processes = []
 
 if Config.Voicious.Enabled
-    voiciousAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.access.log'), 'w'
-    voiciousErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.error.log'), 'w'
+    voiciousAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.access.log'), 'a+'
+    voiciousErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.error.log'), 'a+'
     voicious          = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'core', 'voicious.js')]
     voicious.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
@@ -40,8 +40,8 @@ if Config.Voicious.Enabled
     processes.push voicious
 
 if Config.Restapi.Enabled
-    restAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'rest.access.log'), 'w'
-    restErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'rest.error.log'), 'w'
+    restAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'rest.access.log'), 'a+'
+    restErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'rest.error.log'), 'a+'
     rest          = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'rest', 'api.js')]
     rest.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
@@ -52,8 +52,8 @@ if Config.Restapi.Enabled
     processes.push voicious
     
 if Config.Websocket.Enabled
-    wsAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'ws.access.log'), 'w'
-    wsErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'ws.error.log'), 'w'
+    wsAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'ws.access.log'), 'a+'
+    wsErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'ws.error.log'), 'a+'
     voicious    = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'ws', 'websocket.js')]
     voicious.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
