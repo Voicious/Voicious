@@ -27,6 +27,11 @@ block scripts
 
 block content
     body
+        div.fullscreen.none
+        div#reportBugCtn.box.none
+          textarea#reportBugTextarea
+          center
+            button#sendReport.roomBtnCtrl Send Report
         div#page.layout
             div.north
                 div#header
@@ -56,7 +61,7 @@ block content
                         span#acl #{trans.user}
                       button#reportBug.roomBtnCtrl
                           span.icon.icon-dashboard
-                          span.textBtn Report Bug
+                          span.textBtn #{trans.reportBtn}
             div#body.center
               div.box#textChatContainer.west
                 div#tcMessagesContainer
