@@ -105,6 +105,29 @@ class Room
             i++
         $('div#endMessage').delay(time).fadeIn speed
         $('div#endMessage').delay(time).fadeOut speed
+        i = 0
+        time = interval * 5
+        while i < elems.length
+            $(elems[i]).delay(time).fadeOut speed
+            i++
+        $('div#endMessage').delay(time).fadeIn speed
+        $('div#endMessage').delay(time).fadeOut speed
+        @startAnimation $("div[id$='Arrow']"), 1000, 400
+        
+    startAnimation       : (elems, interval, speed) =>
+        i = elems.length
+        fadeInTime = interval * 5
+        while i >= 0
+            $(elems[i]).delay(fadeInTime).fadeIn speed
+            fadeInTime -= interval
+            i--
+        i = 0
+        fadeOutTime = interval * 5
+        while i < elems.length
+            $(elems[i]).delay(fadeOutTime).fadeOut speed
+            i++
+        $('div#endMessage').delay(fadeOutTime).fadeIn speed
+        $('div#endMessage').delay(3000).fadeOut speed
  
     start               : () =>
         do @networkManager.connection
