@@ -77,14 +77,14 @@ class Room
         $('div#footer').append '<div id="activateArrow">Click here to activate your camera.</div>'
         $('div#body').append '<div id="userListArrow">Here is a list of users currently in the room.</div>'
         $('div#body').append '<div id="endMessage">Enjoy Voicious ;)</div>'
-        @startAnimation $("div[id$='Arrow']"), 1000, 400
+        @startAnimation $("div[id$='Arrow']"), 5000, 400
         
     startAnimation       : (elems, interval, speed) =>
         i = elems.length
-        fadeInTime = interval * 5
+        time = interval * 5
         while i >= 0
-            $(elems[i]).delay(fadeInTime).fadeIn speed
-            fadeInTime -= interval
+            $(elems[i]).delay(time).fadeIn speed
+            time -= interval
             i--
         i = elems.length
         fadeOutTime = interval * 10
@@ -98,7 +98,14 @@ class Room
         $('div#body').append '<div id="textChatArrow" class="arrow_box">Here you can chat with you friends!</div>'
         $('div#footer').append '<div id="activateArrow" class="arrow_box">Click here to activate your camera.</div>'
         $('div#body').append '<div id="userListArrow" class="arrow_box">Here is a list of users currently in the room.</div>'
-
+        i = 0
+        time = interval * 5
+        while i < elems.length
+            $(elems[i]).delay(time).fadeOut speed
+            i++
+        $('div#endMessage').delay(time).fadeIn speed
+        $('div#endMessage').delay(time).fadeOut speed
+ 
     start               : () =>
         do @networkManager.connection
         $('#joinConference').click () =>

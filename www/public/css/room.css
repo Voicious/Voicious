@@ -438,15 +438,6 @@ ul {
 }
 
 /* Turorial arrows */
-#reportBugArrow {
-}
-#textChatArrow {
-}
-#activateArrow {
-}
-#userListArrow {
-}
-
 #roomNameArrow {
     position: absolute;
     background: #16181a;
@@ -455,7 +446,7 @@ ul {
     border: 4px solid #00aeef;
     width: 402px;
     padding: 4px;
-    left: 70px;
+    left: 35px;
     top: -5px;
     display:none;
 }
