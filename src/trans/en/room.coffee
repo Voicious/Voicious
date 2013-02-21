@@ -35,4 +35,5 @@ transDef =
     activateArrow       : "Click here to activate your camera."
     userListArrow       : "Here is a list of users currently in the room."
     endMessage          : "Enjoy Voicious ;)"
+
 exports.transDef = transDef
