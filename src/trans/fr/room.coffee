@@ -32,7 +32,7 @@ transDef =
     roomNameArrow       : "Voici le nom du salon. Partagez le avec vos amis afin qu'ils vous rejoignent. Vous pouvez aussi partager votre url de navigateur directement."
     reportBugArrow      : "Cliquez ici afin de signaler un bug"
     textChatArrow       : "Vous pouvez chatter avec vos amis !"
-    activateArrow       : "Cliquez ici pour activer votre caméra."
+    activateArrow       : "Clickez ici afin d'activer la caméra."
     userListArrow       : "Voici la liste de tous les utilisateurs présents dans le salon."
     endMessage          : "Bonne utilisation ;)"
 

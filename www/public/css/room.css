@@ -444,7 +444,7 @@ ul {
     font-family: 'OpenSans-Bold';
     color: white;
     border: 4px solid #00aeef;
-    width: 402px;
+    width: 509px;
     padding: 4px;
     left: 35px;
     top: -5px;
@@ -552,7 +552,7 @@ ul {
     color: white;
     border: 4px solid #00aeef;
     padding: 4px;
-    width: 241px;
+    width: 240px;
     top: 78px;
     left: -4px;
     display:none;
@@ -619,7 +619,7 @@ ul {
 #endMessage {
     position: absolute;
     display: none;
-    width: 109px;
+    width: auto;
     padding: 4px;
     border: 4px solid #00aeef;
     background: #16181a;
