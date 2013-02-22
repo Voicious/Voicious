@@ -43,6 +43,8 @@ class _Room
                             title   : 'Voicious'
                             login   : user.name
                             room    : req.params.roomid
+                            wsHost  : Config.Websocket.Hostname.External
+                            wsPort  : Config.Websocket.Port
                     user.id_room = req.params.roomid
                     Request.put {
                         json    : user

@@ -24,6 +24,12 @@ block scripts
         if ("#{login}" !== "") {
             window.CurrentUser = "#{login}";
         }
+        if ("#{wsHost}" !== "" && "#{wsPort}" !== "") {
+            window.ws          = {
+                Host : "#{wsHost}",
+                Port : parseInt("#{wsPort}")
+            };
+        }
 
 block content
     body

@@ -18,8 +18,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Room
     constructor         : () ->
         @userList       = new UserList
-        @textChat       = new TextChat @networkManager
-        @networkManager = NetworkManager '192.168.1.65', 4244
+        if window.ws? and window.ws.Host? and window.ws.Port?
+            @networkManager = NetworkManager window.ws.Host, window.ws.Port
+            @textChat       = new TextChat @networkManager
         $('#reportBug').click @bugReport
         do @configureEvents
         do @enableZoomMyCam
