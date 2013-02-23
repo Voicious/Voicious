@@ -28,7 +28,7 @@ transDef =
     activateCam         : "activate"
     reportBtn           : "report bug"
     sendReportBtn       : "send"
-    tutorialModeBtn     : "Tutorial"
+    tutorialModeBtn     : "help"
     roomNameArrow       : "Here is your room id. Share it with your friends if you want them to join! You can also share your browser url directly."
     reportBugArrow      : "Click here if you want to report a bug."
     textChatArrow       : "Here you can chat with you friends!"

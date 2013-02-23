@@ -28,7 +28,7 @@ transDef =
     activateCam         : "activer"
     reportBtn           : "reporter un bug"
     sendReportBtn       : "envoyer"
-    tutorialModeBtn     : "Tutoriel"
+    tutorialModeBtn     : "aide"
     roomNameArrow       : "Voici le nom du salon. Partagez le avec vos amis afin qu'ils vous rejoignent. Vous pouvez aussi partager votre url de navigateur directement."
     reportBugArrow      : "Cliquez ici afin de signaler un bug"
     textChatArrow       : "Vous pouvez chatter avec vos amis !"

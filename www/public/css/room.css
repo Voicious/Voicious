@@ -620,7 +620,8 @@ ul {
     position: absolute;
     display: none;
     width: auto;
-    padding: 4px;
+    font-size: 18px;
+    padding: 7px;
     border: 4px solid #00aeef;
     background: #16181a;
     font-family: 'OpenSans-Bold';
