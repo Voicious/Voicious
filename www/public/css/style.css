@@ -49,6 +49,7 @@
 .icon-off:before { content : '\f011'; }
 .icon-share:before { content : '\f064'; }
 .icon-lock:before { content : '\f023'; }
+.icon-help:before { content : '\f059'; }
 
 * {
     margin: 0;
