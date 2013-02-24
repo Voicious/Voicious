@@ -436,3 +436,196 @@ ul {
     margin: 0;
     padding: 0;
 }
+
+/* Turorial arrows */
+#roomNameArrow {
+    position: absolute;
+    background: #16181a;
+    font-family: 'OpenSans-Bold';
+    color: white;
+    border: 4px solid #00aeef;
+    width: 509px;
+    padding: 4px;
+    left: 35px;
+    top: -5px;
+    display:none;
+}
+#roomNameArrow:after, #roomNameArrow:before {
+    bottom: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+#roomNameArrow:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-bottom-color: #16181a;
+    border-width: 15px;
+    left: 50%;
+    margin-left: -15px;
+}
+#roomNameArrow:before {
+    border-color: rgba(0, 174, 239, 0);
+    border-bottom-color: #00aeef;
+    border-width: 21px;
+    left: 50%;
+    margin-left: -21px;
+}
+
+#reportBugArrow {
+    position: absolute;
+    background: #16181a;
+    font-family: 'OpenSans-Bold';
+    color: white;
+    border: 4px solid #00aeef;
+    width: 260px;
+    padding: 4px;
+    right: 149px;
+    top: -58px;
+    display:none;
+}
+#reportBugArrow:after, #reportBugArrow:before {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+#reportBugArrow:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-left-color: #16181a;
+    border-width: 15px;
+    top: 50%;
+    margin-top: -15px;
+}
+#reportBugArrow:before {
+    border-color: rgba(0, 174, 239, 0);
+    border-left-color: #00aeef;
+    border-width: 21px;
+    top: 50%;
+    margin-top: -21px;
+}
+
+#textChatArrow {
+    position: absolute;
+    background: #16181a;
+    font-family: 'OpenSans-Bold';
+    color: white;
+    border: 4px solid #00aeef;
+    padding: 4px;
+    bottom: 9px;
+    left: 28.4%;
+    display:none;
+}
+#textChatArrow:after, #textChatArrow:before {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+#textChatArrow:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-right-color: #16181a;
+    border-width: 15px;
+    top: 50%;
+    margin-top: -15px;
+}
+#textChatArrow:before {
+    border-color: rgba(0, 174, 239, 0);
+    border-right-color: #00aeef;
+    border-width: 21px;
+    top: 50%;
+    margin-top: -21px;
+}
+
+#activateArrow {
+    position: absolute;
+    background: #16181a;
+    font-family: 'OpenSans-Bold';
+    color: white;
+    border: 4px solid #00aeef;
+    padding: 4px;
+    width: 240px;
+    top: 78px;
+    left: -4px;
+    display:none;
+}
+#activateArrow:after, #activateArrow:before {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+#activateArrow:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-right-color: #16181a;
+    border-width: 15px;
+    top: 50%;
+    margin-top: -15px;
+}
+#activateArrow:before {
+    border-color: rgba(0, 174, 239, 0);
+    border-right-color: #00aeef;
+    border-width: 21px;
+    top: 50%;
+    margin-top: -21px;
+}
+
+#userListArrow {
+    position: absolute;
+    background: #16181a;
+    font-family: 'OpenSans-Bold';
+    color: white;
+    border: 4px solid #00aeef;
+    padding: 4px;
+    right: 11.2%;
+    top: 38px;
+    display:none;
+}
+#userListArrow:after, #userListArrow:before {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+#userListArrow:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-left-color: #16181a;
+    border-width: 15px;
+    top: 50%;
+    margin-top: -15px;
+}
+#userListArrow:before {
+    border-color: rgba(0, 174, 239, 0);
+    border-left-color: #00aeef;
+    border-width: 21px;
+    top: 50%;
+    margin-top: -21px;
+}
+
+#endMessage {
+    position: absolute;
+    display: none;
+    width: auto;
+    font-size: 18px;
+    padding: 7px;
+    border: 4px solid #00aeef;
+    background: #16181a;
+    font-family: 'OpenSans-Bold';
+    color: white;
+    left: 45%;
+    top: 51%;
+}

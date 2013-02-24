@@ -22,6 +22,7 @@ class Room
             @networkManager = NetworkManager window.ws.Host, window.ws.Port
             @textChat       = new TextChat @networkManager
         $('#reportBug').click @bugReport
+        $('#tutorialMode').toggle @startTutorial, @stopTutorial
         do @configureEvents
         do @enableZoomMyCam
         do @enableZoomCam
@@ -68,7 +69,77 @@ class Room
         that = this
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
+        
+    startAnimation       : (elems, interval, speed) =>
+        i = elems.length
+        time = interval * 5
+        while i >= 0
+            $(elems[i]).delay(time).fadeIn speed
+            time -= interval
+            i--
+        i = elems.length
+        fadeOutTime = interval * 10
+        while i >= 0
+            $(elems[i]).delay(fadeOutTime).fadeOut speed
+            fadeOutTime -= interval
+            i--
+        $('div#endMessage').delay(interval * 10 + 4 * interval).fadeIn speed
+        $('div#endMessage').delay(interval * 10).fadeOut speed
+        $('div#body').append '<div id="reportBugArrow" class="arrow_box">Click here if you want to report a bug.</div>'
+        $('div#body').append '<div id="textChatArrow" class="arrow_box">Here you can chat with you friends!</div>'
+        $('div#footer').append '<div id="activateArrow" class="arrow_box">Click here to activate your camera.</div>'
+        $('div#body').append '<div id="userListArrow" class="arrow_box">Here is a list of users currently in the room.</div>'
+        i = 0
+        time = interval * 5
+        while i < elems.length
+            $(elems[i]).delay(time).fadeOut speed
+            i++
+        $('div#endMessage').delay(time).fadeIn speed
+        $('div#endMessage').delay(time).fadeOut speed
+        i = 0
+        time = interval * 5
+        while i < elems.length
+            $(elems[i]).delay(time).fadeOut speed
+            i++
+        $('div#endMessage').delay(time).fadeIn speed
+        $('div#endMessage').delay(time).fadeOut speed
+        @startAnimation $("div[id$='Arrow']"), 1000, 400
+        
+    startTutorial      : () =>
+        $("#tutorialMode").css "background-color", "#43535a"
+        $("#tutorialMode").css "box-shadow", "inset 0 1px #43535a"
+        elems      = $("div[id$='Arrow']")
+        interval   = 2000
+        speed      = 400
+        i          = elems.length
+        fadeInTime = interval * 5
+        while i >= 0
+            $(elems[i]).animate({opacity: 1}, fadeInTime).fadeIn speed
+            fadeInTime -= interval
+            i--
+        i = 0
+        fadeOutTime = interval * 5
+        while i < elems.length
+            $(elems[i]).animate({opacity: 1}, fadeOutTime).fadeOut speed
+            i++
+        $('div#endMessage').animate({opacity: 1}, fadeOutTime * 2).fadeIn speed
+        $('div#endMessage').animate({opacity: 1}, 2000).fadeOut speed
+        setTimeout @colorTutorialBtn, fadeOutTime * 2 + 3200
 
+    stopTutorial      : () =>
+        elems      = $("div[id$='Arrow']")
+        i = 0
+        while i < elems.length
+            $(elems[i]).stop(true, true).fadeOut 400
+            i++
+        $('div#endMessage').stop(true, true).fadeOut 400
+        $("#tutorialMode").css "background-color", "#00aeef"
+        $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
+
+    colorTutorialBtn   : () =>
+        $("#tutorialMode").css "background-color", "#00aeef"
+        $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
+        
     start               : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
