@@ -74,7 +74,7 @@ class Room
         that = this
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
-    
+
     # Start animation.
     startAnimation       : (elems, interval, speed) =>
         i = elems.length
@@ -110,7 +110,7 @@ class Room
         $('div#endMessage').delay(time).fadeIn speed
         $('div#endMessage').delay(time).fadeOut speed
         @startAnimation $("div[id$='Arrow']"), 1000, 400
-        
+
     # Start the tutorial animation.
     startTutorial      : () =>
         $("#tutorialMode").css "background-color", "#43535a"
@@ -147,7 +147,7 @@ class Room
     colorTutorialBtn   : () =>
         $("#tutorialMode").css "background-color", "#00aeef"
         $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
-        
+
     # Send bug report.
     sendReport          : () =>
         $('#sendReport').attr 'disabled', on
