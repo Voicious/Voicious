@@ -26,14 +26,16 @@ Config      = require '../common/config'
 {Translator}= require './trans'
 
 class _Room
-    # Initialize a nodemailer module.
-    constructor : () ->
+    # Initialize a nodemailer module and a list of modules
+    # with default values.
+    constructor : (@modulesList = ['chatText', 'userList']) ->
         @transport = nodemailer.createTransport('Sendmail');
         @token  = Token
 
-    # Render the room with the good translation.
+    # Render the room with the good translation and the list of modules stringified.
     renderRoom : (res, options, host) =>
         options.trans = Translator.getTrans(host, 'room')
+        options.modules = JSON.stringify @modulesList
         res.render 'room', options
 
     # Create a new Room and check if the user is logged in.

@@ -29,6 +29,9 @@ block scripts
                 Host : "#{wsHost}",
                 Port : parseInt("#{wsPort}")
             };
+        if ('!{modules}' != "") {
+          window.modules = JSON.parse('!{modules}');
+          };
         }
 
 block content

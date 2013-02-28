@@ -197,9 +197,13 @@ Relayout    = (container) =>
 # When the document has been loaded it will check if all services are available and
 # launch it.
 $(document).ready ->
+    console.group 'Modules'
+    for module in window.modules
+        console.log module
     if do WebRTC.runnable == true
         room = new Room
         do room.start
+    do console.groupEnd
 
     container   = ($ '#page')
     relayout    = Relayout container
