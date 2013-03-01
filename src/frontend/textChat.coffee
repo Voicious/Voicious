@@ -30,6 +30,7 @@ class   TextChat
             @jqInput.val ''
             @sendMessage message
 
+
         EventManager.addEvent "sendTextMessage", (message) =>
             NetworkManager.sendToAll message
         EventManager.addEvent "receiveTextMessage", (message) =>
