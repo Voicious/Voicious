@@ -82,6 +82,16 @@ class _Room
             else
                 res.send 200
 
+    renderModule    : (req, res) =>
+        user          = req.currentUser
+        console.log "Module Name : #{req.body.module}"
+        options     =
+            title   : 'Voicious'
+            login   : user.name
+            room    : req.params.roomid
+            trans   : Translator.getTrans(req.host, 'room')
+        res.render "modules/#{req.body.module}.jade", options
+
     # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>
         Request.post {
@@ -103,3 +113,4 @@ exports.Routes  =
         '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage, exports.Room.redirectRoom)
     post :
         '/report'       : exports.Room.reportBug
+        '/renderModule' : exports.Room.renderModule

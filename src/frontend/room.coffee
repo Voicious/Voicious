@@ -17,14 +17,14 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class Room
     constructor         : (modules) ->
-            @moduleArray = new Array
-            if window.ws? and window.ws.Host? and window.ws.Port?
-                 @networkManager = NetworkManager window.ws.Host, window.ws.Port
-            $('#reportBug').click @bugReport
-            $('#tutorialMode').toggle @startTutorial, @stopTutorial
+        @moduleArray = new Array
+        if window.ws? and window.ws.Host? and window.ws.Port?
+            @networkManager = NetworkManager window.ws.Host, window.ws.Port
             @loadModules modules
             do @enableZoomMyCam
             do @enableZoomCam
+        $('#reportBug').click @bugReport
+        $('#tutorialMode').toggle @startTutorial, @stopTutorial
 
     loadScript          : (moduleName) ->
         $('head').append "<script type='test/javascript' src='/public/js/#{moduleName}.js'>"
@@ -34,6 +34,13 @@ class Room
     loadModules         : (modules) ->
         for module in modules
             @loadScript module
+            $.ajax(
+                type    : 'POST'
+                url     : '/renderModule'
+                data    :
+                    module      : module
+            ).done (data) ->
+                console.log data
             module = do (module.charAt 0).toUpperCase + module.slice 1
             @moduleArray.push (new window[module] @networkManager)
 
