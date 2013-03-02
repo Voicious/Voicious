@@ -78,42 +78,6 @@ class Room
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
 
-    # Start animation.
-    startAnimation       : (elems, interval, speed) =>
-        i = elems.length
-        time = interval * 5
-        while i >= 0
-            $(elems[i]).delay(time).fadeIn speed
-            time -= interval
-            i--
-        i = elems.length
-        fadeOutTime = interval * 10
-        while i >= 0
-            $(elems[i]).delay(fadeOutTime).fadeOut speed
-            fadeOutTime -= interval
-            i--
-        $('div#endMessage').delay(interval * 10 + 4 * interval).fadeIn speed
-        $('div#endMessage').delay(interval * 10).fadeOut speed
-        $('div#body').append '<div id="reportBugArrow" class="arrow_box">Click here if you want to report a bug.</div>'
-        $('div#body').append '<div id="textChatArrow" class="arrow_box">Here you can chat with you friends!</div>'
-        $('div#footer').append '<div id="activateArrow" class="arrow_box">Click here to activate your camera.</div>'
-        $('div#body').append '<div id="userListArrow" class="arrow_box">Here is a list of users currently in the room.</div>'
-        i = 0
-        time = interval * 5
-        while i < elems.length
-            $(elems[i]).delay(time).fadeOut speed
-            i++
-        $('div#endMessage').delay(time).fadeIn speed
-        $('div#endMessage').delay(time).fadeOut speed
-        i = 0
-        time = interval * 5
-        while i < elems.length
-            $(elems[i]).delay(time).fadeOut speed
-            i++
-        $('div#endMessage').delay(time).fadeIn speed
-        $('div#endMessage').delay(time).fadeOut speed
-        @startAnimation $("div[id$='Arrow']"), 1000, 400
-
     # Start the tutorial animation.
     startTutorial      : () =>
         $("#tutorialMode").css "background-color", "#43535a"
