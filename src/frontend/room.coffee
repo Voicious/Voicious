@@ -16,23 +16,26 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Room
-    constructor         : () ->
-        @userList       = new UserList
-        if window.ws? and window.ws.Host? and window.ws.Port?
-            @networkManager = NetworkManager window.ws.Host, window.ws.Port
-            @textChat       = new TextChat @networkManager
-        $('#reportBug').click @bugReport
-        $('#tutorialMode').toggle @startTutorial, @stopTutorial
-        do @configureEvents
-        do @enableZoomMyCam
-        do @enableZoomCam
+    constructor         : (modules) ->
+            @moduleArray = new Array
+            if window.ws? and window.ws.Host? and window.ws.Port?
+                 @networkManager = NetworkManager window.ws.Host, window.ws.Port
+            $('#reportBug').click @bugReport
+            $('#tutorialMode').toggle @startTutorial, @stopTutorial
+            @loadModules modules
+            do @enableZoomMyCam
+            do @enableZoomCam
 
-    # Fill the eventManager with callbacks which need to be called outside of this object.
-    configureEvents     : () =>
-        EventManager.addEvent "fillUsersList", (users) =>
-            @userList.fill users
-        EventManager.addEvent "updateUserList", (user, event) =>
-            @userList.update user, event
+    loadScript          : (moduleName) ->
+        $('head').append "<script type='test/javascript' src='/public/js/#{moduleName}.js'>"
+
+    # Load the Modules given in parameter.
+    # Parameter's type must be an array
+    loadModules         : (modules) ->
+        for module in modules
+            @loadScript module
+            module = do (module.charAt 0).toUpperCase + module.slice 1
+            @moduleArray.push (new window[module] @networkManager)
 
     # Add the user video and sound to the conference.
     joinConference      : () =>
@@ -197,13 +200,9 @@ Relayout    = (container) =>
 # When the document has been loaded it will check if all services are available and
 # launch it.
 $(document).ready ->
-    console.group 'Modules'
-    for module in window.modules
-        console.log module
     if do WebRTC.runnable == true
-        room = new Room
+        room = new Room window.modules
         do room.start
-    do console.groupEnd
 
     container   = ($ '#page')
     relayout    = Relayout container

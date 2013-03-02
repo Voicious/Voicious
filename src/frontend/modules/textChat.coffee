@@ -15,9 +15,11 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-class   TextChat
+
+class   TextChat extends Module
     # Init the text chat window and the callbacks in the event manager.
     constructor     : (NetworkManager) ->
+        super NetworkManager
         @jqForm       = ($ 'form#chatForm')
         @jqMessageBox = ($ '#tcMessagesContainer')
         @jqInput      = ($ 'input#tcMessageInput')
@@ -33,7 +35,7 @@ class   TextChat
 
         $(window).resize () =>
             do @scrollPane.reinitialise
-        
+
         EventManager.addEvent "sendTextMessage", (message) =>
             NetworkManager.sendToAll message
         EventManager.addEvent "receiveTextMessage", (message) =>

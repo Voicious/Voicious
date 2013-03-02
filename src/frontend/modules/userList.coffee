@@ -15,13 +15,20 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-# The user list contain all the informations of the guests in the room.
-class   UserList
-    constructor     : () ->
+class   UserList extends Module
+    # The user list contain all the informations of the guests in the room.
+    constructor     : (NetworkManager) ->
         @users  = []
         @jqElem = ($ '#userList')
         li      = @jqElem.children 'li'
         @users.push (do li.text)
+        do @configureEvents
+
+    configureEvents     : () =>
+        EventManager.addEvent "fillUsersList", (users) =>
+            @fill users
+        EventManager.addEvent "updateUserList", (user, event) =>
+            @update user, event
 
     # Fill the user list with new users.
     fill            : (users) =>
