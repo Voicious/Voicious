@@ -233,6 +233,7 @@ div#page {
     border-radius: 6px;
     height: 99%;
 }
+
 #userListContainer {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
@@ -247,7 +248,7 @@ div#page {
     margin-right: 10px;
 }
 
-#userList {
+#userListUl {
     margin-top: 35px;
     margin-left: 20px;
 }
@@ -639,4 +640,9 @@ ul {
     transform: scaleX(-1);
     filter: FlipH;
     -ms-filter: "FlipH";
+}
+
+.mod {
+    display: inline;
+    height: 100%;
 }

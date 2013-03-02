@@ -83,8 +83,7 @@ class _Room
                 res.send 200
 
     renderModule    : (req, res) =>
-        user          = req.currentUser
-        console.log "Module Name : #{req.body.module}"
+        user        = req.currentUser
         options     =
             title   : 'Voicious'
             login   : user.name

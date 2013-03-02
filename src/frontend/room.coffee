@@ -29,18 +29,21 @@ class Room
     loadScript          : (moduleName) ->
         $('head').append "<script type='test/javascript' src='/public/js/#{moduleName}.js'>"
 
+    getModuleHTML       : (moduleName) ->
+        $.ajax(
+            type    : 'POST'
+            url     : '/renderModule'
+            data    :
+                    module      : moduleName
+            ).done (data) =>
+                $(data).appendTo("##{moduleName}")
+
     # Load the Modules given in parameter.
     # Parameter's type must be an array
     loadModules         : (modules) ->
         for module in modules
             @loadScript module
-            $.ajax(
-                type    : 'POST'
-                url     : '/renderModule'
-                data    :
-                    module      : module
-            ).done (data) ->
-                console.log data
+            @getModuleHTML module
             module = do (module.charAt 0).toUpperCase + module.slice 1
             @moduleArray.push (new window[module] @networkManager)
 

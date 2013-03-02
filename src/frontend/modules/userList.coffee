@@ -19,7 +19,7 @@ class   UserList extends Module
     # The user list contain all the informations of the guests in the room.
     constructor     : (NetworkManager) ->
         @users  = []
-        @jqElem = ($ '#userList')
+        @jqElem = ($ '#userListUl')
         li      = @jqElem.children 'li'
         @users.push (do li.text)
         do @configureEvents
