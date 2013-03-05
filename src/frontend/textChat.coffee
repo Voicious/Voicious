@@ -29,7 +29,7 @@ class   TextChat
         @jqForm.submit (event) =>
             do event.preventDefault
             message = do @jqInput.val
-            @jqInput.val 'Insert your message here'
+            @jqInput.val ''
             @sendMessage message
 
         $(window).resize () =>
