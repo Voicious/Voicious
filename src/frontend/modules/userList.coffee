@@ -18,6 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class   UserList extends Module
     # The user list contain all the informations of the guests in the room.
     constructor     : (NetworkManager) ->
+        super NetworkManager
         @users  = []
         @jqElem = ($ '#userListUl')
         li      = @jqElem.children 'li'

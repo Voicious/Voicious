@@ -28,7 +28,7 @@ Config      = require '../common/config'
 class _Room
     # Initialize a nodemailer module and a list of modules
     # with default values.
-    constructor : (@modulesList = ['textChat', 'userList']) ->
+    constructor : (@modulesList = ['userList', 'textChat', 'camera']) ->
         @transport = nodemailer.createTransport('Sendmail');
         @token  = Token
 
@@ -90,6 +90,21 @@ class _Room
             room    : req.params.roomid
             trans   : Translator.getTrans(req.host, 'room')
         res.render "modules/#{req.body.module}.jade", options
+
+    reportBug       : (req, res) =>
+        @transport.sendMail({
+            from    : "Voicious bugs<no-reply@voicious.com>"
+            to      : 'voicious_2014@labeip.epitech.eu'
+            subject : 'Bug Report ' + moment().format()
+            text    : req.body.bug})
+        Request.post {
+            json    : req.body
+            url     : "#{Config.Restapi.Url}/bug"
+        }, (e, r, body) =>
+            if e? or r.statusCode > 200
+                throw new Errors.Error
+            else
+                res.send 200
 
     # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>

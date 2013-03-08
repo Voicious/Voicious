@@ -65,7 +65,7 @@ toCompile   = [
     {
         sourceDir   : (Path.join 'src', 'frontend', 'modules')
         destDir     : (Path.join 'www', 'public', 'js')
-        files       : [ 'module', 'userList', 'textChat' ]
+        files       : [ 'module', 'userList', 'textChat', 'camera' ]
     }
     {
         sourceDir   : (Path.join 'src', 'ws')

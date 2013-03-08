@@ -1,0 +1,14 @@
+div.box
+  div#localThumbnails.textBtn
+    label #{trans.receiving}
+      span#nbFeed 0
+    label #{trans.feeds}
+    div#localVideoContainer.video
+      div#notActivate
+        center#centeredLocal
+          label#feedNotActivate #{trans.feedNotActive}
+        center#centerButton
+          button#joinConference #{trans.activateCam}
+      video(autoplay)#localVideo.localVideo.none
+  ul#videos
+    div#activateArrow #{trans.activateArrow}
