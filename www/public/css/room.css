@@ -236,7 +236,7 @@ div#page {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     float: right;
-    width: 10%;
+    width: 12%;
     height: 100%;
 }
 
@@ -298,7 +298,7 @@ div#page {
 .message {
     margin: 10px 0;
     padding: 10px;
-    border-radius:7px;    
+    border-radius:7px;
     background:#fff;
     font-size:14px;
 }

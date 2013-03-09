@@ -68,14 +68,14 @@ block content
             span #{trans.joinRoomBtn}
         div#newRoom
           form#quickLogin_form(method="POST", action='/quickLogin')
-            input#newNickname.brdr(name="name", type="text", placeholder="#{trans.placeholderLogin}", value="#{name}", required="true")
+            input#newNickname.brdr(name="name", type="text", placeholder="#{trans.placeholderLogin}", value="#{name}", required="true", maxlength="25")
           button#newRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickLogin_form")
             span #{trans.newRoomCommit}
           button#newRoomCancel.grey-blue.btn-submit.txt-shd
             span #{trans.cancel}
         div#joinRoom
           form#quickJoin_form(method="POST", action="/quickJoin")
-            input#joinNickname.brdr(type="text", placeholder="#{trans.placeholderLogin}", required="true", name="name")
+            input#joinNickname.brdr(type="text", placeholder="#{trans.placeholderLogin}", required="true", name="name", maxlength="25")
             input#joinUrl.brdr(type="text", placeholder="#{trans.placeholderRoomURL}", required="true", name="room")
           button#joinRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickJoin_form") #{trans.joinRoomCommit}
           button#joinRoomCancel.grey-blue.btn-submit.txt-shd #{trans.cancel}
