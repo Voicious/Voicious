@@ -53,7 +53,7 @@ class NetworkManager
             $("#videos").append(
                 '<li id="' + baliseBlockId + '" class="thumbnail">
                     <p class="none">Callee - ' + cid + '</p>
-                     <video id="' + baliseVideoId + '" autoplay="autoplay" class="thumbnailVideo"></video>
+                     <video id="' + baliseVideoId + '" autoplay="autoplay" class="thumbnailVideo flipH"></video>
                  </li>'
                 )
             baliseName          = '#' + baliseVideoId
