@@ -20,7 +20,8 @@ div#page {
 }
 
 #room_logo {
-    position: absolute;
+    float: left;
+    width: 125px;
     margin-left: 0.8%; margin-top: 2px;
     font-family: 'BreeSerif-Regular';
     color: white;
@@ -37,8 +38,8 @@ div#page {
 
 #room_control {
     margin-top: 10px;
-    position: absolute;
-    width: 75%;
+    float: left;
+    width: 60%;
     height: 40px;
     left: 140px;
 }
@@ -230,7 +231,7 @@ div#page {
 .mainCam {
     border: solid 3px #111;
     border-radius: 6px;
-    height: 100%;
+    height: 99%;
 }
 #userListContainer {
     border-top-left-radius: 6px;
@@ -629,3 +630,4 @@ ul {
     left: 45%;
     top: 51%;
 }
+

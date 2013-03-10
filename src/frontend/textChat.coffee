@@ -15,6 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+
+
 class   TextChat
     constructor     : (NetworkManager) ->
         @jqForm       = ($ 'form#chatForm')
@@ -30,6 +32,9 @@ class   TextChat
             @jqInput.val ''
             @sendMessage message
 
+        $(window).resize () =>
+            do @scrollPane.reinitialise
+        
         EventManager.addEvent "sendTextMessage", (message) =>
             NetworkManager.sendToAll message
         EventManager.addEvent "receiveTextMessage", (message) =>
