@@ -64,7 +64,7 @@ class   TextChat
         else
             elem       = ($ '<div>', { class : 'msgBox', rel : do time.getTime })
             authorLine = ($ ('<p>')).append ($ '<span>', { class : 'author' }).html message.from
-            authorLine.append ($ '<span>', { class : 'time' }).html (do time.getHours + ':' + do time.getMinutes)
+            authorLine.append ($ '<span>', { class : 'time' }).html ((do time.toTimeString).substr 0, 5)
             elem.append authorLine
             elem.append ($ '<p>', {class : 'message'}).html message.text
             (do @scrollPane.getContentPane).append elem
