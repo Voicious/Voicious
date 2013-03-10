@@ -27,6 +27,9 @@ WriteLog  = (fd, data) =>
 
 processes = []
 
+if not Fs.existsSync Config.Paths.Logs
+    Fs.mkdirSync Config.Paths.Logs, '0755'
+
 if Config.Voicious.Enabled
     voiciousAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.access.log'), 'a+'
     voiciousErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.error.log'), 'a+'
@@ -50,7 +53,7 @@ if Config.Restapi.Enabled
         process.stderr.write "#{data}"
         WriteLog restErrorLog, data
     processes.push voicious
-    
+
 if Config.Websocket.Enabled
     wsAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'ws.access.log'), 'a+'
     wsErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'ws.error.log'), 'a+'
