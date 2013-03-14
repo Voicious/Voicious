@@ -15,9 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-
-
 class   TextChat
+    # Init the text chat window and the callbacks in the event manager.
     constructor     : (NetworkManager) ->
         @jqForm       = ($ 'form#chatForm')
         @jqMessageBox = ($ '#tcMessagesContainer')
@@ -40,9 +39,11 @@ class   TextChat
         EventManager.addEvent "receiveTextMessage", (message) =>
             @update message
 
+    # Update the text chat with a new message.
     update          : (message) =>
         @addMessage message
 
+    # Send the new message to the guests.
     sendMessage     : (message) =>
         if message? and message isnt ""
             message =
@@ -53,6 +54,7 @@ class   TextChat
                 event ['message', null, message]
                 @addMessage message
 
+    # Add a new message to the text chat window.
     addMessage      : (message) =>
         jqLastElem = do (@jqMessageBox.find 'div.msgBox').last
         prevTime   = jqLastElem.attr 'rel'
