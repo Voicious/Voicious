@@ -27,12 +27,14 @@ class Room
         do @enableZoomMyCam
         do @enableZoomCam
 
+    # Fill the eventManager with callbacks which need to be called outside of this object.
     configureEvents     : () =>
         EventManager.addEvent "fillUsersList", (users) =>
             @userList.fill users
         EventManager.addEvent "updateUserList", (user, event) =>
             @userList.update user, event
 
+    # Add the user video and sound to the conference.
     joinConference      : () =>
         options =
             video       : '#localVideo'
@@ -44,6 +46,7 @@ class Room
         $(options.video).removeClass 'none'
         WebRTC.getUserMedia(options)
 
+    # Check if the selected camera can be zoomed.
     checkZoom   : (context, htmlClass) =>
         prevCam = $('#mainCam video')
         prevId = -1
@@ -60,16 +63,19 @@ class Room
             $('#mainCam').append newCam
             do window.Relayout
 
+    # Enable the zoom on the main camera.
     enableZoomMyCam     : () =>
         that = this
         $('#localVideo').click () ->
             that.checkZoom this, 'localVideo'
 
+    # Enable the zoom on the guest selected.
     enableZoomCam       : () =>
         that = this
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
-        
+    
+    # Start animation.
     startAnimation       : (elems, interval, speed) =>
         i = elems.length
         time = interval * 5
@@ -105,6 +111,7 @@ class Room
         $('div#endMessage').delay(time).fadeOut speed
         @startAnimation $("div[id$='Arrow']"), 1000, 400
         
+    # Start the tutorial animation.
     startTutorial      : () =>
         $("#tutorialMode").css "background-color", "#43535a"
         $("#tutorialMode").css "box-shadow", "inset 0 1px #43535a"
@@ -126,6 +133,7 @@ class Room
         $('div#endMessage').animate({opacity: 1}, 2000).fadeOut speed
         setTimeout @colorTutorialBtn, fadeOutTime * 2 + 3200
 
+    # Stop tutorial animation.
     stopTutorial      : () =>
         elems      = $("div[id$='Arrow']")
         i = 0
@@ -136,16 +144,12 @@ class Room
         $("#tutorialMode").css "background-color", "#00aeef"
         $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
 
+    # Color the tutorial button.
     colorTutorialBtn   : () =>
         $("#tutorialMode").css "background-color", "#00aeef"
         $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
         
-    start               : () =>
-        do @networkManager.connection
-        $('#joinConference').click () =>
-            do $('#notActivate').hide
-            @joinConference()
-
+    # Send bug report.
     sendReport          : () =>
         $('#sendReport').attr 'disabled', on
         textArea = $('#reportBugTextarea')
@@ -162,10 +166,12 @@ class Room
             do @hideReport
         $('#sendReport').attr 'disabled', off
 
+    # Hide the bug report button.
     hideReport        : () =>
         $("#reportBugCtn").addClass 'none'
         $('div.fullscreen').addClass 'none'
 
+    # Initalize the bug report button.
     bugReport           : (event) =>
         fullscreen = $('div.fullscreen')
         fullscreen.removeClass 'none'
@@ -173,11 +179,13 @@ class Room
         $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
+    # Start all the room services.
     start               : () =>
         do @networkManager.connection
         $('#joinConference').click () =>
             do $('#notActivate').hide
             @joinConference()
+
 
 Relayout    = (container) =>
     options =
@@ -187,6 +195,8 @@ Relayout    = (container) =>
     return () =>
         container.layout options
 
+# When the document has been loaded it will check if all services are available and
+# launch it.
 $(document).ready ->
     if do WebRTC.runnable == true
         room = new Room
