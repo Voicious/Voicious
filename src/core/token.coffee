@@ -18,9 +18,11 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Request     = require 'request'
 Config      = require '../common/config'
 
+# Generate a unique token.
 class _Token
         constructor : () ->
 
+        # Create the unique token and add it into the dataBase.
         createToken : (clientId, roomId, callback) =>
             Request.post {
                 json    : {
@@ -34,6 +36,7 @@ class _Token
                 else
                     callback body.id
 
+        # Delete a token from database.
         deleteToken : (token) =>
             Request.del "#{Config.Restapi.Url}/token/#{token}", (e, r, data) =>
                 if e? or r.statusCode > 200
