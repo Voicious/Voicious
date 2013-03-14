@@ -141,8 +141,7 @@ class Room
             $(elems[i]).stop(true, true).fadeOut 400
             i++
         $('div#endMessage').stop(true, true).fadeOut 400
-        $("#tutorialMode").css "background-color", "#00aeef"
-        $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
+        do @colorTutorialBtn
 
     # Color the tutorial button.
     colorTutorialBtn   : () =>
