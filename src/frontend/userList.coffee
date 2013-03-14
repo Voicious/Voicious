@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+# The user list contain all the informations of the guests in the room.
 class   UserList
     constructor     : () ->
         @users  = []
@@ -22,17 +23,20 @@ class   UserList
         li      = @jqElem.children 'li'
         @users.push (do li.text)
 
+    # Fill the user list with new users.
     fill            : (users) =>
         for user of users
             @users.push users[user].cinfo.name
         do @display
 
+    # Update the user list by creating or removing a user from the list.
     update          : (user, event) =>
         switch event
             when 'create' then @users.push user.cinfo.name
             when 'remove' then @users.unset user.cinfo.name
         do @display
 
+    # Update the user list window.
     display         : () =>
         do @jqElem.empty
         for user in @users
