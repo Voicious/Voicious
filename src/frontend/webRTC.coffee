@@ -15,18 +15,21 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+# Initalize WebRTC functions into a unique function.
 window.RTCPeerConnection = window.webkitRTCPeerConnection or window.mozRTCPeerConnection or window.RTCPeerConnection
 window.SessionDescription = window.RTCSessionDescription or window.mozRTCSessionDescription or window.RTCSessionDescription
 window.IceCandidate = window.RTCIceCandidate or window.mozRTCIceCandidate or window.RTCIceCandidate
 
 navigator.getUserMedia = navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.getUserMedia
 
+# Initialize WebRTC context.
 window.defaults = {
     iceServers: { "iceServers": [{ "url": "stun:stun.ekiga.net" }] },
     constraints: { 'mandatory': { 'OfferToReceiveAudio': true, 'OfferToReceiveVideo': true } }
     optional: { optional: [{ RtpDataChannels: true}] }
 }
 
+# Check if the WebRTC functions are available.
 Runnable                = () ->
     if RTCPeerConnection? and navigator.getUserMedia?
         return true
@@ -45,6 +48,7 @@ PeerConnection          = (options) ->
     peerConnection.tunnel   = options.tunnel
     peerConnection.channel  = null
 
+    # Initialize a datachannel with callbacks.
     setDataChannel          = (channel) =>
         channel.onopen      = () =>
             if options.onChannelOpen?
@@ -66,6 +70,7 @@ PeerConnection          = (options) ->
             if options.onChannelError?
                 do options.onChannelError
 
+    # Check if datachannels are available and create one.
     createDataChannel       = () =>
         try
             if peerConnection.createDataChannel?
@@ -77,20 +82,24 @@ PeerConnection          = (options) ->
     if options.onoffer?
         do createDataChannel
 
+    # Send ice candidate.
     onicecandidate          = (event) =>
         if !event or !event.candidate or !peerConnection
             return
         if options.getice
             options.getice peerConnection.tunnel, event
 
+    # Add a received stream into the peerconnection.
     onaddstream             = (event) =>
         if options.gotstream?
             options.gotstream event
 
+    # Remove a stream.
     onremovestream          = (event) =>
         if options.removestream?
             options.removestream event
             
+    # Set datachannel callbacks.
     ondatachannel           = (event) =>
         setDataChannel event.channel
 
@@ -102,6 +111,7 @@ PeerConnection          = (options) ->
     if options.stream
         peerConnection.addStream options.stream
 
+    # Create peerConnection offers and send them to a guest.
     peerConnection.peerCreateOffer = (onoffer) =>
         if onoffer?
             peerConnection.createOffer (sessionDescription) =>
@@ -111,6 +121,7 @@ PeerConnection          = (options) ->
                 return
             , constraints
 
+    # Create answer from offer and send the answer to the guest.
     peerConnection.peerCreateAnswer = (offer) =>
         if offer?
             peerConnection.setRemoteDescription new SessionDescription(offer)
@@ -124,9 +135,11 @@ PeerConnection          = (options) ->
     peerConnection.peerCreateOffer options.onoffer
     peerConnection.peerCreateAnswer options.offer
 
+    # Set the peerConnection description on answer.
     peerConnection.onanswer         = (sdp) =>
           peerConnection.setRemoteDescription new SessionDescription(sdp)
 
+    # Add new ice candidate.
     peerConnection.addice           = (candidate) => 
           peerConnection.addIceCandidate(new IceCandidate {
                 sdpMLineIndex: candidate.sdpMLineIndex,
@@ -134,6 +147,7 @@ PeerConnection          = (options) ->
                 })
     return peerConnection
 
+# Get audio and video from user.
 GetUserMedia            = (options) ->
     URL = window.webkitURL or window.URL
 
