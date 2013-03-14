@@ -37,11 +37,11 @@ class Room
             url     : '/renderModule'
             data    :
                     module      : moduleName
-            ).done (data) =>
-                $(data).appendTo "##{moduleName}"
-                module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
-                @moduleArray.push (new window[module] @networkManager)
-                @loadModules modules
+        ).done (data) =>
+            $(data).appendTo "##{moduleName}"
+            module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
+            @moduleArray.push (new window[module] @networkManager)
+            @loadModules modules
 
     # Load the Modules given in parameter recursively.
     # Parameter's type must be an array.
