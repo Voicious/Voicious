@@ -25,8 +25,8 @@ Config          = require '../common/config'
 class _User
     constructor : () ->
 
-    # Render the home page
-    # This function is called when there is an error during registration
+    # Render the home page.
+    # This function is called when there is an error during registration.
     errorOnRegistration : (err, req, res) =>
         options =
             erroron         : err
@@ -37,8 +37,8 @@ class _User
             title           : Config.Voicious.Title
         res.render 'home', options
 
-    # Render the home page
-    # This function is called when there is an error during quick log in
+    # Render the home page.
+    # This function is called when there is an error during quick log in.
     errorOnQuickLogin : (err, req, res) =>
         options =
             error        : err
@@ -49,9 +49,9 @@ class _User
             title        : Config.Voicious.Title
         res.render 'home', options
 
-    # Called for inserting a new user in database
-    # Check Validity of all the values (mail, name, etc)
-    # If everything is ok, create the user, log him in and redirect into room (only room for the moment)
+    # Called for inserting a new user in database.
+    # Check Validity of all the values (mail, name, etc).
+    # If everything is ok, create the user, log him in and redirect into room (only room for the moment).
     newUser : (req, res, param, callback, errorCallback) =>
         Request.post {
             json    : param
@@ -63,13 +63,13 @@ class _User
                 req.session.uid = body.id
                 Stats.countTmpUser req, res, callback
 
-    # Redirect to room
+    # Redirect to room.
     redirtoroom : (req, res) =>
         res.redirect '/room'
 
-    # Called for registering a user
-    # Check sanity of all values and called the method newUser to create a new user
-    # if something went wrong, render the home page with the errors setted
+    # Called for registering a user.
+    # Check sanity of all values and called the method newUser to create a new user.
+    # if something went wrong, render the home page with the errors setted.
     register : (req, res, next) =>
         param   = req.body
         err     = []
@@ -91,9 +91,9 @@ class _User
             err = JSON.stringify err
             @errorOnRegistration err, req, res
 
-    # Called for loging in a user
-    # Check sanity of all values and render the home page if any value is wrong
-    # if everything is ok, log the user in and redirect him into room
+    # Called for loging in a user.
+    # Check sanity of all values and render the home page if any value is wrong.
+    # if everything is ok, log the user in and redirect him into room.
     login : (req, res, next) =>
         param       = req.body
         errorOpts   =
@@ -123,9 +123,9 @@ class _User
             errorOpts.erroron   = JSON.stringify errorOpts.erroron
             res.render 'home', errorOpts
 
-    # Called when non registered user create a Room
-    # Check if the name of the user is correctly set, if not render the home page
-    # if everything is ok, create and log the user in and redirect him into room
+    # Called when non registered user create a Room.
+    # Check if the name of the user is correctly set, if not render the home page.
+    # if everything is ok, create and log the user in and redirect him into room.
     quickLogin : (req, res, next) =>
         param = req.body
         if param.name? and param.name isnt ""

@@ -26,7 +26,7 @@ Config      = require '../common/config'
 {Translator}= require './trans'
 
 class _Room
-    # Initilizae a nodemailer module.
+    # Initialize a nodemailer module.
     constructor : () ->
         @transport = nodemailer.createTransport('Sendmail');
         @token  = Token
