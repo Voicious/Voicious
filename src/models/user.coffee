@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+# Define the user model in the database.
 ModelDef =
     name    :
         type    : String
