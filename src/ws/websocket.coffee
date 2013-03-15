@@ -37,6 +37,7 @@ class Websocket
             @rooms      = {}
             @token      = Token
 
+        # Send informations about the new peer to all the peers connected in the room.
         notifyNewPeer     : (socket) =>
             clientsInfos    = []
             sockets         = @rooms[socket.rid]
@@ -48,6 +49,8 @@ class Websocket
 
             @socketOnSend socket, ["peers", clientsInfos]
 
+        # Check in database if the informations sent by the new peer are valid.
+        # If yes the peer is push in the room.
         acceptPeer        : (param) =>
             cid               = generateRandomId()
             socket            = param.socket
@@ -68,6 +71,7 @@ class Websocket
             @socketOnSend socket, ["peer.authentification", socket.cinfo]
             console.log "New client has been accepted as #{cid} in room #{param.rid}"
 
+        # Check if the clientID sent by the new peer is valid.
         clientValidation  : (param) =>
             Request.get "#{Config.Restapi.Url}/user/#{param.cid}", (e, r, data) =>
                 if e? or r.statusCode > 200
@@ -81,6 +85,7 @@ class Websocket
                         param.cinfo  = client
                         @acceptPeer param
 
+        # Check if the roomID sent by the new peer is valid.
         roomValidation    : (param) =>
             Request.get "#{Config.Restapi.Url}/room/#{param.rid}", (e, r, data) =>
                 if e? or r.statusCode > 200
@@ -88,6 +93,8 @@ class Websocket
                 else
                     @clientValidation param
 
+        # Check if the token sent by the new peer is valid.
+        # If yes, we get the roomID and clientID in the database to authentificate the new peer.
         tokenValidation   : (param) =>
             Request.get "#{Config.Restapi.Url}/token/#{param.token}", (e, r, data) =>
                 if e? or r.statusCode > 200
@@ -101,6 +108,7 @@ class Websocket
                     else
                       param.errorCallback param, "Invalid room id"
 
+        # Remove a peer from the list.
         peerRemove        : (socket) =>
             sockets  = @rooms[socket.rid]
 
@@ -109,6 +117,7 @@ class Websocket
 
                 @socketOnSend sock, ["peer.remove", socket.cinfo]
 
+        # Send a packet to a peer.
         socketOnSend      : (socket, msg) =>
             msg = JSON.stringify(msg)
 
@@ -116,6 +125,8 @@ class Websocket
                 if (error)
                     console.error error
 
+        # Function called when a message is received by a peer.
+        # If the peer is not authentificated, it'll call the tokenvalidation function.
         socketOnMessage   : (socket, message) =>
             if not message.data
                 return
@@ -148,6 +159,8 @@ class Websocket
 
                 @tokenValidation(param)
 
+        # Called when a socket has been closed and remove the peer from the list if 
+        # he's authentificated.
         socketOnClose     : (socket) =>
             if socket.enable == true and @rooms[socket.rid]?
                 console.log "Client #{socket.cinfo.cid} has been disconnected from room #{socket.rid}"
@@ -155,6 +168,7 @@ class Websocket
                 @peerRemove socket
             @sockets.splice @sockets.indexOf(socket), 1
 
+        # Called when a new peer has arrived.
         serverOnConnection   : (socket) =>
             socket.cid      = -1
             socket.rid      = -1
@@ -167,6 +181,7 @@ class Websocket
 
             @sockets.push socket
 
+        # Start the websocket server services.
         start       : () =>
             server      = Http.createServer((req, res) ->).listen Config.Websocket.Port, () =>
                 console.log "Server ready on port #{Config.Websocket.Port}"
