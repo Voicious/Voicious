@@ -24,6 +24,7 @@ Path        = require 'path'
 
 Config      = require '../common/config'
 
+# The REST API request the database.
 class Api
     constructor     : () ->
         @app            = do Express
@@ -34,6 +35,7 @@ class Api
         @models         = []
         @configured     = false
 
+    # Get informations from the database with a model and by id.
     defineGet       : (model) =>
         @app.get '/api/' + model, (req, res) =>
             if req.query
@@ -61,6 +63,7 @@ class Api
             catch e
                 res.send 400
 
+    # Delete informations from the database with a model and by id. 
     defineDelete    : (model) =>
         @app.del '/api/' + model + '/:id', (req, res) =>
             try
@@ -73,6 +76,7 @@ class Api
             catch e
                 res.send 400
 
+    # Update or create informations from the database with a model and by id. 
     updateOrCreate  : (model, req, res) =>
         if not req.body.id or req.body.id is req.params.id
             obj = new @models[model] req.body
@@ -85,14 +89,17 @@ class Api
         else
             res.send 400
 
+    # Define post function.
     definePost      : (model) =>
         @app.post '/api/' + model, (req, res) =>
             @updateOrCreate model, req, res
 
+    # Define put function.
     definePut       : (model) =>
         @app.put '/api/' + model + '/:id', (req, res) =>
             @updateOrCreate model, req, res
 
+    # Set all routes for all the models.
     defineAllRoutes : () =>
         ressources  = []
         for model of @db.models
@@ -104,6 +111,7 @@ class Api
         @app.get '/api', (req, res) => res.json ressources
         @app.options /.*/, (req, res) => res.send 200
 
+    # Define all the models.
     defineAllModels : () =>
         modelsPath  = Path.join __dirname, '../models'
         modelsNames = Fs.readdirSync modelsPath
@@ -117,6 +125,7 @@ class Api
                 @models[name]   = @db.define name, ModelDef
                 AfterModelDef @models[name]
 
+    # Initialize REST API context.
     configure       : () =>
         @app.set 'port', Config.Restapi.Port
         @app.use Express.logger 'dev'
@@ -134,6 +143,7 @@ class Api
         do @defineAllRoutes
         @configured = true
 
+    # Start the REST API services.
     start       : () =>
         @db.on 'connected', () =>
             do @configure if not @configured
