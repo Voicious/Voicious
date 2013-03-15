@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+# Define the stat model in the database.
 ModelDef =
     c_date :
         type    : String
