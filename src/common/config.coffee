@@ -17,6 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Path    = require 'path'
 
+# Define internal et external access adress.
 DefaultHostname = (hostname) =>
     h =
         'Internal' : 'localhost',
@@ -30,12 +31,17 @@ DefaultHostname = (hostname) =>
             h.External = hostname.External if hostname.External?
     return h
 
+# This class configure the entire project.
 class _Config
+    # Initialize Voicious config with basic value if configuration file doesn't
+    # contain the required informations.
     checkCoreConfig : () ->
         @Voicious.Enabled  = 0           if not @Voicious.Enabled?
         @Voicious.Hostname = DefaultHostname @Voicious.Hostname
         @Voicious.Port     = 4242        if not @Voicious.Port?
 
+    # Initialize the Rest API config with basic value if configuration file doesn't
+    # contain the required informations.
     checkRestConfig : () ->
         @Restapi.Enabled = 0 if not @Restapi.Enabled?
         if @Restapi.Enabled
@@ -59,11 +65,14 @@ class _Config
             protocol     = if @Restapi.Ssl.Enabled then 'https' else 'http'
             @Restapi.Url = "#{protocol}://#{@Restapi.Hostname.Internal}:#{@Restapi.Port}/api"
 
+    # Initialize the WebSocket server config with basic value if configuration file doesn't
+    # contain the required informations.
     checkWebsocketConfig : () ->
         @Websocket.Enabled  = 0           if not @Websocket.Enabled?
         @Websocket.Hostname = DefaultHostname @Websocket.Hostname
         @Websocket.Port     = 1337        if not @Websocket.Port?
 
+    # Load the configuration file.
     loadJSONConfig : () ->
         fileToOpen  = 'config'
         tmpJSON     = require (Path.join @Paths.Config, fileToOpen + ".json")
