@@ -19,16 +19,21 @@ Config          = require '../common/config'
 {Translator}    = require './trans'
 
 class Errors
+    # Configure 404
     @NotFound : (msg = "404 Not Found") ->
         @name   = 'NotFound'
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
 
+    # Configure Internal Server Error
     @Error : (msg) ->
         @name   = 'InternalServerError'
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
 
+    # Render the Error page with a 404.
+    # Also used when a wrong browser is use.
+    # Set the right message and render the error page.
     @RenderNotFound : (req, res) ->
         loc = Translator.getDomain req.host
         res.status 404
@@ -53,6 +58,7 @@ class Errors
         options.year = do (new Date()).getFullYear
         res.render 'error.jade', options
 
+    # Set the right message and render the internal error page.
     @RenderError : (req, res) ->
         loc = Translator.getDomain req.host
         res.status 500

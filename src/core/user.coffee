@@ -63,6 +63,7 @@ class _User
                 req.session.uid = body.id
                 Stats.countTmpUser req, res, callback
 
+    # Redirect to room
     redirtoroom : (req, res) =>
         res.redirect '/room'
 
@@ -138,6 +139,9 @@ class _User
         else
             @errorOnQuickLogin 'Missing field : Nickname', req, res
 
+    # Called when a not registered user wants to join a Room.
+    # Check if the login and the Room id are correctly set, if not, redirect to the home page.
+    # If everything is ok, create the user and redirect him into the Room.
     quickJoin : (req, res, next) =>
         param = req.body
         if param.name? and param.name isnt ""

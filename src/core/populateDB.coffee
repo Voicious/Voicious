@@ -18,6 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Config = require '../common/config'
 
 class PopulateDB
+    # Call the callback given in order to populate the database
     @populate: (callback) ->
         do callback
 
