@@ -22,87 +22,88 @@ Config      = require '../common/config'
 {Errors}    = require './errors'
 
 class _Stats
-        constructor: () ->
+    constructor: () ->
 
-        renderStats : (res, options) =>
-            res.render 'stats', options
+    # Render the stats page.
+    renderStats : (res, options) =>
+        res.render 'stats', options
 
-        insertNewDate : (req, res, body, callback, timestamp) =>
-            Request.post {
-                json    :
-                    c_date : timestamp
-                    nb_user_tmp : 1
-                url     : "#{Config.Restapi.Url}/stat"
-                }, (e, r, body) =>
+    insertNewDate : (req, res, body, callback, timestamp) =>
+        Request.post {
+            json    :
+                c_date : timestamp
+                nb_user_tmp : 1
+            url     : "#{Config.Restapi.Url}/stat"
+        }, (e, r, body) =>
+            if e? or r.statusCode > 200
+                Errors.RenderNotFound req, res
+            else
+                callback req, res
+
+    updateNbrTmpUser : (req, res, body, callback) =>
+        body = body[0]
+        body.nb_user_tmp += 1
+        Request.put {
+            json    : body
+            url     : "#{Config.Restapi.Url}/stat/#{body.id}"
+        }, (e, r, body) =>
+            if e? or r.statusCode > 200
+                Errors.RenderNotFound req, res
+            else
+                callback req, res
+
+    countTmpUser : (req, res, callback) =>
+        date = Moment().format "YYYY-MM-DD"
+        timestamp = String(do (new Date(date)).getTime)
+        Request.get "#{Config.Restapi.Url}/stat?c_date=#{timestamp}", (e, r, body) =>
+            if e? or r.statusCode > 200
+                Errors.RenderNotFound req, res
+            else
+                body = JSON.parse body
+                if body.length is 0
+                    @insertNewDate req, res, body, callback, timestamp
+                else
+                    @updateNbrTmpUser req, res, body, callback
+
+    getNumberOfRoomsPerDay: (req, res, body) =>
+        body = JSON.parse body
+        data = {}
+        for rooms in body
+            date = Moment.unix rooms.c_date / 1000
+            key = date.format "YYYY-MM-DD"
+            timestamp = do (new Date(key)).getTime
+            if data[timestamp]?
+                data[timestamp] = data[timestamp] += 1
+            else
+                data[timestamp] = 1
+        tmp = []
+        for timestamp, nb of data
+            tmp.push [Number(timestamp), nb]
+        return tmp
+
+    getNumberOfTmpUsersPerDay: (req, res, body) =>
+        body = JSON.parse body
+        data = []
+        for users in body
+            data.push [Number(users.c_date), users.nb_user_tmp]
+        return data
+
+    statsPage : (req, res) =>
+        Request.get "#{Config.Restapi.Url}/room", (e, r, body) =>
+            if e? or r.statusCode > 200
+                Errors.RenderNotFound req, res
+            else
+                chart1 = JSON.stringify @getNumberOfRoomsPerDay req, res, body
+                Request.get "#{Config.Restapi.Url}/stat", (e, r, body) =>
                     if e? or r.statusCode > 200
                         Errors.RenderNotFound req, res
                     else
-                        callback req, res
-
-        updateNbrTmpUser : (req, res, body, callback) =>
-                body = body[0]
-                body.nb_user_tmp += 1
-                Request.put {
-                    json    : body
-                    url     : "#{Config.Restapi.Url}/stat/#{body.id}"
-                }, (e, r, body) =>
-                    if e? or r.statusCode > 200
-                        Errors.RenderNotFound req, res
-                    else
-                        callback req, res
-
-        countTmpUser : (req, res, callback) =>
-            date = Moment().format "YYYY-MM-DD"
-            timestamp = String(do (new Date(date)).getTime)
-            Request.get "#{Config.Restapi.Url}/stat?c_date=#{timestamp}", (e, r, body) =>
-                if e? or r.statusCode > 200
-                    Errors.RenderNotFound req, res
-                else
-                    body = JSON.parse body
-                    if body.length is 0
-                        @insertNewDate req, res, body, callback, timestamp
-                    else
-                        @updateNbrTmpUser req, res, body, callback
-
-        getNumberOfRoomsPerDay: (req, res, body) =>
-            body = JSON.parse body
-            data = {}
-            for rooms in body
-                date = Moment.unix rooms.c_date / 1000
-                key = date.format "YYYY-MM-DD"
-                timestamp = do (new Date(key)).getTime
-                if data[timestamp]?
-                    data[timestamp] = data[timestamp] += 1
-                else
-                    data[timestamp] = 1
-            tmp = []
-            for timestamp, nb of data
-                tmp.push [Number(timestamp), nb]
-            return tmp
-
-        getNumberOfTmpUsersPerDay: (req, res, body) =>
-             body = JSON.parse body
-             data = []
-             for users in body
-                data.push [Number(users.c_date), users.nb_user_tmp]
-             return data
-
-        statsPage : (req, res) =>
-            Request.get "#{Config.Restapi.Url}/room", (e, r, body) =>
-                if e? or r.statusCode > 200
-                    Errors.RenderNotFound req, res
-                else
-                    chart1 = JSON.stringify @getNumberOfRoomsPerDay req, res, body
-                    Request.get "#{Config.Restapi.Url}/stat", (e, r, body) =>
-                        if e? or r.statusCode > 200
-                            Errors.RenderNotFound req, res
-                        else
-                            chart2 = JSON.stringify @getNumberOfTmpUsersPerDay req, res, body
-                            options =
-                                title           : 'Voicious'
-                                chart1          : chart1
-                                chart2          : chart2
-                            @renderStats res, options
+                        chart2 = JSON.stringify @getNumberOfTmpUsersPerDay req, res, body
+                        options =
+                            title           : 'Voicious'
+                            chart1          : chart1
+                            chart2          : chart2
+                        @renderStats res, options
 
 exports.Stats   = new _Stats
 exports.Routes  =
