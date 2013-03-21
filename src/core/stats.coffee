@@ -28,6 +28,8 @@ class _Stats
     renderStats : (res, options) =>
         res.render 'stats', options
 
+    # Create a new document into the collection "stat".
+    # Set the nb_user_tmp to 1.
     insertNewDate : (req, res, body, callback, timestamp) =>
         Request.post {
             json    :
@@ -40,6 +42,7 @@ class _Stats
             else
                 callback req, res
 
+    # Increment the nb_user_tmp into the stat collection for the given id from the body.
     updateNbrTmpUser : (req, res, body, callback) =>
         body = body[0]
         body.nb_user_tmp += 1
@@ -52,6 +55,7 @@ class _Stats
             else
                 callback req, res
 
+    # Create or update the number of temporary user daily.
     countTmpUser : (req, res, callback) =>
         date = Moment().format "YYYY-MM-DD"
         timestamp = String(do (new Date(date)).getTime)
@@ -65,6 +69,7 @@ class _Stats
                 else
                     @updateNbrTmpUser req, res, body, callback
 
+    # Parse the number of room created per Day.
     getNumberOfRoomsPerDay: (req, res, body) =>
         body = JSON.parse body
         data = {}
@@ -81,6 +86,8 @@ class _Stats
             tmp.push [Number(timestamp), nb]
         return tmp
 
+    # Get the number of temporary user created per Day.
+    # Return a array of array in the form [[2013-03-12,42], [2013-03-13,12]].
     getNumberOfTmpUsersPerDay: (req, res, body) =>
         body = JSON.parse body
         data = []
@@ -88,6 +95,7 @@ class _Stats
             data.push [Number(users.c_date), users.nb_user_tmp]
         return data
 
+    # Get all the values for the graphs and render the stats page if no errors occurs.
     statsPage : (req, res) =>
         Request.get "#{Config.Restapi.Url}/room", (e, r, body) =>
             if e? or r.statusCode > 200
