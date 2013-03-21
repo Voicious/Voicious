@@ -1,22 +1,29 @@
 {
-    "name"          : "Voicious",
-    "description"   : "",
-    "main"          : "./www/voicious.js",
-    "version"       : "0.0.1",
-    "dependencies"  : {
-        "express"       : "3.x",
-        "jade"          : "0.27.x",
-        "moment"        : "2.0.x",
-        "jugglingdb"    : "0.1.x",
-        "MD5"           : "1.0.x",
-        "request"       : "2.12.x",
-        "ws"            : "0.4.x"
-    },
-    "directories"   : {
-        "lib"       : "./www/lib"
-    },
-    "scripts"       : {
-        "install"   : "cake build",
-        "start"     : "node ./lib/startup.js"
-    }
+  "name": "Voicious",
+  "description": "",
+  "main": "./www/voicious.js",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "~3.1.0",
+    "jade": "~0.28.2",
+    "moment": "~2.0.0",
+    "jugglingdb": "~0.2.0-23",
+    "MD5": "~1.0.3",
+    "request": "~2.16.6",
+    "ws": "~0.4.25"
+  },
+  "directories": {
+    "lib": "./www/lib"
+  },
+  "scripts": {
+    "install": "grunt all",
+    "start": "node ./lib/startup.js"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-docco": "~0.2.0",
+    "grunt-contrib-coffee": "~0.6.3",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-cssmin": "~0.5.0"
+  }
 }

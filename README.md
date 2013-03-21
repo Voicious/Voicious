@@ -5,11 +5,10 @@ Aimed as well for private using than for enterprises, its ease of use and its er
 
 ## Install
 
-Run the following command from the root directory to install Voicious' dependencies :
+Run the following command from the root directory to install Voicious' dependencies and build the project :
 <pre><code>npm install</code></pre>
 
-Otherwise, you can manually install all dependencies and run :
-<pre><code>cake build</code></pre>
+**Voicious** uses [Grunt](http://gruntjs.com) so you can easily build the project with `grunt build` and the documentation with `grunt docco`.
 
 ## Run
 
@@ -21,12 +20,12 @@ node ./lib/startup.js</code></pre>
 
 The Voicious server requires the following Node.js modules to run :
 
-* Express (=> 3.x)
-* Jade (>= 0.27.x)
-* JugglingDB (>= 0.1.x)
-* MD5 (>= 1.0x)
-* Moment (>= 2.0.0)
-* Request (>= 2.12.0)
+* Express
+* Jade
+* JugglingDB
+* MD5
+* Moment
+* Request
 
 
 To build Voicious you will also need a working CoffeeScript installation  
