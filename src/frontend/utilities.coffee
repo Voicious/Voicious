@@ -15,16 +15,20 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+# Contain useful functions.
 class   Utilities
     constructor         : () ->
 
+    # Generate a random number.
     randNb              : () =>
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
 
+    # Generate a random key.
     generateRandomId    : () =>
         return (@randNb() + @randNb() + "-" + @randNb() + "-" + @randNb() +
                 "-" + @randNb() + "-" + @randNb() + @randNb() + @randNb())
 
+    # Split a string by size and return an array of strings.
     splitString         : (str, len) =>
         size    = Math.ceil str.length / len 
         ret     = []
@@ -35,6 +39,7 @@ class   Utilities
 
         return ret
 
+    # Get the size of a map.
     getMapSize          : (map) =>
         i = 0
         for key, val of map

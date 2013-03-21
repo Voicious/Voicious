@@ -22,21 +22,15 @@ Config            = require '../common/config'
 {Errors}          = require '../core/errors'
 {Token}           = require '../core/token'
 
-# Generate random ID
+# Generate a random number.
 randNb            = () ->
   return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
 
+# Generate a random key.
 generateRandomId  = () ->
   return (randNb() + randNb() + "-" + randNb() + "-" + randNb() + "-" +
           randNb() + "-" + randNb() + randNb() + randNb())
 
-# Variables tips:
-#
-# rid   -> roomID
-# cid   -> clientID
-# cinfo -> clientInfo
-
-# WebSocket server
 class Websocket
         constructor       : () ->
             @sockets    = []

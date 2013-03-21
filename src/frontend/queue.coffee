@@ -15,10 +15,12 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+# This class allows tu sort divided elements
 class   Queue
     constructor     : () ->
         @queue = {}
     
+    # Add an element in the queue by id and number
     addMsgInQueue   : (id, nb, elem) =>
         if @queue[id]?
             @queue[id][nb] = elem
