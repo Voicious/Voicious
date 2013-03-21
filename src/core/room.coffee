@@ -26,14 +26,17 @@ Config      = require '../common/config'
 {Translator}= require './trans'
 
 class _Room
+    # Initilizae a nodemailer module.
     constructor : () ->
         @transport = nodemailer.createTransport('Sendmail');
         @token  = Token
 
+    # Render the room with the good translation.
     renderRoom : (res, options, host) =>
         options.trans = Translator.getTrans(host, 'room')
         res.render 'room', options
 
+    # Create a new Room and check if the user is logged in.
     roomPage : (req, res, next) =>
         Request.get "#{Config.Restapi.Url}/room/#{req.params.roomid}", (e, r, body) =>
             if e? or r.statusCode > 200
@@ -59,6 +62,9 @@ class _Room
                                 options.token = token
                                 @renderRoom res, options, req.host
 
+    # Retrieve the bug report entered by the user.
+    # Send a mail if the nodemailer object find a sendmail in the server.
+    # The bug report is stock into the collection/table bug.
     reportBug       : (req, res) =>
         @transport.sendMail({
             from    : "Voicious bugs<no-reply@voicious.com>"
@@ -74,6 +80,7 @@ class _Room
             else
                 res.send 200
 
+    # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>
         Request.post {
             json    : param
