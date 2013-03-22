@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+# Define the token model in the database.
 ModelDef =
     id_room   :
           type  : Number

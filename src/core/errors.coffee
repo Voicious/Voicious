@@ -19,13 +19,13 @@ Config          = require '../common/config'
 {Translator}    = require './trans'
 
 class Errors
-    # Configure 404
+    # Configure 404.
     @NotFound : (msg = "404 Not Found") ->
         @name   = 'NotFound'
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
 
-    # Configure Internal Server Error
+    # Configure Internal Server Error.
     @Error : (msg) ->
         @name   = 'InternalServerError'
         Error.call this, msg

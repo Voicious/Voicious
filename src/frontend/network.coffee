@@ -23,6 +23,7 @@ class NetworkManager
         @connections                = {}
         @queue                      = new Queue
 
+    # Auto zoom web cam when a new peer join the conference.
     autoZoomWebcam          : () =>
         mainCamId = $('#mainCam video').attr 'id'
         if not mainCamId
@@ -34,6 +35,7 @@ class NetworkManager
             newCam.addClass 'mainCam'
             $('#mainCam').append newCam
 
+    # Create a new peerConnection.
     createPeerConnection    : (options) =>
         cid               = options.cinfo.cid
         localStream       = window.localStream
@@ -87,6 +89,7 @@ class NetworkManager
             return obj
         return null
 
+    # Send a packet to all the peers connected to the room.
     sendToAll                   : (message) =>
         for key, val of @connections
             do (key, val) =>
@@ -94,6 +97,7 @@ class NetworkManager
                 pc = val.peerConnection
                 pc.tunnel.onsend message
 
+    # Negociate peers offer with all the peers connected to the room.
     negociatePeersOffer         : (stream) =>
         for key, val of @connections
             do (key, val) =>
@@ -102,6 +106,7 @@ class NetworkManager
                 pc.peerCreateOffer (tunnel, offer) =>
                     tunnel.onsend ["offer", val.cinfo, offer.sdp]
 
+    # Send authentification packet when the socket open.
     onSocketOpen                : () =>
         roomId = $("#infos").attr("room")
         token = $("#infos").attr("token")
@@ -109,6 +114,8 @@ class NetworkManager
 
     onChannelOpen               : () =>
 
+    # Called when a new packet has been received on the socket.
+    # Check the packet content when receving a new message.
     onSocketMessage             : (message) =>
         try
             args        = JSON.parse(message.data)
@@ -125,6 +132,7 @@ class NetworkManager
                 @onMessageExchangeOffer eventName, cinfos, infos
                 @onMessageText eventName, cinfos, infos
 
+    # Build a packet from a complete queue.
     buildMessage                : (args) =>
         id      = args[1]
         nb      = args[2]
@@ -143,6 +151,8 @@ class NetworkManager
         else
             return null
 
+    # Called when a new packet has been received on the datachannel.
+    # Check the packet content when receiving a new message.
     onChannelMessage            : (message) =>
         try
             args        = JSON.parse(message.data)
@@ -164,6 +174,7 @@ class NetworkManager
                 @onMessageExchangeOffer eventName, cinfos, infos
                 @onMessageText eventName, cinfos, infos
 
+    # Call the functions related to the connection of a new peer or a disconnection.
     onMessagePeers              : (eventName, cinfos) =>
         switch (eventName)
             when 'peers'
@@ -211,6 +222,7 @@ class NetworkManager
                 $("#nbFeed").text(feed)
                 delete @connections[cinfo.cid]
 
+    # Call the functions related to the peerConnection exchange.
     onMessageExchangeOffer      : (eventName, cinfos, sdp) =>
         switch (eventName)
             when 'offer'
@@ -233,6 +245,7 @@ class NetworkManager
 
                 pc.addice sdp
 
+    # Call the functions related to the text chat.
     onMessageText               : (eventName, cinfos, msg) =>
         switch eventName
             when 'message'
@@ -244,10 +257,12 @@ class NetworkManager
 
     onChannelClose              : (event) =>
 
+    # Send a message to a peer through a socket.
     onSocketSend                : (socket, message) =>
         msg = JSON.stringify message
         socket.send msg
 
+    # Send a message to a peer through a datachannel.
     onChannelSend               : (channel, message) =>
         message[1].cid = @cinfo.cid
         msg = JSON.stringify message
@@ -262,6 +277,7 @@ class NetworkManager
         else
             channel.send msg
 
+    # Start the network services.
     connection                  : () =>
         @socket             = new WebSocket "ws://#{@networkConfig.hostname}:#{@networkConfig.port}/"
         @socket.onopen      = () =>

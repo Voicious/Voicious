@@ -17,6 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 {Schema}    = require 'jugglingdb'
 
+# Define the bug model in the database.
 ModelDef =
     c_date   :
         type    : String

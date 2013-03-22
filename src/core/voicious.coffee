@@ -25,7 +25,7 @@ PopulateDB  = require './populateDB'
 {Errors}    = require './errors'
 {Translator} = require './trans'
 
-# Just implement a _currying_ system, it will be used for routes
+# Just implement a _currying_ system, it will be used for routes.
 Function.prototype.curry = () ->
     if arguments.length < 1
         return this
@@ -34,15 +34,15 @@ Function.prototype.curry = () ->
     () ->
         _method.apply this, (args.concat Array.prototype.slice.call arguments)
 
-# Main class  
-# It define the application, populate the database, load all the routes and launch the listenning
+# Main class
+# It define the application, populate the database, load all the routes and launch the listenning.
 class Voicious
     constructor     : () ->
         @app            = do Express
         @configured     = no
 
-    # Retrieve all routes from all services and register them in __Express__  
-    # All routes are preprocessed by __Session.withCurrentUser__
+    # Retrieve all routes from all services and register them in __Express__.
+    # All routes are preprocessed by __Session.withCurrentUser__.
     setAllRoutes    : () =>
         # We can't require this before since it'll load its schema in the database
         {Session}       = require './session'
@@ -67,7 +67,7 @@ class Voicious
         @app.all /^(?!\/public)\/*/, (req, res) =>
             throw new Errors.NotFound
 
-    # Configure the __Express__ instance
+    # Configure the __Express__ instance.
     configure       : () =>
         @app.set 'port', Config.Voicious.Port
         @app.set 'views', Config.Paths.Views
@@ -90,7 +90,7 @@ class Voicious
         @configured = yes
 
     # Main function  
-    # It'll populate the database, fetch the configuration and launch the listenning  
+    # It'll populate the database, fetch the configuration and launch the listenning.
     start       : () =>
         PopulateDB.PopulateDB.populate () =>
             if not @configured
@@ -99,7 +99,7 @@ class Voicious
             (Http.createServer @app).listen (@app.get 'port'), () =>
                 console.log "Server ready on port #{@app.get 'port'}"
 
-    # A callback closing the database before exiting
+    # A callback closing the database before exiting.
     end     : () ->
         console.log "Exiting..."
         do process.exit

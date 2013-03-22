@@ -206,10 +206,3 @@ $(document).ready ->
     ($ window).resize relayout
     if window?
         window.Relayout = relayout
-
- ###   ($ '#footer').resizable {
-        handles   : 'n',
-        stop      : relayout,
-        minHeight : 125,
-        maxHeight : 480,
-    }###

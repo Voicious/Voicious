@@ -22,7 +22,7 @@ Config          = require '../common/config'
 class _Session
     constructor     : () ->
 
-    # Middleware which load the current user informations in __req.currentUser__
+    # Middleware which load the current user informations in __req.currentUser__.
     withCurrentUser : (req, res, next) =>
         req.currentUser = undefined
         if req.session? and req.session.uid?
@@ -32,8 +32,8 @@ class _Session
         else
             do next
 
-    # Middleware-like function which will call it's __next__ argument if __req.currentUser__ exists  
-    # It'll redirect to _'/'_ if not
+    # Middleware-like function which will call it's __next__ argument if __req.currentUser__ exists
+    # It'll redirect to _'/'_ if not.
     ifUser          : (next, cb, req, res) =>
         if req.currentUser
             next req, res
