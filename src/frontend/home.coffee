@@ -37,6 +37,7 @@ class JumpInStep
         (do @_jqBtn.get).click @display
         (do @_jqCancel.get).click @hide
 
+    # Displays the next step.
     display : (event) =>
         (do @_jqCancel.get).attr 'disabled', off
         (do @_jqBtn.get).attr 'disabled', on
@@ -51,6 +52,7 @@ class JumpInStep
             left    : '-=290'
         }, 600
 
+    # Hides the previous step.
     hide : (event) =>
         (do @_jqBtn.get).attr 'disabled', off
         (do @_jqCancel.get).attr 'disabled', on
@@ -62,6 +64,7 @@ class JumpInStep
             left    : '+=290'
         }, 600
 
+    # On form submit, fires the Javascript event 'blur'.
     fireAllBlurOnSubmit : () =>
         form    = (do @_jqDiv.get).children 'form'
         btn     = (do @_jqDiv.get).children 'button[type=submit]'
@@ -78,11 +81,13 @@ class ChoiceForm
             ($ input).bind 'blur', @onFieldBlur
         do @fireAllBlurOnSubmit
 
+    # On click, fires the Javascript event 'blur'.
     fireAllBlurOnSubmit : () =>
         ((do @_jqElem.get).find 'button[type=submit]').click (event) =>
             ((do @_jqElem.get).find 'input').each () ->
                 ($ @).trigger 'blur'
 
+    # Displays the form.
     display : () =>
         ($ document).trigger 'hideAllForms'
         ($ 'div#choicesContainer div.displayed').hide 0, () ->
@@ -96,6 +101,7 @@ class ChoiceForm
         window.location.hash    = @name
         (do @_jqElem.get).fadeIn 600
 
+    # Displays the good field icon.
     displayFieldIcon : (field, ok) =>
         jqIcon      = ($ 'body').find "span.stateIcon[rel=#{field}]"
         jqMessage   = ($ 'body').find "span.errorMessage[rel=#{field}]"
@@ -107,7 +113,8 @@ class ChoiceForm
         else
             jqIcon.addClass 'icon-ok'
             jqMessage.addClass 'none'
-
+        
+    # Checks value validity of a field.
     checkFieldValuePresence : (field, displayError) =>
         valid   = ((do @_jqForm.get).find "input##{field}")[0].validity.valid
         if not valid
@@ -133,17 +140,20 @@ class JumpInForm extends ChoiceForm
         @_jqFirstStep   = PrivateValue.GetOnly (do @_jqElem.get).find '#stepOne'
         @_jqBtn         = PrivateValue.GetOnly (do @_jqFirstStep.get).find 'button'
 
+    # On form submit, fires the Javascript 'blur' event.
     fireAllBlurOnSubmit : () =>
         for step in @steps
             do step.fireAllBlurOnSubmit
 
+    # Hides Jumpin form animation.
     hide : () =>
         (do @_jqFirstStep.get).fadeTo 0.99
         (do @_jqFirstStep.get).animate {
             opacity : 0
             left    : '-=290'
         }, 600
-
+        
+    # Shows Jumpin form animation.
     show : () =>
         (do @_jqFirstStep.get).fadeTo 0.01
         (do @_jqFirstStep.get).animate {
@@ -156,6 +166,7 @@ class SignUpForm extends ChoiceForm
         if not (do @checkPasswordConfirmation)
             do event.preventDefault
 
+    # Checks if the password matches with the confirm passowrd.
     checkPasswordConfirmation : () =>
         passwd  = do ((do @_jqForm.get).find 'input#signup_password').val
         confirm = do ((do @_jqForm.get).find 'input#signup_password_confirm').val
@@ -163,11 +174,13 @@ class SignUpForm extends ChoiceForm
             return false
         return yes
 
+    # Displays field icon matching with the field.
     displayFieldIcon : (field, ok) =>
         super field, ok
         if field is "signup_password"
             super "signup_password_confirm", ok
 
+    # Checks password confirmation and displays the good field icon.
     onFieldBlur : (event) =>
         field   = ($ event.target).attr 'id'
         super event
@@ -182,6 +195,7 @@ class Choice
 
         @_form      = PrivateValue.GetOnly (new formType @name)
 
+    # On click, set the class to 'selected' and displays the form.
     onClick : (event) =>
         ($ 'div#choices li.selected').removeClass 'selected'
         (do @_jqElem.get).addClass 'selected'

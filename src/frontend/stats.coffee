@@ -21,6 +21,7 @@ class Chart
         @_jqChart = PrivateValue.GetOnly ($ '#' + @name)
         (do @_jqChart.get).bind "plothover", @displayTickData
 
+    # Checks for new data and displays it after.
     displayTickData: (event, pos, item) =>
         if item?
             if @prevPoint isnt item.dataIndex
@@ -35,6 +36,7 @@ class Chart
             do $("#tooltip").remove
             @prevPoint = null
 
+    # Displays an updated tooltip with its new position.
     showTooltip: (x, y, contents) =>
         $('<div id="tooltip">' + contents + '</div>').css({
               position: 'absolute',
