@@ -25,8 +25,14 @@ class Room
         $('#tutorialMode').toggle @startTutorial, @stopTutorial
 
     # Append the javascript for the new module given in parameter.
-    loadScript          : (moduleName) ->
-        $('head').append "<script type='test/javascript' src='/public/js/#{moduleName}.js'>"
+    loadScript          : (moduleName, modules) ->
+        $.ajax(
+            type    : 'GET'
+            url     : "/public/js/#{moduleName}.js"
+            dataType: 'script'
+        ).done (data) =>
+            eval data
+            @getModuleHTML moduleName, modules
 
     #Retrieve the HTML for the module and position it into a tag
     #   with the id #moduleName.
@@ -48,8 +54,7 @@ class Room
     loadModules         : (modules) ->
         if modules.length != 0
             mod = do modules.shift
-            @loadScript mod
-            @getModuleHTML mod, modules
+            @loadScript mod, modules
 
     # Add the user video and sound to the conference.
     joinConference      : () =>
