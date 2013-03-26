@@ -15,6 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 class Room
+    # Initialize a room and a networkManager.
+    # Load the modules given in parameter (Array)
     constructor         : (modules) ->
         @moduleArray = new Array
         if window.ws? and window.ws.Host? and window.ws.Port?
@@ -24,7 +26,8 @@ class Room
         $('#reportBug').click @bugReport
         $('#tutorialMode').toggle @startTutorial, @stopTutorial
 
-    # Append the javascript for the new module given in parameter.
+    # Get the javascript for the new module given in parameter
+    # and call getModuleHTML.
     loadScript          : (moduleName, modules) ->
         $.ajax(
             type    : 'GET'
@@ -164,10 +167,6 @@ class Room
         $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
-    # Start all the room services.
-    start               : () =>
-
-
 Relayout    = (container) =>
     options =
         resize : no
@@ -181,7 +180,6 @@ Relayout    = (container) =>
 $(document).ready ->
     if do WebRTC.runnable == true
         room = new Room window.modules
-        do room.start
 
     container   = ($ '#page')
     relayout    = Relayout container
