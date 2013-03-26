@@ -26,14 +26,16 @@ Config      = require '../common/config'
 {Translator}= require './trans'
 
 class _Room
-    # Initialize a nodemailer module.
-    constructor : () ->
+    # Initialize a nodemailer module and a list of modules
+    # with default values.
+    constructor : (@modulesList = ['userList', 'textChat', 'camera']) ->
         @transport = nodemailer.createTransport('Sendmail');
         @token  = Token
 
-    # Render the room with the good translation.
+    # Render the room with the good translation and the list of modules stringified.
     renderRoom : (res, options, host) =>
         options.trans = Translator.getTrans(host, 'room')
+        options.modules = JSON.stringify @modulesList
         res.render 'room', options
 
     # Create a new Room and check if the user is logged in.
@@ -80,6 +82,30 @@ class _Room
             else
                 res.send 200
 
+    renderModule    : (req, res) =>
+        user        = req.currentUser
+        options     =
+            title   : 'Voicious'
+            login   : user.name
+            room    : req.params.roomid
+            trans   : Translator.getTrans(req.host, 'room')
+        res.render "modules/#{req.body.module}.jade", options
+
+    reportBug       : (req, res) =>
+        @transport.sendMail({
+            from    : "Voicious bugs<no-reply@voicious.com>"
+            to      : 'voicious_2014@labeip.epitech.eu'
+            subject : 'Bug Report ' + moment().format()
+            text    : req.body.bug})
+        Request.post {
+            json    : req.body
+            url     : "#{Config.Restapi.Url}/bug"
+        }, (e, r, body) =>
+            if e? or r.statusCode > 200
+                throw new Errors.Error
+            else
+                res.send 200
+
     # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>
         Request.post {
@@ -101,3 +127,4 @@ exports.Routes  =
         '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage, exports.Room.redirectRoom)
     post :
         '/report'       : exports.Room.reportBug
+        '/renderModule' : exports.Room.renderModule

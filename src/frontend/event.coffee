@@ -19,14 +19,14 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class   EventManager
     constructor         : () ->
         @events = {}
-        
+
     # Get a callback from the array with a string.
     getEvent            : (eventName) =>
         for key, val of @events
             if eventName == key
                 return val
         return null
-        
+
     # Add a new callback into the array with a string as a key.
     addEvent            : (eventName, event) =>
         @events[eventName] = event

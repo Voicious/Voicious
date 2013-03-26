@@ -14,25 +14,50 @@ You should have received a copy of the GNU Affero General Public License along w
 program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
-
 class Room
-    constructor         : () ->
-        @userList       = new UserList
+    # Initialize a room and a networkManager.
+    # Load the modules given in parameter (Array)
+    constructor         : (modules) ->
+        @moduleArray = new Array
         if window.ws? and window.ws.Host? and window.ws.Port?
             @networkManager = NetworkManager window.ws.Host, window.ws.Port
-            @textChat       = new TextChat @networkManager
+            do @networkManager.connection # Must be done before initializing modules.
+            @loadModules modules
         $('#reportBug').click @bugReport
         $('#tutorialMode').toggle @startTutorial, @stopTutorial
-        do @configureEvents
-        do @enableZoomMyCam
-        do @enableZoomCam
 
-    # Fill the eventManager with callbacks which need to be called outside of this object.
-    configureEvents     : () =>
-        EventManager.addEvent "fillUsersList", (users) =>
-            @userList.fill users
-        EventManager.addEvent "updateUserList", (user, event) =>
-            @userList.update user, event
+    # Get the javascript for the new module given in parameter
+    # and call getModuleHTML.
+    loadScript          : (moduleName, modules) ->
+        $.ajax(
+            type    : 'GET'
+            url     : "/public/js/#{moduleName}.js"
+            dataType: 'script'
+        ).done (data) =>
+            eval data
+            @getModuleHTML moduleName, modules
+
+    #Retrieve the HTML for the module and position it into a tag
+    #   with the id #moduleName.
+    # Call @loadModules with the remaining modules to load.
+    getModuleHTML       : (moduleName, modules) ->
+        $.ajax(
+            type    : 'POST'
+            url     : '/renderModule'
+            data    :
+                    module      : moduleName
+        ).done (data) =>
+            $(data).appendTo "##{moduleName}"
+            module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
+            @moduleArray.push (new window[module] @networkManager)
+            @loadModules modules
+
+    # Load the Modules given in parameter recursively.
+    # Parameter's type must be an array.
+    loadModules         : (modules) ->
+        if modules.length != 0
+            mod = do modules.shift
+            @loadScript mod, modules
 
     # Add the user video and sound to the conference.
     joinConference      : () =>
@@ -74,43 +99,7 @@ class Room
         that = this
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
-    
-    # Start animation.
-    startAnimation       : (elems, interval, speed) =>
-        i = elems.length
-        time = interval * 5
-        while i >= 0
-            $(elems[i]).delay(time).fadeIn speed
-            time -= interval
-            i--
-        i = elems.length
-        fadeOutTime = interval * 10
-        while i >= 0
-            $(elems[i]).delay(fadeOutTime).fadeOut speed
-            fadeOutTime -= interval
-            i--
-        $('div#endMessage').delay(interval * 10 + 4 * interval).fadeIn speed
-        $('div#endMessage').delay(interval * 10).fadeOut speed
-        $('div#body').append '<div id="reportBugArrow" class="arrow_box">Click here if you want to report a bug.</div>'
-        $('div#body').append '<div id="textChatArrow" class="arrow_box">Here you can chat with you friends!</div>'
-        $('div#footer').append '<div id="activateArrow" class="arrow_box">Click here to activate your camera.</div>'
-        $('div#body').append '<div id="userListArrow" class="arrow_box">Here is a list of users currently in the room.</div>'
-        i = 0
-        time = interval * 5
-        while i < elems.length
-            $(elems[i]).delay(time).fadeOut speed
-            i++
-        $('div#endMessage').delay(time).fadeIn speed
-        $('div#endMessage').delay(time).fadeOut speed
-        i = 0
-        time = interval * 5
-        while i < elems.length
-            $(elems[i]).delay(time).fadeOut speed
-            i++
-        $('div#endMessage').delay(time).fadeIn speed
-        $('div#endMessage').delay(time).fadeOut speed
-        @startAnimation $("div[id$='Arrow']"), 1000, 400
-        
+
     # Start the tutorial animation.
     startTutorial      : () =>
         $("#tutorialMode").css "background-color", "#43535a"
@@ -147,7 +136,7 @@ class Room
     colorTutorialBtn   : () =>
         $("#tutorialMode").css "background-color", "#00aeef"
         $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
-        
+
     # Send bug report.
     sendReport          : () =>
         $('#sendReport').attr 'disabled', on
@@ -178,14 +167,6 @@ class Room
         $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
-    # Start all the room services.
-    start               : () =>
-        do @networkManager.connection
-        $('#joinConference').click () =>
-            do $('#notActivate').hide
-            @joinConference()
-
-
 Relayout    = (container) =>
     options =
         resize : no
@@ -198,8 +179,7 @@ Relayout    = (container) =>
 # launch it.
 $(document).ready ->
     if do WebRTC.runnable == true
-        room = new Room
-        do room.start
+        room = new Room window.modules
 
     container   = ($ '#page')
     relayout    = Relayout container
