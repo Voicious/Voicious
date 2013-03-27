@@ -36,10 +36,10 @@ class   TextChat extends Module
         $(window).resize () =>
             do @scrollPane.reinitialise
 
-        EventManager.addEvent "sendTextMessage", (message) =>
-            NetworkManager.sendToAll message
-        EventManager.addEvent "receiveTextMessage", (message) =>
-            @update message
+        #EventManager.addEvent "sendTextMessage", (message) =>
+        #    NetworkManager.sendToAll message
+        #EventManager.addEvent "receiveTextMessage", (message) =>
+        #    @update message
 
     # Update the text chat with a new message.
     update          : (message) =>

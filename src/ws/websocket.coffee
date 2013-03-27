@@ -44,18 +44,29 @@ class Websocket
         that             = @
         sock.rid         = rid
         sock.uid         = uid
+        sock.name        = name
         sock.onmessage   = (message) ->
             that.onmessage @, message
+        sock.onclose     = () ->
+            that.close @
         @send sock, { type : 'authenticated' }
         if not @socks[rid]?
             @socks[rid] = { }
         else
             peers = []
             for _uid of @socks[rid]
-                @send @socks[rid][_uid].sock, { type : 'peer.create' , params : { id : uid , name : name } }
-                peers.push { id : _uid , name : @socks[rid][_uid].name }
+                if @socks[rid][_uid]?
+                    @send @socks[rid][_uid].sock, { type : 'peer.create' , params : { id : uid , name : name } }
+                    if _uid isnt uid
+                        peers.push { id : _uid , name : @socks[rid][_uid].name }
             @send sock, { type : 'peer.list' , params : { peers : peers } }
         @socks[rid][uid] = { sock : sock , name : name }
+
+    close : (sock) =>
+        delete @socks[sock.rid][uid]
+        for uid of @socks[sock.rid]
+            if @socks[sock.rid][uid]?
+                @send @socks[sock.rid][uid].sock, { type : 'peer.remove' , params : { id : sock.uid , name : sock.name  } }
 
     onmessage : (sock, message) =>
         message = JSON.parse message.data
@@ -67,7 +78,8 @@ class Websocket
                     @send @socks[sock.rid][message.params.to].sock, message.params.data
 
     send : (sock, message) =>
-        sock.send JSON.stringify message
+        if sock.readyState is 1
+            sock.send JSON.stringify message
 
     start : () =>
         @server = new Ws {

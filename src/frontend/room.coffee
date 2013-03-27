@@ -24,25 +24,26 @@ class Room
         @moduleArray = new Array
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections = new Voicious.Connections @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
-            @loadModules modules
+            @loadModules modules, () =>
+                do @connections.dance
         $('#reportBug').click @bugReport
         $('#tutorialMode').toggle @startTutorial, @stopTutorial
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.
-    loadScript          : (moduleName, modules) ->
+    loadScript          : (moduleName, modules, cb) ->
         $.ajax(
             type    : 'GET'
             url     : "/public/js/#{moduleName}.js"
             dataType: 'script'
         ).done (data) =>
             eval data
-            @getModuleHTML moduleName, modules
+            @getModuleHTML moduleName, modules, cb
 
     #Retrieve the HTML for the module and position it into a tag
     #   with the id #moduleName.
     # Call @loadModules with the remaining modules to load.
-    getModuleHTML       : (moduleName, modules) ->
+    getModuleHTML       : (moduleName, modules, cb) ->
         $.ajax(
             type    : 'POST'
             url     : '/renderModule'
@@ -51,15 +52,17 @@ class Room
         ).done (data) =>
             $(data).appendTo "##{moduleName}"
             module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
-            @moduleArray.push (new window[module] @networkManager)
-            @loadModules modules
+            @moduleArray.push (new window[module] @connections)
+            @loadModules modules, cb
 
     # Load the Modules given in parameter recursively.
     # Parameter's type must be an array.
-    loadModules         : (modules) ->
+    loadModules         : (modules, cb) ->
         if modules.length != 0
             mod = do modules.shift
-            @loadScript mod, modules
+            @loadScript mod, modules, cb
+        else
+            do cb
 
     # Add the user video and sound to the conference.
     joinConference      : () =>

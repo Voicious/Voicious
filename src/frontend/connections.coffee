@@ -16,14 +16,18 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Ws
-    constructor : (@uid, @rid, ws) ->
+    constructor : (@uid, @rid) ->
+        @actions      = { }
+
+    dance : (ws) =>
         @ws           = new WebSocket "ws://#{ws.host}:#{ws.port}"
         @ws.onopen    = @onOpen
         @ws.onmessage = @onMessage
-        @actions      = { }
 
     defineAction : (actionName, callback) =>
-        @actions[actionName] = callback
+        if not @actions[actionName]?
+            @actions[actionName] = []
+        @actions[actionName].push callback
 
     send : (data) =>
         @ws.send JSON.stringify data
@@ -43,7 +47,8 @@ class Ws
         console.log message
         message = JSON.parse message.data
         if @actions[message.type]?
-            @actions[message.type] message.params
+            for i, callback of @actions[message.type]
+                callback message.params
 
 class PC
     constructor : (@id, @ws) ->
@@ -116,9 +121,12 @@ class Peer
         @pc.conclude (new window.RTCSessionDescription answeredDescription)
 
 class Connections
-    constructor : (uid, rid, ws) ->
+    constructor : (@uid, @rid, @wsPortal) ->
         @peers = { }
-        @ws    = new Ws(uid, rid, ws)
+        @ws    = new Ws @uid, @rid
+
+    dance : () =>
+        @ws.dance @wsPortal
         @ws.defineAction 'peer.list', (data) =>
             for peer in data.peers
                 @peers[peer.id] = new Peer @ws, peer.id, peer.name
@@ -134,6 +142,9 @@ class Connections
         @ws.defineAction 'ice.candidate', (data) =>
             if @peers[data.from]?
                 @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
+
+    defineAction : (actionName, action) =>
+        @ws.defineAction actionName, action
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate

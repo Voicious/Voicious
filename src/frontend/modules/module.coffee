@@ -15,10 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-class   Module
-    constructor : (@networkManager) ->
+class Module
+    constructor : (@connections) ->
 
-MD = Module
-
-if Window?
-    window.Module = MD
+if window?
+    window.Module = Module

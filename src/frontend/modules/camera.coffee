@@ -20,4 +20,4 @@ class Camera extends Module
         super NetworkManager
 
 if window?
-    window.Voicious.Camera = Camera
+    window.Camera = Camera
