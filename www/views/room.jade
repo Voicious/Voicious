@@ -15,11 +15,7 @@ block scripts
     script(type="text/javascript", src="/public/js/vendor/jquery.jscrollpane.js")
     script(type="text/javascript", src="/public/js/vendor/intro.js")
     script(type="text/javascript", src="/public/js/module.js")
-    script(type="text/javascript", src="/public/js/event.js")
-    script(type="text/javascript", src="/public/js/webRTC.js")
-    script(type="text/javascript", src="/public/js/network.js")
-    script(type="text/javascript", src="/public/js/utilities.js")
-    script(type="text/javascript", src="/public/js/queue.js")
+    script(type='text/javascript', src='/public/js/connections.js')
     script(type="text/javascript", src="/public/js/room.js")
     script(type="text/javascript")
         if ("#{login}" !== "") {
@@ -49,11 +45,11 @@ block content
                     p#room_logo voıċıoųs
                       span#beta Beta
                     div#room_control
-                      p(room='#{room}', token='#{token}')#infos
+                      p(rid='#{rid}', uid='#{uid}')#infos
                       div#room_url_box(data-step="1", data-intro='#{trans.roomNameArrow}')
                         span#share.icon.icon-share
                         p#room_url
-                          span#room_text #{room}
+                          span#room_text #{rid}
                         button#shutdown.icon.icon-off
                       div#btnCtrlBox
                         div.mod#tutorial
