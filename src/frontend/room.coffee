@@ -180,8 +180,8 @@ Relayout    = (container) =>
 # When the document has been loaded it will check if all services are available and
 # launch it.
 $(document).ready ->
-    #if do WebRTC.runnable == true
-    room = new Room window.modules
+    if window.Voicious.WebRTCRunnable
+        room = new Room window.modules
 
     container   = ($ '#page')
     relayout    = Relayout container

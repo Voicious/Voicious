@@ -46,16 +46,24 @@ class Ws
             @actions[message.type] message.params
 
 class PC
-    constructor : (@ws) ->
-        iceServers   = { iceServers : [ { url : 'stun:23.21.150.121' } ] }
-        @constraints =
+    constructor : (@id, @ws) ->
+        iceServers         = { iceServers : [ { url : 'stun:23.21.150.121' } ] }
+        @constraints       =
             mandatory :
                 OfferToReceiveAudio : yes
                 OfferToReceiveVideo : yes
-        @channels    = { }
+        @channels          = { }
 
-        @pc          = new window.RTCPeerConnection iceServers
-        @pc.onopen   = () =>
+        @pc                = new window.RTCPeerConnection iceServers
+        @pc.onicecandidate = @onIceCandidate
+
+    onIceCandidate : (event) =>
+        if event.candidate?
+            @ws.forward @id, { type : 'ice.candidate' , params : {
+                label     : event.candidate.sdpMLineIndex
+                id        : event.candidate.sdpMid
+                candidate : event.candidate.candidate
+            } }
 
     createDataChannel : (name) =>
         @channels              = @pc.createDataChannel name, { }
@@ -63,21 +71,21 @@ class PC
         @channels[name].onopen = () =>
             console.log "OPENED"
 
-    createOffer : (id) =>
+    createOffer : () =>
         @pc.createOffer (description) =>
             @pc.setLocalDescription description, () =>
-                @ws.forward id, { type : 'pc.offer' , params : { description : description } }
+                @ws.forward @id, { type : 'pc.offer' , params : { description : description } }
             , (error) =>
                 return
         , (error) =>
             return
         , @constraints
 
-    createAnswer : (id, offeredDescription) =>
+    createAnswer : (offeredDescription) =>
         @pc.setRemoteDescription offeredDescription, () =>
             @pc.createAnswer (description) =>
                 @pc.setLocalDescription description, () =>
-                    @ws.forward id, { type : 'pc.answer', params : { description : description } }
+                    @ws.forward @id, { type : 'pc.answer', params : { description : description } }
                 , (error) =>
                     return
             , (error) =>
@@ -88,15 +96,21 @@ class PC
     conclude : (answeredDescription) =>
         @pc.setRemoteDescription answeredDescription
 
+    addIceCandidate : (label, id, candidate) =>
+        @pc.addIceCandidate new window.RTCIceCandidate {
+            sdpMLineIndex : label
+            candidate     : candidate
+        }
+
 class Peer
     constructor : (ws, @id, @name) ->
-        @pc = new PC ws
+        @pc = new PC @id, ws
 
     offerHandshake : () =>
-        @pc.createOffer @id
+        do @pc.createOffer
 
     answerHandshake : (offeredDescription) =>
-        @pc.createAnswer @id, (new window.RTCSessionDescription offeredDescription)
+        @pc.createAnswer (new window.RTCSessionDescription offeredDescription)
 
     concludeHandshake : (answeredDescription) =>
         @pc.conclude (new window.RTCSessionDescription answeredDescription)
@@ -117,13 +131,17 @@ class Connections
         @ws.defineAction 'pc.answer', (data) =>
             if @peers[data.from]?
                 @peers[data.from].concludeHandshake data.description
-
-if window?
-    if not window.Voicious?
-        window.Voicious = { }
-    window.Voicious.Connections = Connections
+        @ws.defineAction 'ice.candidate', (data) =>
+            if @peers[data.from]?
+                @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate
 window.RTCPeerConnection     = window.mozRTCPeerConnection     or window.webkitRTCPeerConnection
-navigator.GetUserMedia       = navigator.mozGetUserMedia       or navigator.webkitGetUserMedia
+navigator.getUserMedia       = navigator.mozGetUserMedia       or navigator.webkitGetUserMedia
+
+if window?
+    if not window.Voicious?
+        window.Voicious = { }
+    window.Voicious.Connections    = Connections
+    window.Voicious.WebRTCRunnable = if window.RTCPeerConnection? and navigator.getUserMedia? then yes else no
