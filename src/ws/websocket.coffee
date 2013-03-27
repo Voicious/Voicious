@@ -38,21 +38,33 @@ class Websocket
                 Request.get "#{Config.Restapi.Url}/user/#{uid}", (e, r, body) =>
                     body = JSON.parse body
                     if not e? and body.id_room is rid
-                        @acceptSock uid, rid, sock
+                        @acceptSock body.id, rid, body.name, sock
 
-    acceptSock : (uid, rid, sock) =>
-        sock.onmessage   = @onmessage
+    acceptSock : (uid, rid, name, sock) =>
+        that             = @
+        sock.rid         = rid
+        sock.uid         = uid
+        sock.onmessage   = (message) ->
+            that.onmessage @, message
         @send sock, { type : 'authenticated' }
         if not @socks[rid]?
             @socks[rid] = { }
         else
             peers = []
-            for uid of @socks[rid]
-                peers.push uid
-            @send sock, { type : 'peers' , params : { 'peers' : peers } }
-        @socks[rid][uid] = sock
+            for _uid of @socks[rid]
+                @send @socks[rid][_uid].sock, { type : 'peer.create' , params : { id : uid , name : name } }
+                peers.push { id : _uid , name : @socks[rid][_uid].name }
+            @send sock, { type : 'peer.list' , params : { peers : peers } }
+        @socks[rid][uid] = { sock : sock , name : name }
 
-    onmessage : () =>
+    onmessage : (sock, message) =>
+        message = JSON.parse message.data
+        switch message.type
+            when 'forward' then do () =>
+                s = @socks[sock.rid][message.params.to]
+                if s?
+                    message.params.data.params.from = sock.uid
+                    @send @socks[sock.rid][message.params.to].sock, message.params.data
 
     send : (sock, message) =>
         sock.send JSON.stringify message
