@@ -146,6 +146,11 @@ class Connections
     defineAction : (actionName, action) =>
         @ws.defineAction actionName, action
 
+    sendToAll : (message) =>
+        message = { type : 'chat.message' , params : { message : message } }
+        for id of @peers
+            @ws.forward id, message
+
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate
 window.RTCPeerConnection     = window.mozRTCPeerConnection     or window.webkitRTCPeerConnection
