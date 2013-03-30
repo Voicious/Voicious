@@ -21,22 +21,32 @@ class Camera extends Module
         @feedCount        = 0
         @jqFeedCount      = ($ 'span#nbFeed')
         @jqVideoContainer = ($ 'ul#videos')
+        @currentZoom      = undefined
+        @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
         connections.defineAction 'stream.create', @newStream
         connections.defineAction 'peer.remove', @delStream
 
     delStream : (event, user) =>
-        do ($ "li#video_#{user.id}").remove
-        @refreshFeedCount -1
+        if (@streams.indexOf user.id) >= 0
+            do ($ "li#video_#{user.id}").remove
+            @refreshFeedCount -1
+            @streams.splice user.id, 1
+            if @currentZoom is user.id
+                @zoom undefined, undefined
 
     newStream : (event, data) =>
-        ($ data.video).addClass 'thumbnailVideo flipH'
+        @streams.push data.uid
+        video = ($ data.video)
+        video.addClass 'thumbnailVideo flipH'
         li = ($ '<li>', {
             id    : "video_#{data.uid}",
             class : 'thumbnail'
         }).appendTo @jqVideoContainer
-        li.append data.video
+        li.append video
         @refreshFeedCount 1
+        video.bind 'click', () =>
+            @zoom data.uid, video
 
     enableCamera : () =>
         @connections.enableCamera (video) =>
@@ -45,6 +55,18 @@ class Camera extends Module
             video.attr 'id', 'localVideo'
             video.addClass 'localVideo flipH'
             ($ 'div#localVideoContainer').append video
+            video.bind 'click', () =>
+                @zoom '', video
+
+    zoom : (uid, video) =>
+        container    = ($ 'div#mainCam')
+        do (container.find 'video').remove
+        @currentZoom = uid
+        if video?
+            newVideo     = do video.clone
+            newVideo.removeClass 'thumbnailVideo'
+            do newVideo[0].play
+            container.append newVideo
 
     refreshFeedCount : (modificator = 0) =>
         @feedCount += modificator

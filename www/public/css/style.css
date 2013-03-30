@@ -23,7 +23,7 @@
     font-style: normal;
 }
 
-button {
+button, video {
     cursor: pointer;
 }
 
