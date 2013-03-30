@@ -18,14 +18,21 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Camera extends Module
     constructor : (connections) ->
         super connections
+        @videoContainer = ($ 'ul#videos')
         ($ 'button#joinConference').bind 'click', @enableCamera
+        connections.defineAction 'stream.create', @newStream
+
+    newStream : (event, video) =>
+        ($ video).addClass 'thumbnailVideo flipH'
+        li = ($ '<li>', { class : 'thumbnail' }).appendTo @videoContainer
+        li.append video
 
     enableCamera : () =>
         @connections.enableCamera (video) =>
             ($ 'div#notActivate').css 'display', 'none'
             video = ($ video)
             video.attr 'id', 'localVideo'
-            video.addClass 'localVideo'
+            video.addClass 'localVideo flipH'
             ($ 'div#localVideoContainer').append video
 
 if window?

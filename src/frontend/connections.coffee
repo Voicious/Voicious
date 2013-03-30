@@ -43,7 +43,7 @@ class Ws
         @emitter.trigger message.type, message.params
 
 class PC
-    constructor : (@id, @ws, localStream) ->
+    constructor : (@id, @ws, emitter, localStream) ->
         iceServers         = { iceServers : [ { url : 'stun:23.21.150.121' } ] }
         @constraints       =
             mandatory :
@@ -53,7 +53,8 @@ class PC
 
         @pc                = new window.RTCPeerConnection iceServers
         @pc.onicecandidate = @onIceCandidate
-        @pc.onaddstream    = () =>
+        @pc.onaddstream    = (event) =>
+            emitter.trigger 'stream.create', (createVideoTag event.stream)
         @addStream localStream
 
     addStream : (s) =>
@@ -106,8 +107,8 @@ class PC
         }
 
 class Peer
-    constructor : (ws, @id, @name, localStream = undefined) ->
-        @pc = new PC @id, ws, localStream
+    constructor : (ws, @id, @name, emitter, localStream = undefined) ->
+        @pc = new PC @id, ws, emitter, localStream
 
     setLocalStream : (localStream) =>
         @pc.addStream localStream
@@ -135,10 +136,10 @@ class Connections
         @ws.dance @wsPortal
         @emitter.on 'peer.list', (event, data) =>
             for peer in data.peers
-                @peers[peer.id] = new Peer @ws, peer.id, peer.name, @localStream
+                @peers[peer.id] = new Peer @ws, peer.id, peer.name, @emitter, @localStream
                 do @peers[peer.id].offerHandshake
         @emitter.on 'peer.create', (event, data) =>
-            @peers[data.id] = new Peer @ws, data.id, data.name, @localStream
+            @peers[data.id] = new Peer @ws, data.id, data.name, @emitter, @localStream
         @emitter.on 'pc.offer', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].answerHandshake data.description
