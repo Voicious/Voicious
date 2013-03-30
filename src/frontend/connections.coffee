@@ -54,7 +54,10 @@ class PC
         @pc                = new window.RTCPeerConnection iceServers
         @pc.onicecandidate = @onIceCandidate
         @pc.onaddstream    = (event) =>
-            emitter.trigger 'stream.create', (createVideoTag event.stream)
+            data =
+                video : createVideoTag event.stream
+                uid   : @id
+            emitter.trigger 'stream.create', data
         @addStream localStream
 
     addStream : (s) =>

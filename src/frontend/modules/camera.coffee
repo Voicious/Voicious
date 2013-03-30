@@ -18,14 +18,25 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Camera extends Module
     constructor : (connections) ->
         super connections
-        @videoContainer = ($ 'ul#videos')
+        @feedCount        = 0
+        @jqFeedCount      = ($ 'span#nbFeed')
+        @jqVideoContainer = ($ 'ul#videos')
         ($ 'button#joinConference').bind 'click', @enableCamera
         connections.defineAction 'stream.create', @newStream
+        connections.defineAction 'peer.remove', @delStream
 
-    newStream : (event, video) =>
-        ($ video).addClass 'thumbnailVideo flipH'
-        li = ($ '<li>', { class : 'thumbnail' }).appendTo @videoContainer
-        li.append video
+    delStream : (event, user) =>
+        do ($ "li#video_#{user.id}").remove
+        @refreshFeedCount -1
+
+    newStream : (event, data) =>
+        ($ data.video).addClass 'thumbnailVideo flipH'
+        li = ($ '<li>', {
+            id    : "video_#{data.uid}",
+            class : 'thumbnail'
+        }).appendTo @jqVideoContainer
+        li.append data.video
+        @refreshFeedCount 1
 
     enableCamera : () =>
         @connections.enableCamera (video) =>
@@ -34,6 +45,10 @@ class Camera extends Module
             video.attr 'id', 'localVideo'
             video.addClass 'localVideo flipH'
             ($ 'div#localVideoContainer').append video
+
+    refreshFeedCount : (modificator = 0) =>
+        @feedCount += modificator
+        @jqFeedCount.text @feedCount
 
 if window?
     window.Camera = Camera
