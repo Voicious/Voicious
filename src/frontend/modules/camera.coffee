@@ -16,8 +16,17 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Camera extends Module
-    constructor         : (NetworkManager) ->
-        super NetworkManager
+    constructor : (connections) ->
+        super connections
+        ($ 'button#joinConference').bind 'click', @enableCamera
+
+    enableCamera : () =>
+        @connections.enableCamera (video) =>
+            ($ 'div#notActivate').css 'display', 'none'
+            video = ($ video)
+            video.attr 'id', 'localVideo'
+            video.addClass 'localVideo'
+            ($ 'div#localVideoContainer').append video
 
 if window?
     window.Camera = Camera

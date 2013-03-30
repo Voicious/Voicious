@@ -27,13 +27,13 @@ class UserList extends Module
 
     configureEvents     : () =>
         @connections.defineAction 'peer.list', @fill
-        @connections.defineAction 'peer.create', (user) =>
+        @connections.defineAction 'peer.create', (event, user) =>
             @update 'create', user
-        @connections.defineAction 'peer.remove', (user) =>
+        @connections.defineAction 'peer.remove', (event, user) =>
             @update 'remove', user
 
     # Fill the user list with new users.
-    fill            : (data) =>
+    fill            : (event, data) =>
         for user in data.peers
             @users.push user.name
         do @display

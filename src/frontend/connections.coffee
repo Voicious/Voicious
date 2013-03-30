@@ -16,18 +16,12 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Ws
-    constructor : (@uid, @rid) ->
-        @actions      = { }
+    constructor : (@uid, @rid, @emitter) ->
 
     dance : (ws) =>
         @ws           = new WebSocket "ws://#{ws.host}:#{ws.port}"
         @ws.onopen    = @onOpen
         @ws.onmessage = @onMessage
-
-    defineAction : (actionName, callback) =>
-        if not @actions[actionName]?
-            @actions[actionName] = []
-        @actions[actionName].push callback
 
     send : (data) =>
         @ws.send JSON.stringify data
@@ -44,14 +38,12 @@ class Ws
         @send auth
 
     onMessage : (message) =>
-        console.log message
+        #console.log message
         message = JSON.parse message.data
-        if @actions[message.type]?
-            for i, callback of @actions[message.type]
-                callback message.params
+        @emitter.trigger message.type, message.params
 
 class PC
-    constructor : (@id, @ws) ->
+    constructor : (@id, @ws, localStream) ->
         iceServers         = { iceServers : [ { url : 'stun:23.21.150.121' } ] }
         @constraints       =
             mandatory :
@@ -61,6 +53,12 @@ class PC
 
         @pc                = new window.RTCPeerConnection iceServers
         @pc.onicecandidate = @onIceCandidate
+        @pc.onaddstream    = () =>
+        @addStream localStream
+
+    addStream : (s) =>
+        if s?
+            @pc.addStream s
 
     onIceCandidate : (event) =>
         if event.candidate?
@@ -108,8 +106,11 @@ class PC
         }
 
 class Peer
-    constructor : (ws, @id, @name) ->
-        @pc = new PC @id, ws
+    constructor : (ws, @id, @name, localStream = undefined) ->
+        @pc = new PC @id, ws, localStream
+
+    setLocalStream : (localStream) =>
+        @pc.addStream localStream
 
     offerHandshake : () =>
         do @pc.createOffer
@@ -122,39 +123,58 @@ class Peer
 
 class Connections
     constructor : (@uid, @rid, @wsPortal) ->
-        @peers = { }
-        @ws    = new Ws @uid, @rid
+        @peers       = { }
+        @emitter     = ($ '<span>', { display : 'none', id : 'EMITTER' })
+        @ws          = new Ws @uid, @rid, @emitter
+        @localStream = undefined
+        @userMedia   =
+            audio : yes
+            video : yes
 
     dance : () =>
         @ws.dance @wsPortal
-        @ws.defineAction 'peer.list', (data) =>
+        @emitter.on 'peer.list', (event, data) =>
             for peer in data.peers
-                @peers[peer.id] = new Peer @ws, peer.id, peer.name
+                @peers[peer.id] = new Peer @ws, peer.id, peer.name, @localStream
                 do @peers[peer.id].offerHandshake
-        @ws.defineAction 'peer.create', (data) =>
-            @peers[data.id] = new Peer @ws, data.id, data.name
-        @ws.defineAction 'pc.offer', (data) =>
+        @emitter.on 'peer.create', (event, data) =>
+            @peers[data.id] = new Peer @ws, data.id, data.name, @localStream
+        @emitter.on 'pc.offer', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].answerHandshake data.description
-        @ws.defineAction 'pc.answer', (data) =>
+        @emitter.on 'pc.answer', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].concludeHandshake data.description
-        @ws.defineAction 'ice.candidate', (data) =>
+        @emitter.on 'ice.candidate', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
 
     defineAction : (actionName, action) =>
-        @ws.defineAction actionName, action
+        @emitter.on actionName, action
 
     sendToAll : (message) =>
         message = { type : 'chat.message' , params : { message : message } }
         for id of @peers
             @ws.forward id, message
 
+    enableCamera : (cb) =>
+        navigator.getUserMedia @userMedia, (stream) =>
+            @localStream = stream
+            for id, peer of @peers
+                peer.setLocalStream @localStream
+                do peer.offerHandshake
+            cb (createVideoTag stream)
+
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate
 window.RTCPeerConnection     = window.mozRTCPeerConnection     or window.webkitRTCPeerConnection
 navigator.getUserMedia       = navigator.mozGetUserMedia       or navigator.webkitGetUserMedia
+
+createVideoTag = (stream) ->
+    videoTag     = document.createElement 'video'
+    videoTag.src = window.URL.createObjectURL stream
+    do videoTag.play
+    return videoTag
 
 if window?
     if not window.Voicious?

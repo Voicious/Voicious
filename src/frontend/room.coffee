@@ -64,47 +64,6 @@ class Room
         else
             do cb
 
-    # Add the user video and sound to the conference.
-    joinConference      : () =>
-        options =
-            video       : '#localVideo'
-            onsuccess   : (stream) =>
-                window.localStream          = stream
-                @networkManager.negociatePeersOffer stream
-                $('#joinConference').attr "disabled", "disabled"
-            onerror     : (e) =>
-        $(options.video).removeClass 'none'
-        WebRTC.getUserMedia(options)
-
-    # Check if the selected camera can be zoomed.
-    checkZoom   : (context, htmlClass) =>
-        prevCam = $('#mainCam video')
-        prevId = -1
-        newId = $(context).attr('id')
-        if prevCam
-            prevId = prevCam.attr 'id'
-        if newId + "-mainCam" isnt prevId
-            do prevCam.remove
-            newCam = $(context).clone()
-            newCamId = newCam.attr 'id'
-            newCam.attr 'id', newCamId + "-mainCam"
-            newCam.removeClass htmlClass
-            newCam.addClass 'mainCam'
-            $('#mainCam').append newCam
-            do window.Relayout
-
-    # Enable the zoom on the main camera.
-    enableZoomMyCam     : () =>
-        that = this
-        $('#localVideo').click () ->
-            that.checkZoom this, 'localVideo'
-
-    # Enable the zoom on the guest selected.
-    enableZoomCam       : () =>
-        that = this
-        $('#videos').delegate 'li.thumbnail video', 'click', () ->
-            that.checkZoom this, 'thumbnailVideo'
-
     # Start the tutorial animation.
     startTutorial      : () =>
         $("#tutorialMode").css "background-color", "#43535a"

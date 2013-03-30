@@ -36,7 +36,7 @@ class   TextChat extends Module
         $(window).resize () =>
             do @scrollPane.reinitialise
 
-        @connections.defineAction 'chat.message', (data) =>
+        @connections.defineAction 'chat.message', (event, data) =>
             @addMessage data.message
 
     # Update the text chat with a new message.

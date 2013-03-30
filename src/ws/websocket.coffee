@@ -56,17 +56,17 @@ class Websocket
             peers = []
             for _uid of @socks[rid]
                 if @socks[rid][_uid]?
-                    @send @socks[rid][_uid].sock, { type : 'peer.create' , params : { id : uid , name : name } }
+                    @send @socks[rid][_uid], { type : 'peer.create' , params : { id : uid , name : name } }
                     if _uid isnt uid
                         peers.push { id : _uid , name : @socks[rid][_uid].name }
             @send sock, { type : 'peer.list' , params : { peers : peers } }
-        @socks[rid][uid] = { sock : sock , name : name }
+        @socks[rid][uid] = sock
 
     close : (sock) =>
         delete @socks[sock.rid][uid]
         for uid of @socks[sock.rid]
             if @socks[sock.rid][uid]?
-                @send @socks[sock.rid][uid].sock, { type : 'peer.remove' , params : { id : sock.uid , name : sock.name  } }
+                @send @socks[sock.rid][uid], { type : 'peer.remove' , params : { id : sock.uid , name : sock.name  } }
 
     onmessage : (sock, message) =>
         message = JSON.parse message.data
@@ -75,7 +75,7 @@ class Websocket
                 s = @socks[sock.rid][message.params.to]
                 if s?
                     message.params.data.params.from = sock.uid
-                    @send @socks[sock.rid][message.params.to].sock, message.params.data
+                    @send @socks[sock.rid][message.params.to], message.params.data
 
     send : (sock, message) =>
         if sock.readyState is 1

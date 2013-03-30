@@ -23,6 +23,10 @@
     font-style: normal;
 }
 
+button {
+    cursor: pointer;
+}
+
 .icon-ok, .icon-notok {
     font-family : "FontAwesome";
     font-size: 20px;
