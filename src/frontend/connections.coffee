@@ -38,7 +38,7 @@ class Ws
         @send auth
 
     onMessage : (message) =>
-        #console.log message
+        console.log message
         message = JSON.parse message.data
         @emitter.trigger message.type, message.params
 
@@ -47,8 +47,8 @@ class PC
         iceServers         = { iceServers : [ { url : 'stun:23.21.150.121' } ] }
         @constraints       =
             mandatory :
-                OfferToReceiveAudio : yes
-                OfferToReceiveVideo : yes
+                OfferToReceiveAudio     : yes
+                OfferToReceiveVideo     : yes
         @channels          = { }
 
         @pc                = new window.RTCPeerConnection iceServers
@@ -81,24 +81,25 @@ class PC
     createOffer : () =>
         @pc.createOffer (description) =>
             @pc.setLocalDescription description, () =>
+                #if MOZILLA
+                #    sdp             = description.sdp.split "\r\n"
+                #    description.sdp = ''
+                #    for token in sdp
+                #        description.sdp += token + "\r\n"
+                #        if token[0] is 'm' and token[1] is '='
+                #            description.sdp += "a=crypto:1 AES_CM_128_HMAC_SHA1_80 inline:BAADBAADBAADBAADBAADBAADBAADBAADBAADBAAD\r\n"
                 @ws.forward @id, { type : 'pc.offer' , params : { description : description } }
-            , (error) =>
-                return
-        , (error) =>
-            return
-        , @constraints
+            , errorHandler
+        , errorHandler, @constraints
 
     createAnswer : (offeredDescription) =>
         @pc.setRemoteDescription offeredDescription, () =>
             @pc.createAnswer (description) =>
                 @pc.setLocalDescription description, () =>
                     @ws.forward @id, { type : 'pc.answer', params : { description : description } }
-                , (error) =>
-                    return
-            , (error) =>
-                return
-        , (error) =>
-            return
+                , errorHandler
+            , errorHandler, @constraints
+        , errorHandler
 
     conclude : (answeredDescription) =>
         @pc.setRemoteDescription answeredDescription
@@ -120,10 +121,16 @@ class Peer
         do @pc.createOffer
 
     answerHandshake : (offeredDescription) =>
-        @pc.createAnswer (new window.RTCSessionDescription offeredDescription)
+        if MOZILLA
+            @pc.createAnswer offeredDescription
+        else
+            @pc.createAnswer (new window.RTCSessionDescription offeredDescription)
 
     concludeHandshake : (answeredDescription) =>
-        @pc.conclude (new window.RTCSessionDescription answeredDescription)
+        if MOZILLA
+            @pc.conclude answeredDescription
+        else
+            @pc.conclude (new window.RTCSessionDescription answeredDescription)
 
 class Connections
     constructor : (@uid, @rid, @wsPortal) ->
@@ -132,7 +139,6 @@ class Connections
         @ws          = new Ws @uid, @rid, @emitter
         @localStream = undefined
         @userMedia   =
-            audio : yes
             video : yes
 
     dance : () =>
@@ -168,17 +174,27 @@ class Connections
                 peer.setLocalStream @localStream
                 do peer.offerHandshake
             cb (createVideoTag stream)
+        , errorHandler
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate
 window.RTCPeerConnection     = window.mozRTCPeerConnection     or window.webkitRTCPeerConnection
 navigator.getUserMedia       = navigator.mozGetUserMedia       or navigator.webkitGetUserMedia
 
+MOZILLA = if navigator.mozGetUserMedia? then yes else no
+
 createVideoTag = (stream) ->
-    videoTag     = document.createElement 'video'
-    videoTag.src = window.URL.createObjectURL stream
+    videoTag          = document.createElement 'video'
+    videoTag.autoplay = yes
+    if MOZILLA
+        videoTag.mozSrcObject = stream
+    else
+        videoTag.src          = window.URL.createObjectURL stream
     do videoTag.play
     return videoTag
+
+errorHandler = () ->
+    console.error arguments
 
 if window?
     if not window.Voicious?

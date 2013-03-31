@@ -45,6 +45,7 @@ class Camera extends Module
         }).appendTo @jqVideoContainer
         li.append video
         @refreshFeedCount 1
+        do video[0].play
         video.bind 'click', () =>
             @zoom data.uid, video
 
@@ -55,6 +56,7 @@ class Camera extends Module
             video.attr 'id', 'localVideo'
             video.addClass 'localVideo flipH'
             ($ 'div#localVideoContainer').append video
+            do video[0].play
             video.bind 'click', () =>
                 @zoom '', video
 
