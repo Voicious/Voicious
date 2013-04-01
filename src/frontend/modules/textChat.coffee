@@ -44,6 +44,7 @@ class   TextChat extends Module
     # Update the text chat with a new message.
     update          : (message) =>
         @addMessage message
+        $(window).trigger "newMessage"
 
     # Send the new message to the guests.
     sendMessage     : (message) =>
