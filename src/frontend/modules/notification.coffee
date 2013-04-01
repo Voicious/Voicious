@@ -22,6 +22,7 @@ class Notification extends Module
 
         do @checkFocus
         @enableNotification "newMessage"
+        @enableNotification "newUser"
 
     checkFocus      : () =>
         $(window).blur () =>
@@ -31,6 +32,7 @@ class Notification extends Module
         
     enableNotification      : (notifName) ->
         $(window).on notifName, () =>
+             console.log notifName
              audio = document.getElementById notifName
              if !@active
                   do audio.play

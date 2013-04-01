@@ -40,7 +40,9 @@ class   UserList extends Module
     # Update the user list by creating or removing a user from the list.
     update          : (user, event) =>
         switch event
-            when 'create' then @users.push user.cinfo.name
+            when 'create'
+                @users.push user.cinfo.name
+                $(window).trigger "newUser"
             when 'remove' then @users.unset user.cinfo.name
         do @display
 
