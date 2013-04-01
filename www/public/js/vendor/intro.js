@@ -30,9 +30,9 @@
     this._targetElement = obj;
 
     this._options = {
-      nextLabel: 'Next &rarr;',
-      prevLabel: '&larr; Back',
-      skipLabel: 'Skip',
+      nextLabel: '&rarr;',
+      prevLabel: '&larr;',
+      skipLabel: '&times;',
       tooltipPosition: 'bottom'
     };
   }
@@ -320,30 +320,37 @@
       helperLayer.appendChild(tooltipLayer);
 
       //next button
-      var nextTooltipButton = document.createElement('a');
+      var nextTooltipButton = document.createElement('button');
+
+      nextTooltipButton.className = "roomBtnCtrl";
 
       nextTooltipButton.onclick = function() {
         _nextStep.call(self);
       };
 
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      //nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       nextTooltipButton.href = 'javascript:void(0);';
       nextTooltipButton.innerHTML = this._options.nextLabel;
 
       //previous button
-      var prevTooltipButton = document.createElement('a');
+      var prevTooltipButton = document.createElement('button');
+
+      prevTooltipButton.className = "roomBtnCtrl";
 
       prevTooltipButton.onclick = function() {
         _previousStep.call(self);
       };
 
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+      //prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       prevTooltipButton.href = 'javascript:void(0);';
       prevTooltipButton.innerHTML = this._options.prevLabel;
 
       //skip button
-      var skipTooltipButton = document.createElement('a');
-      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+      var skipTooltipButton = document.createElement('button');
+
+      skipTooltipButton.className = "roomBtnCtrl";
+
+      //skipTooltipButton.className = 'introjs-button introjs-skipbutton';
       skipTooltipButton.href = 'javascript:void(0);';
       skipTooltipButton.innerHTML = this._options.skipLabel;
 

@@ -19,7 +19,5 @@ class Tutorial extends Module
     constructor      : (NetworkManager) ->
         super NetworkManager
 
-TUTO = Tutorial
-
 if window?
-     window.Tutorial = TUTO
+     window.Tutorial = Tutorial

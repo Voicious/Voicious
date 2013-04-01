@@ -50,6 +50,9 @@
 .icon-share:before { content : '\f064'; }
 .icon-lock:before { content : '\f023'; }
 .icon-help:before { content : '\f059'; }
+.icon-next:before { content : '\f061'; }
+.icon-previous:before { content : '\f060'; }
+.icon-stop:before { content : '\f04d'; }
 
 * {
     margin: 0;

@@ -34,7 +34,6 @@ class Notification extends Module
     # Enables a notification. Plays the corresponding notification if the user tab is not active.
     enableNotification      : (notifName) ->
         $(window).on notifName, () =>
-             console.log notifName
              audio = document.getElementById notifName
              if !@active
                   do audio.play

@@ -21,8 +21,8 @@
 .introjs-helperLayer {
   position: absolute;
   z-index: 9999998;
-  background-color: rgba(255,255,255,.9);
-  border: 1px solid rgba(0,0,0,.5);
+  /*background-color: rgba(255,255,255,.9);*/
+  /*border: 1px solid rgba(0,0,0,.5);*/
   border-radius: 4px;
   box-shadow: 0 2px 15px rgba(0,0,0,.4);
   -webkit-transition: all 0.3s ease-out;
@@ -70,7 +70,7 @@
   top: -10px;
   border-top-color:transparent;
   border-right-color:transparent;
-  border-bottom-color:white;
+  border-bottom-color: #16181a;
   border-left-color:transparent;
 }
 .introjs-arrow.right {
@@ -79,11 +79,11 @@
   border-top-color:transparent;
   border-right-color:transparent;
   border-bottom-color:transparent;
-  border-left-color:white;
+  border-left-color: #16181a;
 }
 .introjs-arrow.bottom {
   bottom: -10px;
-  border-top-color:white;
+  border-top-color: #16181a;
   border-right-color:transparent;
   border-bottom-color:transparent;
   border-left-color:transparent;
@@ -92,7 +92,7 @@
   left: -10px;
   top: 10px;
   border-top-color:transparent;
-  border-right-color:white;
+  border-right-color: #16181a;
   border-bottom-color:transparent;
   border-left-color:transparent;
 }
@@ -109,10 +109,16 @@
       -ms-transition: opacity 0.1s ease-out;
        -o-transition: opacity 0.1s ease-out;
           transition: opacity 0.1s ease-out;
+  
+  background: #16181a;
+  color: white;
+  font-family: 'OpenSans-Bold';
 }
 
 .introjs-tooltipbuttons {
   text-align: right;
+  
+  margin-top: 10px;
 }
 
 /* 
