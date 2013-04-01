@@ -3,6 +3,7 @@ extends main
 block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.ui.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.jscrollpane.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/room.css")
 
 block scripts
@@ -12,6 +13,7 @@ block scripts
     script(type="text/javascript", src="/public/js/vendor/jquery.jlayout.js")
     script(type="text/javascript", src="/public/js/vendor/jquery.mousewheel.js")
     script(type="text/javascript", src="/public/js/vendor/jquery.jscrollpane.js")
+    script(type="text/javascript", src="/public/js/vendor/intro.js")
     script(type="text/javascript", src="/public/js/module.js")
     script(type="text/javascript", src="/public/js/event.js")
     script(type="text/javascript", src="/public/js/webRTC.js")
@@ -48,7 +50,7 @@ block content
                       span#beta Beta
                     div#room_control
                       p(room='#{room}', token='#{token}')#infos
-                      div#room_url_box
+                      div#room_url_box(data-step="1", data-intro='#{trans.roomNameArrow}')
                         span#share.icon.icon-share
                         p#room_url
                           span#room_text #{room}
@@ -68,7 +70,7 @@ block content
                       span.icon.icon-user
                       p#login.textBtn #{login},
                         span#acl #{trans.user}
-                      button#reportBug.roomBtnCtrl
+                      button#reportBug.roomBtnCtrl(data-step="5", data-intro='#{trans.reportBugArrow}', data-position="left")
                           span.icon.icon-dashboard
                           span.textBtn #{trans.reportBtn}
             div#body.center

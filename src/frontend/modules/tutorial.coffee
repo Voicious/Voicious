@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Tutorial extends Module
     constructor      : (NetworkManager) ->
         super NetworkManager
-        
+
 TUTO = Tutorial
 
 if window?

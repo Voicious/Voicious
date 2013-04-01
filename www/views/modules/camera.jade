@@ -8,7 +8,7 @@ div.box
         center#centeredLocal
           label#feedNotActivate #{trans.feedNotActive}
         center#centerButton
-          button#joinConference #{trans.activateCam}
+          button#joinConference(data-step="2", data-intro='#{trans.activateArrow}', data-position="top") #{trans.activateCam}
       video(autoplay)#localVideo.localVideo.none
   ul#videos
     div#activateArrow #{trans.activateArrow}
