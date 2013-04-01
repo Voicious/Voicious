@@ -38,8 +38,6 @@ class Notification extends Module
              audio = document.getElementById notifName
              if !@active
                   do audio.play
-        
-NOTIF = Notification
 
 if window?
-     window.Notification = NOTIF
+     window.Notification = Notification
