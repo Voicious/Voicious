@@ -283,7 +283,7 @@
       }
       self._lastShowElementTimer = setTimeout(function() {
         //set current step to the label
-        oldHelperNumberLayer.innerHTML = targetElement.getAttribute('data-step');
+        //oldHelperNumberLayer.innerHTML = targetElement.getAttribute('data-step');
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.getAttribute('data-intro');
         //set the tooltip position
@@ -294,7 +294,7 @@
 
     } else {
       var helperLayer = document.createElement('div'),
-          helperNumberLayer = document.createElement('span'),
+          //helperNumberLayer = document.createElement('span'),
           arrowLayer = document.createElement('div'),
           tooltipLayer = document.createElement('div');
 
@@ -307,15 +307,15 @@
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
 
-      helperNumberLayer.className = 'introjs-helperNumberLayer';
+//      helperNumberLayer.className = 'introjs-helperNumberLayer';
       arrowLayer.className = 'introjs-arrow';
       tooltipLayer.className = 'introjs-tooltip';
 
-      helperNumberLayer.innerHTML = targetElement.getAttribute('data-step');
+//      helperNumberLayer.innerHTML = targetElement.getAttribute('data-step');
       tooltipLayer.innerHTML = '<div class="introjs-tooltiptext">' +
                                targetElement.getAttribute('data-intro') +
                                '</div><div class="introjs-tooltipbuttons"></div>';
-      helperLayer.appendChild(helperNumberLayer);
+//      helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
