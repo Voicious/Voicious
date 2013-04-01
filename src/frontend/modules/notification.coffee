@@ -18,7 +18,23 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Notification extends Module
     constructor      : (NetworkManager) ->
         super NetworkManager
+        @active = true
 
+        do @checkFocus
+        @enableNotification "newMessage"
+
+    checkFocus      : () =>
+        $(window).blur () =>
+             @active = false
+        $(window).focus () =>
+             @active = true
+        
+    enableNotification      : (notifName) ->
+        $(window).on notifName, () =>
+             audio = document.getElementById notifName
+             if !@active
+                  do audio.play
+        
 NOTIF = Notification
 
 if window?
