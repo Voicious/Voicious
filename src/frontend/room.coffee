@@ -99,11 +99,6 @@ class Room
         $('#videos').delegate 'li.thumbnail video', 'click', () ->
             that.checkZoom this, 'thumbnailVideo'
 
-    # Color the tutorial button.
-    colorTutorialBtn   : () =>
-        $("#tutorialMode").css "background-color", "#00aeef"
-        $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
-
     # Send bug report.
     sendReport          : () =>
         $('#sendReport').attr 'disabled', on
