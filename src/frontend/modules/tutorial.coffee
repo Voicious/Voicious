@@ -15,28 +15,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-class Notification extends Module
+class Tutorial extends Module
     constructor      : (NetworkManager) ->
         super NetworkManager
-        @active = true
-
-        do @checkFocus
-        @enableNotification "newMessage"
-        @enableNotification "newUser"
-
-    # Checks if the user tab is active or not.
-    checkFocus      : () =>
-        $(window).blur () =>
-             @active = false
-        $(window).focus () =>
-             @active = true
-
-    # Enables a notification. Plays the corresponding notification if the user tab is not active.
-    enableNotification      : (notifName) ->
-        $(window).on notifName, () =>
-             audio = document.getElementById notifName
-             if !@active
-                  do audio.play
 
 if window?
-     window.Notification = Notification
+     window.Tutorial = Tutorial
