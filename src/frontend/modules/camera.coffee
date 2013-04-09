@@ -15,55 +15,64 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-class   Camera extends Module
-    constructor         : (NetworkManager) ->
-        super NetworkManager
-        $('#joinConference').click () =>
-            do $('#notActivate').hide
-            @joinConference()
-        do @enableZoomMyCam
-        do @enableZoomCam
-        $('#body').css 'height', '77%' # SOOOOO BAD. Another idea ?
-        $('#footer').removeClass 'none'
+class Camera extends Module
+    constructor : (connections) ->
+        super connections
+        @feedCount        = 0
+        @jqFeedCount      = ($ 'span#nbFeed')
+        @jqVideoContainer = ($ 'ul#videos')
+        @currentZoom      = undefined
+        @streams          = [ ]
+        ($ 'button#joinConference').bind 'click', @enableCamera
+        connections.defineAction 'stream.create', @newStream
+        connections.defineAction 'peer.remove', @delStream
 
-    joinConference      : () =>
-        options =
-            video       : '#localVideo'
-            onsuccess   : (stream) =>
-                window.localStream          = stream
-                @networkManager.negociatePeersOffer stream
-                $('#joinConference').attr "disabled", "disabled"
-            onerror     : (e) =>
-        $(options.video).removeClass 'none'
-        WebRTC.getUserMedia(options)
+    delStream : (event, user) =>
+        if (@streams.indexOf user.id) >= 0
+            do ($ "li#video_#{user.id}").remove
+            @refreshFeedCount -1
+            @streams.splice user.id, 1
+            if @currentZoom is user.id
+                @zoom undefined, undefined
 
-    checkZoom   : (context, htmlClass) =>
-        prevCam = $('#mainCam video')
-        prevId = -1
-        newId = $(context).attr('id')
-        if prevCam
-            prevId = prevCam.attr 'id'
-        if newId + "-mainCam" isnt prevId
-            do prevCam.remove
-            newCam = $(context).clone()
-            newCamId = newCam.attr 'id'
-            newCam.attr 'id', newCamId + "-mainCam"
-            newCam.removeClass htmlClass
-            newCam.addClass 'mainCam'
-            $('#mainCam').append newCam
-            do window.Relayout
+    newStream : (event, data) =>
+        @streams.push data.uid
+        video = ($ data.video)
+        video.addClass 'thumbnailVideo flipH'
+        li = ($ '<li>', {
+            id    : "video_#{data.uid}",
+            class : 'thumbnail'
+        }).appendTo @jqVideoContainer
+        li.append video
+        @refreshFeedCount 1
+        do video[0].play
+        video.bind 'click', () =>
+            @zoom data.uid, video
 
-    enableZoomMyCam     : () =>
-        that = this
-        $('#localVideo').click () ->
-            that.checkZoom this, 'localVideo'
+    enableCamera : () =>
+        @connections.enableCamera (video) =>
+            ($ 'div#notActivate').css 'display', 'none'
+            video = ($ video)
+            video.attr 'id', 'localVideo'
+            video.addClass 'localVideo flipH'
+            ($ 'div#localVideoContainer').append video
+            do video[0].play
+            video.bind 'click', () =>
+                @zoom '', video
 
-    enableZoomCam       : () =>
-        that = this
-        $('#videos').delegate 'li.thumbnail video', 'click', () ->
-            that.checkZoom this, 'thumbnailVideo'
+    zoom : (uid, video) =>
+        container    = ($ 'div#mainCam')
+        do (container.find 'video').remove
+        @currentZoom = uid
+        if video?
+            newVideo     = do video.clone
+            newVideo.removeClass 'thumbnailVideo'
+            do newVideo[0].play
+            container.append newVideo
 
-CAM = Camera
+    refreshFeedCount : (modificator = 0) =>
+        @feedCount += modificator
+        @jqFeedCount.text @feedCount
 
 if window?
-    window.Camera = CAM
+    window.Camera = Camera

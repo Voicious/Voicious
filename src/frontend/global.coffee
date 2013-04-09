@@ -31,14 +31,9 @@ class PrivateValue
 
 PV  = new PrivateValue
 
-Array.prototype.unset = (val) ->
-    index = @indexOf val
-    if index > -1
-        @splice index, 1
-
 ($ document).ready () =>
-    if document.location.pathname isnt "/browser" and not window.webkitRTCPeerConnection?
-        document.location = "/browser"
+    #if document.location.pathname isnt "/browser" and not window.webkitRTCPeerConnection?
+    #    document.location = "/browser"
 
 if window?
     window.PrivateValue     = PV

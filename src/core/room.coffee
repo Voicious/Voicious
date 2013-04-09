@@ -48,7 +48,8 @@ class _Room
                 options       =
                     title   : 'Voicious'
                     login   : user.name
-                    room    : req.params.roomid
+                    uid     : user.id
+                    rid     : req.params.roomid
                     wsHost  : Config.Websocket.Hostname.External
                     wsPort  : Config.Websocket.Port
                 user.id_room = req.params.roomid

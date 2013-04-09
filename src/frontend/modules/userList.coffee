@@ -15,10 +15,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-class   UserList extends Module
+class UserList extends Module
     # The user list contain all the informations of the guests in the room.
-    constructor     : (NetworkManager) ->
-        super NetworkManager
+    constructor     : (connections) ->
+        super connections
         @users  = []
         @jqElem = ($ '#userListUl')
         li      = @jqElem.children 'li'
@@ -26,24 +26,23 @@ class   UserList extends Module
         do @configureEvents
 
     configureEvents     : () =>
-        EventManager.addEvent "fillUsersList", (users) =>
-            @fill users
-        EventManager.addEvent "updateUserList", (user, event) =>
-            @update user, event
+        @connections.defineAction 'peer.list', @fill
+        @connections.defineAction 'peer.create', (event, user) =>
+            @update 'create', user
+        @connections.defineAction 'peer.remove', (event, user) =>
+            @update 'remove', user
 
     # Fill the user list with new users.
-    fill            : (users) =>
-        for user of users
-            @users.push users[user].cinfo.name
+    fill            : (event, data) =>
+        for user in data.peers
+            @users.push user.name
         do @display
 
     # Update the user list by creating or removing a user from the list.
-    update          : (user, event) =>
+    update          : (event, user) =>
         switch event
-            when 'create'
-                @users.push user.cinfo.name
-                $(window).trigger "newUser"
-            when 'remove' then @users.unset user.cinfo.name
+            when 'create' then @users.push user.name
+            when 'remove' then @users.splice (@users.indexOf user.name), 1
         do @display
 
     # Update the user list window.
@@ -52,7 +51,5 @@ class   UserList extends Module
         for user in @users
             @jqElem.append (($ '<li>', { class : 'userBox user' }).text user)
 
-UL  = UserList
-
 if window?
-    window.UserList     = UL
+    window.UserList     = UserList

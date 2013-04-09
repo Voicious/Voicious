@@ -20,9 +20,9 @@ Express = require 'express'
 Fs      = require 'fs'
 Path    = require 'path'
 
-Config      = require '../common/config'
-PopulateDB  = require './populateDB'
-{Errors}    = require './errors'
+Config       = require '../common/config'
+PopulateDB   = require './populateDB'
+{Errors}     = require './errors'
 {Translator} = require './trans'
 
 # Just implement a _currying_ system, it will be used for routes.
