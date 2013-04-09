@@ -140,6 +140,7 @@ class Connections
         @localStream = undefined
         @userMedia   =
             video : yes
+            audio : yes
 
     dance : () =>
         @ws.dance @wsPortal
