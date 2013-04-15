@@ -133,9 +133,8 @@ class Peer
             @pc.conclude (new window.RTCSessionDescription answeredDescription)
 
 class Connections
-    constructor : (@uid, @rid, @wsPortal) ->
+    constructor : (@emitter, @uid, @rid, @wsPortal) ->
         @peers       = { }
-        @emitter     = ($ '<span>', { display : 'none', id : 'EMITTER' })
         @ws          = new Ws @uid, @rid, @emitter
         @localStream = undefined
         @userMedia   =
@@ -159,9 +158,6 @@ class Connections
         @emitter.on 'ice.candidate', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
-
-    defineAction : (actionName, action) =>
-        @emitter.on actionName, action
 
     sendToAll : (message) =>
         message = { type : 'chat.message' , params : { message : message } }
