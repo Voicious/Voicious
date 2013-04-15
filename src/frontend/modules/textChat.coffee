@@ -16,10 +16,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 
-class   TextChat extends Module
+class TextChat extends Module
     # Init the text chat window and the callbacks in the event manager.
-    constructor     : (NetworkManager) ->
-        super NetworkManager
+    constructor     : (emitter) ->
+        super emitter
         @jqForm       = ($ 'form#chatForm')
         @jqMessageBox = ($ '#tcMessagesContainer')
         @jqInput      = ($ 'input#tcMessageInput')
@@ -36,7 +36,7 @@ class   TextChat extends Module
         $(window).resize () =>
             do @scrollPane.reinitialise
 
-        @connections.defineAction 'chat.message', (event, data) =>
+        @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
 
     # Update the text chat with a new message.
@@ -50,7 +50,7 @@ class   TextChat extends Module
             message =
                 text : message
                 from : window.CurrentUser
-            @connections.sendToAll message
+            @emitter.trigger 'message.sendtoall', message
             @addMessage message
 
     # Add a new message to the text chat window.
@@ -72,7 +72,5 @@ class   TextChat extends Module
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
 
-TC = TextChat
-
 if window?
-    window.TextChat     = TC
+    window.TextChat     = TextChat

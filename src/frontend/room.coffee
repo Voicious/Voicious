@@ -19,11 +19,12 @@ class Room
     # Initialize a room and a networkManager.
     # Load the modules given in parameter (Array)
     constructor         : (modules) ->
+        @emitter     = ($ '<span>', { display : 'none', id : 'EMITTER' })
         @rid         = ($ '#infos').attr 'rid'
         @uid         = ($ '#infos').attr 'uid'
         @moduleArray = new Array
         if window.ws? and window.ws.Host? and window.ws.Port?
-            @connections = new Voicious.Connections @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
+            @connections = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @loadModules modules, () =>
                 do @connections.dance
         $('#reportBug').click @bugReport
@@ -52,7 +53,7 @@ class Room
         ).done (data) =>
             $(data).appendTo "##{moduleName}"
             module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
-            @moduleArray.push (new window[module] @connections)
+            @moduleArray.push (new window[module] @emitter)
             @loadModules modules, cb
 
     # Load the Modules given in parameter recursively.
