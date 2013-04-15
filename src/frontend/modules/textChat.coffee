@@ -55,9 +55,10 @@ class   TextChat extends Module
 
     # Add a new message to the text chat window.
     addMessage      : (message) =>
-        jqLastElem = do (@jqMessageBox.find 'div.msgBox').last
-        prevTime   = jqLastElem.attr 'rel'
-        time       = new Date
+        jqLastElem   = do (@jqMessageBox.find 'div.msgBox').last
+        prevTime     = jqLastElem.attr 'rel'
+        time         = new Date
+        message.text = @markdown.makeHtml message.text
         if (do (jqLastElem.find 'span.author').text) is message.from and ((do time.getTime) - prevTime) <= 120000
             jqLastElem.attr 'rel', do time.getTime
             (jqLastElem.find 'p.message').append ($ '<br />')
