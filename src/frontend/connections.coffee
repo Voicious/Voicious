@@ -140,6 +140,7 @@ class Connections
         @userMedia   =
             video : yes
             audio : yes
+        @emitter.on 'message.sendtoall', @sendToAll
 
     dance : () =>
         @ws.dance @wsPortal
@@ -159,7 +160,7 @@ class Connections
             if @peers[data.from]?
                 @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
 
-    sendToAll : (message) =>
+    sendToAll : (event, message) =>
         message = { type : 'chat.message' , params : { message : message } }
         for id of @peers
             @ws.forward id, message

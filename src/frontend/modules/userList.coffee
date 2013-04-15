@@ -17,8 +17,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class UserList extends Module
     # The user list contain all the informations of the guests in the room.
-    constructor     : (connections) ->
-        super connections
+    constructor     : (emitter) ->
+        super emitter
         @users  = []
         @jqElem = ($ '#userListUl')
         li      = @jqElem.children 'li'
@@ -26,10 +26,10 @@ class UserList extends Module
         do @configureEvents
 
     configureEvents     : () =>
-        @connections.defineAction 'peer.list', @fill
-        @connections.defineAction 'peer.create', (event, user) =>
+        @emitter.on 'peer.list', @fill
+        @emitter.on 'peer.create', (event, user) =>
             @update 'create', user
-        @connections.defineAction 'peer.remove', (event, user) =>
+        @emitter.on 'peer.remove', (event, user) =>
             @update 'remove', user
 
     # Fill the user list with new users.

@@ -16,8 +16,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Tutorial extends Module
-    constructor      : (NetworkManager) ->
-        super NetworkManager
+    constructor      : (emitter) ->
+        super emitter
 
 if window?
      window.Tutorial = Tutorial

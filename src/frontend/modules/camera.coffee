@@ -16,16 +16,16 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Camera extends Module
-    constructor : (connections) ->
-        super connections
+    constructor : (emitter) ->
+        super emitter
         @feedCount        = 0
         @jqFeedCount      = ($ 'span#nbFeed')
         @jqVideoContainer = ($ 'ul#videos')
         @currentZoom      = undefined
         @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
-        connections.defineAction 'stream.create', @newStream
-        connections.defineAction 'peer.remove', @delStream
+        @emitter.on 'stream.create', @newStream
+        @emitter.on 'peer.remove', @delStream
 
     delStream : (event, user) =>
         if (@streams.indexOf user.id) >= 0

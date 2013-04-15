@@ -53,7 +53,7 @@ class Room
         ).done (data) =>
             $(data).appendTo "##{moduleName}"
             module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
-            @moduleArray.push (new window[module] @connections)
+            @moduleArray.push (new window[module] @emitter)
             @loadModules modules, cb
 
     # Load the Modules given in parameter recursively.

@@ -16,7 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Module
-    constructor : (@connections) ->
+    constructor : (@emitter) ->
 
 if window?
     window.Module = Module
