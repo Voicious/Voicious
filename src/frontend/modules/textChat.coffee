@@ -15,11 +15,28 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+do () ->
+    showdownExt = (converter) ->
+        [
+            {
+                type   : 'lang'
+                filter : (text) ->
+                    text.replace /<?(http|https|ftp)\:\/\/([^\s]+)>?/, "[$1://$2]($1://$2)"
+            }
+            {
+                type   : 'output'
+                filter : (source) ->
+                    source.replace /<a href="(.+)">(.+)<\/a>/, '<a href="$1" target="_blank">$2</a>'
+            }
+        ]
+    if window? and window.Showdown and window.Showdown.extensions
+        window.Showdown.extensions.voicious = showdownExt
 
 class   TextChat extends Module
     # Init the text chat window and the callbacks in the event manager.
     constructor     : (NetworkManager) ->
         super NetworkManager
+        @markdown     = new Showdown.converter { extensions : ['voicious'] }
         @jqForm       = ($ 'form#chatForm')
         @jqMessageBox = ($ '#tcMessagesContainer')
         @jqInput      = ($ 'input#tcMessageInput')
