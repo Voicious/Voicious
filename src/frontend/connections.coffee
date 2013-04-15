@@ -141,6 +141,7 @@ class Connections
             video : yes
             audio : yes
         @emitter.on 'message.sendtoall', @sendToAll
+        @emitter.on 'camera.enable', @enableCamera
 
     dance : () =>
         @ws.dance @wsPortal
@@ -165,13 +166,13 @@ class Connections
         for id of @peers
             @ws.forward id, message
 
-    enableCamera : (cb) =>
+    enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
             @localStream = stream
             for id, peer of @peers
                 peer.setLocalStream @localStream
                 do peer.offerHandshake
-            cb (createVideoTag stream)
+            @emitter.trigger 'camera.localstream', (createVideoTag stream)
         , errorHandler
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription

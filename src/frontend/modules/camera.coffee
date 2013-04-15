@@ -26,6 +26,15 @@ class Camera extends Module
         ($ 'button#joinConference').bind 'click', @enableCamera
         @emitter.on 'stream.create', @newStream
         @emitter.on 'peer.remove', @delStream
+        @emitter.on 'camera.localstream', (event, video) =>
+            ($ 'div#notActivate').css 'display', 'none'
+            video = ($ video)
+            video.attr 'id', 'localVideo'
+            video.addClass 'localVideo flipH'
+            ($ 'div#localVideoContainer').append video
+            do video[0].play
+            video.bind 'click', () =>
+                @zoom '', video
 
     delStream : (event, user) =>
         if (@streams.indexOf user.id) >= 0
@@ -50,15 +59,7 @@ class Camera extends Module
             @zoom data.uid, video
 
     enableCamera : () =>
-        @connections.enableCamera (video) =>
-            ($ 'div#notActivate').css 'display', 'none'
-            video = ($ video)
-            video.attr 'id', 'localVideo'
-            video.addClass 'localVideo flipH'
-            ($ 'div#localVideoContainer').append video
-            do video[0].play
-            video.bind 'click', () =>
-                @zoom '', video
+        @emitter.trigger 'camera.enable'
 
     zoom : (uid, video) =>
         container    = ($ 'div#mainCam')
