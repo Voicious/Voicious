@@ -168,12 +168,16 @@ class Connections
 
     enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
+            if not MOZILLA and not $('p#messageCam').hasClass "hidden"
+                $('p#messageCam').addClass "hidden"
             @localStream = stream
             for id, peer of @peers
                 peer.setLocalStream @localStream
                 do peer.offerHandshake
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
-        , errorHandler
+        , () =>
+            if not MOZILLA and $('p#messageCam').hasClass "hidden"
+                $('p#messageCam').removeClass "hidden"
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate

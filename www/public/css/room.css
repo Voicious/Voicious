@@ -211,6 +211,12 @@ div#page {
     border-radius: 12px;
 }
 
+#messageCam {
+    width: 322px;
+    margin-left: 100px;
+    margin-top: -37px;
+}
+
 #body {
     position : relative;
     top: 0px;

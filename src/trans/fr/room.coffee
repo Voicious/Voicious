@@ -26,6 +26,7 @@ transDef =
     receiving           : "reçois "
     feeds               : " flux"
     activateCam         : "activer"
+    messageCam          : "Votre caméra est bloquée par votre navigateur! Cliquez sur l'icône en forme de caméra dans votre barre d'adresse afin de la réactiver."
     reportBtn           : "reporter un bug"
     sendReportBtn       : "envoyer"
     tutorialModeBtn     : "aide"
