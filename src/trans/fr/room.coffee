@@ -36,5 +36,5 @@ transDef =
     activateArrow       : "Cliquez ici afin d'activer la caméra."
     userListArrow       : "Voici la liste de tous les utilisateurs présents dans le salon."
     endMessage          : "Bonne utilisation ;)"
-    
+
 exports.transDef = transDef
