@@ -26,6 +26,7 @@ transDef =
     receiving           : "receiving "
     feeds               : " feeds"
     activateCam         : "activate"
+    messageCam          : "Your camera seems to be blocked by your browser! Click on the camera icon in your URL bar to reactivate."
     reportBtn           : "report bug"
     sendReportBtn       : "send"
     tutorialModeBtn     : "help"
