@@ -68,41 +68,62 @@ div#voicious_top {
 	border-bottom: 1px solid rgb(26, 28, 30);
 }
 
-#userlist {
-	padding: 20px 0 20px 20px;
+#userList-wrapper {
+    height: 100%;
+    float: right;
 }
 
-#userlist .title {
+#userList {
+    padding: 20px 0 20px 20px;
+    font-family: 'PT Sans', sans-serif;
+}
+
+#userList .title {
 	margin-right: 10px;
 	padding-bottom: 10px;
 }
 
-#userlist > ul > li {
-	margin-bottom: 5px;
-	font-size: 14px;
+#userList > ul > li {
+    font-size: 14px;
+    font-family: 'PT Regular', sans-serif;
+    color: rgb(255, 255, 255);
 }
 
-#userlist li div.user {
-	border: 1px solid rgb(32, 34, 37);
-	padding: 15px 10px 15px 20px;
-	border-right: none;
-	border-top-left-radius: .4em;
-	border-bottom-left-radius: .4em;
-	cursor: pointer;
+#userList li.accordion-group {
+    border: none;
 }
 
-#userlist li div.user:hover {
-	background-color: rgb(255, 255, 255);
+#userList li div.accordion-heading {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(32, 34, 37);
+    padding: 12px 10px 12px 20px;
+    border-right: none;
+    border-top-left-radius: .4em;
+    border-bottom-left-radius: .4em;
+    cursor: pointer;
+    color: rgb(85, 85, 85);
 }
 
-#userlist li div.controls {
-	padding: 10px 0 5px 20px;
+#userList li div.accordion-heading.collapsed {
+    background-color: transparent;
 }
 
-#userlist li div.controls li {
-	margin-bottom: 5px;
+#userList li div.accordion-heading:hover {
+    background-color: rgb(32, 34, 37);
 }
 
+#userList li div.accordion-toggle ul {
+    padding: 10px 0 5px 20px;
+    cursor: default;
+}
+
+#userList li div.accordion-toggle li {
+    margin-bottom: 5px;
+}
+
+#userList li div.accordion-toggle li.disabled {
+    color: rgb(85, 85, 85);
+}
 
 .room-link {
 
@@ -136,4 +157,3 @@ div#voicious_top {
 .room-quit:active {
 	background-color: #c92a2d;
 	box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
-}

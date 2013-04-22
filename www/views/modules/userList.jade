@@ -1,4 +1,15 @@
-div.box#userListContainer.east(data-step="3", data-intro='#{trans.userListArrow}', data-position="left")
-  label.textBtn#userListTitle #{trans.userListTitle}
-  ul#userListUl
-    li.userBox.user #{login}
+div.title.right #{trans.userListTitle}
+ul
+    li.accordion-group
+        div.accordion-heading.collapsed(data-toggle='collapse', data-target="##{login}-userList", data-parent='div#userList > ul') #{login}
+        div.accordion-toggle.collapse(id="#{login}-userList")
+            ul
+                li.fontwhite.disabled
+                    span.icon-double-angle-up
+                    a promote
+                li.fontwhite.disabled
+                    span.icon-ban-circle
+                    a kick
+                li.fontwhite.disabled
+                    span.icon-plus-sign-alt
+                    a add as a contact

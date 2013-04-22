@@ -20,8 +20,8 @@ class UserList extends Module
     constructor     : (emitter) ->
         super emitter
         @users  = []
-        @jqElem = ($ '#userListUl')
-        li      = @jqElem.children 'li'
+        @jqElem = ($ '#userList > ul')
+        li      = @jqElem.find 'div.accordion-heading'
         @users.push (do li.text)
         do @configureEvents
 
@@ -49,7 +49,17 @@ class UserList extends Module
     display         : () =>
         do @jqElem.empty
         for user in @users
-            @jqElem.append (($ '<li>', { class : 'userBox user' }).text user)
+            jqNewLi      = ($ '<li>', { class : 'accordion-group' })
+            jqNewHead    = ($ '<div>', { class : 'accordion-heading collapsed', 'data-toggle' : 'collapse', 'data-target' : "##{user}-userList", 'data-parent' : 'div#userList > ul' }).text user
+            jqNewToggle  = ($ '<div>', { class : 'accordion-toggle collapse', id : "#{user}-userList" })
+            jqNewPromote = ($ '<li>', { class : 'fontwhite disabled' }).text 'promote'
+            jqNewKick    = ($ '<li>', { class : 'fontwhite disabled' }).text 'kick'
+            jqNewAdd     = ($ '<li>', { class : 'fontwhite disabled' }).text 'add as a contact'
+            jqNewToggle.append (((($ '<ul>').append jqNewPromote).append jqNewKick).append jqNewAdd)
+            (jqNewLi.append jqNewHead).append jqNewToggle
+            @jqElem.append jqNewLi
+            jqNewToggle.on 'hide', () ->
+                ((do ($ @).parent).children 'div.accordion-heading').addClass 'collapsed'
 
 if window?
     window.UserList     = UserList
