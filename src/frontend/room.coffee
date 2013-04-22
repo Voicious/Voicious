@@ -136,4 +136,18 @@ class Room
 # launch it.
 $(document).ready ->
     if window.Voicious.WebRTCRunnable
+        # Resize all elements vertically when window is resized
+        # (middle-row elements must fill all space between header and footer)
+        resizeAll = () ->
+            container     = ($ '.container-fluid')[0]
+            rows          = ($ container).find '.row-fluid'
+            summedHeight  = 0
+            for row in rows
+                if (($ row).attr 'id') isnt 'middle-row'
+                    summedHeight += do ($ row).innerHeight
+            jqMiddleRow   = ($ '#middle-row')
+            summedPadding = (parseInt (jqMiddleRow.css 'padding-top')) + (parseInt (jqMiddleRow.css 'padding-bottom'))
+            jqMiddleRow.height (do ($ window).innerHeight) - summedHeight - summedPadding
+        do resizeAll
+        ($ window).on 'resize', resizeAll
         room = new Room window.modules
