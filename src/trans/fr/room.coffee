@@ -16,9 +16,11 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 transDef =
-    manageAcess         : "GERER ACCES"
-    managePlugins       : "GERER PLUGINS"
-    inviteContacts      : "INVITER CONTACTS"
+    manageAcess         : "Gerer accès"
+    managePlugins       : "Gerer Plugins"
+    inviteContacts      : "Inviter Contacts"
+    copyRoomID          : "Copier l'ID du salon"
+    closeRool           : "Fermer Salon"
     user                : "utilisateur"
     dashboard           : "DASHBOARD" # need a translation ?
     userListTitle       : "QUI EST ICI?"
