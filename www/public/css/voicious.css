@@ -1,0 +1,104 @@
+html {
+	height: 100%;
+}
+
+body {
+	background-color: rgb(30, 33, 35);
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+	height: 100%;
+}
+
+.container-fluid {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+.lightblue {
+	background-color: rgb(0, 174, 239);
+}
+
+.fontlightblue {
+	color: rgb(0, 174, 239);
+}
+
+.darkgray {
+	background-color: rgb(22, 24, 26);
+}
+
+.fontdarkgray {
+	color: rgb(85, 85, 85);
+}
+
+.fontlightgray {
+	color: rgb(156, 156, 156);
+}
+
+.fontwhite {
+	color: rgb(255, 255, 255);
+}
+
+.right {
+	text-align: right;
+}
+
+.none {
+	display: none;
+}
+
+.title {
+	color: rgb(255, 255, 255);
+	font-size: 11px;
+	font-weight: bold;
+}
+
+div#middle-row > div.module {
+	margin-left: 9px;
+}
+
+img#voicious_logo {
+	margin: 10px 0 0 20px;
+}
+
+div#voicious_top {
+	height:54px;
+	background-image: url(../img/logo.png);
+	background-repeat: no-repeat;
+	background-position: 20px 10px;
+	border-bottom: 1px solid rgb(26, 28, 30);
+}
+
+#userlist {
+	padding: 20px 0 20px 20px;
+}
+
+#userlist .title {
+	margin-right: 10px;
+	padding-bottom: 10px;
+}
+
+#userlist > ul > li {
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+#userlist li div.user {
+	border: 1px solid rgb(32, 34, 37);
+	padding: 15px 10px 15px 20px;
+	border-right: none;
+	border-top-left-radius: .4em;
+	border-bottom-left-radius: .4em;
+	cursor: pointer;
+}
+
+#userlist li div.user:hover {
+	background-color: rgb(255, 255, 255);
+}
+
+#userlist li div.controls {
+	padding: 10px 0 5px 20px;
+}
+
+#userlist li div.controls li {
+	margin-bottom: 5px;
+}

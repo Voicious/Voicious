@@ -1,16 +1,15 @@
 extends main
 
 block style
-    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.ui.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/bootstrap.min.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/font-awesome.min.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.jscrollpane.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
-    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/room.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/voicious.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/style.css")
 
 block scripts
     script(type="text/javascript", src="/public/js/vendor/jquery.ui.js")
-    script(type="text/javascript", src="/public/js/vendor/jquery.sizes.js")
-    script(type="text/javascript", src="/public/js/vendor/jlayout.border.js")
-    script(type="text/javascript", src="/public/js/vendor/jquery.jlayout.js")
     script(type="text/javascript", src="/public/js/vendor/jquery.mousewheel.js")
     script(type="text/javascript", src="/public/js/vendor/jquery.jscrollpane.js")
     script(type="text/javascript", src="/public/js/vendor/intro.js")
@@ -33,47 +32,28 @@ block scripts
         }
 
 block content
-    body
-        div.fullscreen.none
-        div#reportBugCtn.box.none
-          textarea#reportBugTextarea
-          center
-            button#sendReport.roomBtnCtrl #{trans.sendReportBtn}
-        div#page.layout
-            div.north
-                div#header
-                div#menu
-                    p#room_logo voıċıoųs
-                      span#beta Beta
-                    div#room_control
-                      p(rid='#{rid}', uid='#{uid}')#infos
-                      div#room_url_box(data-step="1", data-intro='#{trans.roomNameArrow}')
-                        span#share.icon.icon-share
-                        p#room_url
-                          span#room_text #{rid}
-                        button#shutdown.icon.icon-off
-                      div#btnCtrlBox
-                        div.mod#tutorial
-                        button.roomBtnCtrl.hidden
-                          span.icon.icon-lock
-                          span.textBtn #{trans.manageAcess}
-                        button.roomBtnCtrl.hidden
-                          span.icon.icon-check-empty
-                          span.textBtn #{trans.managePlugins}
-                        button.roomBtnCtrl.hidden
-                          span.icon.icon-plus
-                          span.textBtn #{trans.inviteContacts}
-                    div#userControl
-                      span.icon.icon-user
-                      p#login.textBtn #{login},
-                        span#acl #{trans.user}
-                      button#reportBug.roomBtnCtrl(data-step="5", data-intro='#{trans.reportBugArrow}', data-position="left")
-                          span.icon.icon-dashboard
-                          span.textBtn #{trans.reportBtn}
-            div#body.center
-              div.mod#textChat
-              div#mainCam.center
-              div.mod#userList
-              div.mod#notification
-            div#footer.south
-              div#camera.mod
+  div.container-fluid(style='height:100%;')
+    div.row-fluid
+      div.span12.lightblue(style='min-height:5px;')
+    div.row-fluid
+      div#voicious_top.span12.darkgray
+        div.span11.offset1
+          div.button-wrap.border-thin
+            button.btn.room-link
+              i.icon-14.icon-link.icon-margin-six
+              | Copy Room ID
+            button.btn.room-quit
+              i.icon-14.icon-off.icon-margin-six
+              | Close Room
+          div.button-wrap.border-thick
+            button.btn.btn-blue
+              i.icon-14.icon-lock.icon-margin-six
+              | Manage Access
+          div.button-wrap.border-thick
+            button.btn.btn-blue
+              i.icon-14.icon-th.icon-margin-six
+              | Manage Plugin
+          div.button-wrap.border-thick
+            button.btn.btn-blue
+              i.icon-14.icon-th.icon-margin-six
+              | Invite Contacts
