@@ -27,19 +27,6 @@ button, video {
     cursor: pointer;
 }
 
-.icon-user {
-    color: #4a535a;
-}
-
-.icon-dashboard:before { content: '\f0e4'; }
-.icon-user:before { content: '\f007'; }
-.icon-plus:before { content: '\f067'; }
-.icon-check-empty:before { content: '\f096'; }
-.icon-off:before { content : '\f011'; }
-.icon-share:before { content : '\f064'; }
-.icon-lock:before { content : '\f023'; }
-.icon-help:before { content : '\f059'; }
-
 * {
     margin: 0;
     padding: 0;
@@ -234,38 +221,4 @@ button:hover
 	padding: 0;
 	margin: 10px;
 	display: inline-block;
-}
-
-.room-link {
-
-	background-color: #243030;
-	color: #fff;
-	border-radius: 3px 0 0 3px;
-}
-
-.room-link:hover {
-	background-color: #3f5252;
-	text-shadow: 0 -1px rgba(0,0,0,0.2);
-}
-
-.room-link:active {
-	background-color: #243030;
-	box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
-}
-
-.room-quit {
-	background-color: #c92a2d;
-	color: #fff;
-	border-radius: 0 3px 3px 0;
-	margin-left: -4px;
-}
-
-.room-quit:hover {
-	background-color: #e04144;
-	text-shadow: 0 -1px rgba(0,0,0,0.2);
-}
-
-.room-quit:active {
-	background-color: #c92a2d;
-	box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
 }

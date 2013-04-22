@@ -102,3 +102,38 @@ div#voicious_top {
 #userlist li div.controls li {
 	margin-bottom: 5px;
 }
+
+
+.room-link {
+
+	background-color: #243030;
+	color: #fff;
+	border-radius: 3px 0 0 3px;
+}
+
+.room-link:hover {
+	background-color: #3f5252;
+	text-shadow: 0 -1px rgba(0,0,0,0.2);
+}
+
+.room-link:active {
+	background-color: #243030;
+	box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+}
+
+.room-quit {
+	background-color: #c92a2d;
+	color: #fff;
+	border-radius: 0 3px 3px 0;
+	margin-left: -4px;
+}
+
+.room-quit:hover {
+	background-color: #e04144;
+	text-shadow: 0 -1px rgba(0,0,0,0.2);
+}
+
+.room-quit:active {
+	background-color: #c92a2d;
+	box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+}
