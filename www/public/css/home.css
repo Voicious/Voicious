@@ -232,3 +232,18 @@ ul.clean {
     font-family: 'Open Sans', 'Helvetica', sans-serif;
     font-size: 13px;
 }
+
+.icon-ok, .icon-notok {
+    font-family : "FontAwesome";
+    font-size: 20px;
+}
+
+.icon-ok:before { content : '\f058'; }
+.icon-ok {
+    color: #39b74c;
+}
+
+.icon-notok:before { content : '\f057'; }
+.icon-notok {
+    color: #ed1c22;
+}
