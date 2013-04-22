@@ -132,22 +132,8 @@ class Room
         $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
-Relayout    = (container) =>
-    options =
-        resize : no
-        type   : 'border'
-    container.layout options
-    return () =>
-        container.layout options
-
 # When the document has been loaded it will check if all services are available and
 # launch it.
 $(document).ready ->
     if window.Voicious.WebRTCRunnable
         room = new Room window.modules
-
-    container   = ($ '#page')
-    relayout    = Relayout container
-    ($ window).resize relayout
-    if window?
-        window.Relayout = relayout
