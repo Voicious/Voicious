@@ -52,9 +52,9 @@ class UserList extends Module
             jqNewLi      = ($ '<li>', { class : 'accordion-group' })
             jqNewHead    = ($ '<div>', { class : 'accordion-heading collapsed', 'data-toggle' : 'collapse', 'data-target' : "##{user}-userList", 'data-parent' : 'div#userList > ul' }).text user
             jqNewToggle  = ($ '<div>', { class : 'accordion-toggle collapse', id : "#{user}-userList" })
-            jqNewPromote = ($ '<li>', { class : 'fontwhite disabled' }).text 'promote'
-            jqNewKick    = ($ '<li>', { class : 'fontwhite disabled' }).text 'kick'
-            jqNewAdd     = ($ '<li>', { class : 'fontwhite disabled' }).text 'add as a contact'
+            jqNewPromote = (($ '<li>', { class : 'fontwhite disabled' }).text 'promote').prepend ($ '<span>', { class : 'icon-double-angle-up' })
+            jqNewKick    = (($ '<li>', { class : 'fontwhite disabled' }).text 'kick').prepend ($ '<span>', { class : 'icon-ban-circle' })
+            jqNewAdd     = (($ '<li>', { class : 'fontwhite disabled' }).text 'add as a contact').prepend ($ '<span>', { class : 'icon-plus-sign-alt' })
             jqNewToggle.append (((($ '<ul>').append jqNewPromote).append jqNewKick).append jqNewAdd)
             (jqNewLi.append jqNewHead).append jqNewToggle
             @jqElem.append jqNewLi
