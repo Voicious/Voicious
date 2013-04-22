@@ -77,11 +77,12 @@ class TextChat extends Module
         jqNewAuthor   = ($ '<span>', { class : 'fontlightblue' }).text message.from
         jqNewTime     = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
         (jqNewMetadata.append jqNewAuthor).append jqNewTime
-        jqNewMessage  = ($ '<div>', { class : 'chatmessage' }).text message.text
+        jqNewMessage  = ($ '<div>', { class : 'chatmessage' }).html message.text
         (do @scrollPane.getContentPane).append (($ '<li>').append jqNewMetadata).append jqNewMessage
 
     # Add a new message to the text chat window.
     addMessage      : (message) =>
+        message.text  = @markdown.makeHtml message.text
         jqLastMessage = do (@jqMessageBox.find 'li').last
         if jqLastMessage[0]?
             lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
