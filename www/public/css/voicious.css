@@ -1,5 +1,6 @@
 html {
     height: 100%;
+    font-family: 'PT Sans', sans-serif;
 }
 
 body {
@@ -56,6 +57,18 @@ div#middle-row > div.module {
     margin-left: 9px;
 }
 
+div#middle-row > div.fill-height {
+    height: 100%;
+}
+
+div.module > div.module-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 img#voicious_logo {
     margin: 10px 0 0 20px;
 }
@@ -69,13 +82,11 @@ div#voicious_top {
 }
 
 #userList-wrapper {
-    height: 100%;
     float: right;
 }
 
 #userList {
     padding: 20px 0 20px 20px;
-    font-family: 'PT Sans', sans-serif;
 }
 
 #userList .title {
@@ -87,7 +98,6 @@ div#voicious_top {
 
 #userList > ul > li {
     font-size: 14px;
-    font-family: 'PT Regular', sans-serif;
     color: rgb(255, 255, 255);
 }
 
@@ -158,4 +168,69 @@ div#voicious_top {
 .room-quit:active {
     background-color: #c92a2d;
     box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+}
+
+#chatcontent {
+    padding: 18px 0 18px 22px;
+    font-size: 14px;
+    height: calc(100% - 126px);
+}
+
+#chatcontent .jspDrag {
+    border-radius: 0;
+    background-color: rgb(36, 38, 41);
+}
+
+#chatcontent ul {
+    height: 100%;
+}
+
+#chatcontent ul li {
+    padding: 12px 0 15px 0;
+    margin-right: 22px;
+    border-bottom: 1px solid rgb(36, 38, 41);
+}
+
+#chatcontent .chatmetadata {
+    margin-bottom: 5px;
+}
+
+#chatcontent .chatmetadata .time {
+    font-size: 11px;
+}
+
+#chatcontent .chatmessage {
+    color: rgb(255, 255, 255);
+    line-height: 16px;
+}
+
+#chatform {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 90px;
+    background-color: rgb(16, 17, 19);
+    text-align: center;
+}
+
+#chatform span {
+    padding: 10px 0 8px 0;
+    float: right;
+    font-size: 12px;
+    color: rgb(172, 172, 172);
+}
+
+#chatform form {
+    width: 80%;
+    height: 54px;
+    display: inline-block;
+    padding: 0 0 26px 0;
+}
+
+#chatform input[type='text'] {
+    border-radius: 0;
+    width: calc(100% - 20px);
+    height: 18px;
+    paddnig: 10px;
 }
