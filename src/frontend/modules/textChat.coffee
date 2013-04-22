@@ -74,7 +74,7 @@ class TextChat extends Module
     newMessageElem : (message) =>
         d             = new Date
         jqNewMetadata = ($ '<div>', { class : 'chatmetadata' })
-        jqNewAuthor   = ($ '<span>', { class : 'fontlightblue' }).text message.from
+        jqNewAuthor   = ($ '<span>', { class : 'fontlightblue', rel : do d.getTime }).text message.from
         jqNewTime     = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
         (jqNewMetadata.append jqNewAuthor).append jqNewTime
         jqNewMessage  = ($ '<div>', { class : 'chatmessage' }).html message.text
@@ -85,16 +85,19 @@ class TextChat extends Module
         message.text  = @markdown.makeHtml message.text
         jqLastMessage = do (@jqMessageBox.find 'li').last
         if jqLastMessage[0]?
+            d          = new Date
             lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
-            if do lastAuthor.text is message.from
+            diffTime   = do d.getTime - lastAuthor.attr 'rel'
+            if do lastAuthor.text is message.from and diffTime < 30000
                 (jqLastMessage.children '.chatmessage').append ($ '<br>')
                 (jqLastMessage.children '.chatmessage').append message.text
+                lastAuthor.attr 'rel', do d.getTime
             else
                 @newMessageElem message
         else
             @newMessageElem message
         do @scrollPane.reinitialise
-        #@scrollPane.scrollToPercentY 100, no
+        @scrollPane.scrollToPercentY 100, no
 
 if window?
     window.TextChat     = TextChat
