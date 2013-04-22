@@ -41,19 +41,24 @@ block content
           div.button-wrap.border-thin
             button.btn.room-link
               i.icon-14.icon-link.icon-margin-six
-              | Copy Room ID
+              | #{trans.copyRoomID}
             button.btn.room-quit
               i.icon-14.icon-off.icon-margin-six
-              | Close Room
+              | #{trans.closeRoom}
           div.button-wrap.border-thick
             button.btn.btn-blue
               i.icon-14.icon-lock.icon-margin-six
-              | Manage Access
+              | #{trans.manageAcess}
           div.button-wrap.border-thick
             button.btn.btn-blue
               i.icon-14.icon-th.icon-margin-six
-              | Manage Plugin
+              | #{trans.managePlugins}
           div.button-wrap.border-thick
             button.btn.btn-blue
-              i.icon-14.icon-th.icon-margin-six
-              | Invite Contacts
+              i.icon-14.icon-plus.icon-margin-six
+              | #{trans.inviteContacts}
+    div#middle-row.row-fluid(style='padding: 8px 0;')
+      div#textChat
+      div#userList
+    div.row-fluid.none
+      div.span12.darkgray#camera
