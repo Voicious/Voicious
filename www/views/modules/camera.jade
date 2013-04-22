@@ -1,14 +1,7 @@
-div.box
-  div#localThumbnails.textBtn
-    label #{trans.receiving}
-      span#nbFeed 0
-    label #{trans.feeds}
-    div#localVideoContainer.video
-      div#notActivate
-        center#centeredLocal
-          label#feedNotActivate #{trans.feedNotActive}
-        center#centerButton
-          button#joinConference(data-step="2", data-intro='#{trans.activateArrow}', data-position="top") #{trans.activateCam}
-          p#messageCam.hidden #{trans.messageCam}
-            
-  ul#videos
+ul#videos
+  li.box
+    div#notActivate
+      label #{trans.feedNotActive}
+        center
+          button#joinConference #{trans.activateCam}
+    div#localVideoContainer.thumbnail-wrapper

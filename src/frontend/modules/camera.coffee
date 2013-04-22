@@ -30,8 +30,8 @@ class Camera extends Module
             ($ 'div#notActivate').css 'display', 'none'
             video = ($ video)
             video.attr 'id', 'localVideo'
-            video.addClass 'localVideo flipH'
-            ($ 'div#localVideoContainer').append video
+            video.addClass 'localVideo flipH thumbnailVideo'
+            ($ '#localVideoContainer').append video
             do video[0].play
             video.bind 'click', () =>
                 @zoom '', video
