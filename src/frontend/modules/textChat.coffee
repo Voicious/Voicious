@@ -72,9 +72,10 @@ class TextChat extends Module
 
     # Create a new message element and append it to @jqMessageBox
     newMessageElem : (message) =>
+        d             = new Date
         jqNewMetadata = ($ '<div>', { class : 'chatmetadata' })
         jqNewAuthor   = ($ '<span>', { class : 'fontlightblue' }).text message.from
-        jqNewTime     = ($ '<span>', { class : 'time' }).text ' at 11:27'
+        jqNewTime     = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
         (jqNewMetadata.append jqNewAuthor).append jqNewTime
         jqNewMessage  = ($ '<div>', { class : 'chatmessage' }).text message.text
         @jqMessageBox.append (($ '<li>').append jqNewMetadata).append jqNewMessage
