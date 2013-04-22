@@ -171,12 +171,23 @@ div#voicious_top {
 }
 
 #chatcontent {
-    padding: 18px 22px;
+    padding: 18px 0 18px 22px;
     font-size: 14px;
+    height: calc(100% - 126px);
+}
+
+#chatcontent .jspDrag {
+    border-radius: 0;
+    background-color: rgb(36, 38, 41);
+}
+
+#chatcontent ul {
+    height: 100%;
 }
 
 #chatcontent ul li {
     padding: 12px 0 15px 0;
+    margin-right: 22px;
     border-bottom: 1px solid rgb(36, 38, 41);
 }
 

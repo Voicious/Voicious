@@ -41,8 +41,8 @@ class TextChat extends Module
         @jqMessageBox = ($ '#chatcontent > ul')
         @jqInput      = @jqForm.children 'input[type=\'text\']'
 
-        #@scrollPane   = do @jqMessageBox.jScrollPane
-        #@scrollPane   = @jqMessageBox.data 'jsp'
+        @scrollPane   = do @jqMessageBox.jScrollPane
+        @scrollPane   = @jqMessageBox.data 'jsp'
 
         @jqForm.submit (event) =>
             do event.preventDefault
@@ -78,11 +78,11 @@ class TextChat extends Module
         jqNewTime     = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
         (jqNewMetadata.append jqNewAuthor).append jqNewTime
         jqNewMessage  = ($ '<div>', { class : 'chatmessage' }).text message.text
-        @jqMessageBox.append (($ '<li>').append jqNewMetadata).append jqNewMessage
+        (do @scrollPane.getContentPane).append (($ '<li>').append jqNewMetadata).append jqNewMessage
 
     # Add a new message to the text chat window.
     addMessage      : (message) =>
-        jqLastMessage = do (@jqMessageBox.children 'li').last
+        jqLastMessage = do (@jqMessageBox.find 'li').last
         if jqLastMessage[0]?
             lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
             if do lastAuthor.text is message.from
@@ -92,6 +92,8 @@ class TextChat extends Module
                 @newMessageElem message
         else
             @newMessageElem message
+        do @scrollPane.reinitialise
+        #@scrollPane.scrollToPercentY 100, no
 
 if window?
     window.TextChat     = TextChat
