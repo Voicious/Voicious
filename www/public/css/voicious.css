@@ -79,8 +79,10 @@ div#voicious_top {
 }
 
 #userList .title {
-	margin-right: 10px;
-	padding-bottom: 10px;
+    margin-right: 10px;
+    padding-bottom: 10px;
+    font-family: 'OpenSans-Bold', sans-serif;
+    font-size: 11px;
 }
 
 #userList > ul > li {
