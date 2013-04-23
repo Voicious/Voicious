@@ -63,6 +63,7 @@ class Camera extends Module
 
     zoom : (uid, video) =>
         container    = ($ 'div#mainCam')
+        container.removeClass 'hidden'
         do (container.find 'video').remove
         @currentZoom = uid
         if video?
