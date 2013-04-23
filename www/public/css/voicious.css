@@ -252,9 +252,6 @@ div#voicious_top {
 }
 
 .thumbnail-wrapper {
-/*  left: 0;
-    top: 0;
-    position: relative; */
     margin: 9px;
     border-width: 3px;
     border-radius: 6px;
@@ -264,16 +261,16 @@ div#voicious_top {
     float: left;
     height: 134px;
     width: 134px;
+    position: relative;
+    top: 0;
+    left: 0;
 }
 
 .thumbnailVideo {
-/*  position: absolute;
-    top: 50%;
+    position: absolute;
+    top: 0;
     left: 50%;
-    margin-top: -67px;
-    margin-left: -67px; */
-    margin-left: -20px;
-    width: 190px;
+    height: 100%;
 }
 
 .flipH {

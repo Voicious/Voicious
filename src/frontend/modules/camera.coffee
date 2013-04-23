@@ -18,8 +18,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Camera extends Module
     constructor : (emitter) ->
         super emitter
-        @feedCount        = 0
-        @jqFeedCount      = ($ 'span#nbFeed')
         @jqVideoContainer = ($ 'ul#videos')
         @currentZoom      = undefined
         @streams          = [ ]
@@ -35,6 +33,7 @@ class Camera extends Module
             do video[0].play
             video.bind 'click', () =>
                 @zoom '', video
+            @centerVideoTag video
 
     delStream : (event, user) =>
         if (@streams.indexOf user.id) >= 0
@@ -53,10 +52,17 @@ class Camera extends Module
             class : 'thumbnail-wrapper'
         }).appendTo @jqVideoContainer
         li.append video
-        @refreshFeedCount 1
+        @centerVideoTag video
         do video[0].play
         video.bind 'click', () =>
             @zoom data.uid, video
+
+    # Must set margin-left css propriety when adding a video tag to the page
+    # Width is computed using video original size (640 * 480) since css value is wrong at this time
+    centerVideoTag : (tag) =>
+        jqTag      = ($ tag)
+        marginleft = ((do jqTag.height) * 640 / 480) / 2
+        jqTag.css 'margin-left', -marginleft
 
     enableCamera : () =>
         @emitter.trigger 'camera.enable'
@@ -71,10 +77,6 @@ class Camera extends Module
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
             container.append newVideo
-
-    refreshFeedCount : (modificator = 0) =>
-        @feedCount += modificator
-        @jqFeedCount.text @feedCount
 
 if window?
     window.Camera = Camera
