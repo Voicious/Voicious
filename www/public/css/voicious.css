@@ -236,25 +236,21 @@ div#voicious_top {
 }
 
 .box {
-    margin: 10px;
-    width: 140px;
-    height: 140px;
+    margin-left: 9px;
     background: #0f0f0f;
 }
 
 .thumbnail-wrapper {
+    margin: 9px;
     z-index: 1;
     border-width: 3px;
-    border-radius: 3px;
+    border-radius: 6px;
     border-style: solid;
     border-color: #0f0f0f;
     overflow: hidden;
-    max-width: 140px;
-    max-height: 140px;
-}
-
-#videos {
-    overflow: auto;
+    float: left;
+    height: 134px;
+    width: 134px;
 }
 
 .thumbnailVideo {

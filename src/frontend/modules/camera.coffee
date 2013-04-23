@@ -50,7 +50,7 @@ class Camera extends Module
         video.addClass 'thumbnailVideo flipH'
         li = ($ '<li>', {
             id    : "video_#{data.uid}",
-            class : 'thumbnail'
+            class : 'thumbnail-wrapper'
         }).appendTo @jqVideoContainer
         li.append video
         @refreshFeedCount 1
