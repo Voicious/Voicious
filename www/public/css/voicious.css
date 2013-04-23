@@ -53,6 +53,14 @@ body {
     font-weight: bold;
 }
 
+#blueLine {
+    min-height: 5px;
+}
+
+#middle-row {
+    padding: 8px 0;
+}
+
 div#middle-row > div.module {
     margin-left: 9px;
 }
@@ -235,13 +243,16 @@ div#voicious_top {
     paddnig: 10px;
 }
 
+#bottom-row {
+    min-height: 160px;
+}
+
 .box {
-    margin-left: 9px;
     background: #0f0f0f;
 }
 
 .thumbnail-wrapper {
-/*    left: 0;
+/*  left: 0;
     top: 0;
     position: relative; */
     margin: 9px;
@@ -256,7 +267,7 @@ div#voicious_top {
 }
 
 .thumbnailVideo {
-/*    position: absolute;
+/*  position: absolute;
     top: 50%;
     left: 50%;
     margin-top: -67px;

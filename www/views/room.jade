@@ -34,9 +34,9 @@ block scripts
 
 block content
   div#infos.none(rid=rid, uid=uid)
-  div.container-fluid(style='height:100%;')
+  div.container-fluid
     div.row-fluid
-      div.span12.lightblue(style='min-height:5px;')
+      div.span12.lightblue#blueLine
     div.row-fluid
       div#voicious_top.span12.darkgray
         div.span11.offset1
@@ -59,9 +59,9 @@ block content
             button.btn.btn-blue
               i.icon-14.icon-plus.icon-margin-six
               | #{trans.inviteContacts}
-    div#middle-row.row-fluid(style='padding: 8px 0;')
+    div#middle-row.row-fluid
         div#textChat.span3.darkgray.module.fill-height
         div#userList-wrapper.span2.darkgray.fill-height
             div#userList
-    div.row-fluid
-      div.span12.darkgray#camera(style="min-height:160px")
+    div.row-fluid#bottom-row
+      div.span12.darkgray#camera
