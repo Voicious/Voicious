@@ -63,6 +63,7 @@ body {
 
 div#middle-row > div.module {
     margin-left: 9px;
+    float: left;
 }
 
 div#middle-row > div.fill-height {

@@ -35,7 +35,20 @@ class Camera extends Module
                 @zoom '', video
             @centerVideoTag video
 
-    delStream : (event, user) =>
+    appendHTML  : () ->
+        html = ($ '<div class="row-fluid" id="bottom-row">
+            <div class="darkgray span12" id="camera">
+                <ul id="videos">
+                    <li class="box thumbnail-wrapper"></li>
+                    <div class="localVideoContainer box"></div>
+                </ul>
+            </div>
+        </div>')
+        ($ '#middle-row').after html
+        ($ '<div class="darkgray fill-height module" id="mainCam"></div>').appendTo '#middle-row'
+        $(window).trigger 'resize'
+
+    delStream   : (event, user) =>
         if (@streams.indexOf user.id) >= 0
             do ($ "li#video_#{user.id}").remove
             @refreshFeedCount -1

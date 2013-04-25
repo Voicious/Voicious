@@ -39,21 +39,9 @@ class Room
             dataType: 'script'
         ).done (data) =>
             eval data
-            @getModuleHTML moduleName, modules, cb
-
-    #Retrieve the HTML for the module and position it into a tag
-    #   with the id #moduleName.
-    # Call @loadModules with the remaining modules to load.
-    getModuleHTML       : (moduleName, modules, cb) ->
-        $.ajax(
-            type    : 'POST'
-            url     : '/renderModule'
-            data    :
-                    module      : moduleName
-        ).done (data) =>
-            $(data).appendTo "##{moduleName}"
             module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
             @moduleArray.push (new window[module] @emitter)
+            do @moduleArray[@moduleArray.length - 1].appendHTML
             @loadModules modules, cb
 
     # Load the Modules given in parameter recursively.

@@ -56,6 +56,23 @@ class TextChat extends Module
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
 
+
+    appendHTML      : () ->
+        html = ($ '<div class="span3 darkgray module fill-height" id="textChat">
+                <div class ="module-wrapper">
+                    <div id="chatcontent">
+                        <ul></ul>
+                    </div>
+                    <div id="chatform">
+                        <form>
+                            <span>Press RETURN to post</span>
+                            <input type="text">
+                    </div>
+                </div>
+            </div>'
+        )
+        html.appendTo "#middle-row"
+
     # Update the text chat with a new message.
     update          : (message) =>
         @addMessage message
