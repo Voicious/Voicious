@@ -51,6 +51,7 @@ class TextChat extends Module
             @sendMessage message
 
         $(window).resize () =>
+            return
             do @scrollPane.reinitialise
 
         @emitter.on 'chat.message', (event, data) =>

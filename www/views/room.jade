@@ -2,6 +2,7 @@ extends main
 
 block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/bootstrap.min.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery-ui-1.10.2.custom.min.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/font-awesome.min.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.jscrollpane.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
@@ -17,11 +18,12 @@ block scripts
     script(type="text/javascript", src="/public/js/vendor/showdown.js")
     script(type="text/javascript", src="/public/js/module.js")
     script(type='text/javascript', src='/public/js/connections.js')
-    script(type="text/javascript", src="/public/js/room.js")
     script(type="text/javascript")
-        if ("#{login}" !== "") {
-            window.CurrentUser = "#{login}";
-        }
+        window.Voicious.currentUser = {
+            uid  : "#{uid}",
+            name : "#{login}"
+        };
+        window.Voicious.room        = "#{rid}"
         if ("#{wsHost}" !== "" && "#{wsPort}" !== "") {
             window.ws          = {
                 Host : "#{wsHost}",
@@ -31,32 +33,17 @@ block scripts
           window.modules = JSON.parse('!{modules}');
           };
         }
+    script(type="text/javascript", src="/public/js/room.js")
 
 block content
-  div#infos.none(rid=rid, uid=uid)
-  div.container-fluid
-    div.row-fluid
-      div.span12.lightblue#blueLine
-    div.row-fluid
-      div#voicious_top.span12.darkgray
-        div.span11.offset1
-          div.button-wrap.border-thin
-            button.btn.room-link
-              i.icon-14.icon-link.icon-margin-six
-              | #{trans.copyRoomID}
-            button.btn.room-quit
-              i.icon-14.icon-off.icon-margin-six
-              | #{trans.closeRoom}
-          div.button-wrap.border-thick
-            button.btn.btn-blue
-              i.icon-14.icon-lock.icon-margin-six
-              | #{trans.manageAcess}
-          div.button-wrap.border-thick
-            button.btn.btn-blue
-              i.icon-14.icon-th.icon-margin-six
-              | #{trans.managePlugins}
-          div.button-wrap.border-thick
-            button.btn.btn-blue
-              i.icon-14.icon-plus.icon-margin-six
-              | #{trans.inviteContacts}
-    div#middle-row.row-fluid
+  div.container-fluid.fill-height
+    div.row-fluid.fill-height
+        div#sidebar.fill-height.left.color-one.column
+            img(src='/public/img/logo.png')
+        div#content.fill-height.left.color-two
+            div.fill-height.left.column
+                ul#feeds
+            div.fill-height.left.column
+                div#mainCam.fill-height
+            div.fill-height.right.column(style='width:30%')
+                div#textChat.fill-height.color-three

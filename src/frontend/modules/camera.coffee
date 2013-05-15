@@ -18,22 +18,22 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Camera extends Module
     constructor : (emitter) ->
         super emitter
+        @jqMainCams       = ($ '#mainCam')
         @jqVideoContainer = ($ 'ul#videos')
         @currentZoom      = undefined
         @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
+        do @enableCamera
         @emitter.on 'stream.create', @newStream
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
-            ($ 'div#notActivate').css 'display', 'none'
-            video = ($ video)
-            video.attr 'id', 'localVideo'
-            video.addClass 'localVideo flipH thumbnailVideo'
-            ($ '#localVideoContainer').append video
-            do video[0].play
-            video.bind 'click', () =>
-                @zoom '', video
-            @centerVideoTag video
+            @newStream event, { video : video , uid : window.Voicious.currentUser.uid }
+        ($ window).on 'resize', @squareMainCam
+        ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
+        do @squareMainCam
+
+    squareMainCam : () =>
+        @jqMainCams.width do @jqMainCams.height
 
     appendHTML  : () ->
         html = ($ '<div class="row-fluid" id="bottom-row">
@@ -51,31 +51,25 @@ class Camera extends Module
     delStream   : (event, user) =>
         if (@streams.indexOf user.id) >= 0
             do ($ "li#video_#{user.id}").remove
-            @refreshFeedCount -1
             @streams.splice user.id, 1
             if @currentZoom is user.id
                 @zoom undefined, undefined
 
     newStream : (event, data) =>
+        console.log "there"
         @streams.push data.uid
         video = ($ data.video)
         video.addClass 'thumbnailVideo flipH'
-        li = ($ '<li>', {
-            id    : "video_#{data.uid}",
-            class : 'thumbnail-wrapper'
-        }).appendTo @jqVideoContainer
-        li.append video
-        @centerVideoTag video
-        do video[0].play
-        video.bind 'click', () =>
-            @zoom data.uid, video
+        video.attr 'rel', data.uid
+        @emitter.trigger 'stream.display', video
 
     # Must set margin-left css propriety when adding a video tag to the page
     # Width is computed using video original size (640 * 480) since css value is wrong at this time
-    centerVideoTag : (tag) =>
-        jqTag      = ($ tag)
+    centerVideoTag : (event) =>
+        jqTag      = ($ event.currentTarget)
         marginleft = ((do jqTag.height) * 640 / 480) / 2
         jqTag.css 'margin-left', -marginleft
+        do event.currentTarget.play
 
     enableCamera : () =>
         @emitter.trigger 'camera.enable'
