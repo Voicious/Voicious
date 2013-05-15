@@ -1,277 +1,55 @@
 html {
+    width: 100%;
     height: 100%;
     font-family: 'PT Sans', sans-serif;
 }
 
 body {
-    background-color: rgb(30, 33, 35);
     -webkit-font-smoothing: antialiased;
     font-smoothing: antialiased;
+    width: 100%;
     height: 100%;
+}
+
+.color-one {
+    background-color: rgb(30, 33, 35);
+}
+
+.color-two {
+    background-color: rgb(15, 15, 15);
+}
+
+.color-three {
+    background-color: rgb(30, 33, 35);
 }
 
 .container-fluid {
-	padding-right: 0;
-	padding-left: 0;
+    width: 100%;
+    padding: 0;
 }
 
-.lightblue {
-    background-color: rgb(0, 174, 239);
+.fill-height {
+    height: 100%;
 }
 
-.fontlightblue {
-    color: rgb(0, 174, 239);
-}
-
-.darkgray {
-    background-color: rgb(22, 24, 26);
-}
-
-.fontdarkgray {
-    color: rgb(85, 85, 85);
-}
-
-.fontlightgray {
-    color: rgb(156, 156, 156);
-}
-
-.fontwhite {
-    color: rgb(255, 255, 255);
+.left {
+    float: left;
 }
 
 .right {
-    text-align: right;
-}
-
-.none {
-    display: none;
-}
-
-.title {
-    color: rgb(255, 255, 255);
-    font-size: 11px;
-    font-weight: bold;
-}
-
-#blueLine {
-    min-height: 5px;
-}
-
-#middle-row {
-    padding: 8px 0;
-}
-
-div#middle-row > div.module {
-    margin-left: 9px;
-    float: left;
-}
-
-div#middle-row > div.fill-height {
-    height: 100%;
-}
-
-div.module > div.module-wrapper {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-img#voicious_logo {
-    margin: 10px 0 0 20px;
-}
-
-div#voicious_top {
-    height:54px;
-    background-image: url(../img/logo.png);
-    background-repeat: no-repeat;
-    background-position: 20px 10px;
-    border-bottom: 1px solid rgb(26, 28, 30);
-}
-
-#userList-wrapper {
     float: right;
 }
 
-#userList {
-    padding: 20px 0 20px 20px;
-}
-
-#userList .title {
-    margin-right: 10px;
-    padding-bottom: 10px;
-    font-family: 'OpenSans-Bold', sans-serif;
-    font-size: 11px;
-}
-
-#userList > ul > li {
-    font-size: 14px;
-    color: rgb(255, 255, 255);
-}
-
-#userList li.accordion-group {
-    border: none;
-}
-
-#userList li div.accordion-heading {
-    background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(32, 34, 37);
-    padding: 12px 10px 12px 20px;
-    border-right: none;
-    border-top-left-radius: .4em;
-    border-bottom-left-radius: .4em;
-    cursor: pointer;
-    color: rgb(85, 85, 85);
-}
-
-#userList li div.accordion-heading.collapsed {
-    background-color: transparent;
-}
-
-#userList li div.accordion-heading:hover {
-    background-color: rgb(32, 34, 37);
-}
-
-#userList li div.accordion-toggle ul {
-    padding: 10px 0 5px 20px;
-    cursor: default;
-}
-
-#userList li div.accordion-toggle li {
-    margin-bottom: 5px;
-}
-
-#userList li div.accordion-toggle li.disabled {
-    color: rgb(85, 85, 85);
-}
-
-.room-link {
-    background-color: #243030;
-    color: #fff;
-    border-radius: 3px 0 0 3px;
-}
-
-.room-link:hover {
-    background-color: #3f5252;
-    text-shadow: 0 -1px rgba(0,0,0,0.2);
-}
-
-.room-link:active {
-    background-color: #243030;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
-}
-
-.room-quit {
-    background-color: #c92a2d;
-    color: #fff;
-    border-radius: 0 3px 3px 0;
-    margin-left: -4px;
-}
-
-.room-quit:hover {
-    background-color: #e04144;
-    text-shadow: 0 -1px rgba(0,0,0,0.2);
-}
-
-.room-quit:active {
-    background-color: #c92a2d;
-    box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
-}
-
-#chatcontent {
-    padding: 18px 0 18px 22px;
-    font-size: 14px;
-    height: calc(100% - 126px);
-}
-
-#chatcontent .jspDrag {
-    border-radius: 0;
-    background-color: rgb(36, 38, 41);
-}
-
-#chatcontent ul {
-    height: 100%;
-}
-
-#chatcontent ul li {
-    padding: 12px 0 15px 0;
-    margin-right: 22px;
-    border-bottom: 1px solid rgb(36, 38, 41);
-}
-
-#chatcontent .chatmetadata {
-    margin-bottom: 5px;
-}
-
-#chatcontent .chatmetadata .time {
-    font-size: 11px;
-}
-
-#chatcontent .chatmessage {
-    color: rgb(255, 255, 255);
-    line-height: 16px;
-}
-
-#chatform {
+.no-relative {
     position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 90px;
-    background-color: rgb(16, 17, 19);
-    text-align: center;
 }
 
-#chatform span {
-    padding: 10px 0 8px 0;
-    float: right;
-    font-size: 12px;
-    color: rgb(172, 172, 172);
+.column {
+    padding: 10px 0 10px 10px;
 }
 
-#chatform form {
-    width: 80%;
-    height: 54px;
-    display: inline-block;
-    padding: 0 0 26px 0;
-}
-
-#chatform input[type='text'] {
-    border-radius: 0;
-    width: calc(100% - 20px);
-    height: 18px;
-    paddnig: 10px;
-}
-
-#bottom-row {
-    min-height: 160px;
-}
-
-.box {
-    background: #0f0f0f;
-}
-
-.thumbnail-wrapper {
-    margin: 9px;
-    border-width: 3px;
-    border-radius: 6px;
-    border-style: solid;
-    border-color: #0f0f0f;
-    overflow: hidden;
-    float: left;
-    height: 134px;
-    width: 134px;
-    position: relative;
-    top: 0;
-    left: 0;
-}
-
-.thumbnailVideo {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    height: 100%;
+.column.fill-height {
+    height: calc(100% - 20px);
 }
 
 .flipH {
@@ -283,13 +61,57 @@ div#voicious_top {
     -ms-filter: "FlipH";
 }
 
-#mainCam {
-    overflow: hidden;
-    border-width: 3px;
-    border-style: solid;
-    border-color: #0f0f0f;
+#sidebar {
+    text-align: center;
+    width: 8%;
+    padding-left: 0;
 }
 
-#mainCam > video {
+#content {
+    width: 92%;
+}
+
+ul#videos {
+    width: 115px;
+}
+
+li.thumbnail-wrapper {
+    width: 115px;
+    height: 115px;
+    margin-bottom: 3px;
+}
+
+.video-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+video {
+    position: absolute;
+    top: 0;
+    left: 50%;
     height: 100%;
+}
+
+#textChat {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#chatform {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+#chatform input[type=text] {
+    padding: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border-radius: 0;
+    margin: 0;
 }

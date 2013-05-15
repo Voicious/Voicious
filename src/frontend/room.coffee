@@ -20,8 +20,8 @@ class Room
     # Load the modules given in parameter (Array)
     constructor         : (modules) ->
         @emitter     = ($ '<span>', { display : 'none', id : 'EMITTER' })
-        @rid         = ($ '#infos').attr 'rid'
-        @uid         = ($ '#infos').attr 'uid'
+        @rid         = window.Voicious.room
+        @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
@@ -124,18 +124,4 @@ class Room
 # launch it.
 $(document).ready ->
     if window.Voicious.WebRTCRunnable
-        # Resize all elements vertically when window is resized
-        # (middle-row elements must fill all space between header and footer)
-        resizeAll = () ->
-            container     = ($ '.container-fluid')[0]
-            rows          = ($ container).find '.row-fluid'
-            summedHeight  = 0
-            for row in rows
-                if (($ row).attr 'id') isnt 'middle-row'
-                    summedHeight += do ($ row).innerHeight
-            jqMiddleRow   = ($ '#middle-row')
-            summedPadding = (parseInt (jqMiddleRow.css 'padding-top')) + (parseInt (jqMiddleRow.css 'padding-bottom'))
-            jqMiddleRow.height (do ($ window).innerHeight) - summedHeight - summedPadding
-        do resizeAll
-        ($ window).on 'resize', resizeAll
         room = new Room window.modules
