@@ -23,6 +23,8 @@ class Room
         @rid         = window.Voicious.room
         @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
+        
+        $('#sidebarAcc').accordion { collapsible: true, active: false }
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @loadModules modules, () =>
@@ -52,7 +54,7 @@ class Room
             @loadScript mod, modules, cb
         else
             do cb
-
+        
     # Start the tutorial animation.
     startTutorial      : () =>
         $("#tutorialMode").css "background-color", "#43535a"
