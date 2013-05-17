@@ -8,6 +8,7 @@ block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/style.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/voicious.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/room.css")
 
 block scripts
     script(type='text/javascript', src='/public/js/vendor/bootstrap.min.js')
@@ -40,6 +41,13 @@ block content
     div.row-fluid.fill-height
         div#sidebar.fill-height.left.color-one.column
             img(src='/public/img/logo.png')
+            p#login.textBtn #{login}
+            span#acl #{trans.user}
+            div#mediaBtn
+              button#cam
+              button#mic
+            button#shareRoomBtn
+            button#manageRoomBtn
         div#content.fill-height.left.color-two
             div.fill-height.left.column
                 ul#feeds

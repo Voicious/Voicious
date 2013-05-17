@@ -1,0 +1,24 @@
+#login {
+    margin-top: 30px;
+    margin-right: 21px;
+    text-align: right;
+}
+#acl {
+    margin-right: 21px;
+    float: right;
+}
+
+#mediaBtn {
+    margin-top: 40px;
+}
+#mediaBtn button {
+    width: 50%;
+    height: 50px;
+}
+#cam {
+    float: left;
+}
+#shareRoomBtn, #manageRoomBtn {
+    width: 100%;
+    height: 50px;
+}
