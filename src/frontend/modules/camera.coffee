@@ -30,6 +30,9 @@ class Camera extends Module
             @newStream event, { video : video , uid : window.Voicious.currentUser.uid }
         ($ window).on 'resize', @squareMainCam
         ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
+        ($ '#feeds').delegate 'video', 'click', (event) =>
+            clickedVideo = ($ event.target)
+            @zoom (clickedVideo.attr 'rel'), clickedVideo
         do @squareMainCam
 
     squareMainCam : () =>
@@ -56,7 +59,6 @@ class Camera extends Module
                 @zoom undefined, undefined
 
     newStream : (event, data) =>
-        console.log "there"
         @streams.push data.uid
         video = ($ data.video)
         video.addClass 'thumbnailVideo flipH'
