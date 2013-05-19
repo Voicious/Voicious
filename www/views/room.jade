@@ -45,22 +45,31 @@ block content
             span#acl #{trans.user}
             div#mediaBtn
               a#cam 
-                span#camSpan OFF
+                span#camSpan.icon.iconMedia.icon-facetime-video
+                p#labelMedia.labelMedia OFF
               a#mic
-                span#micSpan ON
+                span#micSpan.icon.iconMedia.icon-microphone
+                p.labelMedia ON
             div#sidebarAcc
               a#shareRoomLink 
-                span#shareRoomSpan Share ROOM ID
+                span#shareRoomSpan.icon.iconOther.icon-share-alt
+                p#labelShareRoom Share ROOM ID
               div.accordionTab
                 a#clipboardLink.accordionLink 
-                  span#clipboardSpan Copy to clipboard
+                  span#clipboardSpan.icon.iconOther.icon-copy 
+                  p.labelOther Copy to clipboard
                 a#inviteContactLink.accordionLink 
-                  span#inviteContactSpan Invite contacts
+                  span#inviteContactSpan.icon.iconOther.icon-plus 
+                  p.labelOther Invite contacts
                 a#twitterLink.accordionLink
-                  span#twitterSpan Share on twitter
+                  span#twitterSpan.icon.iconOther.icon-twitter
+                  p.labelOther Share on twitter
                 a#facebookLink.accordionLink 
-                  span#facebookSpan Share on facebook
-              a#manageRoomLink MANAGE ROOM
+                  span#facebookSpan.icon.iconOther.icon-facebook-sign
+                  p.labelOther Share on facebook
+              a#manageRoomLink
+                span#manageRoomSpan.icon.iconOther.icon-wrench
+                p#labelManageRoom MANAGE ROOM
               div.accordionTab
         div#content.fill-height.left.color-two
             div.fill-height.left.column

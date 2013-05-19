@@ -11,8 +11,37 @@ a {
 
 .icon {
     font-family: 'FontAwesome';
+}
+
+.iconMedia {
+    height: 30px;
     margin-left: -10px;
-    font-size: 11px;
+    font-size: 22px;
+    margin-right: 18px;
+}
+.iconOther {
+    float: left;
+}
+
+#labelMedia {
+    margin-left: 26px;
+}
+.labelMedia {
+    margin-left: 20px;
+    margin-top: -28px;
+}
+.labelOther {
+    float: left;
+    margin-left: 6px;
+}
+
+#shareRoomSpan, #manageRoomSpan {
+    margin-top: 14px;
+    margin-left: -12px;
+}
+#labelShareRoom, #labelManageRoom {
+    margin-top: 14px;
+    float: left;
 }
 
 #login {
@@ -36,7 +65,8 @@ a {
     margin-top: 40px;
 }
 #cam, #mic {
-    height: 55px;
+    font-size: 12px;
+    height: 52px;
     border-right: none;
     font-family: 'OpenSans-Bold';
 }
@@ -54,7 +84,7 @@ a {
 }
 
 #shareRoomLink {
-    margin-top: 96px;
+    margin-top: 93px;
 }
 #manageRoomLink {
     margin-top: -1px;
@@ -62,7 +92,7 @@ a {
 #shareRoomLink, #manageRoomLink {
     color: white;
     font-family: 'OpenSans-Bold';
-    font-size: 13px;
+    font-size: 10px;
     text-decoration: none;
     background-color: rgb(30, 33, 35);
     height: 40px;
@@ -77,13 +107,13 @@ a {
     height: 124px;
     width: 100%;
     overflow: hidden;
-    margin-bottom: -9px;
+    margin-bottom: -23px;
 }
 .accordionLink {
     display: block;
     width: 92%;
     font-family: 'OpenSans-Bold';
-    font-size: 11px;
+    font-size: 9px;
     padding: 7px;
     float: left;
     border-right: none;
