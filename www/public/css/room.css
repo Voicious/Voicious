@@ -1,32 +1,85 @@
+a {
+    color: white;
+    background-color: rgb(30, 33, 35);
+    text-decoration: none;
+    box-shadow: inset 0 1px rgba(255,255,255,.1);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(15, 15, 15);
+    cursor: pointer; 
+}
+
 #login {
+    color: #b4C1C7;
+    font-size: 15px;
+    font-weight: bold;
     margin-top: 30px;
-    margin-right: 21px;
+    margin-right: 24px;
     text-align: right;
 }
 #acl {
-    margin-right: 21px;
+    color: #00aeef;
+    font-family: 'OpenSans-Regular';
+    font-weight: bold;
+    margin-right: 24px;
     float: right;
+    font-size: 13px;
 }
 
 #mediaBtn {
     margin-top: 40px;
 }
-#mediaBtn button {
-    width: 50%;
-    height: 50px;
+#cam, #mic {
+    height: 55px;
+    border-right: none;
+    font-family: 'OpenSans-Bold';
+}
+#camSpan, #micSpan {
+    display: block;
+    margin-top: 26%;
 }
 #cam {
+    width: 50%;
     float: left;
 }
-
-#shareRoomBtn, #manageRoomBtn {
-    width: 100%;
-    height: 50px;
+#mic {
+    width: 48%;
+    float: right;
 }
+
+#shareRoomLink {
+    margin-top: 96px;
+}
+#manageRoomLink {
+    margin-top: -1px;
+}
+#shareRoomLink, #manageRoomLink {
+    color: white;
+    font-family: 'OpenSans-Bold';
+    font-size: 13px;
+    text-decoration: none;
+    background-color: rgb(30, 33, 35);
+    height: 40px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(15, 15, 15);
+    border-right: none;
+}
+
 #sidebarAcc .ui-accordion-content {
     padding: 0;
-}
-.accordionBtn {
+    height: 124px;
     width: 100%;
-    height: 30px;
+    overflow: hidden;
+    margin-bottom: -9px;
+}
+.accordionLink {
+    display: block;
+    width: 92%;
+    font-family: 'OpenSans-Bold';
+    font-size: 11px;
+    padding: 7px;
+    float: left;
+    border-right: none;
+    border-top: none;
 }

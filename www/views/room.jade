@@ -44,16 +44,23 @@ block content
             p#login.textBtn #{login}
             span#acl #{trans.user}
             div#mediaBtn
-              button#cam
-              button#mic
+              a#cam 
+                span#camSpan OFF
+              a#mic
+                span#micSpan ON
             div#sidebarAcc
-              button#shareRoomBtn Share ROOM ID
+              a#shareRoomLink 
+                span#shareRoomSpan Share ROOM ID
               div.accordionTab
-                button#clipboardBtn.accordionBtn Copy to clipboard
-                button#inviteContactBtn.accordionBtn Invite contacts
-                button#twitterBtn.accordionBtn Share on twitter
-                button#facebookBtn.accordionBtn Share on facebook
-              button#manageRoomBtn MANAGE ROOM
+                a#clipboardLink.accordionLink 
+                  span#clipboardSpan Copy to clipboard
+                a#inviteContactLink.accordionLink 
+                  span#inviteContactSpan Invite contacts
+                a#twitterLink.accordionLink
+                  span#twitterSpan Share on twitter
+                a#facebookLink.accordionLink 
+                  span#facebookSpan Share on facebook
+              a#manageRoomLink MANAGE ROOM
               div.accordionTab
         div#content.fill-height.left.color-two
             div.fill-height.left.column
