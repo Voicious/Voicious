@@ -9,6 +9,12 @@ a {
     cursor: pointer; 
 }
 
+.icon {
+    font-family: 'FontAwesome';
+    margin-left: -10px;
+    font-size: 11px;
+}
+
 #login {
     color: #b4C1C7;
     font-size: 15px;
