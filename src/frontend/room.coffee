@@ -23,14 +23,29 @@ class Room
         @rid         = window.Voicious.room
         @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
-        
-        $('#sidebarAcc').accordion { collapsible: true, active: false }
+
+        do @setPage                
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @loadModules modules, () =>
                 do @connections.dance
         $('#reportBug').click @bugReport
         $('#tutorialMode').toggle @startTutorial, @stopTutorial
+
+    setPage             : () ->
+        $('#sidebarAcc').accordion { collapsible: true, active: false }
+        @toggleMediaButton 'cam'
+        @toggleMediaButton 'mic'        
+
+    toggleMediaButton        : (name) ->
+        $('a#' + name).click () ->
+             label = $('span#label' + name)
+             if (do label.text) is "OFF"
+                  label.text 'ON'
+                  label.css 'color', 'green'
+             else
+                  label.text 'OFF'
+                  label.css 'color', 'red'
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.

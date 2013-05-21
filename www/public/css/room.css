@@ -23,13 +23,16 @@ a {
     float: left;
 }
 
-#labelMedia {
-    margin-left: 26px;
+#labelcam, #labelmic {
+    position: absolute;
+    margin-top: 20px;
+    color: red;
 }
-.labelMedia {
-    margin-left: 20px;
-    margin-top: -28px;
+#labelcam {
+    margin-left: 2px;
 }
+
+
 .labelOther {
     float: left;
     margin-left: 6px;
@@ -70,9 +73,16 @@ a {
     border-right: none;
     font-family: 'OpenSans-Bold';
 }
+
 #camSpan, #micSpan {
-    display: block;
-    margin-top: 26%;
+    position: absolute;
+    margin-top: 16px;
+}
+#camSpan {
+    left: 1.2%;
+}
+#micSpan {
+   left: 5.3%;
 }
 #cam {
     width: 50%;
@@ -92,7 +102,7 @@ a {
 #shareRoomLink, #manageRoomLink {
     color: white;
     font-family: 'OpenSans-Bold';
-    font-size: 10px;
+    font-size: 9px;
     text-decoration: none;
     background-color: rgb(30, 33, 35);
     height: 40px;
@@ -107,13 +117,13 @@ a {
     height: 124px;
     width: 100%;
     overflow: hidden;
-    margin-bottom: -23px;
+    margin-bottom: -27px;
 }
 .accordionLink {
     display: block;
     width: 92%;
     font-family: 'OpenSans-Bold';
-    font-size: 9px;
+    font-size: 8px;
     padding: 7px;
     float: left;
     border-right: none;
