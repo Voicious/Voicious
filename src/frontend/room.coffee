@@ -34,6 +34,8 @@ class Room
 
     setPage             : () ->
         $('#sidebarAcc').accordion { collapsible: true, active: false }
+        $('a#shareRoomLink, a#manageRoomLink').click () ->
+             $(this).toggleClass 'down'
         @toggleMediaButton 'cam'
         @toggleMediaButton 'mic'        
 

@@ -1,4 +1,4 @@
-a {
+a, a:focus {
     color: white;
     background-color: rgb(30, 33, 35);
     text-decoration: none;
@@ -7,6 +7,7 @@ a {
     border-style: solid;
     border-color: rgb(15, 15, 15);
     cursor: pointer; 
+    outline: none;
 }
 
 .icon {
@@ -101,6 +102,7 @@ a {
 }
 #shareRoomLink, #manageRoomLink {
     color: white;
+    text-decoration: none;
     font-family: 'OpenSans-Bold';
     font-size: 9px;
     text-decoration: none;
@@ -110,6 +112,9 @@ a {
     border-style: solid;
     border-color: rgb(15, 15, 15);
     border-right: none;
+}
+#shareRoomLink.down, #manageRoomLink.down {
+    background-image: linear-gradient(#0A0B0C, rgb(30, 33, 35));
 }
 
 #sidebarAcc .ui-accordion-content {
@@ -129,3 +134,4 @@ a {
     border-right: none;
     border-top: none;
 }
+
