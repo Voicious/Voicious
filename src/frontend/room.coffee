@@ -24,7 +24,7 @@ class Room
         @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
 
-        do @setPage                
+        do @setPage
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @loadModules modules, () =>
@@ -36,18 +36,20 @@ class Room
         $('#sidebarAcc').accordion { collapsible: true, active: false }
         $('a#shareRoomLink, a#manageRoomLink').click () ->
              $(this).toggleClass 'down'
-        @toggleMediaButton 'cam'
-        @toggleMediaButton 'mic'        
-
-    toggleMediaButton        : (name) ->
-        $('a#' + name).click () ->
-             label = $('span#label' + name)
-             if (do label.text) is "OFF"
-                  label.text 'ON'
-                  label.css 'color', 'green'
-             else
-                  label.text 'OFF'
-                  label.css 'color', 'red'
+        ($ 'div.activable').click () ->
+            jqA = ($ this).find 'span'
+            icon = do jqA.first
+            label = do jqA.last
+            if (do label.text) is 'OFF'
+                icon.removeClass 'dark-grey'
+                icon.addClass 'white'
+                label.text 'ON'
+                label.css 'color', 'green'
+            else
+                icon.removeClass 'white'
+                icon.addClass 'dark-grey'
+                label.text 'OFF'
+                label.css 'color', 'red'
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.
@@ -71,7 +73,7 @@ class Room
             @loadScript mod, modules, cb
         else
             do cb
-        
+
     # Start the tutorial animation.
     startTutorial      : () =>
         $("#tutorialMode").css "background-color", "#43535a"

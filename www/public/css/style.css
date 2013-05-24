@@ -97,6 +97,14 @@ body {
     background: #0072dc;
 }
 
+.white {
+    color: #ffffff;
+}
+
+.dark-grey {
+    color: #333;
+}
+
 .grey-blue {
     background-color: #7a96af;
 }

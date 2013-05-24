@@ -44,12 +44,12 @@ block content
             p#login.textBtn #{login}
             span#acl #{trans.user}
             div#mediaBtn
-              span#camSpan.icon.iconMedia.icon-facetime-video
-              a#cam
-                span#labelcam OFF
-              span#micSpan.icon.iconMedia.icon-microphone
-              a#mic
-                span#labelmic OFF
+              div#cam.activable
+                span.icon.iconMedia.icon-facetime-video.dark-grey
+                span OFF
+              div#mic.activable
+                span.icon.iconMedia.icon-microphone.dark-grey
+                span OFF
             div#sidebarAcc
               a#shareRoomLink
                 span#shareRoomSpan.icon.iconOther.icon-share-alt
