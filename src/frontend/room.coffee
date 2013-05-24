@@ -33,9 +33,13 @@ class Room
         $('#tutorialMode').toggle @startTutorial, @stopTutorial
 
     setPage             : () ->
-        $('#sidebarAcc').accordion { collapsible: true, active: false }
+        $('#sidebarAcc').accordion { active: false, collapsible: true }
         $('a#shareRoomLink, a#manageRoomLink').click () ->
-             $(this).toggleClass 'down'
+            elem = ($ this)
+            elem.toggleClass 'down'
+            jqSiblinsA = elem.siblings 'a'
+            jqSiblinsA.removeClass 'down'
+
         ($ 'a.activable').click () ->
             jqA = ($ this).find 'span'
             icon = do jqA.first
