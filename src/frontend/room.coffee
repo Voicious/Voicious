@@ -36,7 +36,7 @@ class Room
         $('#sidebarAcc').accordion { collapsible: true, active: false }
         $('a#shareRoomLink, a#manageRoomLink').click () ->
              $(this).toggleClass 'down'
-        ($ 'div.activable').click () ->
+        ($ 'a.activable').click () ->
             jqA = ($ this).find 'span'
             icon = do jqA.first
             label = do jqA.last
