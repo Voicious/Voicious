@@ -66,7 +66,6 @@ class Room
             eval data
             module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
             @moduleArray.push (new window[module] @emitter)
-            do @moduleArray[@moduleArray.length - 1].appendHTML
             @loadModules modules, cb
 
     # Load the Modules given in parameter recursively.

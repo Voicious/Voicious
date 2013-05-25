@@ -36,6 +36,8 @@ class TextChat extends Module
     # Init the text chat window and the callbacks in the event manager.
     constructor     : (emitter) ->
         super emitter
+        do @appendHTML
+        
         @markdown     = new Showdown.converter { extensions : ['voicious'] }
         @jqForm       = ($ '#chatform > form')
         @jqMessageBox = ($ '#chatcontent > ul')
@@ -59,8 +61,8 @@ class TextChat extends Module
 
 
     appendHTML      : () ->
-        html = ($ '<div class="span3 darkgray module fill-height" id="textChat">
-                <div class ="module-wrapper">
+        #html = ($ '<div class="span3 darkgray module fill-height" id="textChat">
+        html = ($ '<div class ="module-wrapper">
                     <div id="chatcontent">
                         <ul></ul>
                     </div>
@@ -69,10 +71,10 @@ class TextChat extends Module
                             <span>Press RETURN to post</span>
                             <input type="text">
                     </div>
-                </div>
-            </div>'
+                </div>'
+        #    </div>'
         )
-        html.appendTo "#middle-row"
+        html.appendTo "#textChat"
 
     # Update the text chat with a new message.
     update          : (message) =>
