@@ -108,10 +108,15 @@ video {
     width: 100%;
 }
 
-#chatform input[type=text] {
+#chatform input[type="text"] {
+    color: #4D5C6B;
+    background-color: #101214;
+    border: none;
+    outline: none;
     padding: 10px;
-    width: calc(100% - 20px);
+    width: calc(100% - 19px);
     height: calc(100% - 20px);
     border-radius: 0;
     margin: 0;
+    padding-bottom: 32px;
 }

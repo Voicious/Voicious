@@ -126,7 +126,7 @@ a, a:focus {
 }
 .accordionLink {
     display: block;
-    width: 92%;
+    width: 100%;
     font-family: 'OpenSans-Bold';
     font-size: 8px;
     padding: 7px;
@@ -136,9 +136,57 @@ a, a:focus {
 }
 
 #chatcontent {
-    /*padding: 30px 0px 30px 30px;*/
+    float: left;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 13px;
+    overflow: hidden;
+    padding-top: 30px;
+    padding-right: 16px;
+    /*box-shadow: inset 0 4px rgba(14,15,17,.1);*/
 }
 
 #chatcontent ul {
-    height: 800px;
+    width: 98%;
+    height: 100%;
+    position: absolute;
+    overflow: auto;
+}
+
+
+.chatmetadata:first-child {
+    color: #00AEEF;
+    padding-left: 30px;
+}
+.time {
+    color: #555;
+}
+
+#chatform span {
+    float: right;
+    margin-bottom: 8px;
+    margin-right: 8px;
+}
+
+.chatmessage {
+    color: white;
+    word-wrap: break-word;
+    text-align: justify;
+    margin-top: 5px;
+    padding-left: 30px;
+}
+.chatmessage p {
+    line-height: 16px;
+    word-wrap: break-word;
+    width: 93%;
+    /*padding-bottom: 28px;*/
+}
+
+#tcSeparator {
+    width: 94%;
+    border-bottom: 1px solid black;
+    margin-top: 13px;
+    margin-bottom: 11px;
+    margin-left: 12px;
 }

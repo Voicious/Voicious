@@ -62,14 +62,14 @@ class TextChat extends Module
 
     appendHTML      : () ->
         html = ($ '<div class="fill-height color-three" id="textChat">
-                     <div class="module-wrapper">
+                     <div style="height: 81%;" class="module-wrapper">
                        <div id="chatcontent">
                          <ul></ul>
                        </div>
                        <div id="chatform">
                          <form>
-                           <span>Press RETURN to post</span>
-                           <input type="text">
+                           <span>Press ENTER to post</span>
+                           <input type="text"></input>
                          </form>
                        </div>
                      </div>
@@ -110,10 +110,11 @@ class TextChat extends Module
             lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
             diffTime   = do d.getTime - lastAuthor.attr 'rel'
             if do lastAuthor.text is message.from and diffTime < 30000  
-                (jqLastMessage.children '.chatmessage').append ($ '<br>')
+                #(jqLastMessage.children '.chatmessage').append ($ '<br>')
                 (jqLastMessage.children '.chatmessage').append message.text
                 lastAuthor.attr 'rel', do d.getTime
             else
+                jqLastMessage.append '<div id="tcSeparator"></div>'
                 @newMessageElem message
         else
             @newMessageElem message
