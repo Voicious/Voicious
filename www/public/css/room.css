@@ -135,3 +135,10 @@ a, a:focus {
     border-top: none;
 }
 
+#chatcontent {
+    /*padding: 30px 0px 30px 30px;*/
+}
+
+#chatcontent ul {
+    height: 800px;
+}

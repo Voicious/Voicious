@@ -61,20 +61,21 @@ class TextChat extends Module
 
 
     appendHTML      : () ->
-        #html = ($ '<div class="span3 darkgray module fill-height" id="textChat">
-        html = ($ '<div class ="module-wrapper">
-                    <div id="chatcontent">
-                        <ul></ul>
-                    </div>
-                    <div id="chatform">
-                        <form>
-                            <span>Press RETURN to post</span>
-                            <input type="text">
-                    </div>
-                </div>'
-        #    </div>'
+        html = ($ '<div class="fill-height color-three" id="textChat">
+                     <div class="module-wrapper">
+                       <div id="chatcontent">
+                         <ul></ul>
+                       </div>
+                       <div id="chatform">
+                         <form>
+                           <span>Press RETURN to post</span>
+                           <input type="text">
+                         </form>
+                       </div>
+                     </div>
+                   </div>'
         )
-        html.appendTo "#textChat"
+        html.appendTo "#middle"
 
     # Update the text chat with a new message.
     update          : (message) =>
@@ -86,7 +87,7 @@ class TextChat extends Module
         if message? and message isnt ""
             message =
                 text : message
-                from : window.CurrentUser
+                from : window.Voicious.currentUser.name
             @emitter.trigger 'message.sendtoall', message
             @addMessage message
 
@@ -108,7 +109,7 @@ class TextChat extends Module
             d          = new Date
             lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
             diffTime   = do d.getTime - lastAuthor.attr 'rel'
-            if do lastAuthor.text is message.from and diffTime < 30000
+            if do lastAuthor.text is message.from and diffTime < 30000  
                 (jqLastMessage.children '.chatmessage').append ($ '<br>')
                 (jqLastMessage.children '.chatmessage').append message.text
                 lastAuthor.attr 'rel', do d.getTime
