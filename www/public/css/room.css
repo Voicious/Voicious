@@ -73,6 +73,7 @@ a, a:focus {
     height: 52px;
     border-right: none;
     font-family: 'OpenSans-Bold';
+    text-decoration: none;
 }
 
 #camSpan, #micSpan {
@@ -141,7 +142,7 @@ a, a:focus {
     height: 100%;
     font-size: 13px;
     overflow: hidden;
-    padding-top: 30px;
+    margin-top: 30px;
     padding-right: 16px;
     /*box-shadow: inset 0 4px rgba(14,15,17,.1);*/
 }
@@ -176,10 +177,9 @@ a, a:focus {
     padding-left: 30px;
 }
 .chatmessage p {
-    line-height: 16px;
+    line-height: 15px;
     word-wrap: break-word;
-    width: 93%;
-    /*padding-bottom: 28px;*/
+    width: 95%;
 }
 
 #tcSeparator {
