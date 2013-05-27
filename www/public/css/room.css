@@ -119,10 +119,9 @@ a, a:focus {
 
 #sidebarAcc .ui-accordion-content {
     padding: 0;
-    height: 124px;
+    height: 100px;
     width: 100%;
     overflow: hidden;
-    margin-bottom: -27px;
 }
 .accordionLink {
     display: block;
