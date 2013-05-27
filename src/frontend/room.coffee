@@ -20,15 +20,40 @@ class Room
     # Load the modules given in parameter (Array)
     constructor         : (modules) ->
         @emitter     = ($ '<span>', { display : 'none', id : 'EMITTER' })
-        @rid         = ($ '#infos').attr 'rid'
-        @uid         = ($ '#infos').attr 'uid'
+        @rid         = window.Voicious.room
+        @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
+
+        do @setPage
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @loadModules modules, () =>
                 do @connections.dance
         $('#reportBug').click @bugReport
         $('#tutorialMode').toggle @startTutorial, @stopTutorial
+
+    setPage             : () ->
+        $('#sidebarAcc').accordion { active: false, collapsible: true }
+        $('a#shareRoomLink, a#manageRoomLink').click () ->
+            elem = ($ this)
+            elem.toggleClass 'down'
+            jqSiblinsA = elem.siblings 'a'
+            jqSiblinsA.removeClass 'down'
+
+        ($ 'a.activable').click () ->
+            jqA = ($ this).find 'span'
+            icon = do jqA.first
+            label = do jqA.last
+            if (do label.text) is 'OFF'
+                icon.removeClass 'dark-grey'
+                icon.addClass 'white'
+                label.text 'ON'
+                label.css 'color', 'green'
+            else
+                icon.removeClass 'white'
+                icon.addClass 'dark-grey'
+                label.text 'OFF'
+                label.css 'color', 'red'
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.
@@ -39,19 +64,6 @@ class Room
             dataType: 'script'
         ).done (data) =>
             eval data
-            @getModuleHTML moduleName, modules, cb
-
-    #Retrieve the HTML for the module and position it into a tag
-    #   with the id #moduleName.
-    # Call @loadModules with the remaining modules to load.
-    getModuleHTML       : (moduleName, modules, cb) ->
-        $.ajax(
-            type    : 'POST'
-            url     : '/renderModule'
-            data    :
-                    module      : moduleName
-        ).done (data) =>
-            $(data).appendTo "##{moduleName}"
             module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
             @moduleArray.push (new window[module] @emitter)
             @loadModules modules, cb
@@ -132,22 +144,8 @@ class Room
         $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
-Relayout    = (container) =>
-    options =
-        resize : no
-        type   : 'border'
-    container.layout options
-    return () =>
-        container.layout options
-
 # When the document has been loaded it will check if all services are available and
 # launch it.
 $(document).ready ->
     if window.Voicious.WebRTCRunnable
         room = new Room window.modules
-
-    container   = ($ '#page')
-    relayout    = Relayout container
-    ($ window).resize relayout
-    if window?
-        window.Relayout = relayout

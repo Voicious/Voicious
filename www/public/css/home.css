@@ -5,7 +5,7 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 160px;
-    background-image: url(../pictures/voicious_logo_big.png);
+    background-image: url(../img/voicious_logo_big.png);
 }
 
 #logoBeta {
@@ -231,4 +231,19 @@ ul.clean {
     color: #636f75;
     font-family: 'Open Sans', 'Helvetica', sans-serif;
     font-size: 13px;
+}
+
+.icon-ok, .icon-notok {
+    font-family : "FontAwesome";
+    font-size: 20px;
+}
+
+.icon-ok:before { content : '\f058'; }
+.icon-ok {
+    color: #39b74c;
+}
+
+.icon-notok:before { content : '\f057'; }
+.icon-notok {
+    color: #ed1c22;
 }

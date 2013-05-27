@@ -1,27 +1,29 @@
 extends main
 
 block style
-    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.ui.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/bootstrap.min.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery-ui-1.10.2.custom.min.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/font-awesome.min.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.jscrollpane.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/style.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/room.css")
 
 block scripts
+    script(type='text/javascript', src='/public/js/vendor/bootstrap.min.js')
     script(type="text/javascript", src="/public/js/vendor/jquery.ui.js")
-    script(type="text/javascript", src="/public/js/vendor/jquery.sizes.js")
-    script(type="text/javascript", src="/public/js/vendor/jlayout.border.js")
-    script(type="text/javascript", src="/public/js/vendor/jquery.jlayout.js")
     script(type="text/javascript", src="/public/js/vendor/jquery.mousewheel.js")
     script(type="text/javascript", src="/public/js/vendor/jquery.jscrollpane.js")
     script(type="text/javascript", src="/public/js/vendor/intro.js")
     script(type="text/javascript", src="/public/js/vendor/showdown.js")
     script(type="text/javascript", src="/public/js/module.js")
     script(type='text/javascript', src='/public/js/connections.js')
-    script(type="text/javascript", src="/public/js/room.js")
     script(type="text/javascript")
-        if ("#{login}" !== "") {
-            window.CurrentUser = "#{login}";
-        }
+        window.Voicious.currentUser = {
+            uid  : "#{uid}",
+            name : "#{login}"
+        };
+        window.Voicious.room        = "#{rid}"
         if ("#{wsHost}" !== "" && "#{wsPort}" !== "") {
             window.ws          = {
                 Host : "#{wsHost}",
@@ -31,49 +33,47 @@ block scripts
           window.modules = JSON.parse('!{modules}');
           };
         }
+    script(type="text/javascript", src="/public/js/room.js")
 
 block content
-    body
-        div.fullscreen.none
-        div#reportBugCtn.box.none
-          textarea#reportBugTextarea
-          center
-            button#sendReport.roomBtnCtrl #{trans.sendReportBtn}
-        div#page.layout
-            div.north
-                div#header
-                div#menu
-                    p#room_logo voıċıoųs
-                      span#beta Beta
-                    div#room_control
-                      p(rid='#{rid}', uid='#{uid}')#infos
-                      div#room_url_box(data-step="1", data-intro='#{trans.roomNameArrow}')
-                        span#share.icon.icon-share
-                        p#room_url
-                          span#room_text #{rid}
-                        button#shutdown.icon.icon-off
-                      div#btnCtrlBox
-                        div.mod#tutorial
-                        button.roomBtnCtrl.hidden
-                          span.icon.icon-lock
-                          span.textBtn #{trans.manageAcess}
-                        button.roomBtnCtrl.hidden
-                          span.icon.icon-check-empty
-                          span.textBtn #{trans.managePlugins}
-                        button.roomBtnCtrl.hidden
-                          span.icon.icon-plus
-                          span.textBtn #{trans.inviteContacts}
-                    div#userControl
-                      span.icon.icon-user
-                      p#login.textBtn #{login},
-                        span#acl #{trans.user}
-                      button#reportBug.roomBtnCtrl(data-step="5", data-intro='#{trans.reportBugArrow}', data-position="left")
-                          span.icon.icon-dashboard
-                          span.textBtn #{trans.reportBtn}
-            div#body.center
-              div.mod#textChat
-              div#mainCam.center
-              div.mod#userList
-              div.mod#notification
-            div#footer.south
-              div#camera.mod
+  div.container-fluid.fill-height
+    div.row-fluid.fill-height
+        div#sidebar.fill-height.left.color-one.column
+            img(src='/public/img/logo.png')
+            p#login.textBtn #{login}
+            span#acl #{trans.user}
+            div#mediaBtn
+              a#cam.activable
+                span#camSpan.icon.iconMedia.icon-facetime-video.dark-grey
+                span#labelcam OFF
+              a#mic.activable
+                span#micSpan.icon.iconMedia.icon-microphone.dark-grey
+                span#labelmic OFF
+            div#sidebarAcc
+              a#shareRoomLink
+                span#shareRoomSpan.icon.iconOther.icon-share-alt
+                p#labelShareRoom #{trans.shareRoomID}
+              div.accordionTab
+                a#clipboardLink.accordionLink
+                  span#clipboardSpan.icon.iconOther.icon-copy
+                  p.labelOther #{trans.copyRoomID}
+                a#inviteContactLink.accordionLink
+                  span#inviteContactSpan.icon.iconOther.icon-plus
+                  p.labelOther #{trans.inviteContacts}
+                a#twitterLink.accordionLink
+                  span#twitterSpan.icon.iconOther.icon-twitter
+                  p.labelOther #{trans.shareOnTwitter}
+                a#facebookLink.accordionLink
+                  span#facebookSpan.icon.iconOther.icon-facebook-sign
+                  p.labelOther #{trans.shareOnFacebook}
+              a#manageRoomLink
+                span#manageRoomSpan.icon.iconOther.icon-wrench
+                p#labelManageRoom #{trans.manageRoom}
+              div.accordionTab
+        div#content.fill-height.left.color-two
+            div.fill-height.left.column
+                ul#feeds
+            div#middle.fill-height.left.column(style='width:30%')
+            //div.fill-height.left.column
+            //    div#mainCam.fill-height.video-wrapper
+

@@ -19,11 +19,11 @@ class UserList extends Module
     # The user list contain all the informations of the guests in the room.
     constructor     : (emitter) ->
         super emitter
-        @users  = []
-        @jqElem = ($ '#userListUl')
-        li      = @jqElem.children 'li'
-        @users.push (do li.text)
+        @jqContainer = ($ 'ul#feeds')
+        @users       = { }
+        @users[window.Voicious.currentUser.uid] = window.Voicious.currentUser
         do @configureEvents
+        do @display
 
     configureEvents     : () =>
         @emitter.on 'peer.list', @fill
@@ -31,25 +31,40 @@ class UserList extends Module
             @update 'create', user
         @emitter.on 'peer.remove', (event, user) =>
             @update 'remove', user
+        @emitter.on 'stream.display', (event, video) =>
+            console.log "HERE"
+            uid = ($ video).attr 'rel'
+            @users[uid].video = video
+            ($ "li#video_#{uid}").append video
 
     # Fill the user list with new users.
     fill            : (event, data) =>
         for user in data.peers
-            @users.push user.name
+            @users[user.id] = { name : user.name , uid : user.id }
         do @display
 
     # Update the user list by creating or removing a user from the list.
     update          : (event, user) =>
+        console.log event
         switch event
-            when 'create' then @users.push user.name
-            when 'remove' then @users.splice (@users.indexOf user.name), 1
+            when 'create' then @users[user.id] = { name : user.name , uid : user.id }
+            when 'remove' then delete @users[user.id]
         do @display
 
     # Update the user list window.
     display         : () =>
-        do @jqElem.empty
-        for user in @users
-            @jqElem.append (($ '<li>', { class : 'userBox user' }).text user)
+        do @jqContainer.empty
+        for uid of @users
+            console.log @users[uid]
+            if @users[uid]?
+                li = ($ '<li>', {
+                    id    : "video_#{uid}"
+                    class : 'thumbnail-wrapper video-wrapper color-three'
+                })
+                if @users[uid].video?
+                    li.append @users[uid].video
+                    do @users[uid].video.play
+                @jqContainer.append li
 
 if window?
     window.UserList     = UserList

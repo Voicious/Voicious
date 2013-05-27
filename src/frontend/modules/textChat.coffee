@@ -36,10 +36,12 @@ class TextChat extends Module
     # Init the text chat window and the callbacks in the event manager.
     constructor     : (emitter) ->
         super emitter
+        do @appendHTML
+        
         @markdown     = new Showdown.converter { extensions : ['voicious'] }
-        @jqForm       = ($ 'form#chatForm')
-        @jqMessageBox = ($ '#tcMessagesContainer')
-        @jqInput      = ($ 'input#tcMessageInput')
+        @jqForm       = ($ '#chatform > form')
+        @jqMessageBox = ($ '#chatcontent > ul')
+        @jqInput      = @jqForm.children 'input[type=\'text\']'
 
         @scrollPane   = do @jqMessageBox.jScrollPane
         @scrollPane   = @jqMessageBox.data 'jsp'
@@ -51,10 +53,29 @@ class TextChat extends Module
             @sendMessage message
 
         $(window).resize () =>
+            return
             do @scrollPane.reinitialise
 
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
+
+
+    appendHTML      : () ->
+        html = ($ '<div class="fill-height color-three" id="textChat">
+                     <div style="height: 81%;" class="module-wrapper">
+                       <div id="chatcontent">
+                         <ul></ul>
+                       </div>
+                       <div id="chatform">
+                         <form>
+                           <span>Press ENTER to post</span>
+                           <input type="text"></input>
+                         </form>
+                       </div>
+                     </div>
+                   </div>'
+        )
+        html.appendTo "#middle"
 
     # Update the text chat with a new message.
     update          : (message) =>
@@ -66,27 +87,37 @@ class TextChat extends Module
         if message? and message isnt ""
             message =
                 text : message
-                from : window.CurrentUser
+                from : window.Voicious.currentUser.name
             @emitter.trigger 'message.sendtoall', message
             @addMessage message
 
+    # Create a new message element and append it to @jqMessageBox
+    newMessageElem : (message) =>
+        d             = new Date
+        jqNewMetadata = ($ '<div>', { class : 'chatmetadata' })
+        jqNewAuthor   = ($ '<span>', { class : 'fontlightblue', rel : do d.getTime }).text message.from
+        jqNewTime     = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
+        (jqNewMetadata.append jqNewAuthor).append jqNewTime
+        jqNewMessage  = ($ '<div>', { class : 'chatmessage' }).html message.text
+        (do @scrollPane.getContentPane).append (($ '<li>').append jqNewMetadata).append jqNewMessage
+
     # Add a new message to the text chat window.
     addMessage      : (message) =>
-        jqLastElem   = do (@jqMessageBox.find 'div.msgBox').last
-        prevTime     = jqLastElem.attr 'rel'
-        time         = new Date
-        message.text = @markdown.makeHtml message.text
-        if (do (jqLastElem.find 'span.author').text) is message.from and ((do time.getTime) - prevTime) <= 120000
-            jqLastElem.attr 'rel', do time.getTime
-            (jqLastElem.find 'p.message').append ($ '<br />')
-            (jqLastElem.find 'p.message').append message.text
+        message.text  = @markdown.makeHtml message.text
+        jqLastMessage = do (@jqMessageBox.find 'li').last
+        if jqLastMessage[0]?
+            d          = new Date
+            lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
+            diffTime   = do d.getTime - lastAuthor.attr 'rel'
+            if do lastAuthor.text is message.from and diffTime < 30000  
+                #(jqLastMessage.children '.chatmessage').append ($ '<br>')
+                (jqLastMessage.children '.chatmessage').append message.text
+                lastAuthor.attr 'rel', do d.getTime
+            else
+                jqLastMessage.append '<div id="tcSeparator"></div>'
+                @newMessageElem message
         else
-            elem       = ($ '<div>', { class : 'msgBox', rel : do time.getTime })
-            authorLine = ($ ('<p>')).append ($ '<span>', { class : 'author' }).html message.from
-            authorLine.append ($ '<span>', { class : 'time' }).html ((do time.toTimeString).substr 0, 5)
-            elem.append authorLine
-            elem.append ($ '<p>', {class : 'message'}).html message.text
-            (do @scrollPane.getContentPane).append elem
+            @newMessageElem message
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
 

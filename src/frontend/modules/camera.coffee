@@ -18,28 +18,42 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Camera extends Module
     constructor : (emitter) ->
         super emitter
-        @feedCount        = 0
-        @jqFeedCount      = ($ 'span#nbFeed')
+        @jqMainCams       = ($ '#mainCam')
         @jqVideoContainer = ($ 'ul#videos')
         @currentZoom      = undefined
         @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
+        do @enableCamera
         @emitter.on 'stream.create', @newStream
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
-            ($ 'div#notActivate').css 'display', 'none'
-            video = ($ video)
-            video.attr 'id', 'localVideo'
-            video.addClass 'localVideo flipH'
-            ($ 'div#localVideoContainer').append video
-            do video[0].play
-            video.bind 'click', () =>
-                @zoom '', video
+            @newStream event, { video : video , uid : window.Voicious.currentUser.uid }
+        ($ window).on 'resize', @squareMainCam
+        ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
+        ($ '#feeds').delegate 'video', 'click', (event) =>
+            clickedVideo = ($ event.target)
+            @zoom (clickedVideo.attr 'rel'), clickedVideo
+        do @squareMainCam
 
-    delStream : (event, user) =>
+    squareMainCam : () =>
+        @jqMainCams.width do @jqMainCams.height
+
+    appendHTML  : () ->
+        html = ($ '<div class="row-fluid" id="bottom-row">
+            <div class="darkgray span12" id="camera">
+                <ul id="videos">
+                    <li class="box thumbnail-wrapper"></li>
+                    <div class="localVideoContainer box"></div>
+                </ul>
+            </div>
+        </div>')
+        ($ '#middle-row').after html
+        ($ '<div class="darkgray fill-height module" id="mainCam"></div>').appendTo '#middle-row'
+        $(window).trigger 'resize'
+
+    delStream   : (event, user) =>
         if (@streams.indexOf user.id) >= 0
             do ($ "li#video_#{user.id}").remove
-            @refreshFeedCount -1
             @streams.splice user.id, 1
             if @currentZoom is user.id
                 @zoom undefined, undefined
@@ -48,21 +62,23 @@ class Camera extends Module
         @streams.push data.uid
         video = ($ data.video)
         video.addClass 'thumbnailVideo flipH'
-        li = ($ '<li>', {
-            id    : "video_#{data.uid}",
-            class : 'thumbnail'
-        }).appendTo @jqVideoContainer
-        li.append video
-        @refreshFeedCount 1
-        do video[0].play
-        video.bind 'click', () =>
-            @zoom data.uid, video
+        video.attr 'rel', data.uid
+        @emitter.trigger 'stream.display', video
+
+    # Must set margin-left css propriety when adding a video tag to the page
+    # Width is computed using video original size (640 * 480) since css value is wrong at this time
+    centerVideoTag : (event) =>
+        jqTag      = ($ event.currentTarget)
+        marginleft = ((do jqTag.height) * 640 / 480) / 2
+        jqTag.css 'margin-left', -marginleft
+        do event.currentTarget.play
 
     enableCamera : () =>
         @emitter.trigger 'camera.enable'
 
     zoom : (uid, video) =>
         container    = ($ 'div#mainCam')
+        container.removeClass 'hidden'
         do (container.find 'video').remove
         @currentZoom = uid
         if video?
@@ -70,10 +86,6 @@ class Camera extends Module
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
             container.append newVideo
-
-    refreshFeedCount : (modificator = 0) =>
-        @feedCount += modificator
-        @jqFeedCount.text @feedCount
 
 if window?
     window.Camera = Camera

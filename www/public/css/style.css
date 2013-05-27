@@ -1,59 +1,31 @@
 @font-face {
     font-family: "BreeSerif-Regular";
-    src: url(../fonts/BreeSerif-Regular.ttf) format("truetype");
+    src: url(../font/BreeSerif-Regular.ttf) format("truetype");
 }
 @font-face {
     font-family: "OpenSans-Regular";
-    src: url(../fonts/OpenSans-Regular.ttf) format("truetype");
+    src: url(../font/OpenSans-Regular.ttf) format("truetype");
 }
 @font-face {
     font-family: "OpenSans-Bold";
-    src: url(../fonts/OpenSans-Bold.ttf) format("truetype");
+    src: url(../font/OpenSans-Bold.ttf) format("truetype");
 }
 @font-face {
     font-family: 'PT Sans';
     font-style: normal;
     font-weight: 400;
-    src: url('../fonts/PTSans.woff') format('woff');
+    src: url('../font/PTSans.woff') format('woff');
 }
 @font-face {
     font-family: "FontAwesome";
-    src: url(../fonts/fontawesome-webfont.woff) format("woff");
+    src: url(../font/fontawesome-webfont.woff) format("woff");
     font-weight: normal;
     font-style: normal;
 }
 
-button, video {
+button {
     cursor: pointer;
 }
-
-.icon-ok, .icon-notok {
-    font-family : "FontAwesome";
-    font-size: 20px;
-}
-
-.icon-ok {
-    color: #39b74c;
-}
-
-.icon-notok {
-    color: #ed1c22;
-}
-
-.icon-user {
-    color: #4a535a;
-}
-
-.icon-dashboard:before { content: '\f0e4'; }
-.icon-user:before { content: '\f007'; }
-.icon-plus:before { content: '\f067'; }
-.icon-check-empty:before { content: '\f096'; }
-.icon-ok:before { content : '\f058'; }
-.icon-notok:before { content : '\f057'; }
-.icon-off:before { content : '\f011'; }
-.icon-share:before { content : '\f064'; }
-.icon-lock:before { content : '\f023'; }
-.icon-help:before { content : '\f059'; }
 
 * {
     margin: 0;
@@ -103,7 +75,7 @@ body {
     width: 100%;
     padding: 0;
     margin: 0;
-    background-image: url(../pictures/noise.png);
+    background-image: url(../img/noise.png);
     font-family: Helvetica;
     font-size: 12px;
 }
@@ -123,6 +95,14 @@ body {
 
 .light-blue:active {
     background: #0072dc;
+}
+
+.white {
+    color: #ffffff;
+}
+
+.dark-grey {
+    color: #333;
 }
 
 .grey-blue {
@@ -172,4 +152,81 @@ a {
 .rounded10 {
   -moz-border-radius: 10px;
   border-radius: 10px;
+}
+
+/** * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/) * http://cssreset.com */html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,time, mark, audio, video {	margin: 0;	padding: 0;	border: 0;	font-size: 100%;	font: inherit;	vertical-align: baseline;}/* HTML5 display-role reset for older browsers */article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {	display: block;}body {	line-height: 1;}ol, ul {	list-style: none;}blockquote, q {	quotes: none;}blockquote:before, blockquote:after,q:before, q:after {	content: '';	content: none;}table {	border-collapse: collapse;	border-spacing: 0;}
+strong {font-weight:bold;}
+
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    padding: 0;
+    border: 0
+}
+
+button:focus,
+button:active,
+button:hover
+{
+   outline: 0;
+   border: 0;
+}
+
+.btn {
+	background-image: none;
+	border: none;
+	border-radius: 0;
+	display: inline-block;
+	padding: 4px 10px;
+	margin: 0;
+	font-size: 13px;
+	line-height: 20px;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	box-shadow: inset 0 1px rgba(255,255,255,.1);
+	text-shadow: 0 1px rgba(0,0,0,0.15);
+	border-radius: 3px;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.btn-blue {
+	background-color: #02b1eb;
+	color: #fff;
+}
+
+.btn-blue:hover {
+	background-color: #24c5ff;
+	text-shadow: 0 -1px rgba(0,0,0,0.2);
+}
+
+.btn-blue:active {
+	background-color: #02b1eb;
+	box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+}
+
+.border-thin {
+	border: solid 1px #0f0f0f;
+	box-shadow: 0 1px rgba(255,255,255,0.08);
+}
+
+.border-thick {
+	border: solid 4px #0f0f0f;
+}
+
+.icon-margin-six {
+	margin-right: 6px;
+}
+
+.icon-14 {
+	font-size: 14px;
+}
+
+.button-wrap {
+	border-radius: 3px;
+	padding: 0;
+	margin: 10px;
+	display: inline-block;
 }
