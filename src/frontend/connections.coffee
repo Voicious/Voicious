@@ -38,7 +38,6 @@ class Ws
         @send auth
 
     onMessage : (message) =>
-        console.log message
         message = JSON.parse message.data
         @emitter.trigger message.type, message.params
 
@@ -76,7 +75,6 @@ class PC
         @channels              = @pc.createDataChannel name, { }
 
         @channels[name].onopen = () =>
-            console.log "OPENED"
 
     createOffer : () =>
         @pc.createOffer (description) =>

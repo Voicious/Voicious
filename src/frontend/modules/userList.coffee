@@ -32,7 +32,6 @@ class UserList extends Module
         @emitter.on 'peer.remove', (event, user) =>
             @update 'remove', user
         @emitter.on 'stream.display', (event, video) =>
-            console.log "HERE"
             uid = ($ video).attr 'rel'
             @users[uid].video = video
             ($ "li#video_#{uid}").append video
@@ -45,7 +44,6 @@ class UserList extends Module
 
     # Update the user list by creating or removing a user from the list.
     update          : (event, user) =>
-        console.log event
         switch event
             when 'create' then @users[user.id] = { name : user.name , uid : user.id }
             when 'remove' then delete @users[user.id]
@@ -55,7 +53,6 @@ class UserList extends Module
     display         : () =>
         do @jqContainer.empty
         for uid of @users
-            console.log @users[uid]
             if @users[uid]?
                 li = ($ '<li>', {
                     id    : "video_#{uid}"
