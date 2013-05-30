@@ -34,12 +34,11 @@ transDef =
     messageCam          : "Your camera seems to be blocked by your browser! Click on the camera icon in your URL bar to reactivate."
     reportBtn           : "report bug"
     sendReportBtn       : "send"
-    tutorialModeBtn     : "help"
-    roomNameArrow       : "Here is your room id. Share it with your friends if you want them to join! You can also share your browser url directly."
-    reportBugArrow      : "Click here if you want to report a bug."
-    textChatArrow       : "Here you can chat with you friends!"
-    activateArrow       : "Click here to activate your camera."
-    userListArrow       : "Here is a list of users currently in the room."
-    endMessage          : "Enjoy Voicious ;)"
+    tutoModeBtn         : "help"
+    mediaTuto           : "Here you can activate your camera and microphone."
+    shareRoomTuto       : "Click here if you want to share the room."
+    manageRoomTuto      : "Click here to change room settings."
+    feedsTuto           : "Here the users present in the room. You can zoom their face by clicking on them."
+    chatTuto            : "Here you can chat with them!"
 
 exports.transDef = transDef

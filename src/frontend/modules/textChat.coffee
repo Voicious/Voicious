@@ -69,8 +69,10 @@ class TextChat extends Module
                        <div id="chatform">
                          <form>
                            <span>Press ENTER to post</span>
-                           <input type="text" data-step="4" data-intro="" data-position="top"></input>
-                         </form>
+                           <input type="text"></input>' + 
+                           # Wait for i18n
+                           #<input type="text" data-step="5" data-intro="" data-position="top"></input>
+                         '</form>
                        </div>
                      </div>
                    </div>'
