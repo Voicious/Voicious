@@ -122,12 +122,12 @@ video {
 }
 
 #labelcam, #labelmic {
-    position: absolute;
-    margin-top: 20px;
+    position: relative;
+    top: 13px;
     color: red;
 }
 #labelcam {
-    margin-left: 2px;
+    margin-left: -2px;
 }
 
 
@@ -174,14 +174,14 @@ video {
 }
 
 #camSpan, #micSpan {
-    position: absolute;
-    margin-top: 16px;
+    position: relative;
+    top: 15px;
 }
 #camSpan {
-    left: 1.2%;
+    left: 11px;
 }
 #micSpan {
-   left: 5.3%;
+    left: 9px;
 }
 #cam {
     width: 50%;
