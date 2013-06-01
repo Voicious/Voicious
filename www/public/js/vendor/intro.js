@@ -396,12 +396,12 @@
                                '</div><div class="introjs-tooltipbuttons"></div>';
 
       //add helper layer number
-      if (this._options.showStepNumbers) {
+      /*if (this._options.showStepNumbers) {
         var helperNumberLayer = document.createElement('span');
         helperNumberLayer.className = 'introjs-helperNumberLayer';
         helperNumberLayer.innerHTML = targetElement.step;
         helperLayer.appendChild(helperNumberLayer);
-      }
+      }*/
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
