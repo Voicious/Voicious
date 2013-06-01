@@ -34,7 +34,7 @@ transDef =
     messageCam          : "Your camera seems to be blocked by your browser! Click on the camera icon in your URL bar to reactivate."
     reportBtn           : "report bug"
     sendReportBtn       : "send"
-    tutoModeBtn         : "help"
+    tutoModeLink        : "Help"
     mediaTuto           : "Here you can activate your camera and microphone."
     shareRoomTuto       : "Click here if you want to share the room."
     manageRoomTuto      : "Click here to change room settings."

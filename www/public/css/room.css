@@ -136,11 +136,11 @@ video {
     margin-left: 6px;
 }
 
-#shareRoomSpan, #manageRoomSpan {
+#shareRoomSpan, #manageRoomSpan, #tutoModeSpan {
     margin-top: 14px;
     margin-left: -12px;
 }
-#labelShareRoom, #labelManageRoom {
+#labelShareRoom, #labelManageRoom, #labelTutoMode {
     margin-top: 14px;
     float: left;
 }
@@ -195,10 +195,10 @@ video {
 #shareRoomLink {
     margin-top: 93px;
 }
-#manageRoomLink {
+#manageRoomLink, #tutoModeLink {
     margin-top: -1px;
 }
-#shareRoomLink, #manageRoomLink {
+#shareRoomLink, #manageRoomLink, #tutoModeLink {
     color: white;
     text-decoration: none;
     font-family: 'OpenSans-Bold';
@@ -211,7 +211,7 @@ video {
     border-color: rgb(15, 15, 15);
     border-right: none;
 }
-#shareRoomLink.down, #manageRoomLink.down {
+#shareRoomLink.down, #manageRoomLink.down, #tutoModeLink.down {
     background-image: linear-gradient(#0A0B0C, rgb(30, 33, 35));
 }
 
