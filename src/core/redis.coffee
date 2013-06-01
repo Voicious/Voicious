@@ -33,21 +33,20 @@ class _Redis extends Database
                 throw new Errors.Error err
 
         insert : (filename, data, callback) ->
+            data = @objToArray data
             filename = filename.split(':')
             if filename.length != 2
                 throw new Errors.Error "Error : wrong format for querying insertion"
-            @client.hincrby ['unique_ids', filename[0], 1], (err, res) =>
-                if err
-                    throw new Errors.Error err
-                query = [filename.join(':'), "id", res]
-                for field in data
-                    query.push field
-                @client.hmset query, (err, res) =>
-                    if err
-                        throw new Errors.Error err
-                    do callback
+            query = [filename.join(':'), "_id", filename[1]]
+            for field in data
+                query.push field
+             @client.hmset query, (err, res) =>
+                 if err
+                     throw new Errors.Error err
+                 do callback
 
         update : (filename, data, callback) ->
+            data = @objToArray data
             @client.hlen filename, (err, res) =>
                 if err
                     throw new Errors.Error err
@@ -63,6 +62,7 @@ class _Redis extends Database
                         do callback
 
         delete : (filename, callback) ->
+            data = @objToArray data
             @client.hkeys filename, (err, res) =>
                 if err
                     throw new Errors.Error err
@@ -75,6 +75,7 @@ class _Redis extends Database
                     do callback
 
         get : (filename, callback) ->
+            data = @objToArray data
             @client.hgetall filename, (err, res) =>
                 if err
                     throw new Errors.Error err
@@ -82,6 +83,12 @@ class _Redis extends Database
 
         close : () ->
             do @client.quit
+
+        objToArray: (obj) ->
+            arr = []
+            for key, val of obj
+                arr.push key, val
+            return arr
 
 class Redis
     @_instance   = undefined

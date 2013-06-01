@@ -21,6 +21,7 @@ md5             = require 'MD5'
 {Errors}        = require './errors'
 Config          = require '../common/config'
 {Stats}         = require './stats'
+{Db}            = require './' + Config.Database.Connector
 
 class _User
     constructor : () ->
@@ -53,15 +54,12 @@ class _User
     # Check Validity of all the values (mail, name, etc).
     # If everything is ok, create the user, log him in and redirect into room (only room for the moment).
     newUser : (req, res, param, callback, errorCallback) =>
-        Request.post {
-            json    : param
-            url     : "#{Config.Restapi.Url}/user"
-        }, (e, r, body) =>
-            if e? or r.statusCode > 200
-                errorCallback e, req, res
-            else
-                req.session.uid = body.id
-                Stats.countTmpUser req, res, callback
+        id_user = param.id_user
+        delete param['id_user']
+        Db.insert 'user:' + id_user, param, () =>
+            req.session.uid = id_user
+            callback req, res
+            # Stats.countTmpUser req, res, callback
 
     # Redirect to room.
     redirtoroom : (req, res) =>
@@ -132,6 +130,8 @@ class _User
             param.mail = param.name + do Date.now
             param.id_acl = 0 #TO DO : put the right value
             param.id_role = 0 #TO DO : put the right value
+            date = do (new Date()).getTime
+            param.id_user = md5 date
             @newUser req, res, param, ((req, res) =>
                 {Room}  = require './room'
                 Room.newRoom req, res, { }

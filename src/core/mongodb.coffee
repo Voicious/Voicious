@@ -38,6 +38,7 @@ class _Mongo extends Database
             if collName.length != 2
                 throw new Errors.Error "Error : wrong format for querying insertion"
             coll = @db.collection collName[0]
+            data['_id'] = collName[1]
             coll.insert data, (err) =>
                 if err
                     throw Errors.Error err
@@ -48,7 +49,7 @@ class _Mongo extends Database
             if collName.length != 2
                 throw new Errors.Error "Error : wrong format for querying update"
             coll = @db.collection collName[0]
-            coll.update {'name': collName[1]}, {$set: cur}, {safe: on}, (err) =>
+            coll.update {'_id': collName[1]}, {$set: cur}, {safe: on}, (err) =>
                 if err
                     throw Errors.Error err
                 do callback
@@ -58,7 +59,7 @@ class _Mongo extends Database
             if collName.length != 2
                 throw new Errors.Error "Error : wrong format for querying get"
             coll = @db.collection collName[0]
-            coll.findOne {'name': collName[1]}, (err, doc) =>
+            coll.findOne {'_id': collName[1]}, (err, doc) =>
                 if err
                     throw Errors.Error err
                 callback doc
@@ -68,7 +69,7 @@ class _Mongo extends Database
             if collName.length != 2
                 throw new Errors.Error "Error : wrong format for querying delete"
             coll = @db.collection collName[0]
-            coll.remove {'name': collName[1]}, {}, (err) =>
+            coll.remove {'_id': collName[1]}, {}, (err) =>
                 if err
                     throw Errors.Error err
                 do callback

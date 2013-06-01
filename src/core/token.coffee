@@ -15,8 +15,11 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+md5         = require 'MD5'
+
 Request     = require 'request'
 Config      = require '../common/config'
+{Db}        = require './' + Config.Database.Connector
 
 # Generate a unique token.
 class _Token
@@ -24,22 +27,16 @@ class _Token
 
         # Create the unique token and add it into the dataBase.
         createToken : (clientId, roomId, callback) =>
-            Request.post {
-                json    : {
-                    id_room   : roomId
-                    id_client : clientId
-                }
-                url     : "#{Config.Restapi.Url}/token"
-            }, (e, r, body) =>
-                if e? or r.statusCode > 200
-                    throw new Errors.Error
-                else
-                    callback body.id
+            date = do (new Date()).getTime
+            id_token = md5 date
+            data =
+                id_room   : roomId
+                id_client : clientId
+            Db.insert 'token:' + id_token, data, () =>
+                callback id_token
 
         # Delete a token from database.
         deleteToken : (token) =>
-            Request.del "#{Config.Restapi.Url}/token/#{token}", (e, r, data) =>
-                if e? or r.statusCode > 200
-                  Errors.Error error "Failed to delete token"
+            Db.delete 'token:' + token, () =>
 
 exports.Token   = new _Token

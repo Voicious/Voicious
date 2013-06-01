@@ -82,11 +82,11 @@ class Voicious
         @app.use @app.router
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
-        @app.use (err, req, res, next) =>
-            if err instanceof Errors.NotFound
-                Errors.RenderNotFound req, res
-            else
-                Errors.RenderError req, res
+        #@app.use (err, req, res, next) =>
+        #    if err instanceof Errors.NotFound
+        #        Errors.RenderNotFound req, res
+        #    else
+        #        Errors.RenderError req, res
         @configured = yes
 
     # Main function  
