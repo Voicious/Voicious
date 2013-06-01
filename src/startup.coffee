@@ -54,18 +54,6 @@ if Config.Websocket.Enabled
         WriteLog wsErrorLog, data
     processes.push ws
 
-if Config.Restapi.Enabled
-    restAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'rest.access.log'), 'a+'
-    restErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'rest.error.log'), 'a+'
-    rest          = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'rest', 'api.js')]
-    rest.stdout.on 'data', (data) =>
-        process.stdout.write "#{data}"
-        WriteLog restAccessLog, data
-    rest.stderr.on 'data', (data) =>
-        process.stderr.write "#{data}"
-        WriteLog restErrorLog, data
-    processes.push rest
-
 process.on 'SIGINT', () =>
     for proc in processes
         proc.kill 'SIGINT'

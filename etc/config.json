@@ -17,21 +17,14 @@
         "Port"      : 4244,
         "Enabled"   : 1
     },
-    "Restapi"   : {
+    "Database"   : {
         "Hostname"      : {
             "Internal" : "localhost",
             "External" : "localhost"
         },
         "Port"          : 4243,
-        "Allowed-hosts" : "*",
         "Enabled"       : 1,
-        "Database"      : {
-            "Connector" : "mongodb",
-            "Database"  : "voicious"
-        },
-        "Ssl"           : {
-            "Key"         : "voicious.key",
-            "Certificate" : "voicious.crt"
-        }
+        "Connector" : "redis",
+        "Name"  : "voicious"
     }
 }

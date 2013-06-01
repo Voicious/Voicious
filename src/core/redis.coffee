@@ -1,8 +1,27 @@
-RedisDriver = require 'redis'
-{Database} = require './database'
-{Errors} = require './errors'
+###
 
-class Redis extends Database
+Copyright (c) 2011-2012  Voicious
+
+This program is free software: you can redistribute it and/or modify it under the terms of the
+GNU Affero General Public License as published by the Free Software Foundation, either version
+3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this
+program. If not, see <http://www.gnu.org/licenses/>.
+
+###
+
+RedisDriver     = require 'redis'
+
+Config          = require '../common/config'
+{Database}      = require './database'
+{Errors}        = require './errors'
+
+class _Redis extends Database
         constructor: (dbName, dbHost = "localhost", dbPort = 6379, dbOptions = {}) ->
             super dbName, dbHost, dbPort, dbOptions
 
@@ -14,10 +33,13 @@ class Redis extends Database
                 throw new Errors.Error err
 
         insert : (filename, data, callback) ->
-            @client.hincrby ['unique_ids', filename, 1], (err, res) =>
+            filename = filename.split(':')
+            if filename.length != 2
+                throw new Errors.Error "Error : wrong format for querying insertion"
+            @client.hincrby ['unique_ids', filename[0], 1], (err, res) =>
                 if err
                     throw new Errors.Error err
-                query = [filename + ':' + res, "id", res]
+                query = [filename.join(':'), "id", res]
                 for field in data
                     query.push field
                 @client.hmset query, (err, res) =>
@@ -52,7 +74,7 @@ class Redis extends Database
                         throw new Errors.Error err
                     do callback
 
-        get : (filename, query, opts, callback) ->
+        get : (filename, callback) ->
             @client.hgetall filename, (err, res) =>
                 if err
                     throw new Errors.Error err
@@ -61,4 +83,9 @@ class Redis extends Database
         close : () ->
             do @client.quit
 
-exports.Redis = Redis
+class Redis
+    @_instance   = undefined
+    @get        : () ->
+        @_instance   ?= new _Redis Config.Database.Name, Config.Database.Host
+
+exports.Db = do Redis.get

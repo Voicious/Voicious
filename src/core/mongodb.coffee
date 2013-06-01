@@ -15,11 +15,13 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-MongoDB = require 'mongodb'
-{Database} = require './database'
-{Errors} = require './errors'
+MongoDB         = require 'mongodb'
 
-class Mongo extends Database
+Config          = require '../common/config'
+{Database}      = require './database'
+{Errors}        = require './errors'
+
+class _Mongo extends Database
         constructor : (dbName, dbHost = 'localhost', dbPort = 27017, dbOptions = {}) ->
                 super dbName, dbHost, dbPort, dbOptions
 
@@ -32,29 +34,41 @@ class Mongo extends Database
                 do callback
 
         insert : (collName, data, callback) ->
-            coll = @db.collection(collName)
+            collName = collName.split(':')
+            if collName.length != 2
+                throw new Errors.Error "Error : wrong format for querying insertion"
+            coll = @db.collection collName[0]
             coll.insert data, (err) =>
                 if err
                     throw Errors.Error err
                 do callback
 
-        update : (collName, old, cur, callback) ->
-            coll = @db.collection(collName)
-            coll.update old, {$set: cur}, {safe: on}, (err) =>
+        update : (collName, cur, callback) ->
+            collName = collName.split(':')
+            if collName.length != 2
+                throw new Errors.Error "Error : wrong format for querying update"
+            coll = @db.collection collName[0]
+            coll.update {'name': collName[1]}, {$set: cur}, {safe: on}, (err) =>
                 if err
                     throw Errors.Error err
                 do callback
 
-        get : (collName, query, opts, callback) ->
-            coll = @db.collection(collName)
-            coll.find(query, {}, opts).toArray (err, docs) =>
+        get : (collName, callback) ->
+            collName = collName.split(':')
+            if collName.length != 2
+                throw new Errors.Error "Error : wrong format for querying get"
+            coll = @db.collection collName[0]
+            coll.findOne {'name': collName[1]}, (err, doc) =>
                 if err
                     throw Errors.Error err
-                callback docs
+                callback doc
 
-        delete : (collName, query, callback) ->
-            coll = @db.collection(collName)
-            coll.remove query, {}, (err) =>
+        delete : (collName, callback) ->
+            collName = collName.split(':')
+            if collName.length != 2
+                throw new Errors.Error "Error : wrong format for querying delete"
+            coll = @db.collection collName[0]
+            coll.remove {'name': collName[1]}, {}, (err) =>
                 if err
                     throw Errors.Error err
                 do callback
@@ -62,4 +76,9 @@ class Mongo extends Database
         close : () ->
             do @db.close
 
-exports.Mongo = Mongo
+class Mongo
+    @_instance   = undefined
+    @get        : () ->
+        @_instance   ?= new _Mongo Config.Database.Name, Config.Database.Host
+
+exports.Db = do Mongo.get
