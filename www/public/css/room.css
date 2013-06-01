@@ -73,6 +73,10 @@ a, a:focus {
     outline: none;
 }
 
+button {
+    box-shadow: inset 0 1px rgba(255,255,255,.1);
+}
+
 .icon {
     font-family: 'FontAwesome';
 }
@@ -136,11 +140,11 @@ video {
     margin-left: 6px;
 }
 
-#shareRoomSpan, #manageRoomSpan, #tutoModeSpan {
+#shareRoomSpan, #manageRoomSpan {
     margin-top: 14px;
     margin-left: -12px;
 }
-#labelShareRoom, #labelManageRoom, #labelTutoMode {
+#labelShareRoom, #labelManageRoom {
     margin-top: 14px;
     float: left;
 }
@@ -195,10 +199,10 @@ video {
 #shareRoomLink {
     margin-top: 93px;
 }
-#manageRoomLink, #tutoModeLink {
+#manageRoomLink {
     margin-top: -1px;
 }
-#shareRoomLink, #manageRoomLink, #tutoModeLink {
+#shareRoomLink, #manageRoomLink {
     color: white;
     text-decoration: none;
     font-family: 'OpenSans-Bold';
@@ -211,7 +215,7 @@ video {
     border-color: rgb(15, 15, 15);
     border-right: none;
 }
-#shareRoomLink.down, #manageRoomLink.down, #tutoModeLink.down {
+#shareRoomLink.down, #manageRoomLink.down {
     background-image: linear-gradient(#0A0B0C, rgb(30, 33, 35));
 }
 
@@ -311,4 +315,32 @@ video {
     margin-top: 13px;
     margin-bottom: 11px;
     margin-left: 12px;
+}
+
+/* tutorial mode */
+#tutoModeBtn {
+    color: white;
+    text-decoration: none;
+    font-family: 'OpenSans-Bold';
+    font-size: 9px;
+    text-decoration: none;
+    background-color: rgb(30, 33, 35);
+    height: 49px;
+    width: 100%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(15, 15, 15);
+    border-right: none;
+    border-top: none;
+}
+
+#spanTutoMode {
+    float: left;
+    margin-left: 10px;
+    margin-top: 6px;
+}
+
+#labelTutoMode {
+    float: left;
+    margin-left: 4px;
 }
