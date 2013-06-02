@@ -34,9 +34,9 @@ class Websocket
 
     validateSock : (uid, rid, sock) =>
         Db.get 'room:' + rid, (body) =>
-            if body.length != 0
+            if Object.keys(body).length > 0
                 Db.get 'user:' + uid, (body) =>
-                    if body.length > 0 and body.id_room is rid
+                    if Object.keys(body).length > 0 and body.id_room is rid
                         @acceptSock body.id, rid, body.name, sock
 
     acceptSock : (uid, rid, name, sock) =>

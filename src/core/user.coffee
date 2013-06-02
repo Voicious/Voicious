@@ -131,7 +131,7 @@ class _User
             param.id_acl = 0 #TO DO : put the right value
             param.id_role = 0 #TO DO : put the right value
             date = do (new Date()).getTime
-            param.id_user = md5 date
+            param.id_user = md5 date + param.name
             @newUser req, res, param, ((req, res) =>
                 {Room}  = require './room'
                 Room.newRoom req, res, { }
@@ -149,6 +149,8 @@ class _User
                 param.mail      = param.name + do Date.now
                 param.id_acl    = 0
                 param.id_role   = 0
+                date = do (new Date()).getTime
+                param.id_user = md5 date + param.name
                 @newUser req, res, param, ((req, res) =>
                     res.redirect "/room/#{param.room}"
                 ), @errorOnQuickLogin
