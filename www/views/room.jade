@@ -42,7 +42,7 @@ block content
             img(src='/public/img/logo.png')
             p#login.textBtn #{login}
             span#acl #{trans.user}
-            div#mediaBtn
+            div#mediaBtn(data-step='1', data-intro='#{trans.mediaTuto}', data-position='right')
               a#cam.activable
                 span#camSpan.icon.iconMedia.icon-facetime-video.dark-grey
                 span#labelcam OFF
@@ -50,7 +50,7 @@ block content
                 span#micSpan.icon.iconMedia.icon-microphone.dark-grey
                 span#labelmic OFF
             div#sidebarAcc
-              a#shareRoomLink
+              a#shareRoomLink(data-step='2', data-intro='#{trans.shareRoomTuto}', data-position='right')
                 span#shareRoomSpan.icon.iconOther.icon-share-alt
                 p#labelShareRoom #{trans.shareRoomID}
               div.accordionTab
@@ -66,14 +66,13 @@ block content
                 a#facebookLink.accordionLink
                   span#facebookSpan.icon.iconOther.icon-facebook-sign
                   p.labelOther #{trans.shareOnFacebook}
-              a#manageRoomLink
+              a#manageRoomLink(data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
                 span#manageRoomSpan.icon.iconOther.icon-wrench
                 p#labelManageRoom #{trans.manageRoom}
               div.accordionTab
         div#content.fill-height.left.color-two
             div.fill-height.left.column
-                ul#feeds
+                ul#feeds(data-step='4', data-intro='#{trans.feedsTuto}', data-position='bottom')
             div#middle.fill-height.left.column(style='width:30%')
             div.fill-height.left.column
               div#mainCam.fill-height.video-wrapper
-

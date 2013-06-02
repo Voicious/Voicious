@@ -18,6 +18,15 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Tutorial extends Module
     constructor      : (emitter) ->
         super emitter
+        do @appendHTML
+
+    appendHTML       : () ->
+        html = ($ '<button id="tutoModeBtn" href="javascript:void(0)" onclick="javascript:introJs().start();">
+                     <span id="spanTutoMode" class="icon iconOther icon-question"></span>
+                     <p id="labelTutoMode">Help</p>
+                   </button>'
+        )
+        html.appendTo "#sidebarAcc"
 
 if window?
      window.Tutorial = Tutorial

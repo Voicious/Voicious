@@ -30,7 +30,6 @@ class Room
             @loadModules modules, () =>
                 do @connections.dance
         $('#reportBug').click @bugReport
-        $('#tutorialMode').toggle @startTutorial, @stopTutorial
 
     setPage             : () ->
         $('#sidebarAcc').accordion { active: false, collapsible: true }
@@ -76,43 +75,6 @@ class Room
             @loadScript mod, modules, cb
         else
             do cb
-
-    # Start the tutorial animation.
-    startTutorial      : () =>
-        $("#tutorialMode").css "background-color", "#43535a"
-        $("#tutorialMode").css "box-shadow", "inset 0 1px #43535a"
-        elems      = $("div[id$='Arrow']")
-        interval   = 2000
-        speed      = 400
-        i          = elems.length
-        fadeInTime = interval * 5
-        while i >= 0
-            $(elems[i]).animate({opacity: 1}, fadeInTime).fadeIn speed
-            fadeInTime -= interval
-            i--
-        i = 0
-        fadeOutTime = interval * 5
-        while i < elems.length
-            $(elems[i]).animate({opacity: 1}, fadeOutTime).fadeOut speed
-            i++
-        $('div#endMessage').animate({opacity: 1}, fadeOutTime * 2).fadeIn speed
-        $('div#endMessage').animate({opacity: 1}, 2000).fadeOut speed
-        setTimeout @colorTutorialBtn, fadeOutTime * 2 + 3200
-
-    # Stop tutorial animation.
-    stopTutorial      : () =>
-        elems      = $("div[id$='Arrow']")
-        i = 0
-        while i < elems.length
-            $(elems[i]).stop(true, true).fadeOut 400
-            i++
-        $('div#endMessage').stop(true, true).fadeOut 400
-        do @colorTutorialBtn
-
-    # Color the tutorial button.
-    colorTutorialBtn   : () =>
-        $("#tutorialMode").css "background-color", "#00aeef"
-        $("#tutorialMode").css "box-shadow", "inset 0 1px #15DBCB"
 
     # Send bug report.
     sendReport          : () =>

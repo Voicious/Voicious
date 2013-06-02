@@ -34,12 +34,11 @@ transDef =
     messageCam          : "Votre caméra est bloquée par votre navigateur! Cliquez sur l'icône en forme de caméra dans votre barre d'adresse afin de la réactiver."
     reportBtn           : "reporter un bug"
     sendReportBtn       : "envoyer"
-    tutorialModeBtn     : "aide"
-    roomNameArrow       : "Voici le nom du salon. Partagez le avec vos amis afin qu'ils vous rejoignent. Vous pouvez aussi partager votre url de navigateur directement."
-    reportBugArrow      : "Cliquez ici afin de signaler un bug"
-    textChatArrow       : "Vous pouvez chatter avec vos amis !"
-    activateArrow       : "Cliquez ici afin d'activer la caméra."
-    userListArrow       : "Voici la liste de tous les utilisateurs présents dans le salon."
-    endMessage          : "Bonne utilisation ;)"
+    tutoModeLink        : "Aide"
+    mediaTuto           : "Ici, vous pouvez activer votre camera et votre microphone."
+    shareRoomTuto       : "Cliquez ici pour partager le salon."
+    manageRoomTuto      : "Cliquez ici pour modifier les paramètres du salon."
+    feedsTuto           : "Voici les utilisateurs présents dans le salon. Vous pouvez les zoomer en cliquant sur l'un d'entre eux."
+    chatTuto            : "Ici, vous pouvez discuter avec eux!"
 
 exports.transDef = transDef

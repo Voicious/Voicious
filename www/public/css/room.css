@@ -73,6 +73,10 @@ a, a:focus {
     outline: none;
 }
 
+button {
+    box-shadow: inset 0 1px rgba(255,255,255,.1);
+}
+
 .icon {
     font-family: 'FontAwesome';
 }
@@ -122,12 +126,12 @@ video {
 }
 
 #labelcam, #labelmic {
-    position: absolute;
-    margin-top: 20px;
+    position: relative;
+    top: 13px;
     color: red;
 }
 #labelcam {
-    margin-left: 2px;
+    margin-left: -2px;
 }
 
 
@@ -174,14 +178,14 @@ video {
 }
 
 #camSpan, #micSpan {
-    position: absolute;
-    margin-top: 16px;
+    position: relative;
+    top: 15px;
 }
 #camSpan {
-    left: 1.2%;
+    left: 11px;
 }
 #micSpan {
-   left: 5.3%;
+    left: 9px;
 }
 #cam {
     width: 50%;
@@ -311,4 +315,32 @@ video {
     margin-top: 13px;
     margin-bottom: 11px;
     margin-left: 12px;
+}
+
+/* tutorial mode */
+#tutoModeBtn {
+    color: white;
+    text-decoration: none;
+    font-family: 'OpenSans-Bold';
+    font-size: 9px;
+    text-decoration: none;
+    background-color: rgb(30, 33, 35);
+    height: 49px;
+    width: 100%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(15, 15, 15);
+    border-right: none;
+    border-top: none;
+}
+
+#spanTutoMode {
+    float: left;
+    margin-left: 10px;
+    margin-top: 6px;
+}
+
+#labelTutoMode {
+    float: left;
+    margin-left: 4px;
 }
