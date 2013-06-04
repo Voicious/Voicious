@@ -37,7 +37,7 @@ class Websocket
             if Object.keys(body).length > 0
                 Db.get 'user', uid, (body) =>
                     if Object.keys(body).length > 0 and body.id_room is rid
-                        @acceptSock body.id, rid, body.name, sock
+                        @acceptSock body._id, rid, body.name, sock
 
     acceptSock : (uid, rid, name, sock) =>
         that             = @
