@@ -23,7 +23,6 @@ class Camera extends Module
         @currentZoom      = undefined
         @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
-        do @enableCamera
         @emitter.on 'stream.create', @newStream
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
