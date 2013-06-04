@@ -42,7 +42,7 @@ class _Room
 
     # Create a new Room and check if the user is logged in.
     roomPage : (req, res, next) =>
-        Db.get 'room:' + req.params.roomid, (body) =>
+        Db.get 'room', req.params.roomid, (body) =>
             if body.length is 0
                 Errors.RenderNotFound req, res
             user          = req.currentUser
@@ -54,7 +54,7 @@ class _Room
                 wsHost  : Config.Websocket.Hostname.External
                 wsPort  : Config.Websocket.Port
             user.id_room = req.params.roomid
-            Db.update 'user:' + user._id, user, () =>
+            Db.update 'user', user._id, user, () =>
                 @token.createToken user._id, req.params.roomid, (token) =>
                     options.token = token
                     @renderRoom res, options, req.host
@@ -103,10 +103,8 @@ class _Room
 
     # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>
-        date = do (new Date()).getTime
-        id_room = md5 date
-        Db.insert 'room:' + id_room, [], () =>
-            res.redirect "/room/#{id_room}"
+        Db.insert 'room', {}, (newitem) =>
+            res.redirect "/room/#{newitem._id}"
 
     redirectRoom : (req, res) =>
         if req.params.roomid?

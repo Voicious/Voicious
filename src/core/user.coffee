@@ -54,10 +54,8 @@ class _User
     # Check Validity of all the values (mail, name, etc).
     # If everything is ok, create the user, log him in and redirect into room (only room for the moment).
     newUser : (req, res, param, callback, errorCallback) =>
-        id_user = param.id_user
-        delete param['id_user']
-        Db.insert 'user:' + id_user, param, () =>
-            req.session.uid = id_user
+        Db.insert 'user', param, (newitem) =>
+            req.session.uid = newitem._id
             callback req, res
             # Stats.countTmpUser req, res, callback
 
@@ -130,8 +128,6 @@ class _User
             param.mail = param.name + do Date.now
             param.id_acl = 0 #TO DO : put the right value
             param.id_role = 0 #TO DO : put the right value
-            date = do (new Date()).getTime
-            param.id_user = md5 date + param.name
             @newUser req, res, param, ((req, res) =>
                 {Room}  = require './room'
                 Room.newRoom req, res, { }
@@ -149,8 +145,6 @@ class _User
                 param.mail      = param.name + do Date.now
                 param.id_acl    = 0
                 param.id_role   = 0
-                date = do (new Date()).getTime
-                param.id_user = md5 date + param.name
                 @newUser req, res, param, ((req, res) =>
                     res.redirect "/room/#{param.room}"
                 ), @errorOnQuickLogin

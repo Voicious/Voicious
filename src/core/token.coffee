@@ -27,16 +27,14 @@ class _Token
 
         # Create the unique token and add it into the dataBase.
         createToken : (clientId, roomId, callback) =>
-            date = do (new Date()).getTime
-            id_token = md5 date
             data =
                 id_room   : roomId
                 id_client : clientId
-            Db.insert 'token:' + id_token, data, () =>
-                callback id_token
+            Db.insert 'token', data, (newitem) =>
+                callback newitem._id
 
         # Delete a token from database.
         deleteToken : (token) =>
-            Db.delete 'token:' + token, () =>
+            Db.delete 'token', token, () =>
 
 exports.Token   = new _Token
