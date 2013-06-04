@@ -136,10 +136,20 @@ class Connections
         @ws          = new Ws @uid, @rid, @emitter
         @localStream = undefined
         @userMedia   =
-            video : yes
-            audio : yes
+            video : no
+            audio : no
         @emitter.on 'message.sendtoall', @sendToAll
         @emitter.on 'camera.enable', @enableCamera
+
+    toggleCamera : () =>
+        console.log 'On toggle la cam'
+        @userMedia['video'] = !@userMedia['video']
+        do @enableCamera
+
+    toggleMicro : () =>
+        console.log 'On toggle le mic'
+        @userMedia['audio'] = !@userMedia['audio']
+        do @enableCamera
 
     dance : () =>
         @ws.dance @wsPortal

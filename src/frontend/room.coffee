@@ -53,6 +53,12 @@ class Room
                 icon.addClass 'dark-grey'
                 label.text 'OFF'
                 label.css 'color', 'red'
+        ($ '#cam').click () =>
+            console.log 'On a cliqué Cam'
+            do @connections.toggleCamera
+        ($ '#mic').click () =>
+            console.log 'On a cliqué mic'
+            do @connections.toggleMicro
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.
