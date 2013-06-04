@@ -15,15 +15,16 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Request     = require 'request'
 nodemailer  = require 'nodemailer'
 moment      = require 'moment'
+md5         = require 'MD5'
 
 Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require './errors'
 {Token}     = require './token'
 {Translator}= require './trans'
+{Db}        = require './' + Config.Database.Connector
 
 class _Room
     # Initialize a nodemailer module and a list of modules
@@ -40,30 +41,22 @@ class _Room
 
     # Create a new Room and check if the user is logged in.
     roomPage : (req, res, next) =>
-        Request.get "#{Config.Restapi.Url}/room/#{req.params.roomid}", (e, r, body) =>
-            if e? or r.statusCode > 200
+        Db.get 'room', req.params.roomid, (body) =>
+            if body.length is 0
                 Errors.RenderNotFound req, res
-            else
-                user          = req.currentUser
-                options       =
-                    title   : 'Voicious'
-                    login   : user.name
-                    uid     : user.id
-                    rid     : req.params.roomid
-                    wsHost  : Config.Websocket.Hostname.External
-                    wsPort  : Config.Websocket.Port
-                user.id_room = req.params.roomid
-                Request.put {
-                    json    : user
-                    url     : "#{Config.Restapi.Url}/user/#{user.id}"
-                }, (e, r, body) =>
-                    if e? or r.statusCode > 200
-                        throw new Errors.Errors
-                    else
-                        @token.createToken user.id, req.params.roomid,
-                            (token) =>
-                                options.token = token
-                                @renderRoom res, options, req.host
+            user          = req.currentUser
+            options       =
+                title   : 'Voicious'
+                login   : user.name
+                uid     : user._id
+                rid     : req.params.roomid
+                wsHost  : Config.Websocket.Hostname.External
+                wsPort  : Config.Websocket.Port
+            user.id_room = req.params.roomid
+            Db.update 'user', user._id, user, () =>
+                @token.createToken user._id, req.params.roomid, (token) =>
+                    options.token = token
+                    @renderRoom res, options, req.host
 
     # Retrieve the bug report entered by the user.
     # Send a mail if the nodemailer object find a sendmail in the server.
@@ -109,14 +102,8 @@ class _Room
 
     # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>
-        Request.post {
-            json    : param
-            url     : "#{Config.Restapi.Url}/room"
-        }, (e, r, body) =>
-            if e? or r.statusCode > 200
-                throw new Errors.Error
-            else
-                res.redirect "/room/#{body.id}"
+        Db.insert 'room', {}, (newitem) =>
+            res.redirect "/room/#{newitem._id}"
 
     redirectRoom : (req, res) =>
         if req.params.roomid?

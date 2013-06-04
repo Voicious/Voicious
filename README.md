@@ -15,17 +15,6 @@ Run one of the following commands from the root directory to run the Voicious se
 <pre><code>npm start
 node ./lib/startup.js</code></pre>
 
-## Dependencies
-
-The Voicious server requires the following [Node.js](http://nodejs.org) modules to run :
-
-* Express
-* Jade
-* JugglingDB
-* MD5
-* Moment
-* Request
-
 ## Licensing
 
 Copyright &copy; 2011-2013  **Voicious**  

@@ -21,9 +21,9 @@ Fs      = require 'fs'
 Path    = require 'path'
 
 Config       = require '../common/config'
-PopulateDB   = require './populateDB'
 {Errors}     = require './errors'
 {Translator} = require './trans'
+{Db}         = require './' + Config.Database.Connector
 
 # Just implement a _currying_ system, it will be used for routes.
 Function.prototype.curry = () ->
@@ -82,17 +82,17 @@ class Voicious
         @app.use @app.router
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
-        @app.use (err, req, res, next) =>
-            if err instanceof Errors.NotFound
-                Errors.RenderNotFound req, res
-            else
-                Errors.RenderError req, res
+        #@app.use (err, req, res, next) =>
+        #    if err instanceof Errors.NotFound
+        #        Errors.RenderNotFound req, res
+        #    else
+        #        Errors.RenderError req, res
         @configured = yes
 
     # Main function  
     # It'll populate the database, fetch the configuration and launch the listenning.
     start       : () =>
-        PopulateDB.PopulateDB.populate () =>
+        Db.connect () =>
             if not @configured
                 do @configure
             process.on 'SIGINT', @end

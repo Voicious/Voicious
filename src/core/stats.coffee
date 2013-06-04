@@ -16,7 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Moment      = require 'moment'
-Request     = require 'request'
+
 Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require './errors'

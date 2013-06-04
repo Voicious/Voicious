@@ -15,9 +15,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Request         = require 'request'
 {User}          = require './user'
 Config          = require '../common/config'
+{Db}            = require './' + Config.Database.Connector
 
 class _Session
     constructor     : () ->
@@ -26,8 +26,8 @@ class _Session
     withCurrentUser : (req, res, next) =>
         req.currentUser = undefined
         if req.session? and req.session.uid?
-            Request.get "#{Config.Restapi.Url}/user/#{req.session.uid}", (e, r, u) =>
-                req.currentUser = JSON.parse u
+            Db.get 'user', req.session.uid, (res) =>
+                req.currentUser = res
                 do next
         else
             do next

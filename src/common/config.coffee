@@ -40,30 +40,13 @@ class _Config
         @Voicious.Hostname = DefaultHostname @Voicious.Hostname
         @Voicious.Port     = 4242        if not @Voicious.Port?
 
-    # Initialize the Rest API config with basic value if configuration file doesn't
+    # Initialize the database config with basic value if configuration file doesn't
     # contain the required informations.
-    checkRestConfig : () ->
-        @Restapi.Enabled = 0 if not @Restapi.Enabled?
-        if @Restapi.Enabled
-            if not @Restapi.Database.Connector?
-                throw "Must provice a database connector if enabling REST API."
-            @Restapi.Hostname         = DefaultHostname @Restapi.Hostname
-            @Restapi.Port             = 4243        if not @Restapi.Port?
-            @Restapi['Allowed-hosts'] = [ ]         if not @Restapi['Allowed-hosts']?
-            if (typeof @Restapi['Allowed-hosts']) is (typeof "")
-                @Restapi['Allowed-hosts'] = [ @Restapi['Allowed-hosts'] ]
-            @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname.Internal}:#{@Voicious.Port}"
-            @Restapi['Allowed-hosts'].push "http://#{@Voicious.Hostname.External}:#{@Voicious.Port}"
-            if @Restapi.Ssl?
-                if @Restapi.Ssl.Key? and @Restapi.Ssl.Certificate?
-                    @Restapi.Ssl.Enabled = 1
-                else
-                    @Restapi.Ssl.Enabled = 0
-            else
-                @Restapi.Ssl =
-                    Enabled : 0
-            protocol     = if @Restapi.Ssl.Enabled then 'https' else 'http'
-            @Restapi.Url = "#{protocol}://#{@Restapi.Hostname.Internal}:#{@Restapi.Port}/api"
+    checkDatabaseConfig : () ->
+        @Database.Enabled = 0           if not @Database.Enabled?
+        @Database.Name = "voicious"     if not @Database.Name?
+        @Database.Connector = "mongodb" if not @Database.Connector?
+        @Database.Hostname = DefaultHostname @Database.Hostname
 
     # Initialize the WebSocket server config with basic value if configuration file doesn't
     # contain the required informations.
@@ -79,7 +62,7 @@ class _Config
         for key, val of tmpJSON
             @[key]  = val
         do @checkCoreConfig
-        do @checkRestConfig
+        do @checkDatabaseConfig
         do @checkWebsocketConfig
 
     constructor : () ->

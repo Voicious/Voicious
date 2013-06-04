@@ -17,9 +17,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Http    = require 'http'
 Ws      = (require 'ws').Server
-Request = require 'request'
 
-Config = require '../common/config'
+Config  = require '../common/config'
+{Db}    = require '../core/' + Config.Database.Connector
 
 class Websocket
     constructor : () ->
@@ -33,12 +33,11 @@ class Websocket
                 that.validateSock message.params.uid, message.params.rid, @
 
     validateSock : (uid, rid, sock) =>
-        Request.get "#{Config.Restapi.Url}/room/#{rid}", (e, r, body) =>
-            if not e?
-                Request.get "#{Config.Restapi.Url}/user/#{uid}", (e, r, body) =>
-                    body = JSON.parse body
-                    if not e? and body.id_room is rid
-                        @acceptSock body.id, rid, body.name, sock
+        Db.get 'room', rid, (body) =>
+            if Object.keys(body).length > 0
+                Db.get 'user', uid, (body) =>
+                    if Object.keys(body).length > 0 and body.id_room is rid
+                        @acceptSock body._id, rid, body.name, sock
 
     acceptSock : (uid, rid, name, sock) =>
         that             = @
@@ -82,10 +81,11 @@ class Websocket
             sock.send JSON.stringify message
 
     start : () =>
-        @server = new Ws {
-            server : (Http.createServer (req, res) ->).listen Config.Websocket.Port, () =>
-                console.log "Server ready on port #{Config.Websocket.Port}"
-        }
-        @server.on 'connection', @onConnection
+        Db.connect () =>
+            @server = new Ws {
+                server : (Http.createServer (req, res) ->).listen Config.Websocket.Port, () =>
+                    console.log "Server ready on port #{Config.Websocket.Port}"
+                }
+            @server.on 'connection', @onConnection
 
 do (new Websocket).start
