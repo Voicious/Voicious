@@ -16,6 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 RedisDriver     = require 'redis'
+MD5             = require 'MD5'
 
 Config          = require '../common/config'
 {Database}      = require './database'
@@ -24,6 +25,7 @@ Config          = require '../common/config'
 class _Redis extends Database
         constructor: (dbName, dbHost = "localhost", dbPort = 6379, dbOptions = {}) ->
             super dbName, dbHost, dbPort, dbOptions
+            @_lastKnownId = { }
 
         connect : (callback) ->
             @client = RedisDriver.createClient @dbPort, @dbHost, @dbOptions
@@ -32,37 +34,43 @@ class _Redis extends Database
             @client.on "error", (err) =>
                 throw new Errors.Error err
 
-        insert : (filename, data, callback) ->
-            data = @objToArray data
-            filename = filename.split(':')
-            if filename.length != 2
-                throw new Errors.Error "Error : wrong format for querying insertion"
-            query = [filename.join(':'), "_id", filename[1]]
-            for field in data
-                query.push field
-             @client.hmset query, (err, res) =>
-                 if err
-                     throw new Errors.Error err
-                 do callback
+        afterIdFound : (filename, callback) =>
+            if not @_lastKnownId[filename]?
+                @_lastKnownId[filename] = 1
+            @client.hgetall filename + ':' + (MD5 @_lastKnownId[filename]), (err, item) =>
+                if item?
+                    ++@_lastKnownId[filename]
+                    @afterIdFound filename, callback
+                else
+                    callback (MD5 @_lastKnownId[filename])
 
-        update : (filename, data, callback) ->
-            data = @objToArray data
+        insert : (filename, data, callback) =>
+            @afterIdFound filename, (id) =>
+                data.__type = filename
+                @client.hmset filename + ':' + id, data, (err, res) =>
+                    if err
+                        throw new Errors.Error err
+                    data._id = id
+                    callback data
+
+        update : (filename, id, data, callback) =>
+            if data._id?
+                delete data._id
+            data.__type = filename
+            filename    = filename + ':' + id
             @client.hlen filename, (err, res) =>
                 if err
                     throw new Errors.Error err
                 if res is 0
                     throw new Errors.Error "Error : trying to update an empty set"
                 else
-                    query = [filename]
-                    for field in data
-                        query.push field
-                    @client.hmset query, (err, res) =>
+                    @client.hmset filename, data, (err, res) =>
                         if err
                             throw new Errors.Error err
                         do callback
 
-        delete : (filename, callback) ->
-            data = @objToArray data
+        delete : (filename, id, callback) =>
+            filename = filename + ':' + id
             @client.hkeys filename, (err, res) =>
                 if err
                     throw new Errors.Error err
@@ -74,21 +82,16 @@ class _Redis extends Database
                         throw new Errors.Error err
                     do callback
 
-        get : (filename, callback) ->
-            data = @objToArray data
+        get : (filename, id, callback) ->
+            filename = filename + ':' + id
             @client.hgetall filename, (err, res) =>
                 if err
                     throw new Errors.Error err
+                res._id = id
                 callback res
 
         close : () ->
             do @client.quit
-
-        objToArray: (obj) ->
-            arr = []
-            for key, val of obj
-                arr.push key, val
-            return arr
 
 class Redis
     @_instance   = undefined
