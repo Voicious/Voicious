@@ -34,42 +34,31 @@ class _Mongo extends Database
                 do callback
 
         insert : (collName, data, callback) ->
-            collName = collName.split(':')
-            if collName.length != 2
-                throw new Errors.Error "Error : wrong format for querying insertion"
-            coll = @db.collection collName[0]
-            data['_id'] = collName[1]
-            coll.insert data, (err) =>
+            coll = @db.collection collName
+            coll.insert data, { safe : on }, (err, item) =>
+                if err
+                    throw Errors.Error err
+                callback item[0]
+
+        update : (collName, id, cur, callback) ->
+            coll = @db.collection collName
+            if cur._id?
+                delete cur._id
+            coll.update {'_id': new MongoDB.ObjectID(String(id))}, {$set: cur}, {safe: on}, (err) =>
                 if err
                     throw Errors.Error err
                 do callback
 
-        update : (collName, cur, callback) ->
-            collName = collName.split(':')
-            if collName.length != 2
-                throw new Errors.Error "Error : wrong format for querying update"
-            coll = @db.collection collName[0]
-            coll.update {'_id': collName[1]}, {$set: cur}, {safe: on}, (err) =>
-                if err
-                    throw Errors.Error err
-                do callback
-
-        get : (collName, callback) ->
-            collName = collName.split(':')
-            if collName.length != 2
-                throw new Errors.Error "Error : wrong format for querying get"
-            coll = @db.collection collName[0]
-            coll.findOne {'_id': collName[1]}, (err, doc) =>
+        get : (collName, id, callback) ->
+            coll = @db.collection collName
+            coll.findOne {'_id': new MongoDB.ObjectID(String(id))}, (err, doc) =>
                 if err
                     throw Errors.Error err
                 callback doc
 
-        delete : (collName, callback) ->
-            collName = collName.split(':')
-            if collName.length != 2
-                throw new Errors.Error "Error : wrong format for querying delete"
-            coll = @db.collection collName[0]
-            coll.remove {'_id': collName[1]}, {}, (err) =>
+        delete : (collName, id, callback) ->
+            coll = @db.collection collName
+            coll.remove {'_id': new MongoDB.ObjectID(String(id))}, {}, (err) =>
                 if err
                     throw Errors.Error err
                 do callback
