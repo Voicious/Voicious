@@ -15,7 +15,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Request         = require 'request'
 {User}          = require './user'
 Config          = require '../common/config'
 {Db}            = require './' + Config.Database.Connector

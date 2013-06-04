@@ -7,9 +7,7 @@
     "express": "~3.1.0",
     "jade": "~0.28.2",
     "moment": "~2.0.0",
-    "jugglingdb": "~0.2.0-23",
     "MD5": "~1.0.3",
-    "request": "~2.16.6",
     "ws": "~0.4.25"
   },
   "directories": {

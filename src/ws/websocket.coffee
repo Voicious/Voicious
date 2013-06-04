@@ -17,7 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Http    = require 'http'
 Ws      = (require 'ws').Server
-Request = require 'request'
+
 Config  = require '../common/config'
 {Db}    = require '../core/' + Config.Database.Connector
 

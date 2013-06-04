@@ -17,7 +17,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 md5         = require 'MD5'
 
-Request     = require 'request'
 Config      = require '../common/config'
 {Db}        = require './' + Config.Database.Connector
 

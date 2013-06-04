@@ -18,13 +18,7 @@
         "Enabled"   : 1
     },
     "Database"   : {
-        "Hostname"      : {
-            "Internal" : "localhost",
-            "External" : "localhost"
-        },
-        "Port"          : 4243,
-        "Enabled"       : 1,
-        "Connector" : "redis",
-        "Name"  : "voicious"
+        "Connector" : "mongodb",
+        "Name"      : "voicious"
     }
 }
