@@ -22,8 +22,9 @@ Moment  = require 'moment'
 Config  = require './common/config'
 
 WriteLog  = (fd, data) =>
-    toLog = '[' + ((do Moment).format 'YYYY MMM DD hh:mm:ssa') + '] ' + data
-    Fs.writeSync fd, toLog, 0, toLog.length
+    if data?
+        toLog = '[' + ((do Moment).format 'YYYY MMM DD hh:mm:ssa') + '] ' + data
+        Fs.writeSync fd, (new Buffer toLog), 0, toLog.length
 
 processes = []
 
@@ -33,7 +34,7 @@ if not Fs.existsSync Config.Paths.Logs
 if Config.Voicious.Enabled
     voiciousAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.access.log'), 'a+'
     voiciousErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.error.log'), 'a+'
-    voicious          = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'core', 'voicious.js')]
+    voicious          = spawn 'node', [(Path.join Config.Paths.Root, 'lib', 'core', 'voicious.js')]
     voicious.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
         WriteLog voiciousAccessLog, data
@@ -45,7 +46,7 @@ if Config.Voicious.Enabled
 if Config.Websocket.Enabled
     wsAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'ws.access.log'), 'a+'
     wsErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'ws.error.log'), 'a+'
-    ws          = spawn 'node', [(Path.join Config.Paths.Approot, 'lib', 'ws', 'websocket.js')]
+    ws          = spawn 'node', [(Path.join Config.Paths.Root, 'lib', 'ws', 'websocket.js')]
     ws.stdout.on 'data', (data) =>
         process.stdout.write "#{data}"
         WriteLog wsAccessLog, data
