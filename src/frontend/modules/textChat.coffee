@@ -56,7 +56,12 @@ class TextChat extends Module
             message = do @jqInput.val
             message = message.replace /\n/g, '<br />'
             @jqInput.val ''
-            @sendMessage message
+            # We check if it's a command or a message
+            command = message.match(/^\/([a-zA-Z ]+)/)
+            if command?
+                @sendCommand command
+            else
+                @sendMessage message
 
         $(window).resize () =>
             do @scrollPane.reinitialise
@@ -88,6 +93,14 @@ class TextChat extends Module
     update          : (message) =>
         @addMessage message
         $(window).trigger "newMessage"
+
+    # Send the command to the command Manager
+    sendCommand     : (command) =>
+        command =
+            cmd : command[1]
+            from : window.Voicious.currentUser.name
+        console.log command
+        @emitter.trigger 'chat.cmd', command
 
     # Send the new message to the guests.
     sendMessage     : (message) =>
