@@ -27,6 +27,7 @@ class Camera extends Module
         @emitter.on 'stream.create', @newStream
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
+            video.muted = yes
             @newStream event, { video : video , uid : window.Voicious.currentUser.uid }
         ($ window).on 'resize', @squareMainCam
         ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
@@ -83,6 +84,8 @@ class Camera extends Module
         @currentZoom = uid
         if video?
             newVideo     = do video.clone
+            if video[0].muted
+                newVideo[0].muted = 1
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
             container.append newVideo
