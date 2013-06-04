@@ -30,7 +30,7 @@ class _Mongo extends Database
             @db = MongoDB.Db @dbName, @server, {w: 1}
             @db.open (err, coll) =>
                 if err
-                    throw Errors.Error err
+                    throw err
                 do callback
 
         insert : (collName, data, callback) ->

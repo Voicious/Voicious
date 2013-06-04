@@ -32,7 +32,7 @@ class _Redis extends Database
             @client.on "ready", () =>
                 do callback
             @client.on "error", (err) =>
-                throw new Errors.Error err
+                throw err
 
         afterIdFound : (filename, callback) =>
             if not @_lastKnownId[filename]?
