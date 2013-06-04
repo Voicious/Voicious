@@ -62,7 +62,7 @@ class Websocket
         @socks[rid][uid] = sock
 
     close : (sock) =>
-        delete @socks[sock.rid][uid]
+        delete @socks[sock.rid][sock.uid]
         for uid of @socks[sock.rid]
             if @socks[sock.rid][uid]?
                 @send @socks[sock.rid][uid], { type : 'peer.remove' , params : { id : sock.uid , name : sock.name  } }
