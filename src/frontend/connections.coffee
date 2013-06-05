@@ -151,7 +151,6 @@ class Connections
         @emitter.on 'camera.enable', @enableCamera
 
     modifyStream : () =>
-        do ($ '#feeds > li:first > video:first').remove
         if @localStream isnt undefined
             do @localStream.stop
             for id, peer of @peers
@@ -163,15 +162,9 @@ class Connections
 
     toggleCamera : () =>
         @userMedia['video'] = !@userMedia['video']
-        if @userMedia['video'] is on and @userMedia['audio'] is off or
-            @userMedia['video'] is off and @userMedia['audio'] is on
-                ($ '#mic').trigger 'click'
-        else
-            do @modifyStream
 
     toggleMicro : () =>
         @userMedia['audio'] = !@userMedia['audio']
-        do @modifyStream
 
     dance : () =>
         @ws.dance @wsPortal

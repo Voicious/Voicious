@@ -55,8 +55,18 @@ class Room
                 label.css 'color', 'red'
         ($ '#cam').click () =>
             do @connections.toggleCamera
+            activeStream = @connections.userMedia
+            if activeStream['video'] is on and activeStream['audio'] is off or
+            activeStream['video'] is off and activeStream['audio'] is on
+                ($ '#mic').trigger 'click'
+            else
+                do ($ '#feeds > li:first > video:first').remove
+                do @connections.modifyStream
+
         ($ '#mic').click () =>
             do @connections.toggleMicro
+            do ($ '#feeds > li:first > video:first').remove
+            do @connections.modifyStream
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.
