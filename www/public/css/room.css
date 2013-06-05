@@ -82,6 +82,7 @@ button {
 
 .icon {
     font-family: 'FontAwesome';
+    font-size: 13px;
 }
 
 .iconMedia {
@@ -94,13 +95,17 @@ button {
     float: left;
 }
 
+#logo {
+    width: 70%;
+}
+
 #content {
-    width: 92%;
+    width: 90%;
 }
 
 #sidebar {
     text-align: center;
-    width: 8%;
+    width: 10%;
     padding-left: 0;
 }
 
@@ -140,12 +145,13 @@ video {
 
 .labelOther {
     float: left;
-    margin-left: 6px;
+    margin-left: 2px;
 }
 
 #shareRoomSpan, #manageRoomSpan {
     margin-top: 14px;
-    margin-left: -12px;
+    margin-left: -13px;
+    margin-right: 2px;
 }
 #labelShareRoom, #labelManageRoom {
     margin-top: 14px;
@@ -224,7 +230,7 @@ video {
 
 #sidebarAcc .ui-accordion-content {
     padding: 0;
-    height: 99px;
+    height: 110px;
     width: 100%;
     overflow: hidden;
 }
