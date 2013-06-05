@@ -57,6 +57,9 @@ class PC
                 video : createVideoTag event.stream
                 uid   : @id
             emitter.trigger 'stream.create', data
+        @pc.onremovestream = (event) =>
+            streamID = event.stream.id # Get the old stream and
+            do ($ "[data-streamid=#{streamID}]").remove # remove it
         @addStream localStream
 
     addStream : (s) =>
@@ -90,6 +93,9 @@ class PC
             , errorHandler
         , errorHandler, @constraints
 
+    removeStream : (stream) =>
+        @pc.removeStream stream
+
     createAnswer : (offeredDescription) =>
         @pc.setRemoteDescription offeredDescription, () =>
             @pc.createAnswer (description) =>
@@ -115,6 +121,9 @@ class Peer
     setLocalStream : (localStream) =>
         @pc.addStream localStream
 
+    rmLocalStream  : (localStream) =>
+        @pc.removeStream localStream
+
     offerHandshake : () =>
         do @pc.createOffer
 
@@ -136,10 +145,26 @@ class Connections
         @ws          = new Ws @uid, @rid, @emitter
         @localStream = undefined
         @userMedia   =
-            video : yes
-            audio : yes
+            video : no
+            audio : no
         @emitter.on 'message.sendtoall', @sendToAll
         @emitter.on 'camera.enable', @enableCamera
+
+    modifyStream : () =>
+        if @localStream isnt undefined
+            do @localStream.stop
+            for id, peer of @peers
+                peer.rmLocalStream @localStream
+                do peer.offerHandshake
+        @localStream = undefined # erase old stream
+        if @userMedia['video'] is yes or @userMedia['audio'] is yes
+            do @enableCamera
+
+    toggleCamera : () =>
+        @userMedia['video'] = !@userMedia['video']
+
+    toggleMicro : () =>
+        @userMedia['audio'] = !@userMedia['audio']
 
     dance : () =>
         @ws.dance @wsPortal
@@ -166,6 +191,7 @@ class Connections
 
     enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
+            @emitter.trigger 'activable.unlock', @userMedia
             if not MOZILLA and not $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').addClass "hidden"
             @localStream = stream
@@ -174,6 +200,7 @@ class Connections
                 do peer.offerHandshake
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
         , () =>
+            @emitter.trigger 'activable.unlock'
             if not MOZILLA and $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').removeClass "hidden"
 
@@ -186,6 +213,7 @@ MOZILLA = if navigator.mozGetUserMedia? then yes else no
 
 createVideoTag = (stream) ->
     videoTag          = document.createElement 'video'
+    videoTag.setAttribute 'data-streamid', stream.id
     videoTag.autoplay = yes
     if MOZILLA
         videoTag.mozSrcObject = stream

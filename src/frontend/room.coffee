@@ -31,6 +31,55 @@ class Room
                 do @connections.dance
         $('#reportBug').click @bugReport
 
+    activateCam         : () =>
+        do @connections.toggleCamera
+        activeStream = @connections.userMedia
+        if activeStream['video'] is on and activeStream['audio'] is off or
+        activeStream['video'] is off and activeStream['audio'] is on
+            ($ '#mic').trigger 'click'
+        else
+            @emitter.trigger 'activable.lock', @connections.userMedia
+            do ($ '#feeds > li:first > video:first').remove
+            do @connections.modifyStream
+
+    activateMic         : () =>
+        do @connections.toggleMicro
+        @emitter.trigger 'activable.lock', @connections.userMedia
+        do ($ '#feeds > li:first > video:first').remove
+        do @connections.modifyStream
+
+     refreshOnOff : (btn, val) =>
+        jqSpans = btn.children 'span'
+        icon = do jqSpans.first
+        label = do jqSpans.last
+        text = (do label.text)
+        oldVal = if text is 'OFF' then off else on
+        if oldVal isnt val
+            label.toggleClass 'green red'
+            icon.toggleClass 'dark-grey white'
+            label.text (if (do label.text) is 'OFF' then 'ON' else 'OFF')
+
+    setOnOff            : () =>
+        ($ '#cam').click @activateCam
+        ($ '#mic').click @activateMic
+        @emitter.on 'activable.lock', (event, data) =>
+             if data['video'] is off and data['audio'] is off
+                @refreshOnOff ($ '#cam'), data['video']
+                @refreshOnOff ($ '#mic'), data['audio']
+                return
+             ($ 'button.activable').each (idx, elem) ->
+                jqElem = ($ elem)
+                jqElem.attr 'disabled', on
+                (jqElem.children 'span').toggleClass 'disable'
+        @emitter.on 'activable.unlock', (event, data) =>
+            ($ 'button.activable').each (idx, elem) =>
+                jqElem = ($ elem)
+                jqElem.attr 'disabled', off
+                (jqElem.children 'span').toggleClass 'disable'
+                if data isnt undefined
+                    @refreshOnOff ($ '#cam'), data['video']
+                    @refreshOnOff ($ '#mic'), data['audio']
+
     setPage             : () ->
         $('#sidebarAcc').accordion { active: false, collapsible: true }
         $('a#shareRoomLink, a#manageRoomLink').click () ->
@@ -38,21 +87,7 @@ class Room
             elem.toggleClass 'down'
             jqSiblinsA = elem.siblings 'a'
             jqSiblinsA.removeClass 'down'
-
-        ($ 'a.activable').click () ->
-            jqA = ($ this).find 'span'
-            icon = do jqA.first
-            label = do jqA.last
-            if (do label.text) is 'OFF'
-                icon.removeClass 'dark-grey'
-                icon.addClass 'white'
-                label.text 'ON'
-                label.css 'color', 'green'
-            else
-                icon.removeClass 'white'
-                icon.addClass 'dark-grey'
-                label.text 'OFF'
-                label.css 'color', 'red'
+        do @setOnOff
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.

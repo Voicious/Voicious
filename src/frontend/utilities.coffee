@@ -30,7 +30,7 @@ class   Utilities
 
     # Split a string by size and return an array of strings.
     splitString         : (str, len) =>
-        size    = Math.ceil str.length / len 
+        size    = Math.ceil str.length / len
         ret     = []
         lc      = 0
 

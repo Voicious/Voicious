@@ -42,13 +42,13 @@ block content
             img(src='/public/img/logo.png')
             p#login.textBtn #{login}
             span#acl #{trans.user}
-            div#mediaBtn(data-step='1', data-intro='#{trans.mediaTuto}', data-position='right')
-              a#cam.activable
+            div#onOffCtn(data-step='1', data-intro='#{trans.mediaTuto}', data-position='right')
+              button#cam.activable
                 span#camSpan.icon.iconMedia.icon-facetime-video.dark-grey
-                span#labelcam OFF
-              a#mic.activable
+                span#camLabel.red OFF
+              button#mic.activable
                 span#micSpan.icon.iconMedia.icon-microphone.dark-grey
-                span#labelmic OFF
+                span#micLabel.red OFF
             div#sidebarAcc
               a#shareRoomLink(data-step='2', data-intro='#{trans.shareRoomTuto}', data-position='right')
                 span#shareRoomSpan.icon.iconOther.icon-share-alt
