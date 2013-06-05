@@ -58,7 +58,8 @@ class PC
                 uid   : @id
             emitter.trigger 'stream.create', data
         @pc.onremovestream = (event) =>
-                console.log event
+            streamID = event.stream.id
+            do ($ "[data-streamid=#{streamID}]").remove
         @addStream localStream
 
     addStream : (s) =>
@@ -93,6 +94,7 @@ class PC
         , errorHandler, @constraints
 
     removeStream : (stream) =>
+        console.log "On remove un Stream"
         @pc.removeStream stream
 
     createAnswer : (offeredDescription) =>
@@ -157,6 +159,7 @@ class Connections
             console.log @peers
             for id, peer of @peers
                 peer.rmLocalStream @localStream
+                do peer.offerHandshake
         @localStream = undefined
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
             console.log "On Enable la camera"
@@ -209,6 +212,7 @@ MOZILLA = if navigator.mozGetUserMedia? then yes else no
 
 createVideoTag = (stream) ->
     videoTag          = document.createElement 'video'
+    videoTag.setAttribute 'data-streamid', stream.id
     videoTag.autoplay = yes
     if MOZILLA
         videoTag.mozSrcObject = stream
