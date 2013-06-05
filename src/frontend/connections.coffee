@@ -94,7 +94,6 @@ class PC
         , errorHandler, @constraints
 
     removeStream : (stream) =>
-        console.log "On remove un Stream"
         @pc.removeStream stream
 
     createAnswer : (offeredDescription) =>
@@ -156,13 +155,11 @@ class Connections
         do ($ '#feeds > li:first > video:first').remove
         if @localStream isnt undefined
             do @localStream.stop
-            console.log @peers
             for id, peer of @peers
                 peer.rmLocalStream @localStream
                 do peer.offerHandshake
         @localStream = undefined
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
-            console.log "On Enable la camera"
             do @enableCamera
 
     toggleMicro : () =>
@@ -170,13 +167,11 @@ class Connections
         do ($ '#feeds > li:first > video:first').remove
         if @localStream isnt undefined
             do @localStream.stop
-            console.log @peers
             for id, peer of @peers
                 peer.rmLocalStream @localStream
                 do peer.offerHandshake
         @localStream = undefined
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
-            console.log "On Enable la camera"
             do @enableCamera
 
     dance : () =>
