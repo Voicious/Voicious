@@ -25,7 +25,7 @@ class _Mongo extends Database
         constructor : (dbName, dbHost = 'localhost', dbPort = 27017, dbOptions = {}) ->
                 super dbName, dbHost, dbPort, dbOptions
 
-        connect : (callback) ->
+        connect : (callback) =>
             @server = MongoDB.Server @dbHost, @dbPort
             @db = MongoDB.Db @dbName, @server, {w: 1}
             @db.open (err, coll) =>
@@ -33,34 +33,43 @@ class _Mongo extends Database
                     throw err
                 do callback
 
-        insert : (collName, data, callback) ->
+        insert : (collName, data, callback) =>
             coll = @db.collection collName
             coll.insert data, { safe : on }, (err, item) =>
                 if err
-                    throw Errors.Error err
+                    throw err
                 callback item[0]
 
-        update : (collName, id, cur, callback) ->
+        update : (collName, id, cur, callback) =>
             coll = @db.collection collName
             if cur._id?
                 delete cur._id
             coll.update {'_id': new MongoDB.ObjectID(String(id))}, {$set: cur}, {safe: on}, (err) =>
                 if err
-                    throw Errors.Error err
+                    throw err
                 do callback
 
-        get : (collName, id, callback) ->
+        get : (collName, id, callback) =>
             coll = @db.collection collName
             coll.findOne {'_id': new MongoDB.ObjectID(String(id))}, (err, doc) =>
                 if err
-                    throw Errors.Error err
+                    throw err
                 callback doc
 
-        delete : (collName, id, callback) ->
+        find : (collName, filters, callback) =>
+            coll = @db.collection collName
+            if filters._id?
+                filters._id = new MongoDB.ObjectID(String(filters._id))
+            coll.findOne filters, (err, doc) =>
+                if err
+                    throw err
+                callback doc
+
+        delete : (collName, id, callback) =>
             coll = @db.collection collName
             coll.remove {'_id': new MongoDB.ObjectID(String(id))}, {}, (err) =>
                 if err
-                    throw Errors.Error err
+                    throw err
                 do callback
 
         close : () ->

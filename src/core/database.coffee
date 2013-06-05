@@ -20,22 +20,25 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Database
         constructor: (@dbName, @dbHost, @dbPort, @dbOptions) ->
 
-        connect: () ->
+        connect: () =>
             throw Errors.Error "Database.connect : not implemented"
 
-        insert: () ->
+        insert: () =>
             throw Errors.Error "Database.insert : not implemented"
 
-        update: () ->
+        update: () =>
             throw Errors.Error "Database.update : not implemented"
 
-        get: () ->
+        get: () =>
             throw Errors.Error "Database.get : not implemented"
 
-        delete: () ->
+        find: () =>
+            throw Errors.Error "Database.find : not implemented"
+
+        delete: () =>
             throw Errors.Error "Database.delete : not implemented"
 
-        close: () ->
+        close: () =>
             throw Errors.Error "Database.close : not implemented"
 
 exports.Database = Database
