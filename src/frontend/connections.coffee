@@ -183,6 +183,8 @@ class Connections
         @emitter.on 'ice.candidate', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
+        @emitter.on 'ping', (event, data) =>
+            @ws.send { type : 'pong' , params : { token : data.token } }
 
     sendToAll : (event, message) =>
         message = { type : 'chat.message' , params : { message : message } }
