@@ -16,6 +16,8 @@ block scripts
     script(type="text/javascript", src="/public/js/vendor/jquery.jscrollpane.js")
     script(type="text/javascript", src="/public/js/vendor/intro.js")
     script(type="text/javascript", src="/public/js/vendor/showdown.js")
+    script(type="text/javascript", src="http://static.ak.fbcdn.net/connect.php/js/FB.Share")
+    script(type="text/javascript", src="http://platform.twitter.com/widgets.js")
     script(type="text/javascript", src="/public/js/module.js")
     script(type='text/javascript', src='/public/js/connections.js')
     script(type="text/javascript")
@@ -60,10 +62,10 @@ block content
                 a#inviteContactLink.accordionLink
                   span#inviteContactSpan.icon.iconOther.icon-plus
                   p.labelOther #{trans.inviteContacts}
-                a#twitterLink.accordionLink
+                a#twitterLink.accordionLink(href="https://twitter.com/share", data-count="none",target="_blank")
                   span#twitterSpan.icon.iconOther.icon-twitter
                   p.labelOther #{trans.shareOnTwitter}
-                a#facebookLink.accordionLink
+                a#facebookLink(href="https://www.facebook.com/sharer/sharer.php?u=http://beta.voicious.com/room/#{rid}", target="_blank").accordionLink
                   span#facebookSpan.icon.iconOther.icon-facebook-sign
                   p.labelOther #{trans.shareOnFacebook}
               a#manageRoomLink(data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
