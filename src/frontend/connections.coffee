@@ -150,29 +150,28 @@ class Connections
         @emitter.on 'message.sendtoall', @sendToAll
         @emitter.on 'camera.enable', @enableCamera
 
-    toggleCamera : () =>
-        @userMedia['video'] = !@userMedia['video']
+    modifyStream : () =>
         do ($ '#feeds > li:first > video:first').remove
         if @localStream isnt undefined
             do @localStream.stop
             for id, peer of @peers
                 peer.rmLocalStream @localStream
                 do peer.offerHandshake
-        @localStream = undefined
+        @localStream = undefined # erase old stream
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
             do @enableCamera
 
+    toggleCamera : () =>
+        @userMedia['video'] = !@userMedia['video']
+        if @userMedia['video'] is on and @userMedia['audio'] is off or
+            @userMedia['video'] is off and @userMedia['audio'] is on
+                ($ '#mic').trigger 'click'
+        else
+            do @modifyStream
+
     toggleMicro : () =>
         @userMedia['audio'] = !@userMedia['audio']
-        do ($ '#feeds > li:first > video:first').remove
-        if @localStream isnt undefined
-            do @localStream.stop
-            for id, peer of @peers
-                peer.rmLocalStream @localStream
-                do peer.offerHandshake
-        @localStream = undefined
-        if @userMedia['video'] is yes or @userMedia['audio'] is yes
-            do @enableCamera
+        do @modifyStream
 
     dance : () =>
         @ws.dance @wsPortal
