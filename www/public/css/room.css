@@ -357,3 +357,7 @@ video {
     float: left;
     margin-left: 4px;
 }
+
+#mainCam video {
+    position: absolute;
+}
