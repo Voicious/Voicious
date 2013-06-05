@@ -191,6 +191,7 @@ class Connections
 
     enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
+            @emitter.trigger 'activable.unlock'
             if not MOZILLA and not $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').addClass "hidden"
             @localStream = stream
@@ -199,6 +200,7 @@ class Connections
                 do peer.offerHandshake
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
         , () =>
+            @emitter.trigger 'activable.unlock'
             if not MOZILLA and $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').removeClass "hidden"
 

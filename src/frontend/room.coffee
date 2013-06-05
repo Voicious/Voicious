@@ -32,42 +32,44 @@ class Room
         $('#reportBug').click @bugReport
 
     activateCam         : () =>
-        @emitter.trigger 'activable.lock'
         do @connections.toggleCamera
         activeStream = @connections.userMedia
         if activeStream['video'] is on and activeStream['audio'] is off or
         activeStream['video'] is off and activeStream['audio'] is on
             ($ '#mic').trigger 'click'
         else
+            @emitter.trigger 'activable.lock', @connections.userMedia
             do ($ '#feeds > li:first > video:first').remove
             do @connections.modifyStream
 
     activateMic         : () =>
         do @connections.toggleMicro
+        @emitter.trigger 'activable.lock', @connections.userMedia
         do ($ '#feeds > li:first > video:first').remove
         do @connections.modifyStream
 
     setOnOff            : () =>
-        ($ 'a.activable').click () ->
+        ($ 'button.activable').click () ->
             jqA = ($ this).find 'span'
             icon = do jqA.first
             label = do jqA.last
-            if (do label.text) is 'OFF'
-                icon.removeClass 'dark-grey'
-                icon.addClass 'white'
-                label.text 'ON'
-                label.css 'color', 'green'
-            else
-                icon.removeClass 'white'
-                icon.addClass 'dark-grey'
-                label.text 'OFF'
-                label.css 'color', 'red'
+            label.toggleClass 'green red'
+            icon.toggleClass 'dark-grey white'
+            label.text (if (do label.text) is 'OFF' then 'ON' else 'OFF')
         ($ '#cam').click @activateCam
         ($ '#mic').click @activateMic
         @emitter.on 'activable.lock', (event, data) =>
-                console.log "On doit lock les activable"
+             if data['video'] is off and data['audio'] is off
+                return
+             ($ 'button.activable').each (idx, elem) ->
+                jqElem = ($ elem)
+                jqElem.attr 'disabled', on
+                (jqElem.children 'span').toggleClass 'disable'
         @emitter.on 'activable.unlock', (event, data) =>
-                console.log "On doit unlock les activable"
+            ($ 'button.activable').each (idx, elem) ->
+                jqElem = ($ elem)
+                jqElem.attr 'disabled', off
+                (jqElem.children 'span').toggleClass 'disable'
 
     setPage             : () ->
         $('#sidebarAcc').accordion { active: false, collapsible: true }

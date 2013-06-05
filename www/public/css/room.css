@@ -40,6 +40,9 @@ body {
     float: right;
 }
 
+.disable {
+    color: #333;
+}
 .no-relative {
     position: absolute;
 }
@@ -153,8 +156,8 @@ video {
 
 #labelcam, #labelmic {
     position: relative;
-    color: red;
 }
+
 #labelcam {
     margin-left: -2px;
 }
@@ -169,6 +172,7 @@ video {
     margin-top: 14px;
     margin-left: -12px;
 }
+
 #labelShareRoom, #labelManageRoom {
     margin-top: 14px;
     float: left;
