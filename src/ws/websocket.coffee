@@ -17,6 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 Http    = require 'http'
 Ws      = (require 'ws').Server
+MD5     = require 'MD5'
 
 Config  = require '../common/config'
 {Db}    = require '../core/' + Config.Database.Connector
@@ -39,16 +40,31 @@ class Websocket
                     if Object.keys(body).length > 0 and body.id_room is rid
                         @acceptSock body._id, rid, body.name, sock
 
+    sendPing : (sock) =>
+        sock._h       = MD5 do Date.now
+        @send sock, { type : 'ping', params : { token : sock._h } }
+        sock._timeout = setTimeout (() =>
+            @pingTimeout sock
+        ), 30000
+
+    pingTimeout : (sock) =>
+        @close sock, 'Ping timeout'
+
     acceptSock : (uid, rid, name, sock) =>
         that             = @
         sock.rid         = rid
         sock.uid         = uid
         sock.name        = name
+        sock._h          = undefined
+        sock._timeout    = undefined
         sock.onmessage   = (message) ->
             that.onmessage @, message
         sock.onclose     = () ->
             that.close @
         @send sock, { type : 'authenticated' }
+        setTimeout (() =>
+            @sendPing sock
+        ), 60000
         if not @socks[rid]?
             @socks[rid] = { }
         else
@@ -61,11 +77,15 @@ class Websocket
             @send sock, { type : 'peer.list' , params : { peers : peers } }
         @socks[rid][uid] = sock
 
-    close : (sock) =>
+    close : (sock, reason = 'Session closed') =>
         delete @socks[sock.rid][sock.uid]
         for uid of @socks[sock.rid]
             if @socks[sock.rid][uid]?
-                @send @socks[sock.rid][uid], { type : 'peer.remove' , params : { id : sock.uid , name : sock.name  } }
+                @send @socks[sock.rid][uid], { type : 'peer.remove' , params : {
+                    id     : sock.uid
+                    name   : sock.name
+                    reason : reason
+                } }
 
     onmessage : (sock, message) =>
         message = JSON.parse message.data
@@ -75,6 +95,14 @@ class Websocket
                 if s?
                     message.params.data.params.from = sock.uid
                     @send @socks[sock.rid][message.params.to], message.params.data
+            when 'pong' then do () =>
+                if message.params.token is sock._h
+                    clearTimeout sock._timeout
+                    sock._timeout = undefined
+                    sock._h       = undefined
+                    setTimeout (() =>
+                        @sendPing sock
+                    ), 60000
 
     send : (sock, message) =>
         if sock.readyState is 1
