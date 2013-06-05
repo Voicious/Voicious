@@ -157,6 +157,8 @@ class Connections
             video : no
             audio : no
         @emitter.on 'message.sendtoall', @sendToAll
+        @emitter.on 'message.sendToOneName', @sendToOneName
+        @emitter.on 'message.sendToOneId', @sendToOneId
         @emitter.on 'camera.enable', @enableCamera
         window.onClose = () =>
             do @ws.close
@@ -203,6 +205,15 @@ class Connections
         message = { type : 'chat.message' , params : { message : message } }
         for id of @peers
             @ws.forward id, message
+    
+    sendToOneName : (event, msg) =>
+        message = { type : msg.type, params : msg.params }
+        userId = @getIdFromUsername msg.to
+        @ws.forward userId, message
+
+    sendToOneId : (event, msg) =>
+        message = { type : msg.type, params : msg.params }  
+        @ws.forward msg.to, message
 
     enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
@@ -218,6 +229,14 @@ class Connections
             @emitter.trigger 'activable.unlock'
             if not MOZILLA and $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').removeClass "hidden"
+
+    getIdFromUsername : (username) =>
+        id = undefined
+        for peer in @peers
+            if peer.name is username
+                id = peer.id
+                break
+        id    
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate

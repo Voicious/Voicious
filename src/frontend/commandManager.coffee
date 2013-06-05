@@ -18,22 +18,23 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class CommandManager
     # Initialize the Command Manager and set the callbacks for the Event Manager.
-    constructor     : (emitter) ->
-        super emitter
-        
+    constructor     : (@emitter) ->
         @emitter.on 'chat.cmd', (event, data) =>
-            @parseCmd data.command
+            @parseCmd data
 
     # Parse the command and call the right function.
     parseCmd        : (command) =>
-        cmd = command[1].split(' ')
-        user = command[2]
-        console.log cmd
+        cmd = command.cmd.split(' ')
+        user = command.from
+        # It will be better with a switch later
+        if cmd[0] is "kick" and cmd[1]?
+            @kick cmd[1], ""
     
     # Kick command implementation
-    kick            : (op, user) =>
-        console.log op + ' kicks ' + user
+    kick            : (user, reason) =>
+        message = { type : 'cmd.kick', to : user, params : { message : reason } }
+        @emitter.trigger 'message.sendToOneName', message
+        
     
-
 if window?
-    window.CommandManager   = new CommandManager
+    window.CommandManager   = CommandManager

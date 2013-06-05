@@ -98,6 +98,14 @@ class Websocket
         message = JSON.parse message.data
         switch message.type
             when 'forward' then do () =>
+                # Temporary
+                # check for the command system
+                if message.params.data.type is 'cmd.kick'
+                    Request.get "{Config.Restapi.Url}/user?uid=#{sock.uid}&rid=#{sock.rid}", (e, r, u) => 
+                        if e
+                            console.log "Error, user can't kick"
+                        else
+                            console.log "kick his butt outta there !"
                 s = @socks[sock.rid][message.params.to]
                 if s?
                     message.params.data.params.from = sock.uid

@@ -99,7 +99,6 @@ class TextChat extends Module
         command =
             cmd : command[1]
             from : window.Voicious.currentUser.name
-        console.log command
         @emitter.trigger 'chat.cmd', command
 
     # Send the new message to the guests.
