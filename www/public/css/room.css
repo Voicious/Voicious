@@ -230,7 +230,8 @@ video {
 
 #sidebarAcc .ui-accordion-content {
     padding: 0;
-    height: 110px;
+    /*height: 110px;*/
+    height: 56px;
     width: 100%;
     overflow: hidden;
 }

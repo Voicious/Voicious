@@ -54,10 +54,10 @@ block content
                 span#shareRoomSpan.icon.iconOther.icon-share-alt
                 p#labelShareRoom #{trans.shareRoomID}
               div.accordionTab
-                a#clipboardLink.accordionLink
+                a#clipboardLink.accordionLink(style='display: none;')
                   span#clipboardSpan.icon.iconOther.icon-copy
                   p.labelOther #{trans.copyRoomID}
-                a#inviteContactLink.accordionLink
+                a#inviteContactLink.accordionLink(style='display: none;')
                   span#inviteContactSpan.icon.iconOther.icon-plus
                   p.labelOther #{trans.inviteContacts}
                 a#twitterLink.accordionLink
@@ -66,7 +66,7 @@ block content
                 a#facebookLink.accordionLink
                   span#facebookSpan.icon.iconOther.icon-facebook-sign
                   p.labelOther #{trans.shareOnFacebook}
-              a#manageRoomLink(data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
+              a#manageRoomLink(style='display: none;', data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
                 span#manageRoomSpan.icon.iconOther.icon-wrench
                 p#labelManageRoom #{trans.manageRoom}
               div.accordionTab
