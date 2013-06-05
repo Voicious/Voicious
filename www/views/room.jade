@@ -66,13 +66,14 @@ block content
                 a#facebookLink.accordionLink
                   span#facebookSpan.icon.iconOther.icon-facebook-sign
                   p.labelOther #{trans.shareOnFacebook}
-              a#manageRoomLink(style='display: none;', data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
+              //a#manageRoomLink(style='display: none;', data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
+              a#manageRoomLink(style='display: none;')
                 span#manageRoomSpan.icon.iconOther.icon-wrench
                 p#labelManageRoom #{trans.manageRoom}
               div.accordionTab
         div#content.fill-height.left.color-two
             div.fill-height.left.column
-                ul#feeds(data-step='4', data-intro='#{trans.feedsTuto}', data-position='bottom')
-            div#middle.fill-height.left.column(style='width:30%')
+                ul#feeds(data-step='3', data-intro='#{trans.feedsTuto}', data-position='bottom')
+            div#middle.fill-height.left.column(style='width:26%')
             div.fill-height.left.column
               div#mainCam.fill-height.video-wrapper
