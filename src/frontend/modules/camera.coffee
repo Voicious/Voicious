@@ -89,6 +89,7 @@ class Camera extends Module
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
             container.append newVideo
+            newVideo.css 'margin-left', '-66%'
 
 if window?
     window.Camera = Camera
