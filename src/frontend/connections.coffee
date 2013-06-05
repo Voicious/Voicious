@@ -166,6 +166,18 @@ class Connections
             do @enableCamera
 
     toggleMicro : () =>
+        @userMedia['audio'] = !@userMedia['audio']
+        do ($ '#feeds > li:first > video:first').remove
+        if @localStream isnt undefined
+            do @localStream.stop
+            console.log @peers
+            for id, peer of @peers
+                peer.rmLocalStream @localStream
+                do peer.offerHandshake
+        @localStream = undefined
+        if @userMedia['video'] is yes or @userMedia['audio'] is yes
+            console.log "On Enable la camera"
+            do @enableCamera
 
     dance : () =>
         @ws.dance @wsPortal
