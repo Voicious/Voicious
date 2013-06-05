@@ -154,11 +154,11 @@ video {
     height: 100%;
 }
 
-#labelcam, #labelmic {
+#camLabel, #micLabel {
     position: relative;
 }
 
-#labelcam {
+#camLabel {
     margin-left: -2px;
 }
 
