@@ -69,12 +69,38 @@ a, a:focus {
     border-width: 1px;
     border-style: solid;
     border-color: rgb(15, 15, 15);
-    cursor: pointer; 
+    cursor: pointer;
     outline: none;
+}
+
+#onOffCtn {
+    margin-top: 20%;
 }
 
 button {
     box-shadow: inset 0 1px rgba(255,255,255,.1);
+}
+
+/* Don't change on hover */
+.activable:hover {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(15, 15, 15);
+    border-right: none;
+}
+
+.activable {
+    width: 50%;
+    color: white;
+    background-color: rgb(30, 33, 35);
+    text-decoration: none;
+    box-shadow: inset 0 1px rgba(255,255,255,.1);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(15, 15, 15);
+    border-right: none;
+    cursor: pointer;
+    outline: none;
 }
 
 .icon {
@@ -127,7 +153,6 @@ video {
 
 #labelcam, #labelmic {
     position: relative;
-    top: 13px;
     color: red;
 }
 #labelcam {
@@ -157,6 +182,7 @@ video {
     margin-right: 24px;
     text-align: right;
 }
+
 #acl {
     color: #00aeef;
     font-family: 'OpenSans-Regular';
@@ -166,42 +192,29 @@ video {
     font-size: 13px;
 }
 
-#mediaBtn {
-    margin-top: 40px;
-}
 #cam, #mic {
     font-size: 12px;
     height: 52px;
-    border-right: none;
     font-family: 'OpenSans-Bold';
     text-decoration: none;
 }
 
 #camSpan, #micSpan {
     position: relative;
-    top: 15px;
 }
+
 #camSpan {
     left: 11px;
 }
+
 #micSpan {
     left: 9px;
 }
-#cam {
-    width: 50%;
-    float: left;
-}
-#mic {
-    width: 48%;
-    float: right;
-}
 
-#shareRoomLink {
-    margin-top: 93px;
-}
 #manageRoomLink {
     margin-top: -1px;
 }
+
 #shareRoomLink, #manageRoomLink {
     color: white;
     text-decoration: none;
@@ -215,8 +228,15 @@ video {
     border-color: rgb(15, 15, 15);
     border-right: none;
 }
+
 #shareRoomLink.down, #manageRoomLink.down {
     background-image: linear-gradient(#0A0B0C, rgb(30, 33, 35));
+}
+
+#sidebarAcc  {
+    /* Due to the accordion */
+    /* Don't have find better... */
+    margin-top: -3px;
 }
 
 #sidebarAcc .ui-accordion-content {
@@ -225,6 +245,7 @@ video {
     width: 100%;
     overflow: hidden;
 }
+
 .accordionLink {
     display: block;
     width: 100%;
