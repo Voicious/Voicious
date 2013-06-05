@@ -31,14 +31,23 @@ class Room
                 do @connections.dance
         $('#reportBug').click @bugReport
 
-    setPage             : () ->
-        $('#sidebarAcc').accordion { active: false, collapsible: true }
-        $('a#shareRoomLink, a#manageRoomLink').click () ->
-            elem = ($ this)
-            elem.toggleClass 'down'
-            jqSiblinsA = elem.siblings 'a'
-            jqSiblinsA.removeClass 'down'
+    activateCam         : () =>
+        @emitter.trigger 'activable.lock'
+        do @connections.toggleCamera
+        activeStream = @connections.userMedia
+        if activeStream['video'] is on and activeStream['audio'] is off or
+        activeStream['video'] is off and activeStream['audio'] is on
+            ($ '#mic').trigger 'click'
+        else
+            do ($ '#feeds > li:first > video:first').remove
+            do @connections.modifyStream
 
+    activateMic         : () =>
+        do @connections.toggleMicro
+        do ($ '#feeds > li:first > video:first').remove
+        do @connections.modifyStream
+
+    setOnOff            : () =>
         ($ 'a.activable').click () ->
             jqA = ($ this).find 'span'
             icon = do jqA.first
@@ -53,20 +62,21 @@ class Room
                 icon.addClass 'dark-grey'
                 label.text 'OFF'
                 label.css 'color', 'red'
-        ($ '#cam').click () =>
-            do @connections.toggleCamera
-            activeStream = @connections.userMedia
-            if activeStream['video'] is on and activeStream['audio'] is off or
-            activeStream['video'] is off and activeStream['audio'] is on
-                ($ '#mic').trigger 'click'
-            else
-                do ($ '#feeds > li:first > video:first').remove
-                do @connections.modifyStream
+        ($ '#cam').click @activateCam
+        ($ '#mic').click @activateMic
+        @emitter.on 'activable.lock', (event, data) =>
+                console.log "On doit lock les activable"
+        @emitter.on 'activable.unlock', (event, data) =>
+                console.log "On doit unlock les activable"
 
-        ($ '#mic').click () =>
-            do @connections.toggleMicro
-            do ($ '#feeds > li:first > video:first').remove
-            do @connections.modifyStream
+    setPage             : () ->
+        $('#sidebarAcc').accordion { active: false, collapsible: true }
+        $('a#shareRoomLink, a#manageRoomLink').click () ->
+            elem = ($ this)
+            elem.toggleClass 'down'
+            jqSiblinsA = elem.siblings 'a'
+            jqSiblinsA.removeClass 'down'
+        do @setOnOff
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.
