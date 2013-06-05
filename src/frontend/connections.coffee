@@ -57,6 +57,8 @@ class PC
                 video : createVideoTag event.stream
                 uid   : @id
             emitter.trigger 'stream.create', data
+        @pc.onremovestream = (event) =>
+                console.log event
         @addStream localStream
 
     addStream : (s) =>
@@ -90,6 +92,9 @@ class PC
             , errorHandler
         , errorHandler, @constraints
 
+    removeStream : (stream) =>
+        @pc.removeStream stream
+
     createAnswer : (offeredDescription) =>
         @pc.setRemoteDescription offeredDescription, () =>
             @pc.createAnswer (description) =>
@@ -114,6 +119,9 @@ class Peer
 
     setLocalStream : (localStream) =>
         @pc.addStream localStream
+
+    rmLocalStream  : (localStream) =>
+        @pc.removeStream localStream
 
     offerHandshake : () =>
         do @pc.createOffer
@@ -142,14 +150,19 @@ class Connections
         @emitter.on 'camera.enable', @enableCamera
 
     toggleCamera : () =>
-        console.log 'On toggle la cam'
         @userMedia['video'] = !@userMedia['video']
-        do @enableCamera
+        do ($ '#feeds > li:first > video:first').remove
+        if @localStream isnt undefined
+            do @localStream.stop
+            console.log @peers
+            for id, peer of @peers
+                peer.rmLocalStream @localStream
+        @localStream = undefined
+        if @userMedia['video'] is yes or @userMedia['audio'] is yes
+            console.log "On Enable la camera"
+            do @enableCamera
 
     toggleMicro : () =>
-        console.log 'On toggle le mic'
-        @userMedia['audio'] = !@userMedia['audio']
-        do @enableCamera
 
     dance : () =>
         @ws.dance @wsPortal
