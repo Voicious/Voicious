@@ -57,12 +57,13 @@ class Websocket
         sock.name        = name
         sock._h          = undefined
         sock._timeout    = undefined
+        sock._nextPing   = undefined
         sock.onmessage   = (message) ->
             that.onmessage @, message
         sock.onclose     = () ->
             that.close @
         @send sock, { type : 'authenticated' }
-        setTimeout (() =>
+        sock._nextPing   = setTimeout (() =>
             @sendPing sock
         ), 60000
         if not @socks[rid]?
@@ -78,6 +79,12 @@ class Websocket
         @socks[rid][uid] = sock
 
     close : (sock, reason = 'Session closed') =>
+        if sock._timeout?
+            clearTimeout sock._timeout
+            sock._timeout  = undefined
+        if sock._nextPing?
+            clearTimeout sock._nextPing
+            sock._nextPing = undefined
         delete @socks[sock.rid][sock.uid]
         for uid of @socks[sock.rid]
             if @socks[sock.rid][uid]?
@@ -98,9 +105,9 @@ class Websocket
             when 'pong' then do () =>
                 if message.params.token is sock._h
                     clearTimeout sock._timeout
-                    sock._timeout = undefined
-                    sock._h       = undefined
-                    setTimeout (() =>
+                    sock._timeout  = undefined
+                    sock._h        = undefined
+                    sock._nextPing = setTimeout (() =>
                         @sendPing sock
                     ), 60000
 
