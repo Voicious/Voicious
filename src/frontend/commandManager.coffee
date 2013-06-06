@@ -21,6 +21,8 @@ class CommandManager
     constructor     : (@emitter) ->
         @emitter.on 'chat.cmd', (event, data) =>
             @parseCmd data
+        @emitter.on 'cmd.kick', (event, data) =>
+            @onKick data        
 
     # Parse the command and call the right function.
     parseCmd        : (command) =>
@@ -35,6 +37,8 @@ class CommandManager
         message = { type : 'cmd.kick', to : user, params : { message : reason } }
         @emitter.trigger 'message.sendToOneName', message
         
-    
+    onKick          : (data) =>
+        window.location.href = '/'
+
 if window?
     window.CommandManager   = CommandManager

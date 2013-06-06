@@ -232,7 +232,7 @@ class Connections
 
     getIdFromUsername : (username) =>
         id = undefined
-        for peer in @peers
+        for p, peer of @peers
             if peer.name is username
                 id = peer.id
                 break

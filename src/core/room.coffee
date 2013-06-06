@@ -102,7 +102,9 @@ class _Room
 
     # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>
-        Db.insert 'room', {}, (newitem) =>
+        user = req.body
+        param.owner = user._id
+        Db.insert 'room', param, (newitem) =>
             res.redirect "/room/#{newitem._id}"
 
     redirectRoom : (req, res) =>

@@ -101,15 +101,20 @@ class Websocket
                 # Temporary
                 # check for the command system
                 if message.params.data.type is 'cmd.kick'
-                    Request.get "{Config.Restapi.Url}/user?uid=#{sock.uid}&rid=#{sock.rid}", (e, r, u) => 
-                        if e
-                            console.log "Error, user can't kick"
-                        else
-                            console.log "kick his butt outta there !"
-                s = @socks[sock.rid][message.params.to]
-                if s?
-                    message.params.data.params.from = sock.uid
-                    @send @socks[sock.rid][message.params.to], message.params.data
+                    Db.get 'room', sock.rid, (res) =>
+                        owner = String res.owner
+                        from = String sock.uid
+                        if owner is from
+                            s = @socks[sock.rid][message.params.to]
+                            if s?
+                                message.params.data.params.from = sock.uid
+                                @send @socks[sock.rid][message.params.to], message.params.data
+                else
+                    s = @socks[sock.rid][message.params.to]
+                    if s?
+                        message.params.data.params.from = sock.uid
+                        @send @socks[sock.rid][message.params.to], message.params.data
+
             when 'pong' then do () =>
                 if message.params.token is sock._h
                     clearTimeout sock._timeout
