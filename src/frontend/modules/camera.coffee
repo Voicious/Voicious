@@ -27,7 +27,7 @@ class Camera extends Module
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
-            @newStream event, { video : video , uid : window.Voicious.currentUser.uid }
+            @newStream event, { video : video , uid : window.Voicious.currentUser.uid , local : yes }
         ($ window).on 'resize', @squareMainCam
         ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
         ($ '#feeds').delegate 'video', 'click', (event) =>
@@ -64,6 +64,8 @@ class Camera extends Module
         video.addClass 'thumbnailVideo flipH'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
+        if not @currentZoom? and (not data.local? or not data.local)
+            @zoom data.uid, video
 
     # Must set margin-left css propriety when adding a video tag to the page
     # Width is computed using video original size (640 * 480) since css value is wrong at this time
