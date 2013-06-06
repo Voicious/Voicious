@@ -18,10 +18,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 Path    = require 'path'
 
 # Define internal et external access adress.
-DefaultHostname = (hostname) =>
+DefaultHostname = (hostname, def = { Internal : '' , External : '' }) =>
     h =
-        'Internal' : 'localhost',
-        'External' : 'localhost'
+        'Internal' : def.Internal or 'localhost'
+        'External' : def.External or 'localhost'
     if hostname?
         if (typeof hostname) is (typeof "")
             h.Internal = hostname
@@ -43,17 +43,25 @@ class _Config
     # Initialize the database config with basic value if configuration file doesn't
     # contain the required informations.
     checkDatabaseConfig : () ->
-        @Database.Enabled = 0           if not @Database.Enabled?
-        @Database.Name = "voicious"     if not @Database.Name?
-        @Database.Connector = "mongodb" if not @Database.Connector?
-        @Database.Hostname = DefaultHostname @Database.Hostname
+        @Database.Name      = "voicious"          if not @Database.Name?
+        @Database.Connector = "mongodb"           if not @Database.Connector?
+        @Database.Sessions  = 'mongo'             if @Database.Sessions is 'mongodb'
+        @Database.Hostname  = DefaultHostname @Database.Hostname
 
     # Initialize the WebSocket server config with basic value if configuration file doesn't
     # contain the required informations.
     checkWebsocketConfig : () ->
         @Websocket.Enabled  = 0           if not @Websocket.Enabled?
         @Websocket.Hostname = DefaultHostname @Websocket.Hostname
-        @Websocket.Port     = 1337        if not @Websocket.Port?
+        @Websocket.Port     = 4243        if not @Websocket.Port?
+
+    #
+    checkSessionsConfig : () ->
+        @Voicious.Sessions           = { }                 if not @Voicious.Sessions?
+        @Voicious.Sessions.Connector = @Database.Connector if not @Voicious.Sessions.Connector
+        if @Voicious.Sessions.Connector is 'mongodb'
+            @Voicious.Sessions.Connector = 'mongo'
+        @Voicious.Sessions.Hostname  = DefaultHostname @Voicious.Sessions.Hostname, @Database.Hostname
 
     # Load the configuration file.
     loadJSONConfig : () ->
@@ -64,6 +72,7 @@ class _Config
         do @checkCoreConfig
         do @checkDatabaseConfig
         do @checkWebsocketConfig
+        do @checkSessionsConfig
 
     constructor : () ->
         @Paths  = {}
