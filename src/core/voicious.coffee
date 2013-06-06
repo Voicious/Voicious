@@ -72,7 +72,7 @@ class Voicious
     # Configure the __Express__ instance.
     configure       : () =>
         sstore = new SStore {
-            db   : 'vcssess'
+            db   : 'voicious_sessions'
             host : Config.Voicious.Sessions.Hostname.Internal
         }
         @app.set 'port', Config.Voicious.Port
