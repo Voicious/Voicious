@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 md5         = require 'MD5'
 
 Config      = require '../common/config'
-{Db}        = require './' + Config.Database.Connector
+{Db}        = require '../common/' + Config.Database.Connector
 
 # Generate a unique token.
 class _Token

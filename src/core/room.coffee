@@ -21,10 +21,10 @@ md5         = require 'MD5'
 
 Config      = require '../common/config'
 {Session}   = require './session'
-{Errors}    = require './errors'
+{Errors}    = require '../common/errors'
 {Token}     = require './token'
 {Translator}= require './trans'
-{Db}        = require './' + Config.Database.Connector
+{Db}        = require '../common/' + Config.Database.Connector
 
 class _Room
     # Initialize a nodemailer module and a list of modules

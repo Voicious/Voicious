@@ -17,7 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 MongoDB         = require 'mongodb'
 
-Config          = require '../common/config'
+Config          = require './config'
 {Database}      = require './database'
 {Errors}        = require './errors'
 

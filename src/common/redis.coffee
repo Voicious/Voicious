@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 RedisDriver     = require 'redis'
 MD5             = require 'MD5'
 
-Config          = require '../common/config'
+Config          = require './config'
 {Database}      = require './database'
 {Errors}        = require './errors'
 

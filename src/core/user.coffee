@@ -18,10 +18,10 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 md5             = require 'MD5'
 
-{Errors}        = require './errors'
+{Errors}        = require '../common/errors'
 Config          = require '../common/config'
 {Stats}         = require './stats'
-{Db}            = require './' + Config.Database.Connector
+{Db}            = require '../common/' + Config.Database.Connector
 
 class _User
     constructor : () ->

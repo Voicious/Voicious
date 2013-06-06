@@ -17,7 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 {User}          = require './user'
 Config          = require '../common/config'
-{Db}            = require './' + Config.Database.Connector
+{Db}            = require '../common/' + Config.Database.Connector
 
 class _Session
     constructor     : () ->

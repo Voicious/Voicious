@@ -21,9 +21,10 @@ Fs      = require 'fs'
 Path    = require 'path'
 
 Config       = require '../common/config'
-{Errors}     = require './errors'
+{Errors}     = require '../common/errors'
 {Translator} = require './trans'
-{Db}         = require './' + Config.Database.Connector
+{Db}         = require '../common/' + Config.Database.Connector
+
 
 # Just implement a _currying_ system, it will be used for routes.
 Function.prototype.curry = () ->

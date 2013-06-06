@@ -15,8 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-Config          = require '../common/config'
-{Translator}    = require './trans'
+Config          = require './config'
+{Translator}    = require '../core/trans'
 
 class Errors
     # Configure 404.
