@@ -67,6 +67,7 @@ class _Redis extends Database
                     @client.hmset filename, data, (err, res) =>
                         if err
                             throw new Errors.Error err
+                        data._id = id
                         do callback
 
         delete : (filename, id, callback) =>
