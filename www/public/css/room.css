@@ -42,10 +42,14 @@ body {
 .disable {
     color: #333;
 }
+
 .no-relative {
     position: absolute;
 }
 
+.index1 {
+    z-index: 1;
+}
 .column {
     padding: 10px 0 10px 10px;
 }

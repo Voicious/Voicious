@@ -63,6 +63,17 @@ class UserList extends Module
         columns  = parseInt (nbUsers / inOneCol + 0.5)
         @jqContainer.css 'width', columns * 118
 
+    muteStream  : () ->
+        button = $ this
+        video = (button.siblings 'video')[0]
+        text = do button.text
+        if text is 'Mute'
+            video.volume = 0
+            button.text 'Unmute'
+        else
+            video.volume = 1
+            button.text 'Mute'
+
     # Update the user list window.
     display         : () =>
         do @jqContainer.empty
@@ -72,6 +83,11 @@ class UserList extends Module
                     id    : "video_#{uid}"
                     class : 'thumbnail-wrapper video-wrapper color-one'
                 })
+                muteBtn = ($ '<button>', {
+                    class : 'muteUnmute no-relative index1',
+                    text  : 'Mute',
+                    click : @muteStream
+                }).appendTo li
                 if @users[uid].video?
                     li.append @users[uid].video
                     do @users[uid].video.play
