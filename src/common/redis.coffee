@@ -87,7 +87,8 @@ class _Redis extends Database
             @client.hgetall filename, (err, res) =>
                 if err
                     throw new Errors.Error err
-                res._id = id
+                if res?
+                    res._id = id
                 callback res
 
         close : () ->

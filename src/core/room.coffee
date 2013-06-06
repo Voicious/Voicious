@@ -42,7 +42,7 @@ class _Room
     # Create a new Room and check if the user is logged in.
     roomPage : (req, res, next) =>
         Db.get 'room', req.params.roomid, (body) =>
-            if body.length is 0
+            if not body? or body.length is 0
                 Errors.RenderNotFound req, res
             user          = req.currentUser
             options       =

@@ -96,6 +96,7 @@ class Voicious
                 Errors.RenderNotFound req, res
             else
                 Errors.RenderError req, res
+            console.error err
         @configured = yes
 
     # Main function
