@@ -41,6 +41,9 @@ class Ws
         message = JSON.parse message.data
         @emitter.trigger message.type, message.params
 
+    close : () =>
+        do @ws.close
+
 class PC
     constructor : (@id, @ws, emitter, localStream) ->
         iceServers         = { iceServers : [ { url : 'stun:23.21.150.121' } ] }
@@ -61,6 +64,9 @@ class PC
             streamID = event.stream.id # Get the old stream and
             do ($ "[data-streamid=#{streamID}]").remove # remove it
         @addStream localStream
+
+    close : () =>
+        do @pc.close
 
     addStream : (s) =>
         if s?
@@ -139,6 +145,9 @@ class Peer
         else
             @pc.conclude (new window.RTCSessionDescription answeredDescription)
 
+    close : () =>
+        do @pc.close
+
 class Connections
     constructor : (@emitter, @uid, @rid, @wsPortal) ->
         @peers       = { }
@@ -149,6 +158,10 @@ class Connections
             audio : no
         @emitter.on 'message.sendtoall', @sendToAll
         @emitter.on 'camera.enable', @enableCamera
+        window.onClose = () =>
+            do @ws.close
+            for peer in @peers
+                do peer.close
 
     modifyStream : () =>
         if @localStream isnt undefined
