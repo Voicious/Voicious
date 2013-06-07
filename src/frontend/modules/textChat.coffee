@@ -68,7 +68,9 @@ class TextChat extends Module
 
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
-
+        @emitter.on 'chat.error', (event, data) =>
+            console.log data
+            @addErrorMessage data
 
     appendHTML      : () ->
         html = ($ '<div class="fill-height color-one" id="textChat">
@@ -137,6 +139,19 @@ class TextChat extends Module
                 @newMessageElem message
         else
             @newMessageElem message
+        do @scrollPane.reinitialise
+        @scrollPane.scrollToPercentY 100, no 
+
+    # Add an error message to the text chat window.
+    addErrorMessage : (error) =>
+        jqLastMessage = do (@jqMessageBox.find 'li').last
+        d = new Date
+        jqNewError  = ($ '<div>', { class : 'blueduckturquoise italic' }).html error.text
+        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at' + ((do d.toTimeString).substr 0, 5)
+        jqNewError.append jqNewTime
+        if jqLastMessage[0]?
+            jqLastMessage.append '<div id="tcSeparator"></div>'
+        (do @scrollPane.getContentPane).append ($ '<li>').append jqNewError
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
 

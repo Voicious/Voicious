@@ -209,10 +209,13 @@ class Connections
     sendToOneName : (event, msg) =>
         message = { type : msg.type, params : msg.params }
         userId = @getIdFromUsername msg.to
-        @ws.forward userId, message
+        if userId is undefined
+            @emitter.trigger 'chat.error', { text : 'kick: ' + msg.to + ' isn\'t in this room.' }
+        else    
+            @ws.forward userId, message
 
     sendToOneId : (event, msg) =>
-        message = { type : msg.type, params : msg.params }  
+        message = { type : msg.type, params : msg.params }
         @ws.forward msg.to, message
 
     enableCamera : () =>

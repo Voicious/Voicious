@@ -109,6 +109,9 @@ class Websocket
                             if s?
                                 message.params.data.params.from = sock.uid
                                 @send @socks[sock.rid][message.params.to], message.params.data
+                        else
+                            error = { type : 'chat.error',  params : {text : 'kick: forbidden.'} }
+                            @send @socks[sock.rid][from], error
                 else
                     s = @socks[sock.rid][message.params.to]
                     if s?
