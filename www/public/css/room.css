@@ -302,12 +302,12 @@ video {
 #chatcontent {
     float: left;
     position: relative;
-    width: calc(100% - 32px);
+    width: calc(100% - 16px);
     height: 100%;
     font-size: 13px;
     overflow: hidden;
     margin-top: 30px;
-    padding: 0 16px;
+    padding-left: 16px;
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
@@ -315,7 +315,7 @@ video {
 }
 
 #chatcontent ul {
-    width: calc(100% - 32px);
+    width: calc(100% - 16px);
     height: 100%;
     position: absolute;
     overflow: auto;
@@ -340,6 +340,7 @@ video {
     word-wrap: break-word;
     text-align: justify;
     margin-top: 5px;
+    margin-right: 16px;
 }
 
 .chatmessage p {
@@ -356,7 +357,7 @@ video {
 }
 
 #tcSeparator {
-    width: calc(100% + 4px);
+    width: calc(100% - 12px);
     border-bottom: 1px solid black;
     margin-top: 13px;
     margin-bottom: 11px;
