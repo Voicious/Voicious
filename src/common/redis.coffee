@@ -18,7 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 RedisDriver     = require 'redis'
 MD5             = require 'MD5'
 
-Config          = require '../common/config'
+Config          = require './config'
 {Database}      = require './database'
 {Errors}        = require './errors'
 
@@ -67,6 +67,7 @@ class _Redis extends Database
                     @client.hmset filename, data, (err, res) =>
                         if err
                             throw new Errors.Error err
+                        data._id = id
                         do callback
 
         delete : (filename, id, callback) =>
@@ -87,7 +88,8 @@ class _Redis extends Database
             @client.hgetall filename, (err, res) =>
                 if err
                     throw new Errors.Error err
-                res._id = id
+                if res?
+                    res._id = id
                 callback res
 
         close : () ->

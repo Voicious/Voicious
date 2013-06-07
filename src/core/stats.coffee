@@ -19,7 +19,7 @@ Moment      = require 'moment'
 
 Config      = require '../common/config'
 {Session}   = require './session'
-{Errors}    = require './errors'
+{Errors}    = require '../common/errors'
 
 class _Stats
     constructor: () ->

@@ -21,9 +21,11 @@ Fs      = require 'fs'
 Path    = require 'path'
 
 Config       = require '../common/config'
-{Errors}     = require './errors'
+{Errors}     = require '../common/errors'
 {Translator} = require './trans'
-{Db}         = require './' + Config.Database.Connector
+{Db}         = require '../common/' + Config.Database.Connector
+
+SStore       = (require 'connect-' + Config.Voicious.Sessions.Connector) Express
 
 # Just implement a _currying_ system, it will be used for routes.
 Function.prototype.curry = () ->
@@ -69,6 +71,10 @@ class Voicious
 
     # Configure the __Express__ instance.
     configure       : () =>
+        sstore = new SStore {
+            db   : 'voicious_sessions'
+            host : Config.Voicious.Sessions.Hostname.Internal
+        }
         @app.set 'port', Config.Voicious.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
@@ -78,7 +84,10 @@ class Voicious
         @app.use do Express.bodyParser
         @app.use do Express.methodOverride
         @app.use Express.cookieParser 'your secret here'
-        @app.use do Express.session
+        @app.use Express.session {
+            secret : 'your secret here',
+            store  : sstore
+        }
         @app.use @app.router
         @app.use Express.static Config.Paths.Webroot
         do @setAllRoutes
@@ -87,6 +96,7 @@ class Voicious
                 Errors.RenderNotFound req, res
             else
                 Errors.RenderError req, res
+            console.error err
         @configured = yes
 
     # Main function

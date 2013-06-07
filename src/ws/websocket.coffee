@@ -20,7 +20,7 @@ Ws      = (require 'ws').Server
 MD5     = require 'MD5'
 
 Config  = require '../common/config'
-{Db}    = require '../core/' + Config.Database.Connector
+{Db}    = require '../common/' + Config.Database.Connector
 
 class Websocket
     constructor : () ->

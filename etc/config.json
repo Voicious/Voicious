@@ -6,8 +6,7 @@
         },
         "Port"      : 4242,
         "Acl"       : ["administrator", "registered", "temporary"],
-        "Roles"     : ["operator", "owner"],
-        "Enabled"   : 1
+        "Roles"     : ["operator", "owner"]
     },
     "Websocket"  : {
         "Hostname"  : {

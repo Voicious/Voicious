@@ -17,7 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 MongoDB         = require 'mongodb'
 
-Config          = require '../common/config'
+Config          = require './config'
 {Database}      = require './database'
 {Errors}        = require './errors'
 
@@ -47,6 +47,7 @@ class _Mongo extends Database
             coll.update {'_id': new MongoDB.ObjectID(String(id))}, {$set: cur}, {safe: on}, (err) =>
                 if err
                     throw err
+                cur._id = id
                 do callback
 
         get : (collName, id, callback) =>
@@ -54,6 +55,7 @@ class _Mongo extends Database
             coll.findOne {'_id': new MongoDB.ObjectID(String(id))}, (err, doc) =>
                 if err
                     throw err
+                doc._id = String doc._id
                 callback doc
 
         find : (collName, filters, callback) =>

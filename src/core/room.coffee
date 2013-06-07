@@ -21,10 +21,10 @@ md5         = require 'MD5'
 
 Config      = require '../common/config'
 {Session}   = require './session'
-{Errors}    = require './errors'
+{Errors}    = require '../common/errors'
 {Token}     = require './token'
 {Translator}= require './trans'
-{Db}        = require './' + Config.Database.Connector
+{Db}        = require '../common/' + Config.Database.Connector
 
 class _Room
     # Initialize a nodemailer module and a list of modules
@@ -42,7 +42,7 @@ class _Room
     # Create a new Room and check if the user is logged in.
     roomPage : (req, res, next) =>
         Db.get 'room', req.params.roomid, (body) =>
-            if body.length is 0
+            if not body? or body.length is 0
                 Errors.RenderNotFound req, res
             user          = req.currentUser
             options       =
