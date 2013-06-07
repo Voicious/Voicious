@@ -31,17 +31,16 @@ processes = []
 if not Fs.existsSync Config.Paths.Logs
     Fs.mkdirSync Config.Paths.Logs, '0755'
 
-if Config.Voicious.Enabled
-    voiciousAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.access.log'), 'a+'
-    voiciousErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.error.log'), 'a+'
-    voicious          = spawn 'node', [(Path.join Config.Paths.Root, 'lib', 'core', 'voicious.js')]
-    voicious.stdout.on 'data', (data) =>
-        process.stdout.write "#{data}"
-        WriteLog voiciousAccessLog, data
-    voicious.stderr.on 'data', (data) =>
-        process.stderr.write "#{data}"
-        WriteLog voiciousErrorLog, data
-    processes.push voicious
+voiciousAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.access.log'), 'a+'
+voiciousErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.error.log'), 'a+'
+voicious          = spawn 'node', [(Path.join Config.Paths.Root, 'lib', 'core', 'voicious.js')]
+voicious.stdout.on 'data', (data) =>
+    process.stdout.write "#{data}"
+    WriteLog voiciousAccessLog, data
+voicious.stderr.on 'data', (data) =>
+    process.stderr.write "#{data}"
+    WriteLog voiciousErrorLog, data
+processes.push voicious
 
 if Config.Websocket.Enabled
     wsAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'ws.access.log'), 'a+'
