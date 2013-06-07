@@ -109,20 +109,18 @@ button {
     padding-left: 0;
 }
 
-ul#videos {
-    width: 115px;
+ul#feeds {
+    width: 118px;
 }
 
 li.thumbnail-wrapper {
     width: 115px;
     height: 115px;
-    margin-bottom: 3px;
+    margin: 0 3px 3px 0;
 }
 
 .video-wrapper {
-    position: relative;
-    top: 0;
-    left: 0;
+    float: left;
     overflow: hidden;
 }
 

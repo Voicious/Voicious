@@ -20,10 +20,13 @@ class UserList extends Module
     constructor     : (emitter) ->
         super emitter
         @jqContainer = ($ 'ul#feeds')
+        @columns     = 1
         @users       = { }
         @users[window.Voicious.currentUser.uid] = window.Voicious.currentUser
         do @configureEvents
         do @display
+        ($ window).on 'resize', () =>
+            do @updateColumns
 
     configureEvents     : () =>
         @emitter.on 'peer.list', @fill
@@ -49,6 +52,17 @@ class UserList extends Module
             when 'remove' then delete @users[user.id]
         do @display
 
+    updateColumns : () =>
+        nbUsers  = 0
+        for uid of @users
+            ++nbUsers
+        height   = do (do @jqContainer.parent).height
+        inOneCol = parseInt (height / 115)
+        if inOneCol > nbUsers
+            inOneCol = nbUsers
+        columns  = parseInt (nbUsers / inOneCol + 0.5)
+        @jqContainer.css 'width', columns * 118
+
     # Update the user list window.
     display         : () =>
         do @jqContainer.empty
@@ -62,6 +76,7 @@ class UserList extends Module
                     li.append @users[uid].video
                     do @users[uid].video.play
                 @jqContainer.append li
+        do @updateColumns
 
 if window?
     window.UserList     = UserList
