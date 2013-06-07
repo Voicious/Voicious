@@ -55,7 +55,7 @@ class _Mongo extends Database
             coll.findOne {'_id': new MongoDB.ObjectID(String(id))}, (err, doc) =>
                 if err
                     throw err
-                doc._id = String(doc._id)
+                doc._id = String doc._id
                 callback doc
 
         find : (collName, filters, callback) =>
