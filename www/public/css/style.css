@@ -101,11 +101,11 @@ body {
     color: #ffffff;
 }
 
-.red {
+button.red, .red {
     color: #c92a2d;
 }
 
-.green {
+button.green, .green {
     color: #8aff00;
 }
 

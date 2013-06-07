@@ -70,7 +70,7 @@ class UserList extends Module
             if @users[uid]?
                 li = ($ '<li>', {
                     id    : "video_#{uid}"
-                    class : 'thumbnail-wrapper video-wrapper color-three'
+                    class : 'thumbnail-wrapper video-wrapper color-one'
                 })
                 if @users[uid].video?
                     li.append @users[uid].video

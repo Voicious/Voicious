@@ -49,13 +49,12 @@ class Room
         do @connections.modifyStream
 
      refreshOnOff : (btn, val) =>
-        jqSpans = btn.children 'span'
-        icon = do jqSpans.first
-        label = do jqSpans.last
+        label = btn.find 'span'
+        icon  = btn.find 'i'
         text = (do label.text)
         oldVal = if text is 'OFF' then off else on
         if oldVal isnt val
-            label.toggleClass 'green red'
+            btn.toggleClass 'green red'
             icon.toggleClass 'dark-grey white'
             label.text (if (do label.text) is 'OFF' then 'ON' else 'OFF')
 

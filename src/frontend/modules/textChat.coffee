@@ -66,7 +66,7 @@ class TextChat extends Module
 
 
     appendHTML      : () ->
-        html = ($ '<div class="fill-height color-three" id="textChat">
+        html = ($ '<div class="fill-height color-one" id="textChat">
                      <div style="height: 81%;" class="module-wrapper">
                        <div id="chatcontent">
                          <ul></ul>

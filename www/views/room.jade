@@ -43,29 +43,34 @@ block content
             p#login.textBtn #{login}
             span#acl #{trans.user}
             div#onOffCtn(data-step='1', data-intro='#{trans.mediaTuto}', data-position='right')
-              button#cam.activable
-                span#camSpan.icon.iconMedia.icon-facetime-video.dark-grey
-                span#camLabel.red OFF
-              button#mic.activable
-                span#micSpan.icon.iconMedia.icon-microphone.dark-grey
-                span#micLabel.red OFF
+              button#cam.activable.red.color-one
+                i.icon.iconMedia.icon-facetime-video.dark-grey
+                span OFF
+              button#mic.activable.red.color-one
+                i.icon.iconMedia.icon-microphone.dark-grey
+                span OFF
             div#sidebarAcc
               a#shareRoomLink(data-step='2', data-intro='#{trans.shareRoomTuto}', data-position='right')
-                span#shareRoomSpan.icon.iconOther.icon-share-alt
-                p#labelShareRoom #{trans.shareRoomID}
+                p#labelShareRoom
+                  i.icon.iconOter.icon-share-alt
+                  | #{trans.shareRoomID}
               div.accordionTab
                 a#clipboardLink.accordionLink(style='display: none;')
-                  span#clipboardSpan.icon.iconOther.icon-copy
-                  p.labelOther #{trans.copyRoomID}
+                  p.labelOther
+                    i.icon.iconOther.icon-copy
+                    | #{trans.copyRoomID}
                 a#inviteContactLink.accordionLink(style='display: none;')
-                  span#inviteContactSpan.icon.iconOther.icon-plus
-                  p.labelOther #{trans.inviteContacts}
+                  p.labelOther
+                    i.icon.iconOther.icon-plus
+                    | #{trans.inviteContacts}
                 a#twitterLink.accordionLink
-                  span#twitterSpan.icon.iconOther.icon-twitter
-                  p.labelOther #{trans.shareOnTwitter}
+                  p.labelOther
+                    i.icon.iconOther.icon-twitter
+                    | #{trans.shareOnTwitter}
                 a#facebookLink.accordionLink
-                  span#facebookSpan.icon.iconOther.icon-facebook-sign
-                  p.labelOther #{trans.shareOnFacebook}
+                  p.labelOther
+                    i.icon.iconOther.icon-facebook-sign
+                    | #{trans.shareOnFacebook}
               //a#manageRoomLink(style='display: none;', data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
               a#manageRoomLink(style='display: none;')
                 span#manageRoomSpan.icon.iconOther.icon-wrench

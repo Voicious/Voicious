@@ -15,15 +15,11 @@ body {
 }
 
 .color-one {
-    background-color: rgb(30, 33, 35);
+    background-color: #131517;
 }
 
 .color-two {
-    background-color: rgb(15, 15, 15);
-}
-
-.color-three {
-    background-color: rgb(30, 33, 35);
+    background-color: #090a0b;
 }
 
 .container-fluid {
@@ -69,9 +65,7 @@ body {
 
 a, a:focus {
     color: white;
-    background-color: rgb(30, 33, 35);
     text-decoration: none;
-    box-shadow: inset 0 1px rgba(255,255,255,.1);
     border-width: 1px;
     border-style: solid;
     border-color: rgb(15, 15, 15);
@@ -93,20 +87,20 @@ button {
     border-style: solid;
     border-color: rgb(15, 15, 15);
     border-right: none;
+    background: #0e1011;
 }
 
 .activable {
     width: 50%;
     color: white;
-    background-color: rgb(30, 33, 35);
     text-decoration: none;
-    box-shadow: inset 0 1px rgba(255,255,255,.1);
     border-width: 1px;
     border-style: solid;
     border-color: rgb(15, 15, 15);
     border-right: none;
     cursor: pointer;
     outline: none;
+    box-shadow: inset 0 1px rgba(255,255,255,.05);
 }
 
 .icon {
@@ -116,9 +110,8 @@ button {
 
 .iconMedia {
     height: 30px;
-    margin-left: -10px;
     font-size: 22px;
-    margin-right: 18px;
+    margin-right: 7px;
 }
 .iconOther {
     float: left;
@@ -163,27 +156,12 @@ video {
     height: 100%;
 }
 
-#camLabel, #micLabel {
-    position: relative;
-}
-
-#camLabel {
-    margin-left: -2px;
-}
-
-
 .labelOther {
     float: left;
     margin-left: 2px;
 }
 
-#shareRoomSpan, #manageRoomSpan {
-    margin-top: 14px;
-    margin-left: -13px;
-    margin-right: 2px;
-}
-
-#labelShareRoom, #labelManageRoom {
+#sidebarAcc > a > p {
     margin-top: 14px;
     float: left;
 }
@@ -213,38 +191,46 @@ video {
     text-decoration: none;
 }
 
-#camSpan, #micSpan {
-    position: relative;
+#cam span, #mic span {
+    font-weight: bold;
 }
 
-#camSpan {
-    left: 11px;
-}
-
-#micSpan {
-    left: 9px;
+#cam i, #mic i {
+     margin-left: 
 }
 
 #manageRoomLink {
     margin-top: -1px;
 }
 
-#shareRoomLink, #manageRoomLink {
+#sidebarAcc > a {
     color: white;
     text-decoration: none;
     font-family: 'OpenSans-Bold';
-    font-size: 9px;
+    font-size: 12px;
     text-decoration: none;
-    background-color: rgb(30, 33, 35);
     height: 40px;
     border-width: 1px;
     border-style: solid;
-    border-color: rgb(15, 15, 15);
+    border-color: #090a0b;
     border-right: none;
+    padding-left: 10px;
+    box-shadow: inset 0 1px rgba(255,255,255,.05);
 }
 
-#shareRoomLink.down, #manageRoomLink.down {
-    background-image: linear-gradient(#0A0B0C, rgb(30, 33, 35));
+#sidebarAcc > a:hover {
+    background: #0e1011;
+}
+
+#sidebarAcc > a.down {
+    background: #070809;
+    background: -moz-linear-gradient(top, #070809 0%, #191b1e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#070809), color-stop(100%,#191b1e));
+    background: -webkit-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: -o-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: -ms-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: linear-gradient(to bottom, #070809 0%,#191b1e 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#070809', endColorstr='#191b1e',GradientType=0 );
 }
 
 #sidebarAcc  {
@@ -255,7 +241,6 @@ video {
 
 #sidebarAcc .ui-accordion-content {
     padding: 0;
-    /*height: 110px;*/
     height: 56px;
     width: 100%;
     overflow: hidden;
@@ -265,11 +250,15 @@ video {
     display: block;
     width: 100%;
     font-family: 'OpenSans-Bold';
-    font-size: 8px;
+    font-size: 11px;
     padding: 7px;
     float: left;
     border-right: none;
     border-top: none;
+}
+
+#sidebarAcc i {
+    margin-right: 6px;
 }
 
 /* chat text */
@@ -287,7 +276,7 @@ video {
 }
 
 #chatform textarea {
-    color: #4D5C6B;
+    color: #91a2b2;
     background-color: #101214;
     border: none;
     outline: none;
@@ -311,7 +300,6 @@ video {
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
-    /*box-shadow: inset 0 4px rgba(14,15,17,.1);*/
 }
 
 #chatcontent ul {
@@ -364,34 +352,17 @@ video {
     margin-left: -2px;
 }
 
-/* tutorial mode */
-#tutoModeBtn {
-    color: white;
-    text-decoration: none;
-    font-family: 'OpenSans-Bold';
-    font-size: 9px;
-    text-decoration: none;
-    background-color: rgb(30, 33, 35);
-    height: 49px;
-    width: 100%;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(15, 15, 15);
-    border-right: none;
-    border-top: none;
-}
-
 #spanTutoMode {
     float: left;
     margin-left: 10px;
     margin-top: 6px;
 }
 
-#labelTutoMode {
-    float: left;
-    margin-left: 4px;
-}
-
 #mainCam video {
     position: absolute;
+}
+
+#sidebarAcc .sidebarlinkoutsideacc {
+    border-top: none;
+    margin-top: 0;
 }

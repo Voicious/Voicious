@@ -44,7 +44,7 @@ class Camera extends Module
 
     appendHTML  : () ->
         html = ($ '<div class="row-fluid" id="bottom-row">
-            <div class="darkgray span12" id="camera">
+            <div class="color-one span12" id="camera">
                 <ul id="videos">
                     <li class="box thumbnail-wrapper"></li>
                     <div class="localVideoContainer box"></div>
@@ -52,7 +52,7 @@ class Camera extends Module
             </div>
         </div>')
         ($ '#middle-row').after html
-        ($ '<div class="darkgray fill-height module" id="mainCam"></div>').appendTo '#middle-row'
+        ($ '<div class="color-one fill-height module" id="mainCam"></div>').appendTo '#middle-row'
         $(window).trigger 'resize'
 
     delStream   : (event, user) =>
