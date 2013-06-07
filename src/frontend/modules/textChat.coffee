@@ -69,7 +69,6 @@ class TextChat extends Module
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
         @emitter.on 'chat.error', (event, data) =>
-            console.log data
             @addErrorMessage data
 
     appendHTML      : () ->
