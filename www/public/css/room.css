@@ -109,20 +109,18 @@ button {
     padding-left: 0;
 }
 
-ul#videos {
-    width: 115px;
+ul#feeds {
+    width: 118px;
 }
 
 li.thumbnail-wrapper {
     width: 115px;
     height: 115px;
-    margin-bottom: 3px;
+    margin: 0 3px 3px 0;
 }
 
 .video-wrapper {
-    position: relative;
-    top: 0;
-    left: 0;
+    float: left;
     overflow: hidden;
 }
 
@@ -260,7 +258,7 @@ video {
     width: 100%;
 }
 
-#chatform input[type="text"] {
+#chatform textarea {
     color: #4D5C6B;
     background-color: #101214;
     border: none;
@@ -270,18 +268,18 @@ video {
     height: calc(100% - 20px);
     border-radius: 0;
     margin: 0;
-    padding-bottom: 32px;
+    resize: none;
 }
 
 #chatcontent {
     float: left;
     position: relative;
-    width: 100%;
+    width: calc(100% - 32px);
     height: 100%;
     font-size: 13px;
     overflow: hidden;
     margin-top: 30px;
-    padding-right: 16px;
+    padding: 0 16px;
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
@@ -289,7 +287,7 @@ video {
 }
 
 #chatcontent ul {
-    width: 98%;
+    width: calc(100% - 32px);
     height: 100%;
     position: absolute;
     overflow: auto;
@@ -297,8 +295,8 @@ video {
 
 .chatmetadata:first-child {
     color: #00AEEF;
-    padding-left: 30px;
 }
+
 .time {
     color: #555;
 }
@@ -314,20 +312,27 @@ video {
     word-wrap: break-word;
     text-align: justify;
     margin-top: 5px;
-    padding-left: 30px;
 }
+
 .chatmessage p {
     line-height: 15px;
     word-wrap: break-word;
     width: 95%;
 }
 
+.chatmessage a {
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
 #tcSeparator {
-    width: 94%;
+    width: calc(100% + 4px);
     border-bottom: 1px solid black;
     margin-top: 13px;
     margin-bottom: 11px;
-    margin-left: 12px;
+    margin-left: -2px;
 }
 
 /* tutorial mode */

@@ -41,19 +41,24 @@ class TextChat extends Module
         @markdown     = new Showdown.converter { extensions : ['voicious'] }
         @jqForm       = ($ '#chatform > form')
         @jqMessageBox = ($ '#chatcontent > ul')
-        @jqInput      = @jqForm.children 'input[type=\'text\']'
+        @jqInput      = @jqForm.children 'textarea'
 
         @scrollPane   = do @jqMessageBox.jScrollPane
         @scrollPane   = @jqMessageBox.data 'jsp'
 
+        @jqInput.on 'keypress', (event) =>
+            if event.keyCode is 13 and not event.shiftKey
+                do event.preventDefault
+                @jqInput.trigger 'submit'
+
         @jqForm.submit (event) =>
             do event.preventDefault
             message = do @jqInput.val
+            message = message.replace /\n/g, '<br />'
             @jqInput.val ''
             @sendMessage message
 
         $(window).resize () =>
-            return
             do @scrollPane.reinitialise
 
         @emitter.on 'chat.message', (event, data) =>
@@ -69,7 +74,7 @@ class TextChat extends Module
                        <div id="chatform">
                          <form>
                            <span>Press ENTER to post</span>
-                           <input type="text"></input>' + 
+                           <textarea type="text"></textarea>' + 
                            # Wait for i18n
                            #<input type="text" data-step="5" data-intro="" data-position="top"></input>
                          '</form>
