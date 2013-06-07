@@ -28,7 +28,11 @@ class Camera extends Module
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
             @newStream event, { video : video , uid : window.Voicious.currentUser.uid , local : yes }
-        ($ window).on 'resize', @squareMainCam
+        ($ window).on 'resize', () =>
+            do @squareMainCam
+            videos = ($ 'video')
+            for video in videos
+                @centerVideoTag { currentTarget : video }
         ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
         ($ '#feeds').delegate 'video', 'click', (event) =>
             clickedVideo = ($ event.target)
