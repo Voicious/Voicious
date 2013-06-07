@@ -98,10 +98,26 @@ class Websocket
         message = JSON.parse message.data
         switch message.type
             when 'forward' then do () =>
-                s = @socks[sock.rid][message.params.to]
-                if s?
-                    message.params.data.params.from = sock.uid
-                    @send @socks[sock.rid][message.params.to], message.params.data
+                # Temporary
+                # check for the command system
+                if message.params.data.type is 'cmd.kick'
+                    Db.get 'room', sock.rid, (res) =>
+                        owner = String res.owner
+                        from = String sock.uid
+                        if owner is from
+                            s = @socks[sock.rid][message.params.to]
+                            if s?
+                                message.params.data.params.from = sock.uid
+                                @send @socks[sock.rid][message.params.to], message.params.data
+                        else
+                            error = { type : 'chat.error',  params : {text : 'kick: forbidden.'} }
+                            @send @socks[sock.rid][from], error
+                else
+                    s = @socks[sock.rid][message.params.to]
+                    if s?
+                        message.params.data.params.from = sock.uid
+                        @send @socks[sock.rid][message.params.to], message.params.data
+
             when 'pong' then do () =>
                 if message.params.token is sock._h
                     clearTimeout sock._timeout

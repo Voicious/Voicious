@@ -317,6 +317,14 @@ video {
     color: #555;
 }
 
+.blueduckturquoise {
+    color: #00c296;
+}
+
+.italic {
+    font-style: italic;
+}
+
 #chatform span {
     float: right;
     margin-bottom: 8px;

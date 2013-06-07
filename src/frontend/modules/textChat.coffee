@@ -56,14 +56,20 @@ class TextChat extends Module
             message = do @jqInput.val
             message = message.replace /\n/g, '<br />'
             @jqInput.val ''
-            @sendMessage message
+            # We check if it's a command or a message
+            command = message.match(/^\/([a-zA-Z ]+)/)
+            if command?
+                @sendCommand command
+            else
+                @sendMessage message
 
         $(window).resize () =>
             do @scrollPane.reinitialise
 
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
-
+        @emitter.on 'chat.error', (event, data) =>
+            @addErrorMessage data
 
     appendHTML      : () ->
         html = ($ '<div class="fill-height color-one" id="textChat">
@@ -88,6 +94,13 @@ class TextChat extends Module
     update          : (message) =>
         @addMessage message
         $(window).trigger "newMessage"
+
+    # Send the command to the command Manager
+    sendCommand     : (command) =>
+        command =
+            cmd : command[1]
+            from : window.Voicious.currentUser.name
+        @emitter.trigger 'chat.cmd', command
 
     # Send the new message to the guests.
     sendMessage     : (message) =>
@@ -125,6 +138,19 @@ class TextChat extends Module
                 @newMessageElem message
         else
             @newMessageElem message
+        do @scrollPane.reinitialise
+        @scrollPane.scrollToPercentY 100, no 
+
+    # Add an error message to the text chat window.
+    addErrorMessage : (error) =>
+        jqLastMessage = do (@jqMessageBox.find 'li').last
+        d = new Date
+        jqNewError  = ($ '<div>', { class : 'blueduckturquoise italic' }).html error.text
+        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at' + ((do d.toTimeString).substr 0, 5)
+        jqNewError.append jqNewTime
+        if jqLastMessage[0]?
+            jqLastMessage.append '<div id="tcSeparator"></div>'
+        (do @scrollPane.getContentPane).append ($ '<li>').append jqNewError
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
 
