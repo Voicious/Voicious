@@ -260,7 +260,7 @@ video {
     width: 100%;
 }
 
-#chatform input[type="text"] {
+#chatform textarea {
     color: #4D5C6B;
     background-color: #101214;
     border: none;
@@ -270,7 +270,7 @@ video {
     height: calc(100% - 20px);
     border-radius: 0;
     margin: 0;
-    padding-bottom: 32px;
+    resize: none;
 }
 
 #chatcontent {
