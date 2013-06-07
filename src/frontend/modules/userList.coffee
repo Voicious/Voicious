@@ -63,16 +63,11 @@ class UserList extends Module
         columns  = parseInt (nbUsers / inOneCol + 0.5)
         @jqContainer.css 'width', columns * 118
 
-    muteStream  : () ->
-        button = $ this
+    muteStream  : (event) =>
+        button = $ event.target
         video = (button.siblings 'video')[0]
-        text = do button.text
-        if text is 'Mute'
-            video.volume = 0
-            button.text 'Unmute'
-        else
-            video.volume = 1
-            button.text 'Mute'
+        video.volume = !video.volume
+        button.text (if (do button.text) is 'Mute' then 'Unmute' else 'Mute')
 
     # Update the user list window.
     display         : () =>
