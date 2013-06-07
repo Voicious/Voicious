@@ -315,10 +315,18 @@ video {
     text-align: justify;
     margin-top: 5px;
 }
+
 .chatmessage p {
     line-height: 15px;
     word-wrap: break-word;
     width: 95%;
+}
+
+.chatmessage a {
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    text-decoration: underline;
 }
 
 #tcSeparator {
