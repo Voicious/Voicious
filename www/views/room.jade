@@ -42,7 +42,7 @@ block content
             img#logo(src='/public/img/logo.png')
             p#login.textBtn #{login}
             span#acl #{trans.user}
-            div#onOffCtn(data-step='1', data-intro='#{trans.mediaTuto}', data-position='right')
+            div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
               button#cam.activable
                 span#camSpan.icon.iconMedia.icon-facetime-video.dark-grey
                 span#camLabel.red OFF
@@ -50,7 +50,7 @@ block content
                 span#micSpan.icon.iconMedia.icon-microphone.dark-grey
                 span#micLabel.red OFF
             div#sidebarAcc
-              a#shareRoomLink(data-step='2', data-intro='#{trans.shareRoomTuto}', data-position='right')
+              a#shareRoomLink(data-step='1', data-intro='#{trans.shareRoomTuto}', data-position='right')
                 span#shareRoomSpan.icon.iconOther.icon-share-alt
                 p#labelShareRoom #{trans.shareRoomID}
               div.accordionTab
@@ -66,14 +66,14 @@ block content
                 a#facebookLink.accordionLink
                   span#facebookSpan.icon.iconOther.icon-facebook-sign
                   p.labelOther #{trans.shareOnFacebook}
-              //a#manageRoomLink(style='display: none;', data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
+              //a#manageRoomLink(style='display: none;', data-step='2', data-intro='#{trans.manageRoomTuto}', data-position='right')
               a#manageRoomLink(style='display: none;')
                 span#manageRoomSpan.icon.iconOther.icon-wrench
                 p#labelManageRoom #{trans.manageRoom}
               div.accordionTab
         div#content.fill-height.left.color-two
             div.fill-height.left.column
-                ul#feeds(data-step='3', data-intro='#{trans.feedsTuto}', data-position='right')
+                ul#feeds(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')
             div#middle.fill-height.left.column(style='width:26%')
             div.fill-height.left.column
               div#mainCam.fill-height.video-wrapper
