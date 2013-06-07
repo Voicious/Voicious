@@ -35,8 +35,16 @@ block scripts
         }
     script(type="text/javascript")
       $( document ).ready(function() {
-          $("a#facebookLink").attr('href', "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href);
-          });
+            $("a#facebookLink").click(function() {
+                window.open("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600');
+            });
+
+            text   = encodeURI("Join me on @voiciousapp: ");
+            url    = encodeURI(window.location.href);
+            $("a#twitterLink").click(function() {
+                window.open("http://twitter.com/share?text=" + text + "&url=" + url + "&related=voiciousapp", '', 'left=500,top=200,width=600,height=600');
+            });
+        });
     script(type="text/javascript", src="/public/js/room.js")
     script(type="text/javascript", src="http://platform.twitter.com/widgets.js")
 block content
@@ -64,10 +72,10 @@ block content
                 a#inviteContactLink.accordionLink
                   span#inviteContactSpan.icon.iconOther.icon-plus
                   p.labelOther #{trans.inviteContacts}
-                a#twitterLink.accordionLink(href="https://twitter.com/share", data-count="none",target="_blank")
+                a#twitterLink.accordionLink(href="#", data-count="none")
                   span#twitterSpan.icon.iconOther.icon-twitter
                   p.labelOther #{trans.shareOnTwitter}
-                a#facebookLink(href="", target="_blank").accordionLink
+                a#facebookLink(href="#", target="_blank").accordionLink
                   span#facebookSpan.icon.iconOther.icon-facebook-sign
                   p.labelOther #{trans.shareOnFacebook}
               a#manageRoomLink(data-step='3', data-intro='#{trans.manageRoomTuto}', data-position='right')
