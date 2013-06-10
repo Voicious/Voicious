@@ -31,7 +31,7 @@ module.exports = (grunt) ->
                 rename : (dest, matchedSrcPath, options) ->
                     r = /^(frontend)\/.*(.js)$/
                     if r.test matchedSrcPath
-                        fileName = matchedSrcPath.split path.sep
+                        fileName = matchedSrcPath.split '/'
                         fileName = fileName[fileName.length - 1]
                         path.join 'www', 'public', 'js', fileName
                     else
