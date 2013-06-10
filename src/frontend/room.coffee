@@ -80,6 +80,11 @@ class Room
                     @refreshOnOff ($ '#cam'), data['video']
                     @refreshOnOff ($ '#mic'), data['audio']
 
+    setClipboard        : () ->
+        jqLink = $('a#clipboardLink')
+        jqLink.attr 'data-clipboard-text', @rid
+        new ZeroClipboard jqLink[0], {moviePath: "/public/swf/vendor/ZeroClipboard.swf"}
+
     setPage             : () ->
         $('#sidebarAcc').accordion { active: false, collapsible: true }
         $('a#shareRoomLink, a#manageRoomLink').click () ->
@@ -88,6 +93,7 @@ class Room
             jqSiblinsA = elem.siblings 'a'
             jqSiblinsA.removeClass 'down'
         do @setOnOff
+        do @setClipboard
 
     # Get the javascript for the new module given in parameter
     # and call getModuleHTML.

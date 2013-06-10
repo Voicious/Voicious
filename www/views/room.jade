@@ -16,6 +16,7 @@ block scripts
     script(type="text/javascript", src="/public/js/vendor/jquery.jscrollpane.js")
     script(type="text/javascript", src="/public/js/vendor/intro.js")
     script(type="text/javascript", src="/public/js/vendor/showdown.js")
+    script(type="text/javascript", src="/public/js/vendor/ZeroClipboard.js")
     script(type="text/javascript", src="/public/js/module.js")
     script(type='text/javascript', src='/public/js/connections.js')
     script(type='text/javascript', src='/public/js/commandManager.js')
@@ -68,7 +69,7 @@ block content
                   i.icon.iconOter.icon-share-alt
                   | #{trans.shareRoomID}
               div.accordionTab
-                a#clipboardLink.accordionLink(style='display: none;')
+                a#clipboardLink.accordionLink(data-clipboard-text='')
                   p.labelOther
                     i.icon.iconOther.icon-copy
                     | #{trans.copyRoomID}
