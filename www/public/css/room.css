@@ -257,6 +257,16 @@ video {
     border-top: none;
 }
 
+.accordionLink:hover {
+    background: #0e1011;
+    color: white;
+}
+
+.clipboardLink {
+    background: #0e1011;
+    color: white;
+}
+
 #sidebarAcc i {
     margin-right: 6px;
 }

@@ -82,8 +82,8 @@ class Room
 
     setClipboard        : () ->
         jqLink = $('a#clipboardLink')
-        jqLink.attr 'data-clipboard-text', @rid
-        new ZeroClipboard jqLink[0], {moviePath: "/public/swf/vendor/ZeroClipboard.swf"}
+        jqLink.attr 'data-clipboard-text', window.location
+        new ZeroClipboard jqLink[0], { moviePath: "/public/swf/vendor/ZeroClipboard.swf", hoverClass: "clipboardLink" }
 
     setPage             : () ->
         $('#sidebarAcc').accordion { active: false, collapsible: true }
