@@ -73,12 +73,7 @@ class TextChat extends Module
         @emitter.on 'peer.create', (event, data) =>
             @emitter.trigger 'chat.error', { text : "#{data.name} arrives in the room." }
         @emitter.on 'peer.remove', (event, data) =>
-            text = ''
-            if data.reason isnt 'kick'
-                text = "#{data.name} leaves the room. (#{data.reason})"
-            else
-                text = "#{data.name} has been kicked out of the room. (#{data.kickmessage})"
-            @emitter.trigger 'chat.error', { text : text }
+            @emitter.trigger 'chat.error', { text : "#{data.name} leaves the room. (#{data.reason})" }
 
     appendHTML      : () ->
         html = ($ '<div class="fill-height color-one" id="textChat">
