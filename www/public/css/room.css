@@ -31,6 +31,10 @@ body {
     height: 100%;
 }
 
+.fill-width {
+    width: 100%;
+}
+
 .left {
     float: left;
 }
@@ -50,6 +54,7 @@ body {
 .index1 {
     z-index: 1;
 }
+
 .column {
     padding: 10px 0 10px 10px;
 }
@@ -151,6 +156,33 @@ li.thumbnail-wrapper {
     left: 0;
     float: left;
     overflow: hidden;
+}
+
+.loginCtn {
+    position: absolute;
+    bottom: 0;
+    height: 25%;
+}
+
+.login {
+    position: relative;
+    color: #FFFFFF;
+    font-family: 'OpenSans-Regular';
+    font-size: 11px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #090a0b;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 3%;
+    background: #070809;
+    background: -moz-linear-gradient(top, #070809 0%, #191b1e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#070809), color-stop(100%,#191b1e));
+    background: -webkit-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: -o-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: -ms-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: linear-gradient(to bottom, #070809 0%,#191b1e 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#070809', endColorstr='#191b1e',GradientType=0 );
 }
 
 video {

@@ -69,6 +69,17 @@ class UserList extends Module
         video.volume = !video.volume
         button.text (if (do button.text) is 'Mute' then 'Unmute' else 'Mute')
 
+    addInterface : (jqLi) =>
+        login = ($ '<center class="loginCtn fill-width">
+                      <p class="login index1">flatmalek</p>
+                    </center>'
+        ).appendTo jqLi
+        muteBtn = ($ '<button>', {
+            class : 'muteUnmute no-relative index1',
+            text  : 'Mute',
+            click : @muteStream
+        })
+
     # Update the user list window.
     display         : () =>
         do @jqContainer.empty
@@ -78,11 +89,7 @@ class UserList extends Module
                     id    : "video_#{uid}"
                     class : 'thumbnail-wrapper video-wrapper color-one'
                 })
-                muteBtn = ($ '<button>', {
-                    class : 'muteUnmute no-relative index1',
-                    text  : 'Mute',
-                    click : @muteStream
-                }).appendTo li
+                @addInterface li
                 if @users[uid].video?
                     li.append @users[uid].video
                     do @users[uid].video.play
