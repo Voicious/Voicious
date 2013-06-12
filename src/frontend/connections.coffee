@@ -175,6 +175,10 @@ class Connections
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
             do @enableCamera
 
+    removePeer   : (peerId) =>
+        do @peers[peerId].close
+        @peers[peerId] = null
+
     toggleCamera : () =>
         @userMedia['video'] = !@userMedia['video']
 
@@ -189,6 +193,10 @@ class Connections
                 do @peers[peer.id].offerHandshake
         @emitter.on 'peer.create', (event, data) =>
             @peers[data.id] = new Peer @ws, data.id, data.name, @emitter, @localStream
+        @emitter.on 'peer.remove', (event, data) =>
+            if @peers[data.id]?
+                @removePeer data.id
+                @emitter.trigger 'stream.remove', event, data
         @emitter.on 'pc.offer', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].answerHandshake data.description

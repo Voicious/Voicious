@@ -24,7 +24,7 @@ class Camera extends Module
         @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
         @emitter.on 'stream.create', @newStream
-        @emitter.on 'peer.remove', @delStream
+        @emitter.on 'stream.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
             @newStream event, { video : video , uid : window.Voicious.currentUser.uid , local : yes }
