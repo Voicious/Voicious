@@ -275,8 +275,8 @@ createVideoTag = (stream) ->
     do videoTag.play
     return videoTag
 
-errorHandler = () ->
-    console.error arguments
+errorHandler = (error) ->
+    console.error error
 
 if window?
     if not window.Voicious?

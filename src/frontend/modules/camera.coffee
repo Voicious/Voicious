@@ -76,7 +76,6 @@ class Camera extends Module
 
     changeStreamState : (event, data) =>
         # Data.state = {audio : bool, video : bool}
-        console.log "STREAM STATE: ", data.streamState
 
     # Must set margin-left css propriety when adding a video tag to the page
     # Width is computed using video original size (640 * 480) since css value is wrong at this time
