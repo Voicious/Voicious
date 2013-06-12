@@ -34,9 +34,9 @@ class Camera extends Module
             for video in videos
                 @centerVideoTag { currentTarget : video }
         ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
-        ($ '#feeds').delegate 'video', 'click', (event) =>
-            clickedVideo = ($ event.target)
-            @zoom (clickedVideo.attr 'rel'), clickedVideo
+#        ($ '#feeds').delegate 'video', 'click', (event) =>
+#            clickedVideo = ($ event.target)
+#            @zoom (clickedVideo.attr 'rel'), clickedVideo
         do @squareMainCam
 
     squareMainCam : () =>
@@ -70,8 +70,8 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
-        if not @currentZoom? and (not data.local? or not data.local)
-            @zoom data.uid, video
+        #if not @currentZoom? and (not data.local? or not data.local)
+            #@zoom data.uid, video
 
     # Must set margin-left css propriety when adding a video tag to the page
     # Width is computed using video original size (640 * 480) since css value is wrong at this time
