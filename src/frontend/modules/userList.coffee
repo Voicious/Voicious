@@ -97,8 +97,8 @@ class UserList extends Module
                     id    : "video_#{uid}"
                     class : 'thumbnail-wrapper video-wrapper user-square color-one'
                 })
-                if @users[uid]['isLocal'] is off
-                    @addInterface li, @users[uid].name
+                li.addClass (if @users[uid]['isLocal'] is on then 'localLi' else 'remoteLi')
+                @addInterface li, @users[uid].name
                 if @users[uid].video?
                     li.append @users[uid].video
                     do @users[uid].video.play

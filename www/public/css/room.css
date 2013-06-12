@@ -498,11 +498,11 @@ video {
     display: none;
 }
 
-.user-square:hover .user-square-controls {
+.user-square.remoteLi:hover .user-square-controls {
     display: block;
 }
 
-.user-square:hover .nocam {
+.user-square.remoteLi:hover .nocam {
     display: none;
 }
 
@@ -573,11 +573,11 @@ video {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#090a0b', endColorstr='#131517',GradientType=0 ); /* IE6-9 */
 }
 
-.user-square:hover .cam-username-wrapper {
+.user-square.remoteLi:hover .cam-username-wrapper {
     display: none;
 }
 
-.user-square:hover video {
+.user-square.remoteLi:hover video {
     display: none;
 }
 
