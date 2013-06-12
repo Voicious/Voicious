@@ -68,12 +68,15 @@ class UserList extends Module
 
     muteStream  : (event) =>
         button = $ event.target
-        video = ((button.parents 'li.thumbnail-wrapper').find 'video')[0] # get the video tag for the li.
-        classI = if (do button.text) is 'mute' then 'icon-microphone' else 'icon-microphone-off'
-        text = if (do button.text) is 'mute' then 'unmute' else 'mute'
-        video.volume = @users[video.getAttribute 'rel']['volume'] = !video.volume
-        do button.empty
-        button.append "<i class='#{classI}'></i>#{text}"
+        mainLi = button.parents 'li.thumbnail-wrapper'
+        video = (mainLi.find 'video')[0] # get the video tag for the li.
+        if video?
+            classI = if (do button.text) is 'mute' then 'icon-microphone' else 'icon-microphone-off'
+            text = if (do button.text) is 'mute' then 'unmute' else 'mute'
+            do button.empty
+            button.append "<i class='#{classI}'></i>#{text}"
+            @users[video.getAttribute 'rel']['volume'] = !@users[video.getAttribute 'rel']['volume']
+            video.volume = @users[video.getAttribute 'rel']['volume']
 
     addInterface : (jqLi, login) =>
         intrfc = ($ "<i class='icon-eye-close nocam'></i>
