@@ -25,6 +25,7 @@ class Camera extends Module
         ($ 'button#joinConference').bind 'click', @enableCamera
         @emitter.on 'stream.create', @newStream
         @emitter.on 'stream.remove', @delStream
+        @emitter.on 'stream.state', @changeStreamState
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
             @newStream event, { video : video , uid : window.Voicious.currentUser.uid , local : yes }
@@ -72,6 +73,10 @@ class Camera extends Module
         @emitter.trigger 'stream.display', video
         if not @currentZoom? and (not data.local? or not data.local)
             @zoom data.uid, video
+
+    changeStreamState : (event, data) =>
+        # Data.state = {audio : bool, video : bool}
+        console.log "STREAM STATE: ", data.streamState
 
     # Must set margin-left css propriety when adding a video tag to the page
     # Width is computed using video original size (640 * 480) since css value is wrong at this time
