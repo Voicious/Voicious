@@ -65,7 +65,9 @@ class Camera extends Module
     newStream : (event, data) =>
         @streams.push data.uid
         video = ($ data.video)
-        video.addClass 'thumbnailVideo flipH'
+        if data.local? and data.local is true
+                video.addClass 'flipH'
+        video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
         if not @currentZoom? and (not data.local? or not data.local)
