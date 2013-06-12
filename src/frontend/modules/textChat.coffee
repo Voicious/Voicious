@@ -37,7 +37,7 @@ class TextChat extends Module
     constructor     : (emitter) ->
         super emitter
         do @appendHTML
-        
+
         @markdown     = new Showdown.converter { extensions : ['voicious'] }
         @jqForm       = ($ '#chatform > form')
         @jqMessageBox = ($ '#chatcontent > ul')
@@ -84,7 +84,7 @@ class TextChat extends Module
                        <div id="chatform">
                          <form>
                            <span>Press ENTER to post</span>
-                           <textarea type="text"></textarea>' + 
+                           <textarea type="text"></textarea>' +
                            # Wait for i18n
                            #<input type="text" data-step="5" data-intro="" data-position="top"></input>
                          '</form>
@@ -132,7 +132,7 @@ class TextChat extends Module
             d          = new Date
             lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
             diffTime   = do d.getTime - lastAuthor.attr 'rel'
-            if do lastAuthor.text is message.from and diffTime < 30000  
+            if do lastAuthor.text is message.from and diffTime < 30000
                 #(jqLastMessage.children '.chatmessage').append ($ '<br>')
                 (jqLastMessage.children '.chatmessage').append message.text
                 lastAuthor.attr 'rel', do d.getTime
