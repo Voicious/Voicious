@@ -540,6 +540,7 @@ video {
 .user-square-controls i {
     margin-right: 6px;
 }
+
 .user-square-controls li:last-child {
     border-radius: 0 0 3px 3px;
 }
@@ -572,8 +573,11 @@ video {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#090a0b', endColorstr='#131517',GradientType=0 ); /* IE6-9 */
 }
 
-
 .user-square:hover .cam-username-wrapper {
+    display: none;
+}
+
+.user-square:hover video {
     display: none;
 }
 
