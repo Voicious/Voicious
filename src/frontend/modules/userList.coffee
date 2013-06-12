@@ -66,9 +66,12 @@ class UserList extends Module
 
     muteStream  : (event) =>
         button = $ event.target
-        video = (button.siblings 'video')[0]
+        video = ((button.parents 'li.thumbnail-wrapper').find 'video')[0] # get the video tag for the li.
+        classI = if (do button.text) is 'mute' then 'icon-microphone' else 'icon-microphone-off'
+        text = if (do button.text) is 'mute' then 'unmute' else 'mute'
         video.volume = !video.volume
-        button.text (if (do button.text) is 'Mute' then 'Unmute' else 'Mute')
+        do button.empty
+        button.append "<i class='#{classI}'></i>#{text}"
 
     addInterface : (jqLi, login) =>
         intrfc = ($ "<i class='icon-eye-close nocam'></i>
@@ -82,11 +85,8 @@ class UserList extends Module
                      </div>
                      <div class='cam-username-wrapper'><div class='cam-username'>#{login}</div></div>"
         ).appendTo jqLi
-        muteBtn = ($ '<button>', {
-            class : 'muteUnmute no-relative index1',
-            text  : 'Mute',
-            click : @muteStream
-        })
+        muteBtn = (jqLi.first 'li')
+        muteBtn.click @muteStream
 
     # Update the user list window.
     display         : () =>
