@@ -23,6 +23,7 @@ class UserList extends Module
         @columns     = 1
         @users       = { }
         @users[window.Voicious.currentUser.uid] = window.Voicious.currentUser
+        @users[window.Voicious.currentUser.uid]['isLocal'] = on
         do @configureEvents
         do @display
         ($ window).on 'resize', () =>
@@ -42,13 +43,13 @@ class UserList extends Module
     # Fill the user list with new users.
     fill            : (event, data) =>
         for user in data.peers
-            @users[user.id] = { name : user.name , uid : user.id }
+            @users[user.id] = { name : user.name , uid : user.id, 'isLocal' : off }
         do @display
 
     # Update the user list by creating or removing a user from the list.
     update          : (event, user) =>
         switch event
-            when 'create' then @users[user.id] = { name : user.name , uid : user.id }
+            when 'create' then @users[user.id] = { name : user.name , uid : user.id, 'isLocal' : off }
             when 'remove' then delete @users[user.id]
         do @display
 
@@ -96,7 +97,8 @@ class UserList extends Module
                     id    : "video_#{uid}"
                     class : 'thumbnail-wrapper video-wrapper user-square color-one'
                 })
-                @addInterface li, @users[uid].name
+                if @users[uid]['isLocal'] is off
+                    @addInterface li, @users[uid].name
                 if @users[uid].video?
                     li.append @users[uid].video
                     do @users[uid].video.play
