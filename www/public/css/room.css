@@ -160,8 +160,13 @@ li.thumbnail-wrapper {
 
 .loginCtn {
     position: absolute;
-    bottom: 0;
-    height: 25%;
+    bottom: 10%;
+}
+
+.noCam {
+    text-align: center; /* align horizontally */
+    font-size : 57px; /* Half the box size */
+    margin-top: 15%; /* Can't find better way */
 }
 
 .login {
