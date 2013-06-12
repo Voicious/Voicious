@@ -24,6 +24,7 @@ class UserList extends Module
         @users       = { }
         @users[window.Voicious.currentUser.uid] = window.Voicious.currentUser
         @users[window.Voicious.currentUser.uid]['isLocal'] = on
+        @users[window.Voicious.currentUser.uid]['volume'] = on
         do @configureEvents
         do @display
         ($ window).on 'resize', () =>
@@ -38,18 +39,19 @@ class UserList extends Module
         @emitter.on 'stream.display', (event, video) =>
             uid = ($ video).attr 'rel'
             @users[uid].video = video
+            video.volume = @users[uid]['volume']
             ($ "li#video_#{uid}").append video
 
     # Fill the user list with new users.
     fill            : (event, data) =>
         for user in data.peers
-            @users[user.id] = { name : user.name , uid : user.id, 'isLocal' : off }
+            @users[user.id] = { name : user.name , uid : user.id, 'isLocal' : off, volume : on}
         do @display
 
     # Update the user list by creating or removing a user from the list.
     update          : (event, user) =>
         switch event
-            when 'create' then @users[user.id] = { name : user.name , uid : user.id, 'isLocal' : off }
+            when 'create' then @users[user.id] = { name : user.name , uid : user.id, isLocal : off, volume : on }
             when 'remove' then delete @users[user.id]
         do @display
 
@@ -69,7 +71,7 @@ class UserList extends Module
         video = ((button.parents 'li.thumbnail-wrapper').find 'video')[0] # get the video tag for the li.
         classI = if (do button.text) is 'mute' then 'icon-microphone' else 'icon-microphone-off'
         text = if (do button.text) is 'mute' then 'unmute' else 'mute'
-        video.volume = !video.volume
+        video.volume = @users[video.getAttribute 'rel']['volume'] = !video.volume
         do button.empty
         button.append "<i class='#{classI}'></i>#{text}"
 
