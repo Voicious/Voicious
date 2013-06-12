@@ -70,12 +70,16 @@ class UserList extends Module
         button.text (if (do button.text) is 'Mute' then 'Unmute' else 'Mute')
 
     addInterface : (jqLi, login) =>
-        intrfc = ($ "<div class='no-relative fill-width fill-height'>
-                        <i class='icon-eye-close noCam fill-width no-relative white'></i>
-                        <center class='loginCtn fill-width'>
-                             <p class='login index1'>#{login}</p>
-                         </center>
-                      </div>"
+        intrfc = ($ "<i class='icon-eye-close nocam'></i>
+                     <div class='user-square-controls'>
+                         <div class='username'>#{login}</div>
+                        <ul>
+                            <li><i class='icon-microphone-off'></i>mute</li>
+                            <li><i class='icon-ban-circle'></i>kick</li>
+                            <li><i class='icon-level-up'></i>promote</li>
+                        </ul>
+                     </div>
+                     <div class='cam-username-wrapper'><div class='cam-username'>#{login}</div></div>"
         ).appendTo jqLi
         muteBtn = ($ '<button>', {
             class : 'muteUnmute no-relative index1',
@@ -90,7 +94,7 @@ class UserList extends Module
             if @users[uid]?
                 li = ($ '<li>', {
                     id    : "video_#{uid}"
-                    class : 'thumbnail-wrapper video-wrapper color-one'
+                    class : 'thumbnail-wrapper video-wrapper user-square color-one'
                 })
                 @addInterface li, @users[uid].name
                 if @users[uid].video?
