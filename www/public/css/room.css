@@ -195,10 +195,6 @@ video {
     font-weight: bold;
 }
 
-#cam i, #mic i {
-     margin-left: 
-}
-
 #manageRoomLink {
     margin-top: -1px;
 }
@@ -384,3 +380,64 @@ video {
     border-top: none;
     margin-top: 0;
 }
+
+/* notification */
+
+.notification-wrapper {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: 10px; /* Malek said 8px but fit with the beginning of the mainCam at 10px. */
+    left: 0;
+    z-index: 1;
+}
+
+.notification {
+    text-shadow: 0 1px rgba(0, 0, 0, .2);
+    background: #000;
+    background: rgba(0, 0, 0, .6);
+    display: inline-block;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.notification i {
+    margin-right: 4px;
+}
+
+/* success notifications style */
+
+.notification-success .notification-content {
+    border-bottom: solid 1px rgba(0, 0, 0, .7);
+    display: inline-block;
+    border-radius: 4px;
+    padding: 1px 8px;
+    box-shadow: inset 0 1px #00c84c;
+    background: #00ae42; /* Old browsers */
+    background: -moz-linear-gradient(top,  #00ae42 0%, #00c84c 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00ae42), color-stop(100%,#00c84c)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #00ae42 0%,#00c84c 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ae42', endColorstr='#00c84c',GradientType=0 ); /* IE6-9 */
+
+}
+
+.notification-success i {
+    color: #00ae42;
+}
+
+.fire-notification {
+    background-color: #111;
+    text-transform: uppercase;
+    font-size: .8em;
+    padding: 6px;
+    margin-left: 12px;
+    border: solid 1px #111;
+    border-radius: 4px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .06), 0 1px rgba(255, 255, 255, .06);
+    color: #eee;
+}
+
+/* end notifications */
