@@ -81,7 +81,7 @@ class Room
                     @refreshOnOff ($ '#mic'), data['audio']
 
     setClipboard        : () ->
-        jqLink = $('a#clipboardLink')
+        jqLink = $ 'a#clipboardLink'
         jqLink.attr 'data-clipboard-text', window.location
         clip = new ZeroClipboard jqLink[0], { moviePath: "/public/swf/vendor/ZeroClipboard.swf", hoverClass: "clipboardLink" }
         clip.on 'complete', () ->

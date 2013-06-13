@@ -413,15 +413,11 @@ video {
     border-radius: 4px;
     padding: 1px 8px;
     box-shadow: inset 0 1px #00c84c;
-    background: #00ae42; /* Old browsers */
     background: -moz-linear-gradient(top,  #00ae42 0%, #00c84c 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00ae42), color-stop(100%,#00c84c)); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Chrome10+,Safari5.1+ */
     background: -o-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* IE10+ */
     background: linear-gradient(to bottom,  #00ae42 0%,#00c84c 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ae42', endColorstr='#00c84c',GradientType=0 ); /* IE6-9 */
-
 }
 
 .notification-success i {
