@@ -201,8 +201,12 @@ class Connections
         @emitter.on 'ping', (event, data) =>
             @ws.send { type : 'pong' , params : { token : data.token } }
 
-    sendToAll : (event, message) =>
-        message = { type : 'chat.message' , params : { message : message } }
+    sendToAll : (event, data) =>
+        message
+        if data.type?
+            message = data
+        else
+            message = { type : 'chat.message' , params : { message : data } }
         for id of @peers
             @ws.forward id, message
     

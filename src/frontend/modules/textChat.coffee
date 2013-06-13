@@ -70,6 +70,10 @@ class TextChat extends Module
             @addMessage data.message
         @emitter.on 'chat.error', (event, data) =>
             @addErrorMessage data
+        @emitter.on 'peer.create', (event, data) =>
+            @emitter.trigger 'chat.error', { text : "#{data.name} arrives in the room." }
+        @emitter.on 'peer.remove', (event, data) =>
+            @emitter.trigger 'chat.error', { text : "#{data.name} leaves the room. (#{data.reason})" }
 
     appendHTML      : () ->
         html = ($ '<div class="fill-height color-one" id="textChat">

@@ -22,7 +22,7 @@ class CommandManager
         @emitter.on 'chat.cmd', (event, data) =>
             @parseCmd data
         @emitter.on 'cmd.kick', (event, data) =>
-            @onKick data        
+            @onKick data
 
     # Parse the command and call the right function.
     parseCmd        : (command) =>
@@ -32,21 +32,25 @@ class CommandManager
             when 'kick' then do () =>
                 if cmd[1]?
                     if cmd[2]?
-                        @kick cmd[1], cmd[2]   
+                        @kick cmd[1], cmd[2]
                     else
                         @kick cmd[1], ""
                 else
                     @emitter.trigger 'chat.error', { text: cmd[0] + ": usage: /kick user reason"}
             else
                 @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
-    
+
     # Kick command implementation
     kick            : (user, reason) =>
         message = { type : 'cmd.kick', to : user, params : { message : reason } }
         @emitter.trigger 'message.sendToOneName', message
-        
+
     onKick          : (data) =>
         #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
+        console.log data
+        text    = "#{window.Voicious.currentUser.name} has been kicked out! (#{data.message})"
+        message = { type : 'chat.error', params : { text : text } }
+        @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
 
 if window?
