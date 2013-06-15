@@ -20,6 +20,10 @@ class Notification extends Module
         super emitter
         @active = true
 
+        @jqAudio = $ "audio#notification"
+        @jqAudio.on 'ended', (e) =>
+            @active = true
+
         do @checkFocus
         @enableNotification "chat.message"
         @enableNotification "peer.create"
@@ -27,17 +31,17 @@ class Notification extends Module
     # Checks if the user tab is active or not.
     checkFocus      : () =>
         $(window).blur () =>
-             @active = false
+            @active = true
         $(window).focus () =>
-             @active = true
+            @active = false
 
     # Enables a notification. Plays the corresponding notification if the user tab is not active.
     enableNotification      : (notifName) ->
         @emitter.on notifName, () =>
-             jqAudio = $ "audio#notification"
-             jqAudio.attr 'src', '/public/sounds/notification/' + notifName + '.mp3'
-             if !@active
-                  do jqAudio[0].play
+             if @active is on
+                @jqAudio.attr 'src', '/public/sounds/notification/' + notifName + '.mp3'
+                do @jqAudio[0].play
+                @active = false
 
 if window?
      window.Notification = Notification
