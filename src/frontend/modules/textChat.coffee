@@ -97,7 +97,6 @@ class TextChat extends Module
     # Update the text chat with a new message.
     update          : (message) =>
         @addMessage message
-        $(window).trigger "newMessage"
 
     # Send the command to the command Manager
     sendCommand     : (command) =>
@@ -143,7 +142,7 @@ class TextChat extends Module
         else
             @newMessageElem message
         do @scrollPane.reinitialise
-        @scrollPane.scrollToPercentY 100, no 
+        @scrollPane.scrollToPercentY 100, no
 
     # Add an error message to the text chat window.
     addErrorMessage : (error) =>
