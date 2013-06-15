@@ -16,27 +16,32 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 class Notification extends Module
-    constructor      : (NetworkManager) ->
-        super NetworkManager
+    constructor      : (emitter) ->
+        super emitter
         @active = true
 
+        @jqAudio = $ "audio#notification"
+        @jqAudio.on 'ended', (e) =>
+            @active = true
+
         do @checkFocus
-        @enableNotification "newMessage"
-        @enableNotification "newUser"
+        @enableNotification "chat.message"
+        @enableNotification "peer.create"
 
     # Checks if the user tab is active or not.
     checkFocus      : () =>
         $(window).blur () =>
-             @active = false
+            @active = true
         $(window).focus () =>
-             @active = true
+            @active = false
 
     # Enables a notification. Plays the corresponding notification if the user tab is not active.
     enableNotification      : (notifName) ->
-        $(window).on notifName, () =>
-             audio = document.getElementById notifName
-             if !@active
-                  do audio.play
+        @emitter.on notifName, () =>
+             if @active is on
+                @jqAudio.attr 'src', '/public/sounds/notification/' + notifName + '.mp3'
+                do @jqAudio[0].play
+                @active = false
 
 if window?
      window.Notification = Notification
