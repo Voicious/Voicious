@@ -171,9 +171,15 @@ class Connections
             for id, peer of @peers
                 peer.rmLocalStream @localStream
                 do peer.offerHandshake
+                if @userMedia['video'] is no or @userMedia['audio'] is no
+                    @sendStreamState id
         @localStream = undefined # erase old stream
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
             do @enableCamera
+
+    removePeer   : (peerId) =>
+        do @peers[peerId].close
+        @peers[peerId] = null
 
     toggleCamera : () =>
         @userMedia['video'] = !@userMedia['video']
@@ -186,9 +192,15 @@ class Connections
         @emitter.on 'peer.list', (event, data) =>
             for peer in data.peers
                 @peers[peer.id] = new Peer @ws, peer.id, peer.name, @emitter, @localStream
+                @sendStreamState peer.id
                 do @peers[peer.id].offerHandshake
         @emitter.on 'peer.create', (event, data) =>
             @peers[data.id] = new Peer @ws, data.id, data.name, @emitter, @localStream
+            @sendStreamState data.id
+        @emitter.on 'peer.remove', (event, data) =>
+            if @peers[data.id]?
+                @removePeer data.id
+                @emitter.trigger 'stream.remove', event, data
         @emitter.on 'pc.offer', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].answerHandshake data.description
@@ -222,6 +234,9 @@ class Connections
         message = { type : msg.type, params : msg.params }
         @ws.forward msg.to, message
 
+    sendStreamState : (id) =>
+        @ws.forward id, { type : 'stream.state', params : { streamState : @userMedia } }
+
     enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
             @emitter.trigger 'activable.unlock', @userMedia
@@ -231,6 +246,7 @@ class Connections
             for id, peer of @peers
                 peer.setLocalStream @localStream
                 do peer.offerHandshake
+                @sendStreamState id
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
         , () =>
             @emitter.trigger 'activable.unlock'
@@ -263,8 +279,8 @@ createVideoTag = (stream) ->
     do videoTag.play
     return videoTag
 
-errorHandler = () ->
-    console.error arguments
+errorHandler = (error) ->
+    console.error error
 
 if window?
     if not window.Voicious?
