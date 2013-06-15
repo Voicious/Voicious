@@ -23,6 +23,8 @@ class UserList extends Module
         @columns     = 1
         @users       = { }
         @users[window.Voicious.currentUser.uid] = window.Voicious.currentUser
+        @users[window.Voicious.currentUser.uid]['isLocal'] = on
+        @users[window.Voicious.currentUser.uid]['volume'] = on
         do @configureEvents
         do @display
         ($ window).on 'resize', () =>
@@ -37,18 +39,19 @@ class UserList extends Module
         @emitter.on 'stream.display', (event, video) =>
             uid = ($ video).attr 'rel'
             @users[uid].video = video
+            video.volume = @users[uid]['volume']
             ($ "li#video_#{uid}").append video
 
     # Fill the user list with new users.
     fill            : (event, data) =>
         for user in data.peers
-            @users[user.id] = { name : user.name , uid : user.id }
+            @users[user.id] = { name : user.name , uid : user.id, 'isLocal' : off, volume : on}
         do @display
 
     # Update the user list by creating or removing a user from the list.
     update          : (event, user) =>
         switch event
-            when 'create' then @users[user.id] = { name : user.name , uid : user.id }
+            when 'create' then @users[user.id] = { name : user.name , uid : user.id, isLocal : off, volume : on }
             when 'remove' then delete @users[user.id]
         do @display
 
@@ -63,6 +66,33 @@ class UserList extends Module
         columns  = parseInt (nbUsers / inOneCol + 0.5)
         @jqContainer.css 'width', columns * 118
 
+    muteStream  : (event) =>
+        button = $ event.target
+        mainLi = button.parents 'li.thumbnail-wrapper'
+        video = (mainLi.find 'video')[0] # get the video tag for the li.
+        if video?
+            classI = if (do button.text) is 'mute' then 'icon-microphone' else 'icon-microphone-off'
+            text = if (do button.text) is 'mute' then 'unmute' else 'mute'
+            do button.empty
+            button.append "<i class='#{classI}'></i>#{text}"
+            @users[video.getAttribute 'rel']['volume'] = !@users[video.getAttribute 'rel']['volume']
+            video.volume = @users[video.getAttribute 'rel']['volume']
+
+    addInterface : (jqLi, login) =>
+        intrfc = ($ "<i class='icon-eye-close nocam'></i>
+                     <div class='user-square-controls'>
+                         <div class='username'>#{login}</div>
+                        <ul>
+                            <li><i class='icon-microphone-off'></i>mute</li>
+                            <li><i class='icon-ban-circle'></i>kick</li>
+                            <li><i class='icon-level-up'></i>promote</li>
+                        </ul>
+                     </div>
+                     <div class='cam-username-wrapper'><div class='cam-username'>#{login}</div></div>"
+        ).appendTo jqLi
+        muteBtn = (jqLi.first 'li')
+        muteBtn.click @muteStream
+
     # Update the user list window.
     display         : () =>
         do @jqContainer.empty
@@ -70,8 +100,10 @@ class UserList extends Module
             if @users[uid]?
                 li = ($ '<li>', {
                     id    : "video_#{uid}"
-                    class : 'thumbnail-wrapper video-wrapper color-one'
+                    class : 'thumbnail-wrapper video-wrapper user-square color-one'
                 })
+                li.addClass (if @users[uid]['isLocal'] is on then 'localLi' else 'remoteLi')
+                @addInterface li, @users[uid].name
                 if @users[uid].video?
                     li.append @users[uid].video
                     do @users[uid].video.play

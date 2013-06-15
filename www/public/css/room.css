@@ -31,6 +31,10 @@ body {
     height: 100%;
 }
 
+.fill-width {
+    width: 100%;
+}
+
 .left {
     float: left;
 }
@@ -42,8 +46,13 @@ body {
 .disable {
     color: #333;
 }
+
 .no-relative {
     position: absolute;
+}
+
+.index1 {
+    z-index: 1;
 }
 
 .column {
@@ -136,6 +145,10 @@ ul#videos {
 }
 
 li.thumbnail-wrapper {
+    display: block;
+    background-color: #131517;
+    font-family: 'PT Sans', 'Helvetica', sans-serif;
+    position: relative;
     width: 115px;
     height: 115px;
     margin: 0 3px 3px 0;
@@ -147,6 +160,38 @@ li.thumbnail-wrapper {
     left: 0;
     float: left;
     overflow: hidden;
+}
+
+.loginCtn {
+    position: absolute;
+    bottom: 10%;
+}
+
+.noCam {
+    text-align: center; /* align horizontally */
+    font-size : 57px; /* Half the box size */
+    margin-top: 15%; /* Can't find better way */
+}
+
+.login {
+    position: relative;
+    color: #FFFFFF;
+    font-family: 'OpenSans-Regular';
+    font-size: 11px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #090a0b;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 3%;
+    background: #070809;
+    background: -moz-linear-gradient(top, #070809 0%, #191b1e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#070809), color-stop(100%,#191b1e));
+    background: -webkit-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: -o-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: -ms-linear-gradient(top, #070809 0%,#191b1e 100%);
+    background: linear-gradient(to bottom, #070809 0%,#191b1e 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#070809', endColorstr='#191b1e',GradientType=0 );
 }
 
 video {
@@ -437,3 +482,115 @@ video {
 }
 
 /* end notifications */
+
+/* user interface on thumbnails */
+
+.nocam {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 5em;
+}
+
+.user-square-controls {
+    padding: 6px;
+    display: none;
+}
+
+.user-square.remoteLi:hover .user-square-controls {
+    display: block;
+}
+
+.user-square.remoteLi:hover .nocam {
+    display: none;
+}
+
+.user-square-controls  ul {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}
+
+.user-square-controls li {
+    padding: 2px 6px;
+    margin-bottom: -1px;
+    background-color: #131517;
+    border: solid 1px #000;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .05);
+    text-transform: uppercase;
+    font-size: .8em;
+    cursor: pointer;
+}
+
+.user-square-controls li:hover {
+    background-color: #00aeef;
+    box-shadow: inset 0 1px rgba(0255, 255, 255, .2);
+}
+
+.user-square-controls li:active {
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, .8);
+}
+
+.username {
+    display: block;
+    text-align: center;
+    text-shadow: 0 1px rgba(0, 0, 0, .08);
+    margin-bottom: 4px;
+}
+
+.user-square-controls i {
+    margin-right: 6px;
+}
+
+.user-square-controls li:last-child {
+    border-radius: 0 0 3px 3px;
+}
+
+.user-square-controls li:first-child {
+    border-radius: 3px 3px 0 0;
+}
+
+.cam-username-wrapper {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.cam-username {
+    border: solid 1px #090a0b;
+    display: inline-block;
+    border-radius: 6px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .06);
+    padding: 0 6px;
+    background: #090a0b; /* Old browsers */
+    background: -moz-linear-gradient(top,  #090a0b 0%, #131517 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#090a0b), color-stop(100%,#131517)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #090a0b 0%,#131517 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #090a0b 0%,#131517 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #090a0b 0%,#131517 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #090a0b 0%,#131517 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#090a0b', endColorstr='#131517',GradientType=0 ); /* IE6-9 */
+}
+
+.user-square.remoteLi:hover .cam-username-wrapper {
+    display: none;
+}
+
+.user-square.remoteLi:hover video {
+    display: none;
+}
+
+#feeds {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #eee;
+}
+
+#feeds ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* end user interface on thumbnails */
