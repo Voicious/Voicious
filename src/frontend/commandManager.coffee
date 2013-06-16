@@ -31,12 +31,12 @@ class CommandManager
         switch  cmd[0]
             when 'kick' then do () =>
                 if cmd[1]?
+                    reason = ''
                     if cmd[2]?
-                        @kick cmd[1], cmd[2]
-                    else
-                        @kick cmd[1], ""
+                        reason = (cmd.splice 2).join ' '
+                    @kick cmd[1], reason
                 else
-                    @emitter.trigger 'chat.error', { text: cmd[0] + ": usage: /kick user reason"}
+                    @emitter.trigger 'chat.error', { text: cmd[0] + ": usage: /kick user [reason]"}
             else
                 @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
 
