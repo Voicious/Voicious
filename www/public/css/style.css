@@ -174,14 +174,6 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     border: 0
 }
 
-button:focus,
-button:active,
-button:hover
-{
-   outline: 0;
-   border: 0;
-}
-
 .btn {
 	background-image: none;
 	border: none;
