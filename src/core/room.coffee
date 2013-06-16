@@ -76,15 +76,6 @@ class _Room
             else
                 res.send 200
 
-    renderModule    : (req, res) =>
-        user        = req.currentUser
-        options     =
-            title   : 'Voicious'
-            login   : user.name
-            room    : req.params.roomid
-            trans   : Translator.getTrans(req.host, 'room')
-        res.render "modules/#{req.body.module}.jade", options
-
     reportBug       : (req, res) =>
         @transport.sendMail({
             from    : "Voicious bugs<no-reply@voicious.com>"
@@ -117,4 +108,3 @@ exports.Routes  =
         '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage, exports.Room.redirectRoom)
     post :
         '/report'       : exports.Room.reportBug
-        '/renderModule' : exports.Room.renderModule
