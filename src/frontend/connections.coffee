@@ -180,6 +180,7 @@ class Connections
     removePeer   : (peerId) =>
         do @peers[peerId].close
         @peers[peerId] = null
+        delete @peers[peerId]
 
     toggleCamera : () =>
         @userMedia['video'] = !@userMedia['video']
