@@ -88,7 +88,7 @@ class UserList extends Module
                             <li><i class='icon-level-up'></i>promote</li>
                         </ul>
                      </div>
-                     <div class='cam-username-wrapper'><div class='cam-username'>#{login}</div></div>"
+                     <div class='cam-username-wrapper index1'><div class='cam-username'>#{login}</div></div>"
         ).appendTo jqLi
         muteBtn = (jqLi.first 'li')
         muteBtn.click @muteStream
