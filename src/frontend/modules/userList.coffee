@@ -94,9 +94,9 @@ class UserList extends Module
                          <div class='username'>#{login}</div>
                         <ul>
                             <li class='muteBtn'><i class='icon-microphone-off'></i>mute</li>
-                            <li class='kickBtn'><i class='icon-ban-circle'></i>kick</li>
-                            <li><i class='icon-level-up'></i>promote</li>
-                        </ul>
+                            <li class='kickBtn'><i class='icon-ban-circle'></i>kick</li> " +
+                            #<li><i class='icon-level-up'></i>promote</li>
+                      "</ul>
                      </div>
                      <div class='cam-username-wrapper index1'><div class='cam-username'>#{login}</div></div>"
         ).appendTo jqLi
