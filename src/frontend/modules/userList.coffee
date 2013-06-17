@@ -66,7 +66,7 @@ class UserList extends Module
         columns  = parseInt (nbUsers / inOneCol + 0.5)
         @jqContainer.css 'width', columns * 118
 
-    muteStream  : (event) =>
+    muteStream   : (event) =>
         button = $ event.target
         mainLi = button.parents 'li.thumbnail-wrapper'
         video = (mainLi.find 'video')[0] # get the video tag for the li.
@@ -78,19 +78,30 @@ class UserList extends Module
             @users[video.getAttribute 'rel']['volume'] = !@users[video.getAttribute 'rel']['volume']
             video.volume = @users[video.getAttribute 'rel']['volume']
 
+    kickUser     : (event) =>
+        mainLi = ($ event.target).parents 'li.thumbnail-wrapper'
+        uid = (mainLi.attr 'id').slice '6' # Skip the `video_`
+        msg =
+          type   : 'cmd.kick'
+          to     : uid
+          params :
+            message : ""
+        @emitter.trigger 'message.sendToOneId', msg
+
     addInterface : (jqLi, login) =>
         intrfc = ($ "<i class='icon-eye-close nocam'></i>
                      <div class='user-square-controls'>
                          <div class='username'>#{login}</div>
                         <ul>
                             <li class='muteBtn'><i class='icon-microphone-off'></i>mute</li>
-                            <li><i class='icon-ban-circle'></i>kick</li>
+                            <li class='kickBtn'><i class='icon-ban-circle'></i>kick</li>
                             <li><i class='icon-level-up'></i>promote</li>
                         </ul>
                      </div>
                      <div class='cam-username-wrapper index1'><div class='cam-username'>#{login}</div></div>"
         ).appendTo jqLi
         (jqLi.find '.muteBtn').click @muteStream
+        (jqLi.find '.kickBtn').click @kickUser
 
     # Update the user list window.
     display         : () =>
