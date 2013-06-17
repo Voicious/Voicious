@@ -83,15 +83,14 @@ class UserList extends Module
                      <div class='user-square-controls'>
                          <div class='username'>#{login}</div>
                         <ul>
-                            <li><i class='icon-microphone-off'></i>mute</li>
+                            <li class='muteBtn'><i class='icon-microphone-off'></i>mute</li>
                             <li><i class='icon-ban-circle'></i>kick</li>
                             <li><i class='icon-level-up'></i>promote</li>
                         </ul>
                      </div>
                      <div class='cam-username-wrapper index1'><div class='cam-username'>#{login}</div></div>"
         ).appendTo jqLi
-        muteBtn = (jqLi.first 'li')
-        muteBtn.click @muteStream
+        (jqLi.find '.muteBtn').click @muteStream
 
     # Update the user list window.
     display         : () =>
