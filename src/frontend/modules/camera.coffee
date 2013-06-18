@@ -35,9 +35,12 @@ class Camera extends Module
             for video in videos
                 @centerVideoTag { currentTarget : video }
         ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
-#        ($ '#feeds').delegate 'video', 'click', (event) =>
-#            clickedVideo = ($ event.target)
-#            @zoom (clickedVideo.attr 'rel'), clickedVideo
+        ($ '#feeds').delegate '.zoomBtn', 'click', (event) =>
+            clickButton = ($ event.target)
+            mainLi = clickButton.parents 'li.thumbnail-wrapper'
+            video = (mainLi.find 'video')
+            if video?
+                @zoom (video.attr 'rel'), video
         do @squareMainCam
 
     squareMainCam : () =>
@@ -71,8 +74,6 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
-        #if not @currentZoom? and (not data.local? or not data.local)
-            #@zoom data.uid, video
 
     changeStreamState : (event, data) =>
         # Data.state = {audio : bool, video : bool}
@@ -93,13 +94,12 @@ class Camera extends Module
         container.removeClass 'hidden'
         do (container.find 'video').remove
         @currentZoom = uid
-        if video?
-            newVideo     = do video.clone
-            if video[0].muted
-                newVideo[0].muted = 1
-            newVideo.removeClass 'thumbnailVideo'
-            do newVideo[0].play
-            container.append newVideo
+        newVideo     = do video.clone
+        if video[0].muted
+            newVideo[0].muted = 1
+        newVideo.removeClass 'thumbnailVideo'
+        do newVideo[0].play
+        container.append newVideo
 
 if window?
     window.Camera = Camera

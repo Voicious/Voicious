@@ -94,7 +94,8 @@ class UserList extends Module
                          <div class='username'>#{login}</div>
                         <ul>
                             <li class='muteBtn'><i class='icon-microphone-off'></i>mute</li>
-                            <li class='kickBtn'><i class='icon-ban-circle'></i>kick</li> " +
+                            <li class='kickBtn'><i class='icon-ban-circle'></i>kick</li>
+                            <li class='zoomBtn'><i class='icon-zoom-in'></i>zoom</li>" +
                             #<li><i class='icon-level-up'></i>promote</li>
                       "</ul>
                      </div>
