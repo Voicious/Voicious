@@ -69,7 +69,9 @@ class TextChat extends Module
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
         @emitter.on 'chat.error', (event, data) =>
-            @addErrorMessage data
+            @addServerMessage data
+        @emitter.on 'chat.info', (event, data) =>
+            @addServerMessage data
         @emitter.on 'peer.create', (event, data) =>
             @emitter.trigger 'chat.error', { text : "#{data.name} arrives in the room." }
         @emitter.on 'peer.remove', (event, data) =>
@@ -145,15 +147,15 @@ class TextChat extends Module
         @scrollPane.scrollToPercentY 100, no
 
     # Add an error message to the text chat window.
-    addErrorMessage : (error) =>
+    addServerMessage : (message) =>
         jqLastMessage = do (@jqMessageBox.find 'li').last
         d = new Date
-        jqNewError  = ($ '<div>', { class : 'blueduckturquoise italic' }).html error.text
+        jqNewMsg  = ($ '<div>', { class : 'blueduckturquoise italic' }).html message.text
         jqNewTime   = ($ '<span>', { class : 'time' }).text ' at' + ((do d.toTimeString).substr 0, 5)
-        jqNewError.append jqNewTime
+        jqNewMsg.append jqNewTime
         if jqLastMessage[0]?
             jqLastMessage.append '<div id="tcSeparator"></div>'
-        (do @scrollPane.getContentPane).append ($ '<li>').append jqNewError
+        (do @scrollPane.getContentPane).append ($ '<li>').append jqNewMsg
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
 
