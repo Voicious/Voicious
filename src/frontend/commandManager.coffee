@@ -71,11 +71,11 @@ class CommandManager
         message = { type : 'cmd.me',  params : { text : text } }
         # will have to remplace by type 'chat.me'
         @emitter.trigger 'message.sendtoall', message
-        @emitter.trigger 'chat.error', { text : text }
+        @emitter.trigger 'chat.me', { text : text }
     
     onMe            : (data) =>
         # will have to remplace by type 'chat.me'
-        @emitter.trigger 'chat.error', { text : data.text }
+        @emitter.trigger 'chat.me', { text : data.text }
     
     quit            : (message) =>
         text = "#{window.Voicious.currentUser.name} has left the room. (#{message})"

@@ -72,6 +72,8 @@ class TextChat extends Module
             @addServerMessage data
         @emitter.on 'chat.info', (event, data) =>
             @addServerMessage data
+        @emitter.on 'chat.me', (event, data) =>
+            @addMeMessage data
         @emitter.on 'peer.create', (event, data) =>
             @emitter.trigger 'chat.error', { text : "#{data.name} arrives in the room." }
         @emitter.on 'peer.remove', (event, data) =>
@@ -147,10 +149,23 @@ class TextChat extends Module
         @scrollPane.scrollToPercentY 100, no
 
     # Add an error message to the text chat window.
-    addServerMessage : (message) =>
+    addServerMessage    : (message) =>
         jqLastMessage = do (@jqMessageBox.find 'li').last
         d = new Date
         jqNewMsg  = ($ '<div>', { class : 'blueduckturquoise italic' }).html message.text
+        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at' + ((do d.toTimeString).substr 0, 5)
+        jqNewMsg.append jqNewTime
+        if jqLastMessage[0]?
+            jqLastMessage.append '<div id="tcSeparator"></div>'
+        (do @scrollPane.getContentPane).append ($ '<li>').append jqNewMsg
+        do @scrollPane.reinitialise
+        @scrollPane.scrollToPercentY 100, no
+    
+    # Add an action message to the text chat window
+    addMeMessage        : (action) =>
+        jqLastMessage = do (@jqMessageBox.find 'li').last
+        d = new Date
+        jqNewMsg  = ($ '<div>', { class : 'blueduckturquoise' }).html action.text
         jqNewTime   = ($ '<span>', { class : 'time' }).text ' at' + ((do d.toTimeString).substr 0, 5)
         jqNewMsg.append jqNewTime
         if jqLastMessage[0]?
