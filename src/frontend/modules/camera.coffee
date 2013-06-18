@@ -96,12 +96,12 @@ class Camera extends Module
         container.removeClass 'hidden'
         do (container.find 'video').remove
         @currentZoom = uid
-        newVideo     = do video.clone
-        if video[0].muted
-            newVideo[0].muted = 1
-        newVideo.removeClass 'thumbnailVideo'
-        do newVideo[0].play
-        container.append newVideo
+        if video?
+            newVideo     = do video.clone
+            newVideo[0].volume = video[0].volume
+            newVideo.removeClass 'thumbnailVideo'
+            do newVideo[0].play
+            container.append newVideo
 
 if window?
     window.Camera = Camera
