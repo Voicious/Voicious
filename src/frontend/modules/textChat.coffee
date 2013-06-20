@@ -153,7 +153,7 @@ class TextChat extends Module
         jqLastMessage = do (@jqMessageBox.find 'li').last
         d = new Date
         jqNewMsg  = ($ '<div>', { class : 'blueduckturquoise italic' }).html message.text
-        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at' + ((do d.toTimeString).substr 0, 5)
+        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
         jqNewMsg.append jqNewTime
         if jqLastMessage[0]?
             jqLastMessage.append '<div id="tcSeparator"></div>'
@@ -166,7 +166,7 @@ class TextChat extends Module
         jqLastMessage = do (@jqMessageBox.find 'li').last
         d = new Date
         jqNewMsg  = ($ '<div>', { class : 'blueduckturquoise' }).html action.text
-        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at' + ((do d.toTimeString).substr 0, 5)
+        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
         jqNewMsg.append jqNewTime
         if jqLastMessage[0]?
             jqLastMessage.append '<div id="tcSeparator"></div>'
