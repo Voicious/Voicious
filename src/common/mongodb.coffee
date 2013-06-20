@@ -52,7 +52,11 @@ class _Mongo extends Database
 
         get : (collName, id, callback) =>
             coll = @db.collection collName
-            coll.findOne {'_id': new MongoDB.ObjectID(String(id))}, (err, doc) =>
+            try
+                id   = new MongoDB.ObjectID String id
+            catch e
+                throw new Errors.NotFound
+            coll.findOne { '_id': id }, (err, doc) =>
                 if err
                     throw err
                 doc._id = String doc._id
