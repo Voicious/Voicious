@@ -562,7 +562,7 @@ video {
     display: inline-block;
     border-radius: 6px;
     box-shadow: inset 0 1px rgba(255, 255, 255, .06);
-    padding: 0 6px;
+    padding: 3px 6px;
     background: #090a0b; /* Old browsers */
     background: -moz-linear-gradient(top,  #090a0b 0%, #131517 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#090a0b), color-stop(100%,#131517)); /* Chrome,Safari4+ */
