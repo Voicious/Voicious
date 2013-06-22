@@ -46,7 +46,7 @@ class _Room
                 Errors.RenderNotFound req, res
             user          = req.currentUser
             options       =
-                title   : 'Voicious'
+                title   : Config.Voicious.Title
                 login   : user.name
                 uid     : user._id
                 rid     : req.params.roomid
