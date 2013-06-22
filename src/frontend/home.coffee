@@ -113,7 +113,7 @@ class ChoiceForm
         else
             jqIcon.addClass 'icon-ok'
             jqMessage.addClass 'none'
-        
+
     # Checks value validity of a field.
     checkFieldValuePresence : (field, displayError) =>
         valid   = ((do @_jqForm.get).find "input##{field}")[0].validity.valid
@@ -152,7 +152,7 @@ class JumpInForm extends ChoiceForm
             opacity : 0
             left    : '-=290'
         }, 600
-        
+
     # Shows Jumpin form animation.
     show : () =>
         (do @_jqFirstStep.get).fadeTo 0.01

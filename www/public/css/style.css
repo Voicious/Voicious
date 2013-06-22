@@ -230,3 +230,11 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 	margin: 10px;
 	display: inline-block;
 }
+
+.icon-twitter {
+    color : #4099FF;
+}
+
+.icon-facebook-sign {
+    color  : #3B5998;
+}
