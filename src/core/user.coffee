@@ -142,11 +142,13 @@ class _User
         param = req.body
         if param.name? and param.name isnt ""
             if param.room? and param.room isnt ""
+                rid             = param.room
+                delete param.room
                 param.mail      = param.name + do Date.now
                 param.id_acl    = 0
                 param.id_role   = 0
                 @newUser req, res, param, ((req, res) =>
-                    res.redirect "/room/#{param.room}"
+                    res.redirect "/room/#{rid}"
                 ), @errorOnQuickLogin
 
 exports.User    = new _User
