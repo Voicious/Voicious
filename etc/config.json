@@ -2,7 +2,7 @@
     "Voicious"  : {
         "Hostname"  : {
             "Internal" : "localhost",
-            "EXternal" : "localhost"
+            "External" : "localhost"
         },
         "Port"      : 4242,
         "Acl"       : ["administrator", "registered", "temporary"],
