@@ -7,7 +7,7 @@ block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/jquery.jscrollpane.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/style.css")
-    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/room.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/newRoom.css")
 
 block scripts
     script(type='text/javascript', src='/public/js/vendor/bootstrap.min.js')
@@ -51,51 +51,7 @@ block scripts
 block content
   div.container-fluid.fill-height
     div.row-fluid.fill-height
-        div#sidebar.fill-height.left.color-one.column
-            img#logo(src='/public/img/logo.png')
-            p#login.textBtn #{login}
-            span#acl #{trans.user}
-            div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
-              button#cam.activable.red.color-one
-                i.icon.iconMedia.icon-facetime-video.dark-grey
-                span OFF
-              button#mic.activable.red.color-one
-                i.icon.iconMedia.icon-microphone.dark-grey
-                span OFF
-            div#sidebarAcc
-              a#shareRoomLink(data-step='1', data-intro='#{trans.shareRoomTuto}', data-position='right')
-                p#labelShareRoom
-                  i.icon.iconOter.icon-share-alt
-                  | #{trans.shareRoomID}
-              div.accordionTab
-                a#clipboardLink.accordionLink(data-clipboard-text='')
-                  p.labelOther
-                    i.icon.iconOther.icon-copy
-                    | #{trans.copyRoomID}
-                  div.notification-wrapper.none
-                    div.notification.notification-success
-                      i.icon-check-sign.icon-large
-                      span.notification-content Link copied to clipboard
-                a#inviteContactLink.accordionLink(style='display: none;')
-                  p.labelOther
-                    i.icon.iconOther.icon-plus
-                    | #{trans.inviteContacts}
-                a#twitterLink.accordionLink(href="#", data-count="none")
-                  p.labelOther
-                    i.icon.iconOther.icon-twitter
-                    | #{trans.shareOnTwitter}
-                a#facebookLink(href="#", target="_blank").accordionLink
-                  p.labelOther
-                    i.icon.iconOther.icon-facebook-sign
-                    | #{trans.shareOnFacebook}
-              //a#manageRoomLink(style='display: none;', data-step='2', data-intro='#{trans.manageRoomTuto}', data-position='right')
-              a#manageRoomLink(style='display: none;')
-                span#manageRoomSpan.icon.iconOther.icon-wrench
-                p#labelManageRoom #{trans.manageRoom}
-              div.accordionTab
+        div#sidebar.row-fluid.fill-height.left.color-one
+          img.center(src='/public/img/logo.png')
+          p#login.span1.offset8.textBtn #{login}
         div#content.fill-height.left.color-two
-            div.fill-height.left.column
-                ul#feeds(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')
-            div#middle.fill-height.left.column(style='width:26%')
-            div.fill-height.left.column
-              div#mainCam.fill-height.video-wrapper
