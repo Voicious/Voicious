@@ -56,4 +56,11 @@ block content
           div#userInfoCtn
             p#login(align="right") #{login}
             p#acl(align="right") #{trans.user}
+          div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
+            button#cam.activable.red.color-one
+              i.icon-facetime-video.dark-grey
+              span OFF
+            button#mic.activable.red.color-one
+              i.icon-microphone.dark-grey
+              span OFF
         div#content.fill-height.left.color-two
