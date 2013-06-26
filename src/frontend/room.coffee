@@ -89,7 +89,7 @@ class Room
 
     setPage             : () ->
         $('#sidebarAcc').accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
-        $('a#shareRoomLink, a#manageRoomLink').click () ->
+        $('.headerAcc').click () ->
             elem = ($ this)
             elem.toggleClass 'down'
             jqSiblinsA = elem.siblings 'a'
