@@ -57,10 +57,19 @@ block content
             p#login(align="right") #{login}
             p#acl(align="right") #{trans.user}
           div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
-            button#cam.activable.red.color-one.bordered
+            button#cam.activable.red.color-one.bordered.shadowed
               i.icon-facetime-video.dark-grey
               span OFF
-            button#mic.activable.red.color-one.bordered
+            button#mic.activable.red.color-one.bordered.shadowed
               i.icon-microphone.dark-grey
               span OFF
+          div#sidebarAcc
+            span.headerAcc.white.bordered.shadowed
+              i.icon-share-alt
+              | #{trans.shareRoomID}
+            ul
+              li
+                i.icon-copy
+                | #{trans.copyRoomID}
+
         div#content.fill-height.left.color-two

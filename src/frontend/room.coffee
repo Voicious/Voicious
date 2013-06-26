@@ -88,7 +88,7 @@ class Room
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
     setPage             : () ->
-        $('#sidebarAcc').accordion { active: false, collapsible: true }
+        $('#sidebarAcc').accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
         $('a#shareRoomLink, a#manageRoomLink').click () ->
             elem = ($ this)
             elem.toggleClass 'down'

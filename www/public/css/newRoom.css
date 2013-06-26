@@ -48,6 +48,10 @@ body {
     border-color: rgb(15, 15, 15);
 }
 
+.shadowed {
+    box-shadow: inset 0 1px rgba(255,255,255,.05);
+}
+
 /* Sidebar Related */
 
 #sidebar i {
@@ -107,6 +111,31 @@ body {
     width: 50%;
     padding : 10px 0;
     cursor: pointer;
-    box-shadow: inset 0 1px rgba(255,255,255,.05);
     border-right: none;
+}
+
+.headerAcc i {
+    font-size: 13px;
+}
+
+/* Remove shitty properties added by ui-accordion-header */
+#sidebarAcc .ui-accordion-header {
+    padding: 20px 0;
+    margin-top: 0;
+}
+
+#sidebarAcc .ui-accordion-content {
+    padding: 0;
+}
+
+.headerAcc:hover {
+    background: #0e1011;
+}
+
+.headerAcc {
+    border-top: none;
+    border-right: none;
+    font-family: 'OpenSans-Bold';
+    font-size: 12px;
+    text-align: center;
 }
