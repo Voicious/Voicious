@@ -63,8 +63,6 @@ class Websocket
         sock.onclose     = () ->
             that.close @
         Db.get 'room', rid, (res) =>
-            console.log typeof uid
-            console.log typeof res.owner
             owner = if String res.owner is uid then true else false
             Db.get 'user', uid, (res) =>
                 res.owner = owner
