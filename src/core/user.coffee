@@ -126,8 +126,6 @@ class _User
         param = req.body
         if param.name? and param.name isnt ""
             param.mail = param.name + do Date.now
-            param.id_acl = 0 #TO DO : put the right value
-            param.id_role = 0 #TO DO : put the right value
             @newUser req, res, param, ((req, res) =>
                 {Room}  = require './room'
                 Room.newRoom req, res, { }
@@ -145,8 +143,6 @@ class _User
                 rid             = param.room
                 delete param.room
                 param.mail      = param.name + do Date.now
-                param.id_acl    = 0
-                param.id_role   = 0
                 @newUser req, res, param, ((req, res) =>
                     res.redirect "/room/#{rid}"
                 ), @errorOnQuickLogin
