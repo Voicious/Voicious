@@ -8,6 +8,7 @@ block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/style.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/newRoom.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/sidebar.css")
 
 block scripts
     script(type='text/javascript', src='/public/js/vendor/bootstrap.min.js')
@@ -77,4 +78,6 @@ block content
               li#clipboardLink
                 i.icon-facebook-sign
                 | #{trans.shareOnFacebook}
-        div#content.fill-height.left.color-two
+        div#container.fill-height.color-two
+          div#modArea.fill-width
+            ul#feeds(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')

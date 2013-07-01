@@ -21,9 +21,9 @@ class Tutorial extends Module
         do @appendHTML
 
     appendHTML       : () ->
-        html = ($ '<a id="tutoModeBtn" href="javascript:void(0)" onclick="javascript:introJs().start();" class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all sidebarlinkoutsideacc">
-                     <p id="labelTutoMode"><i class="icon iconOther icon-question-sign"></i>&nbsp;Help</p>
-                   </a>'
+        html = ($ '<button onclick="javascript:introJs().start();" class="headerAcc ui-accordion-header bordered">
+                    <i class="icon-question-sign"></i>Help
+                    </button>'
         )
         html.appendTo "#sidebarAcc"
 
