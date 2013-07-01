@@ -79,6 +79,32 @@ button {
     margin-top: 10px;
 }
 
-#modArea:only-child {
-    padding-left: 10px;
+#modArea > *:nth-child(n+1) {
+    margin-left: 10px;
+}
+
+#feeds {
+    width: 115px
+}
+
+#feeds > li {
+    overflow: hidden;
+    position: relative;
+    height: 115px;
+}
+
+#feeds > li:nth-child(n+2) {
+    margin-top: 10px;
+}
+
+video {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+}
+
+.block {
+    position: relative;
+    display: inline-block;
 }

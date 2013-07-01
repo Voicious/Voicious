@@ -64,7 +64,7 @@ class UserList extends Module
         if inOneCol > nbUsers
             inOneCol = nbUsers
         columns  = parseInt (nbUsers / inOneCol + 0.5)
-        @jqContainer.css 'width', columns * 118
+#        @jqContainer.css 'width', columns * 115
 
     muteStream   : (event) =>
         button = $ event.target
@@ -89,6 +89,7 @@ class UserList extends Module
         @emitter.trigger 'message.sendToOneId', msg
 
     addInterface : (jqLi, login) =>
+        return
         intrfc = ($ "<i class='icon-eye-close nocam'></i>
                      <div class='user-square-controls'>
                          <div class='username'>#{login}</div>
