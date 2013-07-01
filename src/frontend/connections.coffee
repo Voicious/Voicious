@@ -165,7 +165,7 @@ class Connections
             do @ws.close
             for peer in @peers
                 do peer.close
-    
+
     modifyStream : () =>
         if @localStream isnt undefined
             do @localStream.stop
