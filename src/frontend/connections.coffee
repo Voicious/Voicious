@@ -61,6 +61,7 @@ class PC
                 uid   : @id
             emitter.trigger 'stream.create', data
         @pc.onremovestream = (event) =>
+            emitter.trigger 'stream.remove', { id : @id }
             streamID = event.stream.id # Get the old stream and
             do ($ "[data-streamid=#{streamID}]").remove # remove it
         @addStream localStream

@@ -44,6 +44,10 @@ class UserList extends Module
             @users[uid].video = video
             video.volume = @users[uid]['volume']
             ($ "li#video_#{uid}").append video
+        @emitter.on 'stream.create', (event, data) =>
+            @toggleButtons data.uid, ['zoomBtn', 'muteBtn']
+        @emitter.on 'stream.remove', (event, data) =>
+            @toggleButtons data.id, ['zoomBtn', 'muteBtn']
 
     # Fill the user list with new users.
     fill            : (event, data) =>
@@ -107,6 +111,16 @@ class UserList extends Module
         (jqLi.find '.muteBtn').click @muteStream
         (jqLi.find '.kickBtn').click @kickUser
 
+    toggleButtons     : (uid, buttonNames) =>
+        ($ 'ul#feeds').find('li.remoteLi').each (i, li) ->
+            if ($ li).attr('id') is "video_#{uid}"
+                ($ li).each (i, item) ->
+                    ($ item).find('li').each (i, item) ->
+                        button = ($ item)
+                        for name in buttonNames
+                            if button.hasClass name
+                                if button.css('display') is 'none' then do button.show else do button.hide
+
     # Update the user list window.
     display         : () =>
         do @jqContainer.empty
@@ -124,6 +138,7 @@ class UserList extends Module
                     @jqContainer.prepend li
                 else
                     @jqContainer.append li
+                if !@users[uid].video? then @toggleButtons uid, ['zoomBtn', 'muteBtn']
         do @updateColumns
 
 if window?

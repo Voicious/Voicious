@@ -25,8 +25,13 @@ class Camera extends Module
         @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
         @emitter.on 'stream.create', @newStream
-        @emitter.on 'stream.remove', @delStream
         @emitter.on 'stream.state', @changeStreamState
+        @emitter.on 'stream.remove', (event, user) =>
+            for key, value of @zoomCams
+                if key is user.id
+                    @zoom user.id, undefined
+                    return
+        @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
             @newStream event, { video : video , uid : window.Voicious.currentUser.uid , local : yes }
@@ -55,8 +60,8 @@ class Camera extends Module
         if (@streams.indexOf user.id) >= 0
             do ($ "li#video_#{user.id}").remove
             @streams.splice user.id, 1
-            for k, v of @zoomCams
-                if k is user.id
+            for key, value of @zoomCams
+                if key is user.id
                     @zoom user.id, undefined
                     return
 
@@ -68,7 +73,7 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
-        if Object.keys(@zoomCams).length == 0 and (not data.local? or not data.local)
+        if Object.keys(@zoomCams).length is 0 and (not data.local? or not data.local)
             @zoom data.uid, video
 
     changeStreamState : (event, data) =>
@@ -88,9 +93,9 @@ class Camera extends Module
     zoom : (uid, video) =>
         container    = ($ 'div#mainCam')
         container.removeClass 'hidden'
-        for k, v of @zoomCams
-            if k is uid
-                do @zoomCams[uid].remove
+        for key, value of @zoomCams
+            if key is uid
+                do value.remove
                 delete @zoomCams[uid]
                 return
         if video?
