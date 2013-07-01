@@ -21,7 +21,7 @@ class Camera extends Module
         do @appendHTML
         @jqMainCams       = ($ '#mainCam')
         @jqVideoContainer = ($ 'ul#videos')
-        @currentZoom      = undefined
+        @zoomCams         = { }
         @streams          = [ ]
         ($ 'button#joinConference').bind 'click', @enableCamera
         @emitter.on 'stream.create', @newStream
@@ -55,8 +55,10 @@ class Camera extends Module
         if (@streams.indexOf user.id) >= 0
             do ($ "li#video_#{user.id}").remove
             @streams.splice user.id, 1
-            if @currentZoom is user.id
-                @zoom undefined, undefined
+            for k, v of @zoomCams
+                if k is user.id
+                    @zoom user.id, undefined
+                    return
 
     newStream : (event, data) =>
         @streams.push data.uid
@@ -66,7 +68,7 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
-        if not @currentZoom? and (not data.local? or not data.local)
+        if Object.keys(@zoomCams).length == 0 and (not data.local? or not data.local)
             @zoom data.uid, video
 
     changeStreamState : (event, data) =>
@@ -86,14 +88,20 @@ class Camera extends Module
     zoom : (uid, video) =>
         container    = ($ 'div#mainCam')
         container.removeClass 'hidden'
-        do (container.find 'video').remove
-        @currentZoom = uid
+        for k, v of @zoomCams
+            if k is uid
+                do @zoomCams[uid].remove
+                delete @zoomCams[uid]
+                return
         if video?
             newVideo     = do video.clone
+            newVideo.attr 'id', "zoomcam#{uid}"
             newVideo[0].volume = video[0].volume
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
             container.append newVideo
+            @zoomCams[uid] = ($ "video#zoomcam#{uid}")
+
 
 if window?
     window.Camera = Camera
