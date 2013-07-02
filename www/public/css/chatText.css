@@ -1,0 +1,52 @@
+.frame {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    position: absolute;
+    margin: 10px;
+}
+
+textarea {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%
+}
+
+#textChat {
+    position: absolute;
+    width: 25%;
+}
+
+/*
+#chatContent {
+    height: calc(90% - 10px);
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+#chatForm {
+    margin: 0 10px;
+    margin-bottom: 10px;
+    height: calc(10% - 10px);
+}
+
+#chatForm > form {
+    height: 100%;
+}
+
+#chatForm > form > textarea {
+    -webkit-box-shadow: none; /* Remove */
+    box-shadow: none;         /*  blue  */
+    border: none;             /*  halo  */
+    height: 80%;
+    position: relative;
+    background-color: black; /* fake color */
+    resize: none;
+}
+
+#descriptionTC {
+    height: 20%;
+    display: block;
+    text-align: right;
+}
+*/

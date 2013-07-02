@@ -39,8 +39,8 @@ class TextChat extends Module
         do @appendHTML
 
         @markdown     = new Showdown.converter { extensions : ['voicious'] }
-        @jqForm       = ($ '#chatform > form')
-        @jqMessageBox = ($ '#chatcontent > ul')
+        @jqForm       = ($ '#chatForm > form')
+        @jqMessageBox = ($ '#chatContent > ul')
         @jqInput      = @jqForm.children 'textarea'
 
         @scrollPane   = do @jqMessageBox.jScrollPane
@@ -80,23 +80,23 @@ class TextChat extends Module
             @emitter.trigger 'chat.error', { text : "#{data.name} leaves the room. (#{data.reason})" }
 
     appendHTML      : () ->
-        html = ($ '<div class="fill-height color-one" id="textChat">
-                     <div style="height: 81%;" class="module-wrapper">
-                       <div id="chatcontent">
-                         <ul></ul>
+        html = ($ '<div class="block fill-height color-one" id="textChat">
+                   <div class="frame">
+                       <div id="chatContent">
+                            <ul></ul>
                        </div>
-                       <div id="chatform">
-                         <form>
-                           <span>Press ENTER to post</span>
-                           <textarea type="text"></textarea>' +
-                           # Wait for i18n
-                           #<input type="text" data-step="5" data-intro="" data-position="top"></input>
-                         '</form>
+                       <div id="chatForm">
+                           <form>
+                                <span id="descriptionTC">press ENTER to post</span>
+                                <textarea type="text"></textarea>' +
+                                # Wait for i18n
+                                #<input type="text" data-step="5" data-intro="" data-position="top"></input>
+                          '</form>
                        </div>
-                     </div>
+                   </div>
                    </div>'
         )
-        html.appendTo "#middle"
+        html.appendTo "#modArea"
 
     # Update the text chat with a new message.
     update          : (message) =>
@@ -160,7 +160,7 @@ class TextChat extends Module
         (do @scrollPane.getContentPane).append ($ '<li>').append jqNewMsg
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
-    
+
     # Add an action message to the text chat window
     addMeMessage        : (action) =>
         jqLastMessage = do (@jqMessageBox.find 'li').last
