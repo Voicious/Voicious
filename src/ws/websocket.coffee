@@ -62,7 +62,11 @@ class Websocket
             that.onmessage @, message
         sock.onclose     = () ->
             that.close @
-        @send sock, { type : 'authenticated' }
+        Db.get 'room', rid, (res) =>
+            owner = if String res.owner is uid then true else false
+            Db.get 'user', uid, (res) =>
+                res.owner = owner
+                @send sock, { type : 'authenticated', params : res }
         sock._nextPing   = setTimeout (() =>
             @sendPing sock
         ), 60000

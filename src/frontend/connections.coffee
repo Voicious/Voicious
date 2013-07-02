@@ -160,6 +160,7 @@ class Connections
         @emitter.on 'message.sendToOneName', @sendToOneName
         @emitter.on 'message.sendToOneId', @sendToOneId
         @emitter.on 'camera.enable', @enableCamera
+        @emitter.on 'authenticated', @initUser
         window.onClose = () =>
             do @ws.close
             for peer in @peers
@@ -177,6 +178,9 @@ class Connections
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
             do @enableCamera
 
+    initUser : (event, data) =>
+        window.Voicious.currentUser = data
+        
     removePeer   : (peerId) =>
         do @peers[peerId].close
         @peers[peerId] = null

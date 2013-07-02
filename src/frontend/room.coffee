@@ -20,7 +20,7 @@ class Room
     # Load the modules given in parameter (Array)
     constructor         : (modules) ->
         @emitter     = ($ '<span>', { display : 'none', id : 'EMITTER' })
-        @rid         = window.Voicious.room
+        @rid         = (window.location.pathname.split '/')[2]
         @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
 

@@ -23,9 +23,7 @@ block scripts
     script(type="text/javascript")
         window.Voicious.currentUser = {
             uid  : "#{uid}",
-            name : "#{login}"
         };
-        window.Voicious.room        = "#{rid}"
         if ("#{wsHost}" !== "" && "#{wsPort}" !== "") {
             window.ws          = {
                 Host : "#{wsHost}",
