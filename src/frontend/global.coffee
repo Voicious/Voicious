@@ -32,8 +32,8 @@ class PrivateValue
 PV  = new PrivateValue
 
 ($ document).ready () =>
-    #if document.location.pathname isnt "/browser" and not window.webkitRTCPeerConnection?
-    #    document.location = "/browser"
+    if document.location.pathname isnt "/browser" and not window.webkitRTCPeerConnection?
+        document.location = "/browser"
 
 if window?
     window.PrivateValue     = PV
