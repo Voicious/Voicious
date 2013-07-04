@@ -66,17 +66,21 @@ block content
               i.icon-microphone.dark-grey
               span OFF
           div#sidebarAcc
-            span.headerAcc.white.bordered.shadowed
+            span.headerAcc.white.bordered.shadowed(data-step='1', data-intro='#{trans.shareRoomTuto}', data-position='right')
               i.icon-share-alt
               | #{trans.shareRoomID}
             ul.white
               li#clipboardLink
                 i.icon-copy
                 | #{trans.copyRoomID}
-              li#clipboardLink
+                div.notification-wrapper.none
+                  div.notification.notification-success
+                    i.icon-check-sign.icon-large
+                    span.notification-content Link copied to clipboard
+              li#twitterLink
                 i.icon-twitter
                 | #{trans.shareOnTwitter}
-              li#clipboardLink
+              li#facebookLink
                 i.icon-facebook-sign
                 | #{trans.shareOnFacebook}
         div#container.fill-height.color-two
