@@ -89,7 +89,6 @@ class UserList extends Module
         @emitter.trigger 'message.sendToOneId', msg
 
     addInterface : (jqLi, login) =>
-        return
         intrfc = ($ "<i class='icon-eye-close nocam'></i>
                      <div class='user-square-controls'>
                          <div class='username'>#{login}</div>
