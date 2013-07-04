@@ -169,4 +169,25 @@ video {
     display: block;
 }
 
+.zoom-control {
+    display: none;
+    position: relative;
+}
+
+.zoom-cam:hover .zoom-control {
+    display: block;
+}
+
+.zoom-control li {
+    padding: 2px 8px 2px 8px;
+    margin-bottom: -1px;
+    width: 10px;
+    cursor: pointer;
+    float: right;
+}
+
+.zoom-control li {
+    float: inside;
+}
+
 /* end user interface on thumbnails */

@@ -104,12 +104,12 @@ class Camera extends Module
             newVideo[0].volume = video[0].volume
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
-            html = ($ "<li id='zoomcam_#{uid}' class='zoom-cam-wrapper video-wrapper user-square color-one remoteLi'>
-                           <div class='user-square-controls'>
+            html = ($ "<li id='zoomcam_#{uid}' class='zoom-cam-wrapper video-wrapper zoom-cam'>
+                           <div class='zoom-control index1'>
                                <ul>
                                    <li class='closeBtn'><i class='icon-remove'></i></li>
                                </ul>
-                           <div>
+                           </div>
                        </li>")
             (html.find '.closeBtn').click () =>
                 @zoom uid, undefined
