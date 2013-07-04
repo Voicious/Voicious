@@ -93,6 +93,7 @@ class Camera extends Module
     zoom : (uid, video) =>
         container    = ($ '#mainCam')
         container.removeClass 'hidden'
+        @emitter.trigger 'stream.zoom', uid
         for key, value of @zoomCams
             if key is uid
                 do value.remove
@@ -116,7 +117,6 @@ class Camera extends Module
             container.append html
             @centerVideoTag newVideo
             @zoomCams[uid] = ($ "li#zoomcam_#{uid}")
-
 
 if window?
     window.Camera = Camera

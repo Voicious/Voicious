@@ -48,6 +48,8 @@ class UserList extends Module
             @toggleButtons data.uid, ['zoomBtn', 'muteBtn']
         @emitter.on 'stream.remove', (event, data) =>
             @toggleButtons data.id, ['zoomBtn', 'muteBtn']
+        @emitter.on 'stream.zoom', (event, id) =>
+            @zoomButton id
 
     # Fill the user list with new users.
     fill            : (event, data) =>
@@ -111,15 +113,23 @@ class UserList extends Module
         (jqLi.find '.muteBtn').click @muteStream
         (jqLi.find '.kickBtn').click @kickUser
 
-    toggleButtons     : (uid, buttonNames) =>
-        ($ 'ul#feeds').find('li.remoteLi').each (i, li) ->
-            if ($ li).attr('id') is "video_#{uid}"
-                ($ li).each (i, item) ->
-                    ($ item).find('li').each (i, item) ->
-                        button = ($ item)
-                        for name in buttonNames
-                            if button.hasClass name
-                                if button.css('display') is 'none' then do button.show else do button.hide
+    toggleButtons     : (id, buttonNames) =>
+        ($ "li#video_#{id}").each (i, item) ->
+            ($ item).find('li').each (i, item) ->
+                button = ($ item)
+                for name in buttonNames
+                    if button.hasClass name
+                        if button.css('display') is 'none' then do button.show else do button.hide
+
+    zoomButton        : (id) =>
+        ($ "li#video_#{id}").each (i, item) ->
+            ($ item).find('li').each (i, item) ->
+                button = ($ item)
+                if button.hasClass 'zoomBtn'
+                    className = if (do button.text) is 'zoom' then 'icon-zoom-in' else 'icon-zoom-out'
+                    text = if (do button.text) is 'zoom' then 'unzoom' else 'zoom'
+                    do button.empty
+                    button.append "<i class='#{className}'></i>#{text}"
 
     # Update the user list window.
     display         : () =>
