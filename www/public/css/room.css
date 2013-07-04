@@ -59,6 +59,16 @@ button {
     float: left;
 }
 
+li.zoom-cam-wrapper {
+    display: block;
+    background-color: #131517;
+    font-family: 'PT Sans', 'Helvetica', sans-serif;
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 3px 3px 0;
+}
+
 video {
     position: absolute;
     top: 0;

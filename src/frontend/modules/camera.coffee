@@ -39,8 +39,9 @@ class Camera extends Module
             do @squareMainCam
             videos = ($ 'video')
             for video in videos
-                @centerVideoTag { currentTarget : video }
-        ($ document).on 'DOMNodeInserted', 'video', @centerVideoTag
+                @centerVideoTag ($ video)
+        ($ document).on 'DOMNodeInserted', 'video', (event) =>
+            @centerVideoTag ($ event.currentTarget)
         ($ '#feeds').delegate '.zoomBtn', 'click', (event) =>
             clickButton = ($ event.target)
             mainLi = clickButton.parents 'li.thumbnail-wrapper'
@@ -81,17 +82,16 @@ class Camera extends Module
 
     # Must set margin-left css propriety when adding a video tag to the page
     # Width is computed using video original size (640 * 480) since css value is wrong at this time
-    centerVideoTag : (event) =>
-        jqTag      = ($ event.currentTarget)
-        marginleft = ((do jqTag.height) * 640 / 480) / 2
-        jqTag.css 'margin-left', -marginleft
-        do event.currentTarget.play
+    centerVideoTag : (video) =>
+        marginleft = ((do video.height) * 640 / 480) / 2
+        video.css 'margin-left', -marginleft
+        do video[0].play
 
     enableCamera : () =>
         @emitter.trigger 'camera.enable'
 
     zoom : (uid, video) =>
-        container    = ($ 'div#mainCam')
+        container    = ($ '#mainCam')
         container.removeClass 'hidden'
         for key, value of @zoomCams
             if key is uid
@@ -100,12 +100,22 @@ class Camera extends Module
                 return
         if video?
             newVideo     = do video.clone
-            newVideo.attr 'id', "zoomcam#{uid}"
             newVideo[0].volume = video[0].volume
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
-            container.append newVideo
-            @zoomCams[uid] = ($ "video#zoomcam#{uid}")
+            html = ($ "<li id='zoomcam_#{uid}' class='zoom-cam-wrapper video-wrapper user-square color-one remoteLi'>
+                           <div class='user-square-controls'>
+                               <ul>
+                                   <li class='closeBtn'><i class='icon-remove'></i></li>
+                               </ul>
+                           <div>
+                       </li>")
+            (html.find '.closeBtn').click () =>
+                @zoom uid, undefined
+            html.append newVideo
+            container.append html
+            @centerVideoTag newVideo
+            @zoomCams[uid] = ($ "li#zoomcam_#{uid}")
 
 
 if window?
