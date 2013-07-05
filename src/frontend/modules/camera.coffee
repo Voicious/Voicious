@@ -34,7 +34,7 @@ class Camera extends Module
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
-            @newStream event, { video : video , uid : window.Voicious.currentUser.uid , local : yes }
+            @newStream event, { video : video , uid : window.Voicious.currentUser._id , local : yes }
         ($ window).on 'resize', () =>
             do @squareMainCam
             videos = ($ 'video')
@@ -70,7 +70,7 @@ class Camera extends Module
         @streams.push data.uid
         video = ($ data.video)
         if data.local? and data.local is true
-                video.addClass 'flipH'
+            video.addClass 'flipH'
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
