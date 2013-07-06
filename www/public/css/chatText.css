@@ -17,17 +17,13 @@ textarea {
     width: 25%;
 }
 
-/*
+
 #chatContent {
-    height: calc(90% - 10px);
-    margin-left: 10px;
-    margin-top: 10px;
+    height: 90%;
 }
 
 #chatForm {
-    margin: 0 10px;
-    margin-bottom: 10px;
-    height: calc(10% - 10px);
+    height: 10%;
 }
 
 #chatForm > form {
@@ -38,15 +34,14 @@ textarea {
     -webkit-box-shadow: none; /* Remove */
     box-shadow: none;         /*  blue  */
     border: none;             /*  halo  */
-    height: 80%;
+    height: 60%;
     position: relative;
     background-color: black; /* fake color */
     resize: none;
 }
 
 #descriptionTC {
-    height: 20%;
+    height: 40%;
     display: block;
     text-align: right;
 }
-*/

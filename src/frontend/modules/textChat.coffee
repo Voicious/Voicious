@@ -80,7 +80,7 @@ class TextChat extends Module
             @emitter.trigger 'chat.error', { text : "#{data.name} leaves the room. (#{data.reason})" }
 
     appendHTML      : () ->
-        html = ($ '<div class="block fill-height color-one" id="textChat">
+        html = ($ '<div class="module fill-height color-one" id="textChat">
                    <div class="frame">
                        <div id="chatContent">
                             <ul></ul>

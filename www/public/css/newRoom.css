@@ -117,7 +117,7 @@ video {
     height: 100%;
 }
 
-.block {
+.module {
     position: relative;
     display: inline-block;
 }
