@@ -37,13 +37,13 @@ block scripts
         }
     script(type="text/javascript")
       $( document ).ready(function() {
-            $("a#facebookLink").click(function() {
+            $("#facebookLink").click(function() {
                 window.open("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600');
             });
 
             text   = encodeURI("Join me on @voiciousapp: ");
             url    = encodeURI(window.location.href);
-            $("a#twitterLink").click(function() {
+            $("#twitterLink").click(function() {
                 window.open("http://twitter.com/share?text=" + text + "&url=" + url + "&related=voiciousapp", '', 'left=500,top=200,width=600,height=600');
             });
         });
