@@ -29,7 +29,7 @@ Config      = require '../common/config'
 class _Room
     # Initialize a nodemailer module and a list of modules
     # with default values.
-    constructor : (@modulesList = [ 'userList' , 'camera', 'notification', 'tutorial', 'textChat']) ->
+    constructor : (@modulesList = [ 'userList' , 'notification', 'tutorial', 'textChat', 'camera']) ->
         @transport = nodemailer.createTransport('Sendmail');
         @token  = Token
 

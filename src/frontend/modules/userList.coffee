@@ -90,7 +90,7 @@ class UserList extends Module
 
     addInterface : (jqLi, login) =>
         intrfc = ($ "<i class='icon-eye-close nocam'></i>
-                     <div class='user-square-controls'>
+                     <div class='frame user-square-controls'>
                          <div class='username'>#{login}</div>
                         <ul>
                             <li class='muteBtn'><i class='icon-microphone-off'></i>mute</li>

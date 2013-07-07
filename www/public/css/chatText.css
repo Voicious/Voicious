@@ -13,13 +13,61 @@ textarea {
 }
 
 #textChat {
-    position: absolute;
     width: 25%;
 }
 
-
 #chatContent {
     height: 90%;
+}
+
+#chatContent ul {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.chatmetadata:first-child {
+    color: #00AEEF;
+}
+
+.time {
+    color: #555;
+}
+
+.blueduckturquoise {
+    color: #00c296;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.chatmessage {
+    color: white;
+    word-wrap: break-word;
+    text-align: justify;
+    margin-top: 5px;
+}
+
+.chatmessage p {
+    line-height: 15px;
+    word-wrap: break-word;
+    width: 95%;
+}
+
+.chatmessage a {
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+#tcSeparator {
+    width: calc(100% - 12px);
+    border-bottom: 1px solid black;
+    margin-top: 13px;
+    margin-bottom: 11px;
+    margin-left: -2px;
 }
 
 #chatForm {

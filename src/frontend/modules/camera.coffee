@@ -18,6 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Camera extends Module
     constructor : (emitter) ->
         super emitter
+        do @appendHTML
         @jqMainCams       = ($ '#mainCam')
         @jqVideoContainer = ($ 'ul#videos')
         @currentZoom      = undefined
@@ -47,7 +48,7 @@ class Camera extends Module
         @jqMainCams.width do @jqMainCams.height
 
     appendHTML  : () ->
-        ($ '<div class="block color-one fill-height module" id="mainCam"></div>').appendTo '#modArea'
+        ($ '<div class="fill-height module" id="mainCam"></div>').appendTo '#modArea'
         $(window).trigger 'resize'
 
     delStream   : (event, user) =>
