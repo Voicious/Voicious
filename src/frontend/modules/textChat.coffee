@@ -43,7 +43,7 @@ class TextChat extends Module
         @jqMessageBox = ($ '#chatContent > ul')
         @jqInput      = @jqForm.children 'textarea'
 
-        @scrollPane   = do @jqMessageBox.jScrollPane
+        @scrollPane   = @jqMessageBox.jScrollPane { horizontalDragMaxWidth: 0 }
         @scrollPane   = @jqMessageBox.data 'jsp'
 
         @jqInput.on 'keypress', (event) =>
