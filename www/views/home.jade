@@ -56,8 +56,8 @@ block content
                         div.description
                             i.icon-asterisk
                             | Create a new Room
-                        input(name='name', placeholder='Nickname', type='text', required='true')
-                        div.error
+                        input(name='name', placeholder='Nickname', type='text', required)
+                        div.error(for='name')
                             label
                                 i.icon-remove
                                 | &nbsp;Please choose a nickname
@@ -68,17 +68,21 @@ block content
                         div.description
                             i.icon-chevron-right
                             | Join an existing Room
-                        input(name='room', placeholder='Room ID', type='text', required='true')
-                        div.msg.success
+                        input(name='room', placeholder='Room ID', type='text', required)
+                        div.msg.success(for='room')
                             label
                                 i.icon-ok
                                 strong Room ID
                                 | &nbsp;is OK
-                        input(name='name', placeholder='Nickname', type='text', required='true')
-                        div.msg.info
+                        input(name='name', placeholder='Nickname', type='text', required)
+                        div.msg.info(for='name')
                             label
                                 i.icon-hand-left
                                 | &nbsp;Choose a nickname, then you are good to join
+                        div.error(for='name')
+                            label
+                                i.icon-remove
+                                | &nbsp;Please choose a nickname
                         button.btn-large.btn-start.btn-join join
                         button.btn-large.btn-start.btn-cancel cancel
             div#signinContainer.stepContainer

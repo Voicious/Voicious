@@ -44,6 +44,25 @@ displayStep = (element) =>
         right   : 0
     }, 200
 
+validateInput = (event) ->
+    target   = ($ @)
+    displays =
+        error   : ''
+        success : ''
+    if do @checkValidity
+        target.attr 'class', 'input-success'
+        displays.error   = 'none'
+        displays.success = 'inline-block'
+    else
+        target.attr 'class', 'input-error'
+        displays.error   = 'inline-block'
+        displays.success = 'none'
+    for cat, disp of displays
+        message = do (target.siblings ('.' + cat)).first
+        if (message.attr 'for') is target.attr 'name'
+            message.css 'display', disp
+
+
 init = () =>
     quick              = ($ '#quick')
     signin             = ($ '#signin')
@@ -79,6 +98,9 @@ init = () =>
         ($ @).toggleClass 'checked'
         rememberMeBox.prop 'checked', not rememberMeBox.prop 'checked'
         rememberMeIconTick.attr 'class', (if rememberMeBox.prop 'checked' then 'icon-check' else 'icon-check-empty')
+
+    ($ 'input[required]').on 'keyup', validateInput
+    ($ 'input[required]').on 'blur', validateInput
 
 ($ document).ready () =>
     do init
