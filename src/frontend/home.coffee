@@ -37,7 +37,6 @@ displaySection = (element) =>
 displayStep = (element) =>
     element = ($ element)
     step    = ($ containers[element.attr 'id'])
-    console.log step
     do (do step.siblings).hide
     step.fadeTo 0, 0.1
     (step.css 'right', '-50px').animate {
@@ -47,7 +46,7 @@ displayStep = (element) =>
 
 init = () =>
     quick              = ($ '#quick')
-    signIn             = ($ '#signin')
+    signin             = ($ '#signin')
     cancel             = ($ '.btn-cancel')
     tabs               = ($ '.tabs > div')
     rememberMe         = ($ '.rememberMe')
@@ -56,7 +55,7 @@ init = () =>
     quickChoices       = ($ '#quickInitial > button')
     containers         =
         quick          : '#quickContainer'
-        signIn         : '#signinContainer'
+        signin         : '#signinContainer'
         quickCreateBtn : '#quickCreate'
         quickJoinBtn   : '#quickJoin'
     ($ 'button').attr 'tabindex', '-1'

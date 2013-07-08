@@ -1,25 +1,25 @@
 extends main
 
 block style
-    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/font-awesome.min.css")
-    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/home.css")
+    link(rel='stylesheet', media='screen', type='text/css', href='/public/css/font-awesome.min.css')
+    link(rel='stylesheet', media='screen', type='text/css', href='/public/css/home.css')
 
 block scripts
     script(type='text/javascript', src='/public/js/home.js')
-    script(type="text/javascript")
-        if ("#{hash}" !== "") {
-            window.location.hash    = "#{hash}";
+    script(type='text/javascript')
+        if ('#{hash}' !== '') {
+            window.location.hash    = '#{hash}';
         }
 
     if locals.erroron
-        script(type="text/javascript")
+        script(type='text/javascript')
             this.erroron    = JSON.parse('!{erroron}');
 
     if locals.roomid
-        script(type="text/javascript")
+        script(type='text/javascript')
             $(document).ready(function () {
-                $("#joinRoomBtn").click();
-                $("#joinUrl").val("!{roomid}");
+                $('#joinRoomBtn').click();
+                $('#joinUrl').val('!{roomid}');
             });
 
 block content
@@ -55,7 +55,7 @@ block content
                     div.description
                         i.icon-asterisk
                         | Create a new Room
-                    input(name="nickname", placeholder="Nickname", type="text")
+                    input(name='nickname', placeholder='Nickname', type='text')
                     div.error
                         label
                             i.icon-remove
@@ -66,16 +66,32 @@ block content
                     div.description
                         i.icon-chevron-right
                         | Join an existing Room
-                    input(name="roomId", placeholder="Room ID", type="text")
+                    input(name='roomId', placeholder='Room ID', type='text')
                     div.msg.success
                         label
                             i.icon-ok
                             strong Room ID
                             | &nbsp;is OK
-                    input(name="nickname", placeholder="Nickname", type="text", autofocus)
+                    input(name='nickname', placeholder='Nickname', type='text', autofocus)
                     div.msg.info
                         label
                             i.icon-hand-left
                             | &nbsp;Choose a nickname, then you are good to join
                     button.btn-large.btn-start.btn-create create
                     button.btn-large.btn-start.btn-cancel cancel
+            div#signinContainer.stepContainer
+                div#signinStep.step
+                    div.description
+                        i.icon-user
+                        | Sign in
+                    input(name='username', placeholder='Username or Email address', type='text')
+                    input(name='password', placeholder='Password', type='password')
+                    a.forgot(href='#')
+                        i.icon-question-sign
+                        | I forgot my password
+                    div.rememberMe
+                        input#rememberMe(type='checkbox', hidden=true)
+                        label
+                            i.icon-check-empty
+                            | Remember me
+                    button.btn-large.btn-start.btn-signin sign in
