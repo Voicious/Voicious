@@ -67,13 +67,12 @@ init = () =>
         displayStep @
 
     cancel.click () ->
-        parent = do ($ @).parent
+        parent = ($ @).parents '.step'
         parent.animate {
             opacity : 0
             right   : '-50'
         }, 200, () =>
             do parent.hide
-            console.log 'here'
             ($ '#quickInitial').fadeIn 100
 
 ($ document).ready () =>
