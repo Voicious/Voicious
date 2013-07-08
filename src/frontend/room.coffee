@@ -106,8 +106,10 @@ class Room
             dataType: 'script'
         ).done (data) =>
             eval data
-            module = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
-            @moduleArray.push (new window[module] @emitter)
+            module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
+            theModule = (new window[module] @emitter)
+            @emitter.on 'module.initialize', theModule.initialize
+            @moduleArray.push theModule
             @loadModules modules, cb
 
     # Load the Modules given in parameter recursively.

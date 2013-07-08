@@ -18,7 +18,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Module
     constructor : (@emitter) ->
 
-    appendHTML  : () ->
+    appendHTML  : () =>
+
+    initialize  : () =>
 
 if window?
     window.Module = Module
