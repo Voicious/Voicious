@@ -75,6 +75,11 @@ init = () =>
             do parent.hide
             ($ '#quickInitial').fadeIn 100
 
+    rememberMe.click () ->
+        ($ @).toggleClass 'checked'
+        rememberMeBox.prop 'checked', not rememberMeBox.prop 'checked'
+        rememberMeIconTick.attr 'class', (if rememberMeBox.prop 'checked' then 'icon-check' else 'icon-check-empty')
+
 ($ document).ready () =>
     do init
     displaySection quick
