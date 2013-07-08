@@ -56,7 +56,7 @@ block content
                         div.description
                             i.icon-asterisk
                             | Create a new Room
-                        input(name='name', placeholder='Nickname', type='text')
+                        input(name='name', placeholder='Nickname', type='text', required='true')
                         div.error
                             label
                                 i.icon-remove
@@ -64,22 +64,23 @@ block content
                         button.btn-large.btn-start.btn-create(type='submit') create
                         button.btn-large.btn-start.btn-cancel cancel
                 div#quickJoin.step
-                    div.description
-                        i.icon-chevron-right
-                        | Join an existing Room
-                    input(name='roomId', placeholder='Room ID', type='text')
-                    div.msg.success
-                        label
-                            i.icon-ok
-                            strong Room ID
-                            | &nbsp;is OK
-                    input(name='nickname', placeholder='Nickname', type='text', autofocus)
-                    div.msg.info
-                        label
-                            i.icon-hand-left
-                            | &nbsp;Choose a nickname, then you are good to join
-                    button.btn-large.btn-start.btn-join join
-                    button.btn-large.btn-start.btn-cancel cancel
+                    form(method='POST', action='/quickJoin')
+                        div.description
+                            i.icon-chevron-right
+                            | Join an existing Room
+                        input(name='room', placeholder='Room ID', type='text', required='true')
+                        div.msg.success
+                            label
+                                i.icon-ok
+                                strong Room ID
+                                | &nbsp;is OK
+                        input(name='name', placeholder='Nickname', type='text', required='true')
+                        div.msg.info
+                            label
+                                i.icon-hand-left
+                                | &nbsp;Choose a nickname, then you are good to join
+                        button.btn-large.btn-start.btn-join join
+                        button.btn-large.btn-start.btn-cancel cancel
             div#signinContainer.stepContainer
                 div#signinStep.step
                     div.description
