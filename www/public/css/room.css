@@ -85,7 +85,7 @@ button {
     font-family: 'Open Sans', sans-serif;
     font-size: 13px;
     color: #eee;
-    width: 115px
+    width: 118px;
 }
 
 #feeds ul {
@@ -98,10 +98,12 @@ button {
     overflow: hidden;
     position: relative;
     height: 115px;
-}
-
-#feeds > li:nth-child(n+2) {
-    margin-top: 10px;
+    width: 115px;
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0 3px 3px 0;
+    float: left;
 }
 
 video {

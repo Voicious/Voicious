@@ -64,7 +64,7 @@ class UserList extends Module
         if inOneCol > nbUsers
             inOneCol = nbUsers
         columns  = parseInt (nbUsers / inOneCol + 0.5)
-#        @jqContainer.css 'width', columns * 115
+        @jqContainer.css 'width', columns * 118
 
     muteStream   : (event) =>
         button = $ event.target
