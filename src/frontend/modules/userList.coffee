@@ -22,13 +22,16 @@ class UserList extends Module
         @jqContainer = ($ 'ul#feeds')
         @columns     = 1
         @users       = { }
-        @users[window.Voicious.currentUser.uid] = window.Voicious.currentUser
-        @users[window.Voicious.currentUser.uid]['isLocal'] = on
-        @users[window.Voicious.currentUser.uid]['volume'] = on
         do @configureEvents
         do @display
         ($ window).on 'resize', () =>
             do @updateColumns
+
+    initialize          : () =>
+        @users[window.Voicious.currentUser.uid] = window.Voicious.currentUser
+        @users[window.Voicious.currentUser.uid]['isLocal'] = on
+        @users[window.Voicious.currentUser.uid]['volume'] = on
+        do @display
 
     configureEvents     : () =>
         @emitter.on 'peer.list', @fill
