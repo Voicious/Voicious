@@ -81,15 +81,15 @@ class Room
                     @refreshOnOff ($ '#mic'), data['audio']
 
     setClipboard        : () ->
-        jqLink = $ 'a#clipboardLink'
-        jqLink.attr 'data-clipboard-text', window.location
-        clip = new ZeroClipboard jqLink[0], { moviePath: "/public/swf/vendor/ZeroClipboard.swf", hoverClass: "clipboardLink" }
+        jqElem = $ '#clipboardLink'
+        jqElem.attr 'data-clipboard-text', window.location
+        clip = new ZeroClipboard jqElem[0], { moviePath: "/public/swf/vendor/ZeroClipboard.swf", hoverClass: "clipHover" }
         clip.on 'complete', () ->
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
     setPage             : () ->
-        $('#sidebarAcc').accordion { active: false, collapsible: true }
-        $('a#shareRoomLink, a#manageRoomLink').click () ->
+        $('#sidebarAcc').accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
+        $('.headerAcc').click () ->
             elem = ($ this)
             elem.toggleClass 'down'
             jqSiblinsA = elem.siblings 'a'

@@ -1,0 +1,167 @@
+/* Sidebar Related */
+
+#sidebar i {
+    margin-right: 6px;
+}
+
+#logo {
+    margin-top: 10%;
+}
+
+#sidebar {
+    width: auto;
+    float: left;
+    min-width: 150px;
+}
+
+
+#userInfoCtn {
+    margin-top: 25%;
+    margin-right: 15%;
+}
+
+#login {
+    font-weight: bold;
+    font-size: 15px;
+    color: #b4C1C7;
+}
+
+#acl {
+    font-family: 'OpenSans-Regular';
+    font-weight: bold;
+    font-size: 13px;
+    color: #00aeef;
+}
+
+#onOffCtn {
+    margin-top: 15%;
+}
+
+#onOffCtn i {
+    font-size: 22px;
+}
+
+#onOffCtn span {
+    font-size: 12px;
+    font-family: 'OpenSans-Bold';
+}
+
+.activable {
+    width: 50%;
+    padding : 10px 0;
+    cursor: pointer;
+    border-right: none;
+}
+
+.headerAcc i {
+    font-size: 13px;
+}
+
+/* Remove shitty properties added by ui-accordion-header */
+#sidebarAcc .ui-accordion-header {
+    font-family: 'OpenSans-Bold';
+    padding: 20px 0;
+    margin-top: 0;
+}
+
+#sidebarAcc .ui-accordion-content {
+    font-family: 'OpenSans-Bold';
+    padding: 0;
+}
+
+.headerAcc:hover {
+    background: #0e1011;
+}
+
+.headerAcc {
+    border-top: none;
+    border-right: none;
+    font-size: 12px;
+    text-align: center;
+}
+
+.headerAcc.down {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#070809), color-stop(100%,#191b1e));
+    background: -webkit-linear-gradient(top, #070809 0%,#191b1e 100%);
+}
+
+#sidebarAcc > ul > li {
+    padding: 5px 0;
+    font-size: 11px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(15, 15, 15);
+    cursor: pointer;
+    box-shadow: inset 0 1px rgba(255,255,255,.05);
+}
+
+#sidebarAcc > ul > li > i {
+    margin-left: 10%;
+}
+
+#sidebarAcc > ul > li:hover {
+    background: #0e1011;
+}
+
+/* Due to flash elem */
+.clipHover {
+    background: #0e1011;
+}
+
+/* notification */
+
+.notification-wrapper {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: 10px; /* Malek said 8px but fit with the beginning of the mainCam at 10px. */
+    left: 0;
+    z-index: 1;
+}
+
+.notification {
+    text-shadow: 0 1px rgba(0, 0, 0, .2);
+    background: #000;
+    background: rgba(0, 0, 0, .6);
+    display: inline-block;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.notification i {
+    margin-right: 4px;
+}
+
+/* success notifications style */
+
+.notification-success .notification-content {
+    font-family: 'OpenSans-Regular';
+    border-bottom: solid 1px rgba(0, 0, 0, .7);
+    display: inline-block;
+    border-radius: 4px;
+    padding: 3px 8px;
+    box-shadow: inset 0 1px #00c84c;
+    background: -moz-linear-gradient(top,  #00ae42 0%, #00c84c 100%); /* FF3.6+ */
+    background: -webkit-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #00ae42 0%,#00c84c 100%); /* W3C */
+}
+
+.notification-success i {
+    color: #00ae42;
+}
+
+.fire-notification {
+    background-color: #111;
+    text-transform: uppercase;
+    font-size: .8em;
+    padding: 6px;
+    margin-left: 12px;
+    border: solid 1px #111;
+    border-radius: 4px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .06), 0 1px rgba(255, 255, 255, .06);
+    color: #eee;
+}
+
+/* end notifications */

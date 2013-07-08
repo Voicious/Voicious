@@ -8,6 +8,8 @@ block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/introjs.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/style.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/room.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/sidebar.css")
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/chatText.css")
 
 block scripts
     script(type='text/javascript', src='/public/js/vendor/bootstrap.min.js')
@@ -35,13 +37,13 @@ block scripts
         }
     script(type="text/javascript")
       $( document ).ready(function() {
-            $("a#facebookLink").click(function() {
+            $("#facebookLink").click(function() {
                 window.open("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600');
             });
 
             text   = encodeURI("Join me on @voiciousapp: ");
             url    = encodeURI(window.location.href);
-            $("a#twitterLink").click(function() {
+            $("#twitterLink").click(function() {
                 window.open("http://twitter.com/share?text=" + text + "&url=" + url + "&related=voiciousapp", '', 'left=500,top=200,width=600,height=600');
             });
         });
@@ -51,51 +53,36 @@ block scripts
 block content
   div.container-fluid.fill-height
     div.row-fluid.fill-height
-        div#sidebar.fill-height.left.color-one.column
-            img#logo(src='/public/img/logo.png')
-            p#login.textBtn #{login}
-            span#acl #{trans.user}
-            div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
-              button#cam.activable.red.color-one
-                i.icon.iconMedia.icon-facetime-video.dark-grey
-                span OFF
-              button#mic.activable.red.color-one
-                i.icon.iconMedia.icon-microphone.dark-grey
-                span OFF
-            div#sidebarAcc
-              a#shareRoomLink(data-step='1', data-intro='#{trans.shareRoomTuto}', data-position='right')
-                p#labelShareRoom
-                  i.icon.iconOter.icon-share-alt
-                  | #{trans.shareRoomID}
-              div.accordionTab
-                a#clipboardLink.accordionLink(data-clipboard-text='')
-                  p.labelOther
-                    i.icon.iconOther.icon-copy
-                    | #{trans.copyRoomID}
-                  div.notification-wrapper.none
-                    div.notification.notification-success
-                      i.icon-check-sign.icon-large
-                      span.notification-content Link copied to clipboard
-                a#inviteContactLink.accordionLink(style='display: none;')
-                  p.labelOther
-                    i.icon.iconOther.icon-plus
-                    | #{trans.inviteContacts}
-                a#twitterLink.accordionLink(href="#", data-count="none")
-                  p.labelOther
-                    i.icon.iconOther.icon-twitter
-                    | #{trans.shareOnTwitter}
-                a#facebookLink(href="#", target="_blank").accordionLink
-                  p.labelOther
-                    i.icon.iconOther.icon-facebook-sign
-                    | #{trans.shareOnFacebook}
-              //a#manageRoomLink(style='display: none;', data-step='2', data-intro='#{trans.manageRoomTuto}', data-position='right')
-              a#manageRoomLink(style='display: none;')
-                span#manageRoomSpan.icon.iconOther.icon-wrench
-                p#labelManageRoom #{trans.manageRoom}
-              div.accordionTab
-        div#content.fill-height.left.color-two
-            div.fill-height.left.column
-                ul#feeds(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')
-            div#middle.fill-height.left.column(style='width:26%')
-            div.fill-height.left.column
-              div#mainCam.fill-height.video-wrapper
+        div#sidebar.row-fluid.fill-height.left.color-one
+          img#logo.center(src='/public/img/logo.png')
+          div#userInfoCtn
+            p#login(align="right") #{login}
+            p#acl(align="right") #{trans.user}
+          div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
+            button#cam.activable.red.color-one.bordered.shadowed
+              i.icon-facetime-video.dark-grey
+              span OFF
+            button#mic.activable.red.color-one.bordered.shadowed
+              i.icon-microphone.dark-grey
+              span OFF
+          div#sidebarAcc
+            span.headerAcc.white.bordered.shadowed(data-step='1', data-intro='#{trans.shareRoomTuto}', data-position='right')
+              i.icon-share-alt
+              | #{trans.shareRoomID}
+            ul.white
+              li#clipboardLink
+                i.icon-copy
+                | #{trans.copyRoomID}
+                div.notification-wrapper.none
+                  div.notification.notification-success
+                    i.icon-check-sign.icon-large
+                    span.notification-content Link copied to clipboard
+              li#twitterLink
+                i.icon-twitter
+                | #{trans.shareOnTwitter}
+              li#facebookLink
+                i.icon-facebook-sign
+                | #{trans.shareOnFacebook}
+        div#container.fill-height.color-two
+          div#modArea.frame.fill-width
+            ul#feeds.module.fill-height(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')
