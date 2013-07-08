@@ -14,6 +14,7 @@ textarea {
 
 #textChat {
     width: 25%;
+    font-size: 13px;
 }
 
 #chatContent {
@@ -32,6 +33,7 @@ textarea {
 
 .time {
     color: #555;
+    font-size: 12px;
 }
 
 .blueduckturquoise {
@@ -89,6 +91,7 @@ textarea {
     resize: none;
     padding: 0 5px;
     color: #090a0b;
+    font-size: 13px;
 }
 
 #descriptionTC {
