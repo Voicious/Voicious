@@ -1,6 +1,7 @@
 extends main
 
 block style
+    link(rel="stylesheet", media="screen", type="text/css", href="/public/css/font-awesome.min.css")
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/home.css")
 
 block scripts
@@ -9,7 +10,6 @@ block scripts
             window.location.hash    = "#{hash}";
         }
 
-    script(type="text/javascript", src="/public/js/home.js")
     if locals.erroron
         script(type="text/javascript")
             this.erroron    = JSON.parse('!{erroron}');
@@ -22,76 +22,59 @@ block scripts
             });
 
 block content
-    div#logo.no-selec
-    div#desc.no-selec web voice chat application
-      b#logoBeta Beta
-    div#choices.no-selec
-      ul.clean.hidden
-        li#jumpInBtn.choice.txt-shd #{trans.jumpInBtn}
-        li#logInBtn.choice.middle-choice.txt-shd #{trans.logInBtn}
-        li#signUpBtn.choice.txt-shd #{trans.signUpBtn}
-      ul
-    div#choicesContainer
-      span
-        span
-          span.stateGroup(rel="newNickname", style="top:5px;")
-            span.stateIcon(rel="newNickname")
-            span.errorMessage.none(rel="newNickname") #{trans.invalidNickname}
-          span
-            span.stateGroup(rel="joinNickName", style="top:5px;")
-              span.stateIcon(rel="joinNickName")
-              span.errorMessage.none(rel="joinNickName") #{trans.invalidNickname}
-            span.stateGroup(rel="joinUrl", style="top:37px;")
-              span.stateIcon(rel="joinUrl")
-              span.errorMessage.none(rel="joinUrl") #{trans.invalidURL}
-        span
-          span.stateGroup(rel="login_email", style="top:10px;")
-            span.stateIcon(rel="login_email")
-            span.errorMessage.none(rel="login_email") #{trans.invalidEmail}
-          span.stateGroup(rel="login_password", style="top:42px;")
-            span.stateIcon(rel="login_password")
-            span.errorMessage.none(rel="login_password") #{trans.invalidPassword}
-        span
-          span.stateGroup(rel="signup_email", style="top:10px;")
-            span.stateIcon(rel="signup_email")
-            span.errorMessage.none(rel="signup_email") #{trans.invalidEmail}
-          span.stateGroup(rel="signup_password", style="top:43px;")
-            span.stateIcon(rel="signup_password")
-            span.errorMessage.none(rel="signup_password", style="top:14px;") #{trans.invalidPassword}
-          span.stateGroup(rel="signup_password_confirm", style="top:75px;")
-            span.stateIcon(rel="signup_password_confirm")
-      div#jumpIn.no-selec
-        div#stepOne
-          button#newRoomBtn.med-green.btn-submit.txt-shd
-            span #{trans.newRoomBtn}
-          button#joinRoomBtn.blue-green.btn-submit.txt-shd
-            span #{trans.joinRoomBtn}
-        div#newRoom
-          form#quickLogin_form(method="POST", action='/quickLogin')
-            input#newNickname.brdr(name="name", type="text", placeholder="#{trans.placeholderLogin}", value="#{name}", required="true", maxlength="25")
-          button#newRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickLogin_form")
-            span #{trans.newRoomCommit}
-          button#newRoomCancel.grey-blue.btn-submit.txt-shd
-            span #{trans.cancel}
-        div#joinRoom
-          form#quickJoin_form(method="POST", action="/quickJoin")
-            input#joinNickname.brdr(type="text", placeholder="#{trans.placeholderLogin}", required="true", name="name", maxlength="25")
-            input#joinUrl.brdr(type="text", placeholder="#{trans.placeholderRoomURL}", required="true", name="room")
-          button#joinRoomCommit.light-blue.btn-submit.txt-shd(type="submit", form="quickJoin_form") #{trans.joinRoomCommit}
-          button#joinRoomCancel.grey-blue.btn-submit.txt-shd #{trans.cancel}
-      div#logIn.no-selec
-        form#login_form(method="POST", action="/login")
-          input#login_email.brdr(name="mail", type="email", placeholder="Email", value="#{login_email}", required="true")
-          input#login_password.brdr(name="password", type="password", placeholder="#{trans.placeholderPass}", required="true")
-        button#login-btn.light-blue.btn-submit.txt-shd(type="submit", form="login_form")
-          span #{trans.logInBtn}
-        a(href="#password") #{trans.forgotPass}
-      div#signUp.no-selec
-
-        form#signup_form(method="POST", action="/user")
-          input#signup_email.brdr(name="mail", type="email", placeholder="Email", value="#{signup_email}", required="true")
-          input#signup_password.brdr(name="password", type="password", placeholder="#{trans.placeholderPass}", required="true")
-          input#signup_password_confirm.brdr(name="passwordconfirm", type="password", placeholder="#{trans.placeholderConfirmPass}", required="true")
-        button#signup-btn.light-blue.btn-submit.txt-shd(type="submit", form="signup_form") #{trans.signUpBtn}
-      if locals.error
-        p#msg #{error}
+  div.container
+    div.signup
+      a
+        i.icon-edit
+        strong SIGN UP
+        | &nbsp;for an account
+      a.benefits
+        i.icon-chevron-sign-right
+        | benefits of signing up (for free)
+    div.start-container
+      div.logo
+      div.tabs
+        div.quick
+          i.icon-bolt
+          | quick start
+        div.signin
+          i.icon-user
+          | sign in
+      div#quickContainer.stepContainer
+        div#quickInitial.step
+          button#quickCreateBtn.btn-large.btn-quick.btn-start.btn-quick-init
+            i.icon-asterisk.icon-create
+            strong create
+            | &nbsp;new room
+          button#quickJoinBtn.btn-large.btn-quick.btn-start.btn-quick-init
+            i.icon-chevron-right.icon-join
+            strong join
+            | &nbsp;existing room
+      div#quickCreate.step
+        div.description
+          i.icon-asterisk
+          | Create a new Room
+        input(name="nickname", placeholder="Nickname", type="text")
+        div.error
+          label
+            i.icon-remove
+            | &nbsp;Please choose a nickname
+        button.btn-large.btn-start.btn-create create
+        button.btn-large.btn-start.btn-cancel cancel
+      div#quickJoin.step
+        div.description
+          i.icon-chevron-right
+          | Join an existing Room
+        input(name="roomId", placeholder="Room ID", type="text")
+        div.msg.success
+          label
+            i.icon-ok
+            strong Room ID
+            | &nbsp;is OK
+        input(name="nickname", placeholder="Nickname", type="text", autofocus)
+        div.msg.info
+          label
+            i.icon-hand-left
+            | &nbsp;Choose a nickname, then you are good to join
+        button.btn-large.btn-start.btn-create create
+        button.btn-large.btn-start.btn-cancel cancel
