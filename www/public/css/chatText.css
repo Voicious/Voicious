@@ -3,6 +3,9 @@
 }
 
 #chatContent {
+    -webkit-user-select: text;  /* Chrome all / Safari all */
+    -moz-user-select: text;     /* Firefox all */
+    user-select: text;
     height: 90%;
 }
 
