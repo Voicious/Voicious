@@ -5,6 +5,7 @@ block style
     link(rel="stylesheet", media="screen", type="text/css", href="/public/css/home.css")
 
 block scripts
+    script(type='text/javascript', src='/public/js/home.js')
     script(type="text/javascript")
         if ("#{hash}" !== "") {
             window.location.hash    = "#{hash}";
