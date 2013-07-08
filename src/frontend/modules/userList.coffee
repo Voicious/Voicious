@@ -116,12 +116,14 @@ class UserList extends Module
                     id    : "video_#{uid}"
                     class : 'thumbnail-wrapper video-wrapper user-square color-one'
                 })
-                li.addClass (if @users[uid]['isLocal'] is on then 'localLi' else 'remoteLi')
                 @addInterface li, @users[uid].name
                 if @users[uid].video?
                     li.append @users[uid].video
                     do @users[uid].video.play
-                @jqContainer.append li
+                if @users[uid].isLocal? and @users[uid].isLocal
+                    @jqContainer.prepend li
+                else
+                    @jqContainer.append li
         do @updateColumns
 
 if window?
