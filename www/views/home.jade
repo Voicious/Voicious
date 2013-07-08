@@ -52,16 +52,17 @@ block content
                         strong join
                         | &nbsp;existing room
                 div#quickCreate.step
-                    div.description
-                        i.icon-asterisk
-                        | Create a new Room
-                    input(name='nickname', placeholder='Nickname', type='text')
-                    div.error
-                        label
-                            i.icon-remove
-                            | &nbsp;Please choose a nickname
-                    button.btn-large.btn-start.btn-create create
-                    button.btn-large.btn-start.btn-cancel cancel
+                    form(method='POST', action='/quicklogin')
+                        div.description
+                            i.icon-asterisk
+                            | Create a new Room
+                        input(name='name', placeholder='Nickname', type='text')
+                        div.error
+                            label
+                                i.icon-remove
+                                | &nbsp;Please choose a nickname
+                        button.btn-large.btn-start.btn-create(type='submit') create
+                        button.btn-large.btn-start.btn-cancel cancel
                 div#quickJoin.step
                     div.description
                         i.icon-chevron-right
