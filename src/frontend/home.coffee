@@ -105,3 +105,13 @@ init = () =>
 ($ document).ready () =>
     do init
     displaySection quick
+    if window.location.search?
+        params = (window.location.search.substr 1).split '&'
+        for param in params
+            [ name , value ] = param.split '='
+            if name is 'roomid'
+                container = ($ containers.quickJoinBtn)
+                (container.find 'input[name=room]').val value
+                (container.find '.info').css 'display', 'inline-block'
+                do ($ '#quickJoinBtn').click
+                break
