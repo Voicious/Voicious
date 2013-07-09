@@ -49,14 +49,17 @@ validateInput = (event) ->
     displays =
         error   : ''
         success : ''
+        info    : ''
     ok       = yes
     if do event.currentTarget.checkValidity
         target.attr 'class', 'input-success'
         displays.error   = 'none'
+        displays.info    = 'none'
         displays.success = 'inline-block'
     else
         target.attr 'class', 'input-error'
         displays.error   = 'inline-block'
+        displays.info    = 'none'
         displays.success = 'none'
         ok               = no
     for cat, disp of displays
