@@ -87,6 +87,7 @@ init = () =>
 
     cancel.click () ->
         parent = ($ @).parents '.step'
+        (parent.find '.error, .info, .success').css 'display', 'none'
         parent.animate {
             opacity : 0
             right   : '-50'
