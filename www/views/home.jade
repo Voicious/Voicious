@@ -61,7 +61,7 @@ block content
                             label
                                 i.icon-remove
                                 | &nbsp;Please choose a nickname
-                        button.btn-large.btn-start.btn-create(type='submit') create
+                        button.btn-large.btn-start.btn-create(type='submit', formnovalidate) create
                         button.btn-large.btn-start.btn-cancel(type='reset') cancel
                 div#quickJoin.step
                     form(method='POST', action='/quickJoin')
@@ -83,7 +83,7 @@ block content
                             label
                                 i.icon-remove
                                 | &nbsp;Please choose a nickname
-                        button.btn-large.btn-start.btn-join(type='submit') join
+                        button.btn-large.btn-start.btn-join(type='submit', formnovalidate) join
                         button.btn-large.btn-start.btn-cancel(type='reset') cancel
             div#signinContainer.stepContainer
                 div#signinStep.step

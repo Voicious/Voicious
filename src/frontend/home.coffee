@@ -45,11 +45,12 @@ displayStep = (element) =>
     }, 200
 
 validateInput = (event) ->
-    target   = ($ @)
+    target   = ($ event.currentTarget)
     displays =
         error   : ''
         success : ''
-    if do @checkValidity
+    ok       = yes
+    if do event.currentTarget.checkValidity
         target.attr 'class', 'input-success'
         displays.error   = 'none'
         displays.success = 'inline-block'
@@ -57,11 +58,24 @@ validateInput = (event) ->
         target.attr 'class', 'input-error'
         displays.error   = 'inline-block'
         displays.success = 'none'
+        ok               = no
     for cat, disp of displays
         message = do (target.siblings ('.' + cat)).first
         if (message.attr 'for') is target.attr 'name'
             message.css 'display', disp
+    ok
 
+validateForm = (event) ->
+    target = ($ event.currentTarget)
+    inputs = target.find ':input'
+    ok     = yes
+    for input in inputs
+        type = ($ input).attr 'type'
+        if type isnt 'submit' and type isnt 'reset'
+            if not validateInput { currentTarget : input }
+                ok = no
+    if not ok
+        do event.preventDefault
 
 init = () =>
     quick              = ($ '#quick')
@@ -88,6 +102,7 @@ init = () =>
     cancel.click () ->
         parent = ($ @).parents '.step'
         (parent.find '.error, .info, .success').css 'display', 'none'
+        (parent.find '.input-success, .input-error').removeClass 'input-success input-error'
         parent.animate {
             opacity : 0
             right   : '-50'
@@ -100,8 +115,9 @@ init = () =>
         rememberMeBox.prop 'checked', not rememberMeBox.prop 'checked'
         rememberMeIconTick.attr 'class', (if rememberMeBox.prop 'checked' then 'icon-check' else 'icon-check-empty')
 
-    ($ 'input[required]').on 'keyup', validateInput
-    ($ 'input[required]').on 'blur', validateInput
+    ($ ':input[required]').on 'keyup', validateInput
+    ($ ':input[required]').on 'blur', validateInput
+    ($ 'form').on 'submit', validateForm
 
 ($ document).ready () =>
     do init
