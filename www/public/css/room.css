@@ -199,7 +199,7 @@ video {
     display: none;
 }
 
-.user-square:first-child:hover .video,
+.user-square:first-child:hover video,
 .user-square:first-child:hover .nocam,
 .user-square:first-child:hover .cam-username-wrapper,
 .user-square:hover .user-square-controls {
