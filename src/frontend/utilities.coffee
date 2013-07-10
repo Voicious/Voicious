@@ -50,5 +50,3 @@ U = Utilities
 
 if window?
     window.Utilities    = new U
-if exports?
-    exports.Utilities   = new U

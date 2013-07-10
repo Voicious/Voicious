@@ -59,16 +59,6 @@ button {
     float: left;
 }
 
-li.zoom-cam-wrapper {
-    display: block;
-    background-color: #131517;
-    font-family: 'PT Sans', 'Helvetica', sans-serif;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    margin: 0 3px 10px 0;
-}
-
 video {
     position: absolute;
     top: 0;
@@ -79,113 +69,6 @@ video {
 .module {
     overflow: hidden;
     position: relative;
-<<<<<<< HEAD
-=======
-    width: calc(100% - 16px);
-    height: 100%;
-    font-size: 13px;
-    overflow: hidden;
-    margin-top: 30px;
-    padding-left: 16px;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
-}
-
-#chatcontent ul {
-    width: calc(100% - 16px);
-    height: 100%;
-    position: absolute;
-    overflow: auto;
-}
-
-.chatmetadata:first-child {
-    color: #00AEEF;
-}
-
-.time {
-    color: #555;
-}
-
-.blueduckturquoise {
-    color: #00c296;
-}
-
-.italic {
-    font-style: italic;
-}
-
-#chatform span {
-    float: right;
-    margin-bottom: 8px;
-    margin-right: 8px;
-}
-
-.chatmessage {
-    color: white;
-    word-wrap: break-word;
-    text-align: justify;
-    margin-top: 5px;
-    margin-right: 16px;
-}
-
-.chatmessage p {
-    line-height: 15px;
-    word-wrap: break-word;
-    width: 95%;
-}
-
-.chatmessage a {
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
-    text-decoration: underline;
-}
-
-#tcSeparator {
-    width: calc(100% - 12px);
-    border-bottom: 1px solid black;
-    margin-top: 13px;
-    margin-bottom: 11px;
-    margin-left: -2px;
-}
-
-#spanTutoMode {
-    float: left;
-    margin-left: 10px;
-    margin-top: 6px;
-}
-
-#mainCam {
-    width: 100%;
-    height: 100%;
-}
-
-#mainCam video {
-    position: absolute;
-}
-
-#sidebarAcc .sidebarlinkoutsideacc {
-    border-top: none;
-    margin-top: 0;
-}
-
-/* notification */
-
-.notification-wrapper {
-    text-align: center;
-    position: absolute;
-    width: 100%;
-    top: 10px; /* Malek said 8px but fit with the beginning of the mainCam at 10px. */
-    left: 0;
-    z-index: 1;
-}
-
-.notification {
-    text-shadow: 0 1px rgba(0, 0, 0, .2);
-    background: #000;
-    background: rgba(0, 0, 0, .6);
->>>>>>> Maximized zoom cam
     display: inline-block;
 }
 
@@ -276,6 +159,17 @@ video {
     display: block;
 }
 
+#mainCam {
+    text-align: center;
+}
+
+li.zoom-cam-wrapper {
+    margin: 0 10px 10px 0;
+    position: relative;
+    overflow: hidden;
+    float: left;
+}
+
 .zoom-control {
     display: none;
     position: relative;
@@ -291,10 +185,6 @@ video {
     width: 10px;
     cursor: pointer;
     float: right;
-}
-
-.zoom-control li {
-    float: inside;
 }
 
 /* end user interface on thumbnails */

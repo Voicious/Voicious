@@ -23,6 +23,7 @@ class Camera extends Module
         @jqVideoContainer = ($ 'ul#videos')
         @zoomCams         = { }
         @streams          = [ ]
+        @mosaicNb         = 1
         ($ 'button#joinConference').bind 'click', @enableCamera
         @emitter.on 'stream.create', @newStream
         @emitter.on 'stream.state', @changeStreamState
@@ -40,6 +41,7 @@ class Camera extends Module
             videos = ($ 'video')
             for video in videos
                 @centerVideoTag ($ video)
+            do @resizeZoomCams
         ($ document).on 'DOMNodeInserted', 'video', (event) =>
             @centerVideoTag ($ event.currentTarget)
         ($ '#feeds').delegate '.zoomBtn', 'click', (event) =>
@@ -54,7 +56,7 @@ class Camera extends Module
         @jqMainCams.width do @jqMainCams.height
 
     appendHTML  : () ->
-        ($ '<div class="fill-height module" id="mainCam"></div>').appendTo '#modArea'
+        ($ '<ul class="fill-height module" id="mainCam"></ul>').appendTo '#modArea'
         $(window).trigger 'resize'
 
     delStream   : (event, user) =>
@@ -74,8 +76,6 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
-        if Object.keys(@zoomCams).length is 0 and (not data.local? or not data.local)
-            @zoom data.uid, video
 
     changeStreamState : (event, data) =>
         # Data.state = {audio : bool, video : bool}
@@ -90,6 +90,19 @@ class Camera extends Module
     enableCamera : () =>
         @emitter.trigger 'camera.enable'
 
+    resizeZoomCams : () =>
+        cam = ($ '#mainCam')
+        val = @mosaicNb * @mosaicNb
+        if val < Object.keys(@zoomCams).length
+            @mosaicNb += 1
+        else if @mosaicNb > Object.keys(@zoomCams).length
+            @mosaicNb -= 1
+        size = ((do cam.width) / @mosaicNb) - 10
+        for key, li of @zoomCams
+            li.css 'width', "#{size}px"
+            li.css 'height', "#{size}px"
+            @centerVideoTag (li.find 'video')
+
     zoom : (uid, video) =>
         container    = ($ '#mainCam')
         container.removeClass 'hidden'
@@ -98,13 +111,14 @@ class Camera extends Module
             if key is uid
                 do value.remove
                 delete @zoomCams[uid]
+                do @resizeZoomCams
                 return
         if video?
             newVideo     = do video.clone
             newVideo[0].volume = video[0].volume
             newVideo.removeClass 'thumbnailVideo'
             do newVideo[0].play
-            html = ($ "<li id='zoomcam_#{uid}' class='zoom-cam-wrapper video-wrapper zoom-cam'>
+            html = ($ "<li id='zoomcam_#{uid}' class='zoom-cam-wrapper zoom-cam'>
                            <div class='zoom-control index1'>
                                <ul>
                                    <li class='closeBtn'><i class='icon-remove'></i></li>
@@ -117,6 +131,7 @@ class Camera extends Module
             container.append html
             @centerVideoTag newVideo
             @zoomCams[uid] = ($ "li#zoomcam_#{uid}")
+            do @resizeZoomCams
 
 if window?
     window.Camera = Camera
