@@ -28,9 +28,9 @@ class UserList extends Module
             do @updateColumns
 
     initialize          : () =>
-        @users[window.Voicious.currentUser._uid] = window.Voicious.currentUser
-        @users[window.Voicious.currentUser._uid]['isLocal'] = on
-        @users[window.Voicious.currentUser._uid]['volume'] = on
+        @users[window.Voicious.currentUser._id] = window.Voicious.currentUser
+        @users[window.Voicious.currentUser._id]['isLocal'] = on
+        @users[window.Voicious.currentUser._id]['volume'] = on
         do @display
 
     configureEvents     : () =>
