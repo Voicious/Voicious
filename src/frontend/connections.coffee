@@ -206,7 +206,7 @@ class Connections
         @emitter.on 'peer.remove', (event, data) =>
             if @peers[data.id]?
                 @removePeer data.id
-                @emitter.trigger 'stream.remove', event, data
+                @emitter.trigger 'stream.remove', data
         @emitter.on 'pc.offer', (event, data) =>
             if @peers[data.from]?
                 @peers[data.from].answerHandshake data.description
