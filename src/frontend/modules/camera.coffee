@@ -97,7 +97,7 @@ class Camera extends Module
             @mosaicNb += 1
         else if @mosaicNb > Object.keys(@zoomCams).length
             @mosaicNb -= 1
-        size = ((do cam.width) / @mosaicNb) - 10
+        size = ((do cam.width) / @mosaicNb) - 10 # ugly fix
         for key, li of @zoomCams
             li.css 'width', "#{size}px"
             li.css 'height', "#{size}px"
