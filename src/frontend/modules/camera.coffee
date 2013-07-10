@@ -76,6 +76,8 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
+        if !data.local?
+            @zoom data.uid, video
 
     changeStreamState : (event, data) =>
         # Data.state = {audio : bool, video : bool}
