@@ -28,9 +28,9 @@ class UserList extends Module
             do @updateColumns
 
     initialize          : () =>
-        @users[window.Voicious.currentUser._uid] = window.Voicious.currentUser
-        @users[window.Voicious.currentUser._uid]['isLocal'] = on
-        @users[window.Voicious.currentUser._uid]['volume'] = on
+        @users[window.Voicious.currentUser._id] = window.Voicious.currentUser
+        @users[window.Voicious.currentUser._id]['isLocal'] = on
+        @users[window.Voicious.currentUser._id]['volume'] = on
         do @display
 
     configureEvents     : () =>
@@ -44,6 +44,12 @@ class UserList extends Module
             @users[uid].video = video
             video.volume = @users[uid]['volume']
             ($ "li#video_#{uid}").append video
+        @emitter.on 'stream.create', (event, data) =>
+            @toggleButtons data.uid, ['zoomBtn', 'muteBtn']
+        @emitter.on 'stream.remove', (event, data) =>
+            @toggleButtons data.id, ['zoomBtn', 'muteBtn']
+        @emitter.on 'stream.zoom', (event, id) =>
+            @zoomButton id
 
     # Fill the user list with new users.
     fill            : (event, data) =>
@@ -54,9 +60,12 @@ class UserList extends Module
     # Update the user list by creating or removing a user from the list.
     update          : (event, user) =>
         switch event
-            when 'create' then @users[user.id] = { name : user.name , uid : user.id, isLocal : off, volume : on }
-            when 'remove' then delete @users[user.id]
-        do @display
+            when 'create'
+                @users[user.id] = { name : user.name , uid : user.id, isLocal : off, volume : on }
+                @createThumbnail user.id
+            when 'remove'
+                delete @users[user.id]
+                do ($ "li#video_#{user.id}").remove
 
     updateColumns : () =>
         nbUsers  = 0
@@ -107,23 +116,47 @@ class UserList extends Module
         (jqLi.find '.muteBtn').click @muteStream
         (jqLi.find '.kickBtn').click @kickUser
 
+    # Display or hide buttons on thumbnail
+    toggleButtons     : (id, buttonNames) =>
+        ($ "li#video_#{id}").each (i, item) ->
+            ($ item).find('li').each (i, item) ->
+                button = ($ item)
+                for name in buttonNames
+                    if button.hasClass name
+                        if button.css('display') is 'none' then do button.show else do button.hide
+
+    # Change zoom button state
+    zoomButton        : (id) =>
+        ($ "li#video_#{id}").each (i, item) ->
+            ($ item).find('li').each (i, item) ->
+                button = ($ item)
+                if button.hasClass 'zoomBtn'
+                    className = if (do button.text) is 'zoom' then 'icon-zoom-in' else 'icon-zoom-out'
+                    text = if (do button.text) is 'zoom' then 'unzoom' else 'zoom'
+                    do button.empty
+                    button.append "<i class='#{className}'></i>#{text}"
+
     # Update the user list window.
-    display         : () =>
+    display           : () =>
         do @jqContainer.empty
         for uid of @users
-            if @users[uid]?
-                li = ($ '<li>', {
-                    id    : "video_#{uid}"
-                    class : 'thumbnail-wrapper video-wrapper user-square color-one'
-                })
-                @addInterface li, @users[uid].name
-                if @users[uid].video?
-                    li.append @users[uid].video
-                    do @users[uid].video.play
-                if @users[uid].isLocal? and @users[uid].isLocal
-                    @jqContainer.prepend li
-                else
-                    @jqContainer.append li
+            @createThumbnail uid
+
+    # Append new thumbnail on feeds
+    createThumbnail   : (uid) =>
+        li = ($ '<li>', {
+            id    : "video_#{uid}"
+            class : 'thumbnail-wrapper video-wrapper user-square color-one'
+        })
+        @addInterface li, @users[uid].name
+        if @users[uid].video?
+            li.append @users[uid].video
+            do @users[uid].video.play
+        if @users[uid].isLocal? and @users[uid].isLocal
+            @jqContainer.prepend li
+        else
+            @jqContainer.append li
+        if !@users[uid].video? then @toggleButtons uid, ['zoomBtn', 'muteBtn']
         do @updateColumns
 
 if window?

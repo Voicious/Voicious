@@ -159,4 +159,32 @@ video {
     display: block;
 }
 
+#mainCam {
+    text-align: center;
+}
+
+li.zoom-cam-wrapper {
+    margin: 0 10px 10px 0;
+    position: relative;
+    overflow: hidden;
+    float: left;
+}
+
+.zoom-control {
+    display: none;
+    position: relative;
+}
+
+.zoom-cam:hover .zoom-control {
+    display: block;
+}
+
+.zoom-control li {
+    padding: 2px 8px 2px 8px;
+    margin-bottom: -1px;
+    width: 10px;
+    cursor: pointer;
+    float: right;
+}
+
 /* end user interface on thumbnails */
