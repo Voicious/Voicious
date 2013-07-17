@@ -15,3 +15,18 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+class ButtonManager
+    constructor : (@emitter) ->
+        @emitter.on 'button.new', createButton
+
+    createButton : (event, data) =>
+        return
+
+    createOuterButton : (name, icon, rank) =>
+        return
+
+    createInnerButton : (outer, name, icon, rank, cb) =>
+        return
+
+if window.Voicious?
+    window.Voicious.ButtonManager = ButtonManager
