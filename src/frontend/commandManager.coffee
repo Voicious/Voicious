@@ -19,17 +19,26 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class CommandManager
     # Initialize the Command Manager and set the callbacks for the Event Manager.
     constructor     : (@emitter) ->
+        @commands = { }
         @emitter.on 'chat.cmd', (event, data) =>
             @parseCmd data
         @emitter.on 'cmd.kick', (event, data) =>
             @onKick data
         @emitter.on 'cmd.me', (event, data) =>
             @onMe data
+        @emitter.on 'cmd.register', (event, data) =>
+            @register data
+        @emitter.on 'cmd.remove', (event, data) =>
+            @remove data
 
     # Parse the command and call the right function.
     parseCmd        : (command) =>
         cmd = command.cmd.split(' ')
         user = String command.from
+        # if @commands[cmd[0]]?
+        #    @commands[cmd[0]] cmd
+        # else
+        #    @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
         switch  cmd[0]
             when 'kick' then do () =>
                 if cmd[1]?
@@ -91,6 +100,14 @@ class CommandManager
                     /me [action]<br/>
                     /quit [message]" }
         @emitter.trigger 'chat.info', message
+    
+    register        : (data) =>
+        @commands[data.name] = data.callback
+    
+    remove          : (data) =>
+        @commands[data] = null
+        delete @commands[data]
+        
     
 if window?
     window.CommandManager   = CommandManager
