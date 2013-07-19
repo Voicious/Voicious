@@ -28,6 +28,9 @@ class ButtonManager
             newButton = @createOuterButton params.name, params.icon, params.rank
         if params.callback?
             newButton.click params.callback
+        if params.attrs?
+            for key, value of params.attrs
+                newButton.attr key, value
 
     createOuterButton : (name, icon, rank = -1) =>
         @_jqContainer.accordion 'destroy'
@@ -41,6 +44,7 @@ class ButtonManager
             ($ buttons[rank]).before newButton
         newButton.after ($ '<ul>', { class : 'white' })
         @_jqContainer.accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
+        newButton
 
     createInnerButton : (outer, name, icon, rank = -1) =>
         return
