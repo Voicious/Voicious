@@ -17,15 +17,27 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class ButtonManager
     constructor : (@emitter) ->
-        @emitter.on 'button.new', createButton
+        @_jqContainer = ($ '#sidebarAcc')
+        @emitter.on 'button.create', @createButton
 
-    createButton : (event, data) =>
-        return
+    createButton : (event, params) =>
+        newButton
+        if params.outer?
+            newButton = @createInnerButton params.outer, params.name, params.icon, params.rank
+        else
+            newButton = @createOuterButton params.name, params.icon, params.rank
+        if params.callback?
+            newButton.click params.callback
 
-    createOuterButton : (name, icon, rank) =>
-        return
+    createOuterButton : (name, icon, rank = -1) =>
+        newButton = $ '<span>', { class : 'headerAcc white bordered shadowed' }
+        newButton.text name
+        ($ '<i>', { class : "icon-#{icon}" }).prependTo newButton
+        newButton.appendTo @_jqContainer
+        @_jqContainer.accordion 'refresh'
+        newButton.after ($ '<ul>', { class : 'white' })
 
-    createInnerButton : (outer, name, icon, rank, cb) =>
+    createInnerButton : (outer, name, icon, rank = -1) =>
         return
 
 if window.Voicious?

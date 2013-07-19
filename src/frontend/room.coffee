@@ -26,8 +26,9 @@ class Room
 
         do @setPage
         if window.ws? and window.ws.Host? and window.ws.Port?
-            @connections = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
+            @connections    = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @commandManager = new CommandManager @emitter
+            @buttonManager  = new Voicious.ButtonManager @emitter
             @loadModules modules, () =>
                 do @connections.dance
         $('#reportBug').click @bugReport
