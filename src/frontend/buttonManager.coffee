@@ -30,12 +30,17 @@ class ButtonManager
             newButton.click params.callback
 
     createOuterButton : (name, icon, rank = -1) =>
+        @_jqContainer.accordion 'destroy'
         newButton = $ '<span>', { class : 'headerAcc white bordered shadowed' }
         newButton.text name
         ($ '<i>', { class : "icon-#{icon}" }).prependTo newButton
-        newButton.appendTo @_jqContainer
-        @_jqContainer.accordion 'refresh'
+        buttons   = @_jqContainer.children 'span.headerAcc'
+        if rank is -1 or rank >= buttons.length
+            newButton.appendTo @_jqContainer
+        else
+            ($ buttons[rank]).before newButton
         newButton.after ($ '<ul>', { class : 'white' })
+        @_jqContainer.accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
 
     createInnerButton : (outer, name, icon, rank = -1) =>
         return
