@@ -19,9 +19,9 @@ class Tutorial extends Module
     constructor      : (emitter) ->
         super emitter
         button =
-            name     : 'Help'
-            icon     : 'question-sign'
-            callback : () =>
+            name  : 'Help'
+            icon  : 'question-sign'
+            click : () =>
                 do (do introJs).start
         @emitter.trigger 'button.create', button
 

@@ -24,11 +24,11 @@ class Room
         @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
 
-        do @setPage
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections    = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @commandManager = new CommandManager @emitter
             @buttonManager  = new Voicious.ButtonManager @emitter
+            do @setPage
             @loadModules modules, () =>
                 do @connections.dance
         $('#reportBug').click @bugReport
@@ -89,12 +89,50 @@ class Room
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
     setPage             : () ->
-        $('#sidebarAcc').accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
-        $('.headerAcc').click () ->
-            elem = ($ this)
-            elem.toggleClass 'down'
-            jqSiblinsA = elem.siblings 'a'
-            jqSiblinsA.removeClass 'down'
+        @emitter.trigger 'button.create', {
+            name  : 'Share Room ID'
+            icon  : 'share-alt'
+            attrs :
+                'data-step'     : 1
+                'data-intro'    : 'Click here if you want to share the room.'
+                'data-position' : 'right'
+        }
+        @emitter.trigger 'button.create', {
+            name     : 'Copy to clipboard'
+            icon     : 'copy'
+            outer    : 'Share Room ID'
+            attrs    :
+                'data-clipboard-text' : window.location
+            callback : (btn) =>
+                clip = new ZeroClipboard (do btn.get), {
+                    moviePath  : '/public/swf/vendor/ZeroClipboard.swf'
+                    hoverClass : 'clipHover'
+                }
+                clip.on 'complete', () =>
+                    ((($ '.notification-wrapper').fadeIn 600).delay 3000).fadeOut 1000
+                btn.append '''<div class="notification-wrapper none">
+                                <div class="notification notification-success">
+                                    <i class="icon-check-sign icon-large"></i>
+                                    <span class="notification-content">Link copied to clipboard</span>
+                                </div>
+                            </div>'''
+        }
+        @emitter.trigger 'button.create', {
+            name  : 'Share on Twitter'
+            icon  : 'twitter'
+            outer : 'share room id'
+            click : () =>
+                text = encodeURI "Join me on @voiciousapp: "
+                url  = "http://twitter.com/share?text=" + text + "&url=" + window.location.href + "&related=voiciousapp"
+                window.open url, '', 'left=500,top=200,width=600,height=600'
+        }
+        @emitter.trigger 'button.create', {
+            name  : 'Share on Facebook'
+            icon  : 'facebook-sign'
+            outer : 'share_room_id'
+            click : () =>
+                window.open "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600'
+        }
         do @setOnOff
         do @setClipboard
 
