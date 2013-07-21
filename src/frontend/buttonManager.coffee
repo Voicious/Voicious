@@ -18,23 +18,27 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class ButtonManager
     constructor : (@emitter) ->
         @_jqContainer = ($ '#sidebarAcc')
+        @_jqContainer.accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
         @emitter.on 'button.create', @createButton
 
     createButton : (event, params) =>
+        @_jqContainer.accordion 'destroy'
         newButton
         if params.outer?
             newButton = @createInnerButton params.outer, params.name, params.icon, params.rank
         else
             newButton = @createOuterButton params.name, params.icon, params.rank
-        if params.callback?
-            newButton.click params.callback
+        if params.click?
+            newButton.click params.click
         if params.attrs?
             for key, value of params.attrs
                 newButton.attr key, value
+        @_jqContainer.accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
+        if params.callback?
+            params.callback newButton
 
     createOuterButton : (name, icon, rank = -1) =>
-        @_jqContainer.accordion 'destroy'
-        newButton = $ '<span>', { class : 'headerAcc white bordered shadowed' }
+        newButton = $ '<span>', { class : 'headerAcc white bordered shadowed' , id : 'btn_' + Utilities.slugify name }
         newButton.text name
         ($ '<i>', { class : "icon-#{icon}" }).prependTo newButton
         buttons   = @_jqContainer.children 'span.headerAcc'
@@ -43,11 +47,18 @@ class ButtonManager
         else
             ($ buttons[rank]).before newButton
         newButton.after ($ '<ul>', { class : 'white' })
-        @_jqContainer.accordion { active: false, collapsible: true, heightStyle: 'content', icons: off }
-        newButton
 
     createInnerButton : (outer, name, icon, rank = -1) =>
-        return
+        newButton = $ '<li>', { id : 'btn_' + Utilities.slugify name }
+        newButton.text name
+        ($ '<i>', { class : "icon-#{icon}" }).prependTo newButton
+        container = (@_jqContainer.children '#btn_' + Utilities.slugify outer).next 'ul'
+        buttons   = container.children 'li'
+        if rank is -1 or rank >= buttons.length
+            newButton.appendTo container
+        else
+            ($ buttons[rank]).before newButton
+        newButton
 
 if window.Voicious?
     window.Voicious.ButtonManager = ButtonManager
