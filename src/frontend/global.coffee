@@ -52,6 +52,9 @@ class   Utilities
 
         return ret
 
+    slugify : (str) =>
+        ((do str.toLowerCase).replace /[^\w ]+/g, '').replace /\s+/g, '_'
+
     # Get the size of a map.
     getMapSize          : (map) =>
         i = 0

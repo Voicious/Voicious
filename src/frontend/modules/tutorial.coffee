@@ -18,14 +18,12 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Tutorial extends Module
     constructor      : (emitter) ->
         super emitter
-        do @appendHTML
-
-    appendHTML       : () ->
-        html = ($ '<button onclick="javascript:introJs().start();" class="headerAcc ui-accordion-header bordered">
-                    <i class="icon-question-sign"></i>Help
-                    </button>'
-        )
-        html.appendTo "#sidebarAcc"
+        button =
+            name  : 'Help'
+            icon  : 'question-sign'
+            click : () =>
+                do (do introJs).start
+        @emitter.trigger 'button.create', button
 
 if window?
      window.Tutorial = Tutorial

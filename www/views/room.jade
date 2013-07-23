@@ -22,6 +22,7 @@ block scripts
     script(type="text/javascript", src="/public/js/module.js")
     script(type='text/javascript', src='/public/js/connections.js')
     script(type='text/javascript', src='/public/js/commandManager.js')
+    script(type='text/javascript', src='/public/js/buttonManager.js')
     script(type="text/javascript")
         window.Voicious.currentUser = {
             uid  : "#{uid}",
@@ -35,18 +36,6 @@ block scripts
           window.modules = JSON.parse('!{modules}');
           };
         }
-    script(type="text/javascript")
-      $( document ).ready(function() {
-            $("#facebookLink").click(function() {
-                window.open("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600');
-            });
-
-            text   = encodeURI("Join me on @voiciousapp: ");
-            url    = encodeURI(window.location.href);
-            $("#twitterLink").click(function() {
-                window.open("http://twitter.com/share?text=" + text + "&url=" + url + "&related=voiciousapp", '', 'left=500,top=200,width=600,height=600');
-            });
-        });
     script(type="text/javascript", src="/public/js/room.js")
     script(type="text/javascript", src="http://platform.twitter.com/widgets.js")
     audio#notification(src='')
@@ -66,23 +55,6 @@ block content
               i.icon-microphone.dark-grey
               span OFF
           div#sidebarAcc
-            span.headerAcc.white.bordered.shadowed(data-step='1', data-intro='#{trans.shareRoomTuto}', data-position='right')
-              i.icon-share-alt
-              | #{trans.shareRoomID}
-            ul.white
-              li#clipboardLink
-                i.icon-copy
-                | #{trans.copyRoomID}
-                div.notification-wrapper.none
-                  div.notification.notification-success
-                    i.icon-check-sign.icon-large
-                    span.notification-content Link copied to clipboard
-              li#twitterLink
-                i.icon-twitter
-                | #{trans.shareOnTwitter}
-              li#facebookLink
-                i.icon-facebook-sign
-                | #{trans.shareOnFacebook}
         div#container.fill-height.color-two
           div#modArea.frame.fill-width
             ul#feeds.module.fill-height(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')
