@@ -26,6 +26,10 @@ class UserList extends Module
         do @display
         ($ window).on 'resize', () =>
             do @updateColumns
+        kick = 
+            name : 'kick'
+            callback : @kick
+        @emitter.trigger 'cmd.register', kick
 
     initialize          : () =>
         @users[window.Voicious.currentUser._id] = window.Voicious.currentUser
@@ -159,5 +163,16 @@ class UserList extends Module
         if !@users[uid].video? then @toggleButtons uid, ['zoomBtn', 'muteBtn']
         do @updateColumns
 
+    kick                : (params) =>
+        console.log params
+        if params[1]?
+            reason = ''
+            if params[2]?
+                reason = (params.splice 2).join ' '
+            message = { type : 'cmd.kick', to : params[1], params : { message : reason } }
+            @emitter.trigger 'message.sendToOneName', message
+        else
+            @emitter.trigger 'chat.error', { text: params[0] + ": usage: /kick user [reason]"}
+        
 if window?
     window.UserList     = UserList

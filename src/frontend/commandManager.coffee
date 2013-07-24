@@ -35,19 +35,11 @@ class CommandManager
     parseCmd        : (command) =>
         cmd = command.cmd.split(' ')
         user = String command.from
-        # if @commands[cmd[0]]?
-        #    @commands[cmd[0]] cmd
-        # else
-        #    @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
+        if @commands[cmd[0]]?
+            @commands[cmd[0]] cmd
+        else
+            @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
         switch  cmd[0]
-            when 'kick' then do () =>
-                if cmd[1]?
-                    reason = ''
-                    if cmd[2]?
-                        reason = (cmd.splice 2).join ' '
-                    @kick cmd[1], reason
-                else
-                    @emitter.trigger 'chat.error', { text: cmd[0] + ": usage: /kick user [reason]"}
             when 'me' then do () =>
                 if cmd[1]?
                     action = (cmd.slice 1).join " "
@@ -62,11 +54,6 @@ class CommandManager
             when 'help' then do @help
             else
                 @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
-
-    # Kick command implementation
-    kick            : (user, reason) =>
-        message = { type : 'cmd.kick', to : user, params : { message : reason } }
-        @emitter.trigger 'message.sendToOneName', message
 
     onKick          : (data) =>
         #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
