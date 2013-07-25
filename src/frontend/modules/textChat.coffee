@@ -65,7 +65,12 @@ class TextChat extends Module
 
         $(window).resize () =>
             do @scrollPane.reinitialise
-
+        
+        me =
+            name : 'me'
+            callback : @me
+        @emitter.trigger 'cmd.register', me
+        
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
         @emitter.on 'chat.error', (event, data) =>
@@ -148,7 +153,7 @@ class TextChat extends Module
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
 
-    # Add an error message to the text chat window.
+    # Add an information message to the text chat window.
     addServerMessage    : (message) =>
         jqLastMessage = do (@jqMessageBox.find 'li').last
         d = new Date
@@ -173,6 +178,17 @@ class TextChat extends Module
         (do @scrollPane.getContentPane).append ($ '<li>').append jqNewMsg
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
+    
+    me                  : (user, data) =>
+        if data[1]?
+            action = (data.slice 1).join " "
+            text = "#{user} #{action}"
+            message = { type : 'cmd.me',  params : { text : text } }
+            @emitter.trigger 'message.sendtoall', message
+            @addMeMessage message.params
+        else
+            message = { text : "me: usage: /me [action]" }
+            @addServerMessage message
 
 if window?
     window.TextChat     = TextChat

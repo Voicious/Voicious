@@ -42,20 +42,13 @@ class CommandManager
 
     # Parse the command and call the right function.
     parseCmd        : (command) =>
-        cmd = command.cmd.split(' ')
+        cmd = do command.cmd.trim
+        cmd = cmd.split ' '
         user = String command.from
         if @commands[cmd[0]]?
-            @commands[cmd[0]] cmd
+            @commands[cmd[0]] user, cmd
         else
-            switch  cmd[0]
-                when 'me' then do () =>
-                    if cmd[1]?
-                        action = (cmd.slice 1).join " "
-                        @me user, action
-                    else
-                        @emitter.trigger 'char.error', { text: "me: usage: /me [action]"}
-                else
-                    @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
+            @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
 
     onKick          : (data) =>
         #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
@@ -63,20 +56,12 @@ class CommandManager
         message = { type : 'chat.error', params : { text : text } }
         @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
-
-    # must be handled by textchat
-    me              : (user, data) =>
-        text = "#{user} #{data}"
-        message = { type : 'cmd.me',  params : { text : text } }
-        # will have to remplace by type 'chat.me'
-        @emitter.trigger 'message.sendtoall', message
-        @emitter.trigger 'chat.me', { text : text }
     
     onMe            : (data) =>
-        # will have to remplace by type 'chat.me'
         @emitter.trigger 'chat.me', { text : data.text }
 
     help            : () =>
+    # should use @commands to get the list of commands
         message = { text : "Commands list:<br/>
                     /help<br/>
                     /kick user [reason]<br/>

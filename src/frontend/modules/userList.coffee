@@ -163,16 +163,16 @@ class UserList extends Module
         if !@users[uid].video? then @toggleButtons uid, ['zoomBtn', 'muteBtn']
         do @updateColumns
 
-    kick                : (params) =>
+    kick                : (user, data) =>
         console.log params
-        if params[1]?
+        if data[1]?
             reason = ''
-            if params[2]?
-                reason = (params.splice 2).join ' '
-            message = { type : 'cmd.kick', to : params[1], params : { message : reason } }
+            if data[2]?
+                reason = (data.splice 2).join ' '
+            message = { type : 'cmd.kick', to : data[1], params : { message : reason } }
             @emitter.trigger 'message.sendToOneName', message
         else
-            @emitter.trigger 'chat.error', { text: params[0] + ": usage: /kick user [reason]"}
+            @emitter.trigger 'chat.error', { text: data[0] + ": usage: /kick user [reason]"}
         
 if window?
     window.UserList     = UserList

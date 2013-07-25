@@ -155,7 +155,7 @@ class Room
         $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
-    quit                : (data) =>
+    quit                : (user, data) =>
         reason = ""
         if data[1]?
             reason = (data.slice 1).join " "
