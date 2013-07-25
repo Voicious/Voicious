@@ -164,7 +164,6 @@ class UserList extends Module
         do @updateColumns
 
     kick                : (user, data) =>
-        console.log params
         if data[1]?
             reason = ''
             if data[2]?
