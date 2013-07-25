@@ -30,6 +30,10 @@ class Room
             @commandManager = new CommandManager @emitter
             @loadModules modules, () =>
                 do @connections.dance
+        quit =
+            name : 'quit'
+            callback : @quit
+        @emitter.trigger 'cmd.register', quit
         $('#reportBug').click @bugReport
 
     activateCam         : () =>
@@ -151,6 +155,16 @@ class Room
         $('#reportBugCtn').removeClass 'none'
         $('#sendReport').click @sendReport
 
+    quit                : (data) =>
+        reason = ""
+        if data[1]?
+            reason = (data.slice 1).join " "
+        text = "#{window.Voicious.currentUser.name} has left the room. (#{reason})"
+        message = { type : 'chat.error', params : { text : text } }
+        # duplicate with the first login/logout messages, so it is desactivated for the moment.
+        # @emitter.trigger 'message.sendtoall', message
+        window.location.replace '/'
+        
 # When the document has been loaded it will check if all services are available and
 # launch it.
 $(document).ready ->
