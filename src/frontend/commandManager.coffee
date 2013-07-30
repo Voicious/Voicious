@@ -20,6 +20,7 @@ class CommandManager
     # Initialize the Command Manager and set the callbacks for the Event Manager.
     constructor     : (@emitter) ->
         @commands = {'help' : @help }
+        @infos = {'help' : "display this help" }
         @emitter.on 'chat.cmd', (event, data) =>
             @parseCmd data
         @emitter.on 'cmd.kick', (event, data) =>
@@ -34,11 +35,15 @@ class CommandManager
     # Register a command
     register        : (data) =>
         @commands[data.name] = data.callback
+        if data.infos?
+            @infos[data.name] = data.infos
     
     # Remove a command from the list
     remove          : (data) =>
         @commands[data] = null
         delete @commands[data]
+        @infos[data] = null
+        delete @infos[data]
 
     # Parse the command and call the right function.
     parseCmd        : (command) =>
@@ -62,12 +67,18 @@ class CommandManager
 
     help            : () =>
     # should use @commands to get the list of commands
-        message = { text : "Commands list:<br/>
-                    /help<br/>
-                    /kick user [reason]<br/>
-                    /me [action]<br/>
-                    /quit [message]" }
-        @emitter.trigger 'chat.info', message
+        message = "Commands list:<br/>"
+        #message = { text : "Commands list:<br/>
+        #            /help<br/>
+        #            /kick user [reason]<br/>
+        #            /me [action]<br/>
+        #            /quit [message]" }
+        for name, cb of @commands
+            message += "/" + name 
+            if @infos[name]?
+                message += ": " + @infos[name]
+            message += "<br/>"
+        @emitter.trigger 'chat.info', { text : message }
 
 if window?
     window.CommandManager   = CommandManager

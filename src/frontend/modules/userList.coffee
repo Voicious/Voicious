@@ -29,6 +29,7 @@ class UserList extends Module
         kick = 
             name : 'kick'
             callback : @kick
+            infos : "usage: /kick user [reason]"
         @emitter.trigger 'cmd.register', kick
 
     initialize          : () =>

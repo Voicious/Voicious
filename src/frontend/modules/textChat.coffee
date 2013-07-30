@@ -69,6 +69,7 @@ class TextChat extends Module
         me =
             name : 'me'
             callback : @me
+            infos : "usage: /me action"
         @emitter.trigger 'cmd.register', me
         
         @emitter.on 'chat.message', (event, data) =>
