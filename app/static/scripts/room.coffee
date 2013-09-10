@@ -145,7 +145,7 @@ class Room
     loadScript          : (moduleName, modules, cb) ->
         $.ajax(
             type    : 'GET'
-            url     : "/public/js/#{moduleName}.js"
+            url     : "/scripts/modules/#{moduleName}.js"
             dataType: 'script'
         ).done (data) =>
             eval data

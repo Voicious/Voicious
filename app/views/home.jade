@@ -1,11 +1,11 @@
 extends main
 
 block style
-    link(rel='stylesheet', media='screen', type='text/css', href='/public/css/font-awesome.min.css')
-    link(rel='stylesheet', media='screen', type='text/css', href='/public/css/home.css')
+    !=css('/css/font-awesome.min')
+    !=css('/css/home')
 
 block scripts
-    script(type='text/javascript', src='/public/js/home.js')
+    !=js('/scripts/home')
     script(type='text/javascript')
         if ('#{hash}' !== '') {
             window.location.hash    = '#{hash}';

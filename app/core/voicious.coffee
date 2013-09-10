@@ -58,7 +58,7 @@ class Voicious
                 roomid          : req.query.roomid || ''
             options.trans = Translator.getTrans(req.host, 'home')
             res.render 'home', options
-        servicesNames   = Fs.readdirSync (Path.join Config.Paths.Libroot, 'core')
+        servicesNames   = Fs.readdirSync (Path.join Config.Paths.Root, 'core')
         for serviceName in servicesNames
             service = require './' + serviceName
             if service.Routes?
@@ -66,8 +66,6 @@ class Voicious
                     if @app[method]?
                         for route of service.Routes[method]
                             @app[method] route, Session.withCurrentUser, service.Routes[method][route]
-        @app.all /^(?!\/public)\/*/, (req, res) =>
-            throw new Errors.NotFound
 
     # Configure the __Express__ instance.
     configure       : () =>
@@ -90,12 +88,13 @@ class Voicious
         }
         @app.use @app.router
         @app.use Express.static Config.Paths.Webroot
+        @app.use (require 'connect-assets') src : Config.Paths.Webroot
         do @setAllRoutes
-        @app.use (err, req, res, next) =>
-            if err instanceof Errors.NotFound
-                Errors.RenderNotFound req, res
-            else
-                Errors.RenderError req, res
+#        @app.use (err, req, res, next) =>
+#            if err instanceof Errors.NotFound
+#                Errors.RenderNotFound req, res
+#            else
+#                Errors.RenderError req, res
         @configured = yes
 
     # Main function
@@ -113,5 +112,4 @@ class Voicious
         console.log "Exiting..."
         do process.exit
 
-voicious = new Voicious
-do voicious.start
+do (new Voicious).start

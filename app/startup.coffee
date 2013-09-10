@@ -31,29 +31,7 @@ processes = []
 if not Fs.existsSync Config.Paths.Logs
     Fs.mkdirSync Config.Paths.Logs, '0755'
 
-voiciousAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.access.log'), 'a+'
-voiciousErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'voicious.error.log'), 'a+'
-voicious          = spawn 'node', [(Path.join Config.Paths.Root, 'lib', 'core', 'voicious.js')]
-voicious.stdout.on 'data', (data) =>
-    process.stdout.write "#{data}"
-    WriteLog voiciousAccessLog, data
-voicious.stderr.on 'data', (data) =>
-    process.stderr.write "#{data}"
-    WriteLog voiciousErrorLog, data
-processes.push voicious
+require './core/voicious'
 
 if Config.Websocket.Enabled
-    wsAccessLog = Fs.openSync (Path.join Config.Paths.Logs, 'ws.access.log'), 'a+'
-    wsErrorLog  = Fs.openSync (Path.join Config.Paths.Logs, 'ws.error.log'), 'a+'
-    ws          = spawn 'node', [(Path.join Config.Paths.Root, 'lib', 'ws', 'websocket.js')]
-    ws.stdout.on 'data', (data) =>
-        process.stdout.write "#{data}"
-        WriteLog wsAccessLog, data
-    ws.stderr.on 'data', (data) =>
-        process.stderr.write "#{data}"
-        WriteLog wsErrorLog, data
-    processes.push ws
-
-process.on 'SIGINT', () =>
-    for proc in processes
-        proc.kill 'SIGINT'
+    require './ws/websocket'

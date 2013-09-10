@@ -76,12 +76,11 @@ class _Config
 
     constructor : () ->
         @Paths  = {}
-        @Paths.Root             = Path.join __dirname, '..', '..'
-        @Paths.Config           = Path.join @Paths.Root, 'etc'
-        @Paths.Webroot          = Path.join @Paths.Root, 'www'
-        @Paths.Libroot          = Path.join @Paths.Root, 'lib'
-        @Paths.Views            = Path.join @Paths.Webroot, 'views'
-        @Paths.Logs             = Path.join @Paths.Root, 'logs'
+        @Paths.Root             = Path.join __dirname, '..'
+        @Paths.Config           = Path.join @Paths.Root, '..', 'etc'
+        @Paths.Webroot          = Path.join @Paths.Root, 'static'
+        @Paths.Views            = Path.join @Paths.Root, 'views'
+        @Paths.Logs             = Path.join @Paths.Root, '..', 'logs'
 
         do @loadJSONConfig
         @Voicious.Title = 'voıċıoųs'
