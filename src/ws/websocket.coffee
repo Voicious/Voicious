@@ -34,11 +34,12 @@ class Websocket
                 that.validateSock message.params.uid, message.params.rid, @
 
     validateSock : (uid, rid, sock) =>
-        Db.get 'room', rid, (body) =>
-            if Object.keys(body).length > 0
-                Db.get 'user', uid, (body) =>
-                    if Object.keys(body).length > 0 and body.id_room is rid
-                        @acceptSock body._id, rid, body.name, sock
+        try
+            Db.get 'room', rid, (body) =>
+                if Object.keys(body).length > 0
+                    Db.get 'user', uid, (body) =>
+                        if Object.keys(body).length > 0 and body.id_room is rid
+                            @acceptSock body._id, rid, body.name, sock
 
     sendPing : (sock) =>
         sock._h       = MD5 do Date.now

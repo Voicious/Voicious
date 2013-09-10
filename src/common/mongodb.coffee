@@ -59,7 +59,8 @@ class _Mongo extends Database
             coll.findOne { '_id': id }, (err, doc) =>
                 if err
                     throw err
-                doc._id = String doc._id
+                if doc?
+                    doc._id = String doc._id
                 callback doc
 
         find : (collName, filters, callback) =>
