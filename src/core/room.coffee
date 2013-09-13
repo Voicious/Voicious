@@ -105,7 +105,7 @@ class _Room
     shareroom : (req, res) =>
         @transport.sendMail {
             from : "Voicious<no-reply@voicious.com>"
-            to : req.body.emails.split
+            to : req.body.emails
             subject : "#{req.body.from} wants to talk to you on Voicious"
             text : """
                 Hello!
