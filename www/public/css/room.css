@@ -187,4 +187,28 @@ li.zoom-cam-wrapper {
     float: right;
 }
 
+/* Popovers */
+
+.popover {
+    background-color: #232323;
+}
+
+.popover-content small {
+    font-size: 10px;
+}
+
+.popover-content textarea {
+    margin-bottom: 10px;
+    padding: 2px;
+}
+
+.popover-title {
+    background-color: #121212;
+    border-bottom: 1px solid #888;
+}
+
+.popover.right .arrow:after {
+    border-right-color: #232323;
+}
+
 /* end user interface on thumbnails */
