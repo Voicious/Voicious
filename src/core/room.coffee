@@ -102,9 +102,23 @@ class _Room
         if req.params.roomid?
             res.redirect "/?roomid=#{req.params.roomid}&hash=#jumpIn"
 
+    shareroom : (req, res) =>
+        @transport.sendMail {
+            from : "Voicious<no-reply@voicious.com>"
+            to : req.body.emails.split
+            subject : "#{req.body.from} wants to talk to you on Voicious"
+            text : """
+                Hello!
+                #{req.body.from} just invited you on Voicious.
+                You can join him here: #{req.body.roomurl}
+            """
+        }
+        res.send 200
+
 exports.Room    = new _Room
 exports.Routes  =
     get :
         '/room/:roomid' : (Session.ifUser.curry exports.Room.roomPage, exports.Room.redirectRoom)
     post :
         '/report'       : exports.Room.reportBug
+        '/shareroom'    : exports.Room.shareroom

@@ -92,6 +92,38 @@ class Room
         clip.on 'complete', () ->
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
+    sendByMail : (event) =>
+        currentTarget = ($ event.currentTarget)
+        form = ($ '<form>', {action : '/shareroom', method : 'POST'})
+        form.submit (event) =>
+            do event.preventDefault
+            f = ($ event.currentTarget)
+            mails = do (do (form.find 'textarea').first).val
+            currentTarget.popover 'destroy'
+            options =
+                type : f.attr 'method'
+                url : f.attr 'action'
+                data :
+                    emails : mails
+                    roomurl : window.location.href
+                    from : window.Voicious.currentUser.name
+                success : () =>
+                    console.log 'SUCCESS'
+            console.log options
+            $.ajax options
+            no
+        html = '''
+            <small>E-mail addresses (comma separated):</small>
+            <textarea name="emails" required></textarea>
+            <button class="btn">Share</button>
+        '''
+        form.append html
+        options =
+            title : "Share this room by email"
+            html : yes
+            content : form
+        currentTarget.popover options
+
     setPage             : () ->
         @emitter.trigger 'button.create', {
             name  : 'Share Room ID'
@@ -120,6 +152,12 @@ class Room
                                     <span class="notification-content">Link copied to clipboard</span>
                                 </div>
                             </div>'''
+        }
+        @emitter.trigger 'button.create', {
+            name : 'Share by email'
+            icon : 'envelope'
+            outer : 'share room id'
+            click : @sendByMail
         }
         @emitter.trigger 'button.create', {
             name  : 'Share on Twitter'
