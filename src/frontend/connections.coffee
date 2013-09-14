@@ -160,7 +160,6 @@ class Connections
         @emitter.on 'message.sendtoall', @sendToAll
         @emitter.on 'message.sendToOneName', @sendToOneName
         @emitter.on 'message.sendToOneId', @sendToOneId
-        @emitter.on 'camera.enable', @enableCamera
         @emitter.on 'authenticated', @initUser
         window.onClose = () =>
             do @ws.close
