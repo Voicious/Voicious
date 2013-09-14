@@ -255,9 +255,10 @@ class Connections
                 @sendStreamState id
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
         , (error) =>
-            if error? and error.code is 1
-                @emitter.trigger 'notif.text.ko',
-                    text : "It seems that we can't access your hardware."
+            do @toggleCamera if @userMedia.video
+            do @toggleMicro if @userMedia.audio
+            @emitter.trigger 'notif.text.ko',
+                text : "It seems that we can't access your hardware."
             @emitter.trigger 'activable.unlock'
             if not MOZILLA and $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').removeClass "hidden"
