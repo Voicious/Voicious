@@ -26,13 +26,13 @@ class NotificationManager
 
     textNotif : (type, data) =>
         cla = if type then 'success' else 'error'
-        icon = if type then 'icon-check-sign' else ''
+        icon = if type then 'icon-check-sign' else 'icon-remove-sign'
         n = """<div class='notification-wrapper none'>
-                        <div class='notification notification-#{cla}'>
-                            <i class='#{icon} icon-large'></i>
-                            <span class='notification-content'>#{data.text}</span>
-                        </div>
-                    </div>"""
+                    <div class='notification notification-#{cla}'>
+                        <i class='#{icon} icon-large'></i>
+                        <span class='notification-content'>#{data.text}</span>
+                    </div>
+                </div>"""
         n = ($ n)
         ($ 'body').append n
         ((n.fadeIn 600).delay 3000).fadeOut 1000, () =>

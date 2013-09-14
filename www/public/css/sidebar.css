@@ -132,9 +132,7 @@
     margin-right: 4px;
 }
 
-/* success notifications style */
-
-.notification-success .notification-content {
+.notification-content {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 13px;
     line-height: 20px;
@@ -143,6 +141,9 @@
     display: inline-block;
     border-radius: 4px;
     padding: 3px 8px;
+}
+
+.notification-success .notification-content {
     box-shadow: inset 0 1px #00c84c;
     background: -moz-linear-gradient(top,  #00ae42 0%, #00c84c 100%); /* FF3.6+ */
     background: -webkit-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Chrome10+,Safari5.1+ */
@@ -154,6 +155,22 @@
 
 .notification-success i {
     color: #00ae42;
+}
+
+.notification-error .notification-content {
+    box-shadow: inset 0 1px #c12023;
+    background: #c12023;
+    background: -moz-linear-gradient(top,  #c12023 0%, #f32837 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c12023), color-stop(100%,#f32837));
+    background: -webkit-linear-gradient(top,  #c12023 0%,#f32837 100%);
+    background: -o-linear-gradient(top,  #c12023 0%,#f32837 100%);
+    background: -ms-linear-gradient(top,  #c12023 0%,#f32837 100%);
+    background: linear-gradient(to bottom,  #c12023 0%,#f32837 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c12023', endColorstr='#f32837',GradientType=0 );
+}
+
+.notification-error i {
+    color: #c12023;
 }
 
 .fire-notification {
