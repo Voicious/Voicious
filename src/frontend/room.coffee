@@ -92,10 +92,22 @@ class Room
         clip.on 'complete', () ->
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
-    sendByMail : (event) =>
-        form = ($ '<form>', {action : '/shareroom', method : 'POST'})
+    doForm : (action, label, btnLabel, cb) =>
+        form = ($ '<form>', {action : action, method : 'POST'})
         form.submit (event) =>
             do event.preventDefault
+            cb event
+            no
+        html = """
+            <small>#{label}</small>
+            <textarea name="data" required></textarea>
+            <button class="btn">#{btnLabel}</button>
+        """
+        form.append html
+
+
+    sendByMail : (event) =>
+        cb = (event) =>
             f = ($ event.currentTarget)
             mails = do (do (form.find 'textarea').first).val
             options =
@@ -108,17 +120,21 @@ class Room
                 success : () =>
                     ((form.parents '.popover').prev 'li').popover 'destroy'
             $.ajax options
-            no
-        html = '''
-            <small>E-mail addresses (comma separated):</small>
-            <textarea name="emails" required></textarea>
-            <button class="btn">Share</button>
-        '''
-        form.append html
-        options =
+        {
             title : "Share this room by email"
             html : yes
-            content : form
+            content : @doForm '/shareroom',
+            'E-mail addresses (comma separated):', 'Share', cb
+        }
+
+    # Send bug report.
+    reportBug : () =>
+        {
+            title : 'Report a bug'
+            html : yes
+            content : @doForm '/report', 'Explain the bug:', 'Report', () =>
+            container : 'body'
+        }
 
     setPage             : () ->
         @emitter.trigger 'button.create', {
@@ -171,6 +187,11 @@ class Room
             click : () =>
                 window.open "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600'
         }
+        @emitter.trigger 'button.create', {
+            name  : 'Report a bug'
+            icon  : 'ambulance'
+            click : {popover : do @reportBug}
+        }
         do @setOnOff
         do @setClipboard
 
@@ -197,23 +218,6 @@ class Room
             @loadScript mod, modules, cb
         else
             do cb
-
-    # Send bug report.
-    sendReport          : () =>
-        $('#sendReport').attr 'disabled', on
-        textArea = $('#reportBugTextarea')
-        content = do textArea.val
-        content = content.replace(/(^\s*)|(\s*$)/gi,"");
-        content = content.replace(/[ ]{2,}/gi," ");
-        if content isnt ""
-            $.ajax
-                type: 'POST'
-                url: '/report'
-                data:
-                    bug: content
-            textArea.val ""
-            do @hideReport
-        $('#sendReport').attr 'disabled', off
 
     # Hide the bug report button.
     hideReport        : () =>
