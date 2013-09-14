@@ -203,6 +203,7 @@ li.zoom-cam-wrapper {
 .popover-content textarea {
     margin-bottom: 10px;
     padding: 2px;
+    resize: vertical;
 }
 
 .popover-title {
