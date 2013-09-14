@@ -146,13 +146,8 @@ class Room
                     hoverClass : 'clipHover'
                 }
                 clip.on 'complete', () =>
-                    ((($ '.notification-wrapper').fadeIn 600).delay 3000).fadeOut 1000
-                btn.append '''<div class="notification-wrapper none">
-                                <div class="notification notification-success">
-                                    <i class="icon-check-sign icon-large"></i>
-                                    <span class="notification-content">Link copied to clipboard</span>
-                                </div>
-                            </div>'''
+                    @emitter.trigger 'notif.text.ok',
+                        text : 'Link copied to clipboard'
         }
         @emitter.trigger 'button.create', {
             name : 'Share by email'
