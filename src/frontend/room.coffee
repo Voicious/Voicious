@@ -96,7 +96,7 @@ class Room
         form = ($ '<form>', {action : action, method : 'POST'})
         form.submit (event) =>
             do event.preventDefault
-            cb event
+            cb ($ event.currentTarget)
             no
         html = """
             <small>#{label}</small>
@@ -107,9 +107,8 @@ class Room
 
 
     sendByMail : (event) =>
-        cb = (event) =>
-            f = ($ event.currentTarget)
-            mails = do (do (form.find 'textarea').first).val
+        cb = (f) =>
+            mails = do (do (f.find 'textarea').first).val
             options =
                 type : f.attr 'method'
                 url : f.attr 'action'
@@ -118,21 +117,34 @@ class Room
                     roomurl : window.location.href
                     from : window.Voicious.currentUser.name
                 success : () =>
-                    ((form.parents '.popover').prev 'li').popover 'destroy'
+                    (do (f.find 'textarea').first).val ''
+                    ((f.parents '.popover').prev 'li').popover 'hide'
             $.ajax options
+        form = @doForm '/shareroom', 'E-mail addresses (comma separated):', 'Share', cb
         {
             title : "Share this room by email"
             html : yes
-            content : @doForm '/shareroom',
-            'E-mail addresses (comma separated):', 'Share', cb
+            content : form
         }
 
     # Send bug report.
     reportBug : () =>
+        cb = (f) =>
+            bug = do (do (f.find 'textarea').first).val
+            options =
+                type : f.attr 'method'
+                url : f.attr 'action'
+                data :
+                    bug : bug
+                    from : window.Voicious.currentUser.name
+                success : () =>
+                    (do (f.find 'textarea').first).val ''
+                    ($ '#btn_report_a_bug').popover 'hide'
+            $.ajax options
         {
             title : 'Report a bug'
             html : yes
-            content : @doForm '/report', 'Explain the bug:', 'Report', () =>
+            content : @doForm '/report', 'Explain the bug:', 'Report', cb
             container : 'body'
         }
 
