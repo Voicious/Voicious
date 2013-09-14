@@ -93,13 +93,11 @@ class Room
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
     sendByMail : (event) =>
-        currentTarget = ($ event.currentTarget)
         form = ($ '<form>', {action : '/shareroom', method : 'POST'})
         form.submit (event) =>
             do event.preventDefault
             f = ($ event.currentTarget)
             mails = do (do (form.find 'textarea').first).val
-            currentTarget.popover 'destroy'
             options =
                 type : f.attr 'method'
                 url : f.attr 'action'
@@ -108,8 +106,7 @@ class Room
                     roomurl : window.location.href
                     from : window.Voicious.currentUser.name
                 success : () =>
-                    console.log 'SUCCESS'
-            console.log options
+                    ((form.parents '.popover').prev 'li').popover 'destroy'
             $.ajax options
             no
         html = '''
@@ -122,7 +119,6 @@ class Room
             title : "Share this room by email"
             html : yes
             content : form
-        currentTarget.popover options
 
     setPage             : () ->
         @emitter.trigger 'button.create', {
@@ -157,7 +153,7 @@ class Room
             name : 'Share by email'
             icon : 'envelope'
             outer : 'share room id'
-            click : @sendByMail
+            click : {popover : do @sendByMail}
         }
         @emitter.trigger 'button.create', {
             name  : 'Share on Twitter'

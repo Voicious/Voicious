@@ -29,7 +29,10 @@ class ButtonManager
         else
             newButton = @createOuterButton params.name, params.icon, params.rank
         if params.click?
-            newButton.click params.click
+            if typeof params.click is 'function'
+                newButton.click params.click
+            else if params.click.popover?
+                newButton.popover params.click.popover
         if params.attrs?
             for key, value of params.attrs
                 newButton.attr key, value
