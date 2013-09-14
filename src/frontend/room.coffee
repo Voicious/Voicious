@@ -28,6 +28,7 @@ class Room
             @connections    = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
             @commandManager = new CommandManager @emitter
             @buttonManager  = new Voicious.ButtonManager @emitter
+            @notificationManager = new Voicious.NotificationManager @emitter
             do @setPage
             @loadModules modules, () =>
                 do @connections.dance

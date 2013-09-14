@@ -135,7 +135,10 @@
 /* success notifications style */
 
 .notification-success .notification-content {
-    font-family: 'OpenSans-Regular';
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    color: rgb(238, 238, 238);
     border-bottom: solid 1px rgba(0, 0, 0, .7);
     display: inline-block;
     border-radius: 4px;
@@ -146,6 +149,7 @@
     background: -o-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top,  #00ae42 0%,#00c84c 100%); /* IE10+ */
     background: linear-gradient(to bottom,  #00ae42 0%,#00c84c 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ae42', endColorstr='#00c84c',GradientType=0 ); /* IE6-9 */
 }
 
 .notification-success i {
