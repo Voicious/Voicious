@@ -255,7 +255,10 @@ class Connections
                 do peer.offerHandshake
                 @sendStreamState id
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
-        , () =>
+        , (error) =>
+            if error? and error.code is 1
+                @emitter.trigger 'notif.text.ok',
+                    text : "It seems that we can't access your hardware."
             @emitter.trigger 'activable.unlock'
             if not MOZILLA and $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').removeClass "hidden"
