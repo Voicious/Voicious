@@ -231,19 +231,6 @@ class Room
         else
             do cb
 
-    # Hide the bug report button.
-    hideReport        : () =>
-        $("#reportBugCtn").addClass 'none'
-        $('div.fullscreen').addClass 'none'
-
-    # Initalize the bug report button.
-    bugReport           : (event) =>
-        fullscreen = $('div.fullscreen')
-        fullscreen.removeClass 'none'
-        fullscreen.click @hideReport
-        $('#reportBugCtn').removeClass 'none'
-        $('#sendReport').click @sendReport
-
     quit                : (user, data) =>
         reason = ""
         if data[1]?
