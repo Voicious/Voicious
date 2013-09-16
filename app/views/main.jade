@@ -9,12 +9,13 @@ html
 
         title #{title}
 
-        !=css("/css/normalize.css")
-        !=css("/css/style.css")
+        !=css("/vendor/normalize-css/normalize.css")
         link(rel="shortcut icon", type="image/png", href="/img/favicon.png")
         block style
 
-        !=js("/scripts/vendor/jquery.js")
+        !=js("/vendor/jquery/jquery.min.js")
+        !=js("/vendor/jquery-ui/ui/minified/jquery-ui.min.js")
+        !=js('/vendor/bootstrap/docs/assets/js/bootstrap.min.js')
         !=js("/scripts/global.js")
         block scripts
 

@@ -89,7 +89,7 @@ class Room
     setClipboard        : () ->
         jqElem = $ '#clipboardLink'
         jqElem.attr 'data-clipboard-text', window.location
-        clip = new ZeroClipboard jqElem[0], { moviePath: "/swf/vendor/ZeroClipboard.swf", hoverClass: "clipHover" }
+        clip = new ZeroClipboard jqElem[0], { moviePath: "/vendor/zeroclipboard/ZeroClipboard.swf", hoverClass: "clipHover" }
         clip.on 'complete', () ->
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
@@ -110,7 +110,7 @@ class Room
                 'data-clipboard-text' : window.location
             callback : (btn) =>
                 clip = new ZeroClipboard (do btn.get), {
-                    moviePath  : '/swf/vendor/ZeroClipboard.swf'
+                    moviePath  : '/vendor/zeroclipboard/ZeroClipboard.swf'
                     hoverClass : 'clipHover'
                 }
                 clip.on 'complete', () =>
