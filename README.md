@@ -7,13 +7,11 @@ Aimed as well for private using than for enterprises, its ease of use and its er
 
 To install **Voicious**' dependencies, build the project and its documentation, run `npm install` from the root dircetory.  
 
-**Voicious** uses [Grunt](http://gruntjs.com) so you can easily build the project with `grunt build` and the documentation with `grunt docco`.  
-
 ## Run
 
 Run one of the following commands from the root directory to run the Voicious server :  
 <pre><code>npm start
-node ./lib/startup.js</code></pre>
+coffee ./app/startup.caffee</code></pre>
 
 ## Licensing
 

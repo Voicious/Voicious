@@ -1,8 +1,8 @@
 {
   "name": "Voicious",
   "description": "",
-  "main": "./www/voicious.js",
-  "version": "0.2.1-b",
+  "main": "./app/startup.coffee",
+  "version": "0.4.5",
   "repository": "git://github.com/Voicious/Voicious.git",
   "dependencies": {
     "express": "~3.1.0",
@@ -22,14 +22,7 @@
     "lib": "./www/lib"
   },
   "scripts": {
-    "install": "grunt all",
-    "start": "node ./lib/startup.js"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-docco": "~0.2.0",
-    "grunt-contrib-coffee": "~0.6.3",
-    "grunt-contrib-clean": "~0.4.0",
-    "grunt-contrib-cssmin": "~0.5.0"
+    "install": "bower install",
+    "start": "coffee ./app/startup.coffee"
   }
 }
