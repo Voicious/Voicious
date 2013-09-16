@@ -27,20 +27,20 @@ class _Modules
     constructor : () ->
 
     getModule : (req, res) =>
-        res.render (Path.join 'modules', req.params.modulename), (err, html) =>
+        scriptName = req.params.modulename + '.js'
+        Jade.render "!=js('/scripts/modules/#{scriptName}')", {}, (err, scriptTag) =>
             if err?
-                scriptName = req.params.modulename + '.js'
-                Jade.render "!=js('/scripts/modules/#{scriptName}')", {}, (err, html) =>
+                throw new Errors.NotFound
+            else
+                res.render (Path.join 'modules', req.params.modulename), (err, html) =>
                     if err?
-                        throw new Errors.NotFound
+                        res.json
+                            module : req.params.modulename
+                            html : scriptTag
                     else
                         res.json
                             module : req.params.modulename
-                            html : html
-            else
-                res.json
-                    module : req.params.modulename
-                    html : html
+                            html : scriptTag + html
 
 
 exports.Modules = new _Modules

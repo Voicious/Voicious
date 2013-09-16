@@ -55,10 +55,6 @@ class Camera extends Module
     squareMainCam : () =>
         @jqMainCams.width do @jqMainCams.height
 
-    appendHTML  : () ->
-        ($ '<ul class="fill-height module" id="mainCam"></ul>').appendTo '#modArea'
-        $(window).trigger 'resize'
-
     delStream   : (event, user) =>
         if (@streams.indexOf user.id) >= 0
             do ($ "li#video_#{user.id}").remove

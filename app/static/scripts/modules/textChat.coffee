@@ -84,25 +84,6 @@ class TextChat extends Module
         @emitter.on 'peer.remove', (event, data) =>
             @emitter.trigger 'chat.error', { text : "#{data.name} leaves the room. (#{data.reason})" }
 
-    appendHTML      : () ->
-        html = ($ '<div class="module fill-height color-one" id="textChat">
-                   <div class="frame">
-                       <div id="chatContent">
-                            <ul></ul>
-                       </div>
-                       <div id="chatForm">
-                           <form>
-                                <span id="descriptionTC">press ENTER to post</span>
-                                <textarea type="text"></textarea>' +
-                                # Wait for i18n
-                                #<input type="text" data-step="5" data-intro="" data-position="top"></input>
-                          '</form>
-                       </div>
-                   </div>
-                   </div>'
-        )
-        html.appendTo "#modArea"
-
     # Update the text chat with a new message.
     update          : (message) =>
         @addMessage message
