@@ -14,7 +14,9 @@
     "redis": "~0.8.3",
     "connect-redis": "~1.4.5",
     "connect-mongo": "~0.3.2",
-    "connect-assets": "~2.5.2"
+    "connect-assets": "~2.5.2",
+    "less": "~1.4.2",
+    "bower": "~1.2.6"
   },
   "directories": {
     "lib": "./www/lib"
