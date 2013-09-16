@@ -190,21 +190,27 @@ li.zoom-cam-wrapper {
 /* Popovers */
 
 .popover {
+    font-family: 'OpenSans-Bold';
     background-color: #232323;
 }
 
 .popover-content small {
     font-size: 10px;
+    color: #fff;
+    line-height: 13px;
 }
 
 .popover-content textarea {
     margin-bottom: 10px;
     padding: 2px;
+    resize: vertical;
 }
 
 .popover-title {
     background-color: #121212;
     border-bottom: 1px solid #888;
+    color: #fff;
+    font-size: 14px;
 }
 
 .popover.right .arrow:after {

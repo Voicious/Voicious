@@ -77,19 +77,13 @@ class _Room
                 res.send 200
 
     reportBug       : (req, res) =>
-        @transport.sendMail({
+        @transport.sendMail {
             from    : "Voicious bugs<no-reply@voicious.com>"
             to      : 'voicious_2014@labeip.epitech.eu'
-            subject : 'Bug Report ' + moment().format()
-            text    : req.body.bug})
-        Request.post {
-            json    : req.body
-            url     : "#{Config.Restapi.Url}/bug"
-        }, (e, r, body) =>
-            if e? or r.statusCode > 200
-                throw new Errors.Error
-            else
-                res.send 200
+            subject : "Bug Report from #{req.body.from}" + do (do moment).format
+            text    : req.body.bug
+        }
+        res.send 200
 
     # Create the new room and redirect the user inside.
     newRoom : (req, res, param) =>

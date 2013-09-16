@@ -92,14 +92,23 @@ class Room
         clip.on 'complete', () ->
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
-    sendByMail : (event) =>
-        currentTarget = ($ event.currentTarget)
-        form = ($ '<form>', {action : '/shareroom', method : 'POST'})
+    doForm : (action, label, btnLabel, cb) =>
+        form = ($ '<form>', {action : action, method : 'POST'})
         form.submit (event) =>
             do event.preventDefault
-            f = ($ event.currentTarget)
-            mails = do (do (form.find 'textarea').first).val
-            currentTarget.popover 'destroy'
+            cb ($ event.currentTarget)
+            no
+        html = """
+            <small>#{label}</small>
+            <textarea name="data" required></textarea>
+            <button class="btn">#{btnLabel}</button>
+        """
+        form.append html
+
+
+    sendByMail : (event) =>
+        cb = (f) =>
+            mails = do (do (f.find 'textarea').first).val
             options =
                 type : f.attr 'method'
                 url : f.attr 'action'
@@ -108,21 +117,36 @@ class Room
                     roomurl : window.location.href
                     from : window.Voicious.currentUser.name
                 success : () =>
-                    console.log 'SUCCESS'
-            console.log options
+                    (do (f.find 'textarea').first).val ''
+                    ((f.parents '.popover').prev 'li').popover 'hide'
             $.ajax options
-            no
-        html = '''
-            <small>E-mail addresses (comma separated):</small>
-            <textarea name="emails" required></textarea>
-            <button class="btn">Share</button>
-        '''
-        form.append html
-        options =
+        form = @doForm '/shareroom', 'E-mail addresses (comma separated):', 'Share', cb
+        {
             title : "Share this room by email"
             html : yes
             content : form
-        currentTarget.popover options
+        }
+
+    # Send bug report.
+    reportBug : () =>
+        cb = (f) =>
+            bug = do (do (f.find 'textarea').first).val
+            options =
+                type : f.attr 'method'
+                url : f.attr 'action'
+                data :
+                    bug : bug
+                    from : window.Voicious.currentUser.name
+                success : () =>
+                    (do (f.find 'textarea').first).val ''
+                    ($ '#btn_report_a_bug').popover 'hide'
+            $.ajax options
+        {
+            title : 'Report a bug'
+            html : yes
+            content : @doForm '/report', 'Explain the bug:', 'Report', cb
+            container : 'body'
+        }
 
     setPage             : () ->
         @emitter.trigger 'button.create', {
@@ -157,7 +181,7 @@ class Room
             name : 'Share by email'
             icon : 'envelope'
             outer : 'share room id'
-            click : @sendByMail
+            click : {popover : do @sendByMail}
         }
         @emitter.trigger 'button.create', {
             name  : 'Share on Twitter'
@@ -174,6 +198,11 @@ class Room
             outer : 'share_room_id'
             click : () =>
                 window.open "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600'
+        }
+        @emitter.trigger 'button.create', {
+            name  : 'Report a bug'
+            icon  : 'ambulance'
+            click : {popover : do @reportBug}
         }
         do @setOnOff
         do @setClipboard
@@ -201,36 +230,6 @@ class Room
             @loadScript mod, modules, cb
         else
             do cb
-
-    # Send bug report.
-    sendReport          : () =>
-        $('#sendReport').attr 'disabled', on
-        textArea = $('#reportBugTextarea')
-        content = do textArea.val
-        content = content.replace(/(^\s*)|(\s*$)/gi,"");
-        content = content.replace(/[ ]{2,}/gi," ");
-        if content isnt ""
-            $.ajax
-                type: 'POST'
-                url: '/report'
-                data:
-                    bug: content
-            textArea.val ""
-            do @hideReport
-        $('#sendReport').attr 'disabled', off
-
-    # Hide the bug report button.
-    hideReport        : () =>
-        $("#reportBugCtn").addClass 'none'
-        $('div.fullscreen').addClass 'none'
-
-    # Initalize the bug report button.
-    bugReport           : (event) =>
-        fullscreen = $('div.fullscreen')
-        fullscreen.removeClass 'none'
-        fullscreen.click @hideReport
-        $('#reportBugCtn').removeClass 'none'
-        $('#sendReport').click @sendReport
 
     quit                : (user, data) =>
         reason = ""
