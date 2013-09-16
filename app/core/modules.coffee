@@ -1,0 +1,49 @@
+###
+
+Copyright (c) 2011-2013  Voicious
+
+This program is free software: you can redistribute it and/or modify it under the terms of the
+GNU Affero General Public License as published by the Free Software Foundation, either version
+3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this
+program. If not, see <http://www.gnu.org/licenses/>.
+
+###
+
+Jade = require 'jade'
+Path = require 'path'
+Fs = require 'fs'
+
+Config      = require '../common/config'
+{Session}   = require './session'
+{Errors}    = require '../common/errors'
+
+class _Modules
+    constructor : () ->
+
+    getModule : (req, res) =>
+        res.render (Path.join 'modules', req.params.modulename), (err, html) =>
+            if err?
+                scriptName = req.params.modulename + '.js'
+                Jade.render "!=js('/scripts/modules/#{scriptName}')", {}, (err, html) =>
+                    if err?
+                        throw new Errors.NotFound
+                    else
+                        res.json
+                            module : req.params.modulename
+                            html : html
+            else
+                res.json
+                    module : req.params.modulename
+                    html : html
+
+
+exports.Modules = new _Modules
+exports.Routes =
+    get :
+        '/modules/:modulename' : (Session.ifUser.curry exports.Modules.getModule, () -> )

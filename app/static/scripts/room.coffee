@@ -23,6 +23,7 @@ class Room
         @rid         = (window.location.pathname.split '/')[2]
         @uid         = window.Voicious.currentUser.uid
         @moduleArray = new Array
+        @_jqModArea = $ '#modArea'
 
         if window.ws? and window.ws.Host? and window.ws.Port?
             @connections    = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }
@@ -88,7 +89,7 @@ class Room
     setClipboard        : () ->
         jqElem = $ '#clipboardLink'
         jqElem.attr 'data-clipboard-text', window.location
-        clip = new ZeroClipboard jqElem[0], { moviePath: "/public/swf/vendor/ZeroClipboard.swf", hoverClass: "clipHover" }
+        clip = new ZeroClipboard jqElem[0], { moviePath: "/swf/vendor/ZeroClipboard.swf", hoverClass: "clipHover" }
         clip.on 'complete', () ->
             ($ '.notification-wrapper').fadeIn(600).delay(3000).fadeOut(1000)
 
@@ -109,7 +110,7 @@ class Room
                 'data-clipboard-text' : window.location
             callback : (btn) =>
                 clip = new ZeroClipboard (do btn.get), {
-                    moviePath  : '/public/swf/vendor/ZeroClipboard.swf'
+                    moviePath  : '/swf/vendor/ZeroClipboard.swf'
                     hoverClass : 'clipHover'
                 }
                 clip.on 'complete', () =>
@@ -141,19 +142,20 @@ class Room
         do @setClipboard
 
     # Get the javascript for the new module given in parameter
-    # and call getModuleHTML.
     loadScript          : (moduleName, modules, cb) ->
         $.ajax(
             type    : 'GET'
-            url     : "/scripts/modules/#{moduleName}.js"
-            dataType: 'script'
-        ).done (data) =>
-            eval data
-            module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
-            theModule = (new window[module] @emitter)
-            @emitter.on 'module.initialize', theModule.initialize
-            @moduleArray.push theModule
-            @loadModules modules, cb
+            url     : "/modules/#{moduleName}"
+            success : (data) =>
+                @_jqModArea.append data.html
+                module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
+                theModule = (new window[module] @emitter)
+                @emitter.on 'module.initialize', theModule.initialize
+                @moduleArray.push theModule
+                @loadModules modules, cb
+            error : () =>
+                @loadModules modules, cb
+        )
 
     # Load the Modules given in parameter recursively.
     # Parameter's type must be an array.
