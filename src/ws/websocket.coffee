@@ -68,20 +68,20 @@ class Websocket
             Db.get 'user', uid, (res) =>
                 res.owner = owner
                 @send sock, { type : 'authenticated', params : res }
-        sock._nextPing   = setTimeout (() =>
-            @sendPing sock
-        ), 60000
-        if not @socks[rid]?
-            @socks[rid] = { }
-        else
-            peers = []
-            for _uid of @socks[rid]
-                if @socks[rid][_uid]?
-                    @send @socks[rid][_uid], { type : 'peer.create' , params : { id : uid , name : name } }
-                    if _uid isnt uid
-                        peers.push { id : _uid , name : @socks[rid][_uid].name }
-            @send sock, { type : 'peer.list' , params : { peers : peers } }
-        @socks[rid][uid] = sock
+                sock._nextPing   = setTimeout (() =>
+                    @sendPing sock
+                ), 60000
+                if not @socks[rid]?
+                    @socks[rid] = { }
+                else
+                    peers = []
+                    for _uid of @socks[rid]
+                        if @socks[rid][_uid]?
+                            @send @socks[rid][_uid], { type : 'peer.create' , params : { id : uid , name : name } }
+                            if _uid isnt uid
+                                peers.push { id : _uid , name : @socks[rid][_uid].name }
+                    @send sock, { type : 'peer.list' , params : { peers : peers } }
+                @socks[rid][uid] = sock
 
     close : (sock, reason = 'Session closed') =>
         if sock._timeout?
