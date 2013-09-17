@@ -39,7 +39,7 @@ class Notification extends Module
     enableNotification      : (notifName) ->
         @emitter.on notifName, () =>
              if @active is on
-                @jqAudio.attr 'src', '/public/sounds/notification/' + notifName + '.mp3'
+                @jqAudio.attr 'src', '/sounds/notification/' + notifName + '.mp3'
                 do @jqAudio[0].play
                 @active = false
 
