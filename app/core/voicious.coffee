@@ -90,11 +90,13 @@ class Voicious
         @app.use Express.static Config.Paths.Webroot
         @app.use (require 'connect-assets') src : Config.Paths.Webroot
         do @setAllRoutes
-#        @app.use (err, req, res, next) =>
-#            if err instanceof Errors.NotFound
-#                Errors.RenderNotFound req, res
-#            else
-#                Errors.RenderError req, res
+
+        @app.use (req, res, next) =>
+            Errors.RenderNotFound req, res
+        @app.use (err, req, res, next) =>
+            console.error err
+            Errors.RenderError req, res
+
         @configured = yes
 
     # Main function
