@@ -160,7 +160,6 @@ class Connections
         @emitter.on 'message.sendtoall', @sendToAll
         @emitter.on 'message.sendToOneName', @sendToOneName
         @emitter.on 'message.sendToOneId', @sendToOneId
-        @emitter.on 'camera.enable', @enableCamera
         @emitter.on 'authenticated', @initUser
         window.onClose = () =>
             do @ws.close
@@ -255,7 +254,11 @@ class Connections
                 do peer.offerHandshake
                 @sendStreamState id
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
-        , () =>
+        , (error) =>
+            do @toggleCamera if @userMedia.video
+            do @toggleMicro if @userMedia.audio
+            @emitter.trigger 'notif.text.ko',
+                text : "It seems that we can't access your hardware."
             @emitter.trigger 'activable.unlock'
             if not MOZILLA and $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').removeClass "hidden"

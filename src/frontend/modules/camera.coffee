@@ -24,7 +24,6 @@ class Camera extends Module
         @zoomCams         = { }
         @streams          = [ ]
         @mosaicNb         = 1
-        ($ 'button#joinConference').bind 'click', @enableCamera
         @emitter.on 'stream.create', @newStream
         @emitter.on 'stream.state', @changeStreamState
         @emitter.on 'stream.remove', (event, user) =>
@@ -88,9 +87,6 @@ class Camera extends Module
         marginleft = ((do video.height) * 640 / 480) / 2
         video.css 'margin-left', -marginleft
         do video[0].play
-
-    enableCamera : () =>
-        @emitter.trigger 'camera.enable'
 
     resizeZoomCams : () =>
         cam = ($ '#mainCam')
