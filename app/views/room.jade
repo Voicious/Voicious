@@ -1,0 +1,58 @@
+extends main
+
+block style
+    !=css("/vendor/jquery-ui/themes/base/minified/jquery-ui.min.css")
+    !=css("/vendor/bootstrap/docs/assets/css/bootstrap.css")
+    !=css("/vendor/jscrollpane/style/jquery.jscrollpane.css")
+    !=css("/vendor/intro.js/introjs.css")
+    !=css("/css/style.css")
+    !=css('/vendor/font-awesome/less/font-awesome.css')
+    !=css("/css/room.css")
+    !=css("/css/sidebar.css")
+    !=css("/css/chatText.css")
+
+block scripts
+    !=js("/vendor/jquery-mousewheel/jquery.mousewheel.js")
+    !=js("/vendor/jscrollpane/script/jquery.jscrollpane.js")
+    !=js("/vendor/intro.js/minified/intro.min.js")
+    !=js("/vendor/showdown/compressed/showdown.js")
+    !=js("/vendor/zeroclipboard/ZeroClipboard.min.js")
+    !=js("/scripts/modules/module.js")
+    !=js('/scripts/connections.js')
+    !=js('/scripts/commandManager.js')
+    !=js('/scripts/buttonManager.js')
+    script(type="text/javascript")
+        window.Voicious.currentUser = {
+            uid  : "#{uid}",
+        };
+        if ("#{wsHost}" !== "" && "#{wsPort}" !== "") {
+            window.ws          = {
+                Host : "#{wsHost}",
+                Port : parseInt("#{wsPort}")
+            };
+        if ('!{modules}' != "") {
+          window.modules = JSON.parse('!{modules}');
+          };
+        }
+    !=js("/scripts/room.js")
+    script(type="text/javascript", src="http://platform.twitter.com/widgets.js")
+    audio#notification(src='')
+block content
+  div.container-fluid.fill-height
+    div.row-fluid.fill-height
+        div#sidebar.row-fluid.fill-height.left.color-one
+          img#logo.center(src='/img/logo.png')
+          div#userInfoCtn
+            p#login(align="right") #{login}
+            p#acl(align="right") #{trans.user}
+          div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
+            button#cam.activable.red.color-one.bordered.shadowed
+              i.icon-facetime-video.dark-grey
+              span OFF
+            button#mic.activable.red.color-one.bordered.shadowed
+              i.icon-microphone.dark-grey
+              span OFF
+          div#sidebarAcc
+        div#container.fill-height.color-two
+          div#modArea.frame.fill-width
+            ul#feeds.module.fill-height(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')

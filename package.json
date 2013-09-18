@@ -1,8 +1,8 @@
 {
   "name": "Voicious",
   "description": "",
-  "main": "./www/voicious.js",
-  "version": "0.2.1-b",
+  "main": "./app/startup.coffee",
+  "version": "0.4.5",
   "repository": "git://github.com/Voicious/Voicious.git",
   "dependencies": {
     "express": "~3.1.0",
@@ -14,18 +14,16 @@
     "redis": "~0.8.3",
     "connect-redis": "~1.4.5",
     "connect-mongo": "~0.3.2",
-    "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-docco": "git://github.com/DavidSouther/grunt-docco.git",
-    "grunt-cli": "~0.1.9",
-    "grunt": "~0.4.1",
-    "nodemailer": "~0.5.2"
+    "nodemailer": "~0.5.2",
+    "connect-assets": "~2.5.2",
+    "less": "~1.4.2",
+    "bower": "~1.2.6"
   },
   "directories": {
     "lib": "./www/lib"
   },
   "scripts": {
-    "install": "grunt all",
-    "start": "node ./lib/startup.js"
+    "install": "bower install",
+    "start": "coffee ./app/startup.coffee"
   }
 }

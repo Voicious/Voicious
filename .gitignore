@@ -1,14 +1,9 @@
-lib
-lib/*
-
-/www/public/js/*.js
-
 docs/*
 
 node_modules
 node_modules/*
 
-test/*.js
+app/static/vendor/*
 
 *~
 .*.swp
