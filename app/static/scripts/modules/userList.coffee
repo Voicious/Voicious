@@ -26,7 +26,7 @@ class UserList extends Module
         do @display
         ($ window).on 'resize', () =>
             do @updateColumns
-        kick = 
+        kick =
             name : 'kick'
             callback : @kick
         @emitter.trigger 'cmd.register', kick
@@ -171,7 +171,7 @@ class UserList extends Module
             message = { type : 'cmd.kick', to : data[1], params : { message : reason } }
             @emitter.trigger 'message.sendToOneName', message
         else
-            @emitter.trigger 'chat.error', { text: data[0] + ": usage: /kick user [reason]"}
-        
+            @emitter.trigger 'chat.message', { text: data[0] + ": usage: /kick user [reason]"}
+
 if window?
     window.UserList     = UserList

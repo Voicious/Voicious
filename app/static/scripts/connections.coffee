@@ -227,13 +227,13 @@ class Connections
             message = { type : 'chat.message' , params : { message : data } }
         for id of @peers
             @ws.forward id, message
-    
+
     sendToOneName : (event, msg) =>
         message = { type : msg.type, params : msg.params }
         userId = @getIdFromUsername msg.to
         if userId is undefined
-            @emitter.trigger 'chat.error', { text : 'kick: ' + msg.to + ' isn\'t in this room.' }
-        else    
+            @emitter.trigger 'chat.message', { text : 'kick: ' + msg.to + ' isn\'t in this room.' }
+        else
             @ws.forward userId, message
 
     sendToOneId : (event, msg) =>
@@ -269,7 +269,7 @@ class Connections
             if peer.name is username
                 id = peer.id
                 break
-        id    
+        id
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate

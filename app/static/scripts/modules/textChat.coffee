@@ -62,13 +62,12 @@ class TextChat extends Module
             name : 'me'
             callback : @me
 
-        ['chat.message', 'chat.error', 'chat.info', 'chat.me'].map (eType) =>
-            @emitter.on eType, @newMessage
+        @emitter.on 'chat.message', @newMessage
 
         @emitter.on 'peer.create', (event, data) =>
-            @emitter.trigger 'chat.error', { text : "#{data.name} arrives in the room." }
+            @emitter.trigger 'chat.message', { text : "#{data.name} arrives in the room." }
         @emitter.on 'peer.remove', (event, data) =>
-            @emitter.trigger 'chat.error', { text : "#{data.name} leaves the room. (#{data.reason})" }
+            @emitter.trigger 'chat.message', { text : "#{data.name} leaves the room. (#{data.reason})" }
 
     submit : (event) =>
         do event.preventDefault
