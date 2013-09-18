@@ -37,40 +37,47 @@ class TextChat extends Module
     constructor     : (emitter) ->
         super emitter
 
+        #Define the Markdown interpretor
         @markdown     = new Showdown.converter { extensions : ['voicious'] }
+
+        #Define accessor for DOM elements
         @content = ($ '#textChat')
         @content.messages = @content.find '#chatContent > ul'
         @content.form = @content.find 'form'
         @content.form.textarea = @content.form.find 'textarea'
 
+        #Launch jScrollpane
         @scrollPane   = @content.messages.jScrollPane horizontalDragMaxWidth : 0
         @scrollPane   = @content.messages.data 'jsp'
+        ($ window).resize () =>
+            do @scrollPane.reinitialise
 
+        #Define what's going on when and how the form is submitted
         @content.form.textarea.on 'keypress', (event) =>
             if event.keyCode is 13 and not event.shiftKey
                 do event.preventDefault
                 @content.form.trigger 'submit'
-
         @content.form.submit @submit
 
+        #Initialize the message list and tis watcher
         (@messages = []).watch 'length', @update
 
-        ($ window).resize () =>
-            do @scrollPane.reinitialise
-
+        #Define chat's own commands
         @emitter.trigger 'cmd.register',
             name : 'me'
             callback : @me
 
+        #Define event bindings
         @emitter.on 'chat.message', @newMessage
-
         @emitter.on 'peer.create', (event, data) =>
             @emitter.trigger 'chat.message', { text : "#{data.name} arrives in the room." }
         @emitter.on 'peer.remove', (event, data) =>
             @emitter.trigger 'chat.message', { text : "#{data.name} leaves the room. (#{data.reason})" }
 
     submit : (event) =>
+        #Do not send the form
         do event.preventDefault
+        #Translating line break to HTML <br />
         message = (do @content.form.textarea.val).replace /\n/g, '<br />'
         @content.form.textarea.val ''
         # We check if it's a command or a message
@@ -79,20 +86,27 @@ class TextChat extends Module
             @sendCommand command
         else
             @sendMessage message
+        #Do not send the form
         no
 
     # Update the text chat with a new message.
     update          : () =>
+        #Empty the message list
         container = (do @scrollPane.getContentPane)
         do container.empty
+
         prevMessage = undefined
+        #Loop through all messages
         @messages.map (message) =>
+            #Humanize the timestamp
             formatedTime = (do (new Date message.time).toTimeString).substr 0, 5
+            #Group message sent by a user
             if prevMessage? and prevMessage.message.from is message.from and message.time - prevMessage.message.time < 3000
                 prevMessage.message = message
                 (($ prevMessage.html[2]).find '.chatmessage').append message.text
             else
                 html = undefined
+                #If message.from is not defined, thew it is a server message
                 if message.from?
                     html = """
                         <div class='chatmetadata'>
@@ -116,6 +130,8 @@ class TextChat extends Module
                         </li>
                     """).appendTo container
                     message : message
+
+        #Reinitialize the scrollPane and scroll to its bottom
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
 
@@ -136,7 +152,9 @@ class TextChat extends Module
             @emitter.trigger 'chat.message', message
 
     newMessage : (event, message) =>
+        #Append a timestamp to the object
         message.time = do (new Date).getTime
+        #Push the object into the watched array
         @messages.push message
 
     me : (user, data) =>
