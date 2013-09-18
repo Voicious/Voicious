@@ -5,7 +5,7 @@ Aimed as well for private using than for enterprises, its ease of use and its er
 
 ## Install
 
-To install **Voicious**' dependencies, build the project and its documentation, run `npm install` from the root dircetory.  
+To install **Voicious**' dependencies, build the project and its documentation, run `npm install` from the root directory.  
 
 ## Configuration
 
