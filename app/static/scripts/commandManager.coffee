@@ -56,7 +56,7 @@ class CommandManager
         message = { type : 'chat.error', params : { text : text } }
         @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
-    
+
     onMe            : (data) =>
         @emitter.trigger 'chat.me', { text : data.text }
 

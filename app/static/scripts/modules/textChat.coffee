@@ -88,24 +88,34 @@ class TextChat extends Module
         do container.empty
         prevMessage = undefined
         @messages.map (message) =>
+            formatedTime = (do (new Date message.time).toTimeString).substr 0, 5
             if prevMessage? and prevMessage.message.from is message.from and message.time - prevMessage.message.time < 3000
                 prevMessage.message = message
                 (($ prevMessage.html[2]).find '.chatmessage').append message.text
             else
-                elem = ($ """
-                    <div class='tcSeparator'></div>
-                    <li>
+                html = undefined
+                if message.from?
+                    html = """
                         <div class='chatmetadata'>
                             <span class='fontlightblue'>#{message.from}</span>
-                            <span class='time'>
-                                 at #{((do (new Date message.time).toTimeString).substr 0, 5)}
-                            </span>
+                            <span class='time'> at #{formatedTime}</span>
                         </div>
                         <div class='chatmessage'>#{message.text}</div>
-                    </li>
-                """).appendTo container
+                    """
+                else
+                    html = """
+                        <div class='blueduckturquoise #{if not message.me then "italic"}'>
+                            #{message.text}
+                            <span class='time'> at #{formatedTime}</span>
+                        </div>
+                    """
                 prevMessage =
-                    html : elem
+                    html : ($ """
+                        <div class='tcSeparator'></div>
+                        <li>
+                            #{html}
+                        </li>
+                    """).appendTo container
                     message : message
         do @scrollPane.reinitialise
         @scrollPane.scrollToPercentY 100, no
@@ -129,6 +139,18 @@ class TextChat extends Module
     newMessage : (event, message) =>
         message.time = do (new Date).getTime
         @messages.push message
+
+    me : (user, data) =>
+        message = undefined
+        if data[1]?
+            action = (data.slice 1).join " "
+            text = "#{user} #{action}"
+            message = { type : 'cmd.me', params : { text : text } }
+            @emitter.trigger 'message.sendtoall', message
+            message = {text : text, me : yes}
+        else
+            message = { text : "me: usage: /me action" }
+        @newMessage null, message
 
 if window?
     window.TextChat     = TextChat

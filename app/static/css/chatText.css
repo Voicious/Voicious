@@ -16,6 +16,10 @@
     overflow: auto;
 }
 
+#chatContent ul .tcSeparator:first-child {
+    display: none;
+}
+
 .chatmetadata:first-child {
     color: #00AEEF;
 }
