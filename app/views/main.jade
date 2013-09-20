@@ -1,0 +1,23 @@
+!!! doctype 5
+
+html
+    head
+        meta(http-equiv="Content-Type", content="text/html", charset="UTF-8")
+        meta(name="description", content="Simple application for videoconference")
+        meta(name="identifier-url", content="http://www.voicious.com")
+        meta(http-equiv="content-Language", content="fr")
+
+        title #{title}
+
+        !=css("/vendor/normalize-css/normalize.css")
+        link(rel="shortcut icon", type="image/png", href="/img/favicon.png")
+        block style
+
+        !=js("/vendor/jquery/jquery.min.js")
+        !=js("/vendor/jquery-ui/ui/minified/jquery-ui.min.js")
+        !=js('/vendor/bootstrap/docs/assets/js/bootstrap.min.js')
+        !=js("/scripts/global.js")
+        block scripts
+
+    body
+        block content

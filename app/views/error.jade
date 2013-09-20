@@ -1,0 +1,17 @@
+extends main
+
+block style
+    link(rel="stylesheet", media="screen", type="text/css", href="http://fonts.googleapis.com/css?family=Inconsolata:400,700&subset=latin,latin-ext")
+    !=css("/css/error.css")
+
+block content
+    div#page
+        div#content.rounded10
+            h1.bold #{status}
+            h2 #{statusText}
+            p.errorGreenText
+                !{errorMsg}
+        div#footer
+            p
+                a#logo.voiciouslogo(href="/") voıċıoųs
+                span#copyright &copy; Copyright 2011 - #{year}
