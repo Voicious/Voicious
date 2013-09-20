@@ -66,13 +66,7 @@ class CommandManager
         @emitter.trigger 'chat.me', { text : data.text }
 
     help            : () =>
-    # should use @commands to get the list of commands
         message = "Commands list:<br/>"
-        #message = { text : "Commands list:<br/>
-        #            /help<br/>
-        #            /kick user [reason]<br/>
-        #            /me [action]<br/>
-        #            /quit [message]" }
         for name, cb of @commands
             message += "/" + name 
             if @infos[name]?
