@@ -41,7 +41,7 @@ class UserList extends Module
         @emitter.on 'peer.list', @fill
         @emitter.on 'peer.create', (event, user) =>
             @update 'create', user
-            @emitter.trigger 'notif.audio', { filename : "peer.create.mp3" }
+            @emitter.trigger 'notif.audio', { name : "peer.create" }
         @emitter.on 'peer.remove', (event, user) =>
             @update 'remove', user
         @emitter.on 'stream.display', (event, video) =>

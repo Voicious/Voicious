@@ -37,9 +37,8 @@ block scripts
         }
     !=js("/scripts/room.js")
     script(type="text/javascript", src="http://platform.twitter.com/widgets.js")
-    ul
-      for af in audioFiles
-        audio(src= "/sounds/notification/" + af)
+    for af in audioFiles
+      audio(src="/sounds/notification/" + af, name=af)
 block content
   div.container-fluid.fill-height
     div.row-fluid.fill-height
