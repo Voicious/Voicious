@@ -19,10 +19,18 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class NotificationManager
     # Initialize the Notification Manager and set the callbacks for the Event Manager.
     constructor     : (@emitter) ->
+        @active = true
+        do @checkFocus
+        do @audioCtrl
+
         @emitter.on 'notif.text.ok', (event, data) =>
             @textNotif yes, data
         @emitter.on 'notif.text.ko', (event, data) =>
             @textNotif no, data
+        @emitter.on 'peer.create', () =>
+            @audioNotif 'peer.create'
+        @emitter.on 'chat.message', () =>
+            @audioNotif 'chat.message'
 
     textNotif : (type, data) =>
         cla = if type then 'success' else 'error'
@@ -37,6 +45,24 @@ class NotificationManager
         ($ 'body').append n
         ((n.fadeIn 600).delay 3000).fadeOut 1000, () =>
             do n.remove
+
+    audioNotif : (eventName) =>
+        if @active is on
+            src = '/sounds/notification/' + eventName + '.mp3'
+            do $("audio[src='" + src + "']")[0].play
+            @active = false
+
+    checkFocus     : () =>
+        $(window).blur () =>
+            @active = true
+        $(window).focus () =>
+            @active = false
+
+    audioCtrl      : () =>
+        @jqAudio = $ "audio.notification"
+        @jqAudio.on 'ended', (e) =>
+            @active = true
+        do @checkFocus
 
 if window.Voicious?
     window.Voicious.NotificationManager   = NotificationManager

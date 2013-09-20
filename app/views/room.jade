@@ -37,7 +37,8 @@ block scripts
         }
     !=js("/scripts/room.js")
     script(type="text/javascript", src="http://platform.twitter.com/widgets.js")
-    audio#notification(src='')
+    audio.notification(src='/sounds/notification/peer.create.mp3')
+    audio.notification(src='/sounds/notification/chat.message.mp3')
 block content
   div.container-fluid.fill-height
     div.row-fluid.fill-height
