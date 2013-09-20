@@ -217,3 +217,76 @@ li.zoom-cam-wrapper {
 }
 
 /* end user interface on thumbnails */
+
+/* tutorial mode */
+
+.introjs-helperLayer {
+	background-color: transparent;
+}
+
+.introjs-helperNumberLayer {
+	visibility: hidden;
+}
+
+.introjs-tooltip {
+	background-color: #131517;
+	color: white;
+}
+
+.introjs-arrow.left {
+	border-right-color: #131517;
+}
+
+.introjs-showElement {
+	background-color: #131517;
+}
+
+.introjs-button {
+	background: #131517;
+	border-color: black;
+	color: white;
+	text-shadow: none;
+	cursor: pointer;
+}
+
+.introjs-button:active {
+	color: green;
+}
+
+.introjs-button:focus {
+	background: #0e1011;
+	color: #00aeef;
+	border-color: #00aeef;
+	text-shadow: none;
+	outline: none;
+}
+
+.introjs-button:hover {
+	background: #0e1011;
+	color: #00aeef;
+	border-color: black;
+	text-shadow: none;
+	box-shadow: none;
+}
+
+.introjs-nextbutton, .introjs-prevbutton {
+	background: #0e1011;
+	color: white;
+	border-color: black;
+	text-shadow: none;
+}
+
+.introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
+	background-color: #131517;
+	border-color: black;
+	text-shadow: none;
+	color: #333;
+}
+
+.introjs-skipbutton {
+	background-color: #131517;
+	border-color: black;
+	color: white;
+}
+
+/* end tutorial mode */
