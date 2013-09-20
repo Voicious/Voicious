@@ -73,6 +73,7 @@ class TextChat extends Module
         
         @emitter.on 'chat.message', (event, data) =>
             @addMessage data.message
+            @emitter.trigger 'notif.audio', { filename : "chat.message.mp3" }
         @emitter.on 'chat.error', (event, data) =>
             @addServerMessage data
         @emitter.on 'chat.info', (event, data) =>

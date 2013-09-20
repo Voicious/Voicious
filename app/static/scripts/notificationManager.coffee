@@ -27,10 +27,8 @@ class NotificationManager
             @textNotif yes, data
         @emitter.on 'notif.text.ko', (event, data) =>
             @textNotif no, data
-        @emitter.on 'peer.create', () =>
-            @audioNotif 'peer.create'
-        @emitter.on 'chat.message', () =>
-            @audioNotif 'chat.message'
+        @emitter.on 'notif.audio', (event, data) =>
+            @audioNotif data
 
     textNotif : (type, data) =>
         cla = if type then 'success' else 'error'
@@ -46,9 +44,9 @@ class NotificationManager
         ((n.fadeIn 600).delay 3000).fadeOut 1000, () =>
             do n.remove
 
-    audioNotif : (eventName) =>
+    audioNotif : (data) =>
         if @active is on
-            src = '/sounds/notification/' + eventName + '.mp3'
+            src = '/sounds/notification/' + data.filename
             do $("audio[src='" + src + "']")[0].play
             @active = false
 
