@@ -16,7 +16,7 @@ You can define in this file your database configuration (connector, host, userna
 
 Run one of the following commands from the root directory to run the Voicious server :  
 <pre><code>npm start
-coffee ./app/startup.caffee</code></pre>
+coffee ./app/startup.coffee</code></pre>
 
 ## Licensing
 

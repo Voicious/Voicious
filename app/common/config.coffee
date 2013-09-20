@@ -55,6 +55,13 @@ class _Config
         @Websocket.Hostname = DefaultHostname @Websocket.Hostname
         @Websocket.Port     = 4243        if not @Websocket.Port?
 
+    # Initialize the Peerjs server config with basic value if configuration file doesn't
+    # contain the required informations.
+    checkPeerjsConfig : () ->
+        @Peerjs.Enabled  = 0           if not @Peerjs.Enabled?
+        @Peerjs.Hostname = DefaultHostname @Peerjs.Hostname
+        @Peerjs.Port     = 4244        if not @Peerjs.Port?
+
     #
     checkSessionsConfig : () ->
         @Voicious.Sessions           = { }                 if not @Voicious.Sessions?
@@ -72,6 +79,7 @@ class _Config
         do @checkCoreConfig
         do @checkDatabaseConfig
         do @checkWebsocketConfig
+        do @checkPeerjsConfig
         do @checkSessionsConfig
 
     constructor : () ->
