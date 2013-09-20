@@ -165,12 +165,16 @@ class UserList extends Module
         do @updateColumns
 
     kick                : (user, data) =>
+        console.log window.Voicious.currentUser
         if data[1]?
-            reason = ''
-            if data[2]?
-                reason = (data.splice 2).join ' '
-            message = { type : 'cmd.kick', to : data[1], params : { message : reason } }
-            @emitter.trigger 'message.sendToOneName', message
+            if data[1] is window.Voicious.currentUser.name
+                @emitter.trigger 'chat.error', { text: data[0] + ": you cannot kick yourself"}
+            else
+                reason = ''
+                if data[2]?
+                    reason = (data.splice 2).join ' '
+                message = { type : 'cmd.kick', to : data[1], params : { message : reason } }
+                @emitter.trigger 'message.sendToOneName', message
         else
             @emitter.trigger 'chat.error', { text: data[0] + ": usage: /kick user [reason]"}
         
