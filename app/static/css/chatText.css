@@ -1,6 +1,8 @@
 #textChat {
     width: 25%;
     font-size: 13px;
+	min-height: 415px;
+	min-width: 230px;
 }
 
 #chatContent {

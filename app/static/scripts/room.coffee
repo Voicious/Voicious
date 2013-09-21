@@ -204,6 +204,57 @@ class Room
         do @setOnOff
         do @setClipboard
 
+    resizableMod        : () =>
+        $('.module').each () ->
+            $(this).resizable {
+                containment: '#modArea',
+                handles: 'se',
+                resize: (event, ui) =>
+                    id = '#' + ui.element.attr 'id'
+                    maxSize = {}
+                    visible = true
+                    $('.module').each () ->
+                        pos = { t: (do $(this).offset).top, l: (do $(this).offset).left, h: do $(this).height, w: do $(this).width, docH: do $(window).height, docW: do $(window).width }
+                        visible = (pos.t > 0 && pos.l > 0 && pos.t + pos.h < pos.docH && pos.l + pos.w < pos.docW)
+                        if visible
+                            maxSize = { width: do $(id).width, height: do $(id).height }
+                        else
+                            visible = false
+                            return
+                    if !visible
+                        $(id).resizable('widget').trigger 'mouseup'
+                        $(id).width (maxSize.width - ($('.module').length * 10))
+                        $(id).height (maxSize.height - ($('.module').length * 10))
+            }
+
+    sortableMod         : () =>
+        $('#modArea').sortable({
+            containment: '#container',
+            tolerance: 'pointer',
+            receive: (event, ui) ->
+                $('.module').each () ->
+                    pos = { t: (do $(this).offset).top, l: (do $(this).offset).left, h: do $(this).height, w: do $(this).width, docH: do $(window).height, docW: do $(window).width }
+                    visible = (pos.t > 0 && pos.l > 0 && pos.t + pos.h < pos.docH && pos.l + pos.w < pos.docW)
+                    if !visible
+                        $(ui.sender).sortable 'cancel'
+            sort: (event, ui) ->
+                $('.module').css 'clear', ''
+            stop: (event, ui) ->
+                draggedItemId = '#' + ui.item.attr 'id'
+                prevHeight = do (do ui.item.prev).height
+                nextHeight = do (do ui.item.next).height
+                if ui.position.top >= prevHeight && ui.position.top >= nextHeight
+                    $(draggedItemId).css 'clear', 'left'
+                else
+                    $(draggedItemId).css 'clear', ''
+                if $('#mainCam').length
+                    $('#mainCam').trigger 'resize'
+        }).disableSelection()
+    
+    dynamicMod          : () =>
+        do @resizableMod
+        do @sortableMod
+
     # Get the javascript for the new module given in parameter
     loadScript          : (moduleName, modules, cb) ->
         $.ajax(
@@ -228,6 +279,7 @@ class Room
             @loadScript mod, modules, cb
         else
             do cb
+            do @dynamicMod
 
     quit                : (user, data) =>
         reason = ""
