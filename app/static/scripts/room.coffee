@@ -221,7 +221,26 @@ class Room
         )
 
     resizableMod        : () =>
-        do $('.module').resizable
+        $('.module').each () ->
+            $(this).resizable {
+                containment: '#modArea',
+                resize: (event, ui) =>
+                    id = '#' + ui.element.attr 'id'
+                    maxSize = {}
+                    visible = true
+                    $('.module').each () ->
+                        pos = { t: (do $(this).offset).top, l: (do $(this).offset).left, h: do $(this).height, w: do $(this).width, docH: do $(window).height, docW: do $(window).width }
+                        visible = (pos.t > 0 && pos.l > 0 && pos.t + pos.h < pos.docH && pos.l + pos.w < pos.docW)
+                        if visible
+                            maxSize = { width: do $(id).width, height: do $(id).height }
+                        else
+                            visible = false
+                            return
+                        if !visible
+                            $(id).resizable('widget').trigger 'mouseup'
+                            $(id).width (maxSize.width - ($('.module').length * 10))
+                            $(id).height (maxSize.height - ($('.module').length * 10))
+            }
 
     sortableMod         : () =>
         $('#modArea').sortable({
