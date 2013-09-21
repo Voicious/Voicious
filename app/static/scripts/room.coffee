@@ -245,6 +245,12 @@ class Room
     sortableMod         : () =>
         $('#modArea').sortable({
             containment: '#modArea',
+            receive: (event, ui) ->
+                $('.module').each () ->
+                    pos = { t: (do $(this).offset).top, l: (do $(this).offset).left, h: do $(this).height, w: do $(this).width, docH: do $(window).height, docW: do $(window).width }
+                    visible = (pos.t > 0 && pos.l > 0 && pos.t + pos.h < pos.docH && pos.l + pos.w < pos.docW)
+                    if !visible
+                        $(ui.sender).sortable 'cancel'
             stop: (event, ui) ->
                 draggedItemId = '#' + ui.item.attr 'id'
                 prevItem = do ui.item.prev
