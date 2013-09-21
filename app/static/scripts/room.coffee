@@ -223,8 +223,21 @@ class Room
     resizableMod        : () =>
         do $('.module').resizable
 
+    sortableMod         : () =>
+        $('#modArea').sortable({
+            containment: '#modArea',
+            stop: (event, ui) ->
+                draggedItemId = '#' + ui.item.attr 'id'
+                prevItem = do ui.item.prev
+                if ui.position.top >= (do prevItem.height)
+                    $(draggedItemId).css 'clear', 'left'
+                else
+                    $(draggedItemId).css 'clear', ''
+        }).disableSelection()
+
     dynamicMod          : () =>
         do @resizableMod
+        do @sortableMod
 
     # Load the Modules given in parameter recursively.
     # Parameter's type must be an array.
