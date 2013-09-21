@@ -1,0 +1,26 @@
+extends main
+
+block style
+    !=css("/css/style.css")
+    !=css("/css/dashboard.css")
+
+block content
+  div.container-fluid.fill-height.color-one
+        div#sidebar.row-fluid.fill-height.left
+          div.fill-width.color-two.content-right
+            img#logo(src="/img/logo.png")
+          div#userInfoCtn
+            p#login(align="right") #{login}
+            p#dashboard(align="right") DASHBOARD
+          div#optionController.fill-width
+            ul#optionList
+              li
+                i.icon-th-large
+                | option1
+              li
+                i.icon-group
+                | option2
+              li
+                i.icon-cog
+                | option3
+        div#content.fill-height

@@ -1,0 +1,79 @@
+#sidebar {
+    width: auto;
+    float: left;
+    min-width: 200px;
+    color: white;
+}
+
+#sidebar i { /* in double */
+    margin-right: 6px;
+}
+
+#content {
+    overflow: hidden;
+}
+
+#logo {
+    text-align: right;
+    margin-right: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.content-right {
+    text-align: right;
+}
+
+#userInfoCtn {
+    color : #ffffff;
+    margin-top: 15px;
+    margin-right: 20px;
+}
+
+#login {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+#dashboard {
+    font-family: 'OpenSans-Bold';
+    margin-top: 5px;
+    font-size: 10px;
+    color: white;
+}
+
+#optionController {
+    margin-top: 20px;
+}
+
+#optionController > ul > li {
+    position: relative;
+    padding: 10px 0;
+}
+
+#optionController > ul > li > i {
+    margin-left: 10%;
+}
+
+
+.arrow_box {
+    position: relative;
+    background: #88b7d5;
+}
+.arrow_box:after {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.arrow_box:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #88b7d5;
+    border-width: 20px;
+    top: 50%;
+    margin-top: 20px;
+}
