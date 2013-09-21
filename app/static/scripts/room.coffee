@@ -251,10 +251,13 @@ class Room
                     visible = (pos.t > 0 && pos.l > 0 && pos.t + pos.h < pos.docH && pos.l + pos.w < pos.docW)
                     if !visible
                         $(ui.sender).sortable 'cancel'
+            sort: (event, ui) ->
+                $('.module').css 'clear', ''
             stop: (event, ui) ->
                 draggedItemId = '#' + ui.item.attr 'id'
-                prevItem = do ui.item.prev
-                if ui.position.top >= (do prevItem.height)
+                prevHeight = do (do ui.item.prev).height
+                nextHeight = do (do ui.item.next).height
+                if ui.position.top >= prevHeight && ui.position.top >= nextHeight
                     $(draggedItemId).css 'clear', 'left'
                 else
                     $(draggedItemId).css 'clear', ''
