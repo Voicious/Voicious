@@ -204,26 +204,11 @@ class Room
         do @setOnOff
         do @setClipboard
 
-    # Get the javascript for the new module given in parameter
-    loadScript          : (moduleName, modules, cb) ->
-        $.ajax(
-            type    : 'GET'
-            url     : "/modules/#{moduleName}"
-            success : (data) =>
-                @_jqModArea.append data.html
-                module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
-                theModule = (new window[module] @emitter)
-                @emitter.on 'module.initialize', theModule.initialize
-                @moduleArray.push theModule
-                @loadModules modules, cb
-            error : () =>
-                @loadModules modules, cb
-        )
-
     resizableMod        : () =>
         $('.module').each () ->
             $(this).resizable {
                 containment: '#modArea',
+                handles: 'se',
                 resize: (event, ui) =>
                     id = '#' + ui.element.attr 'id'
                     maxSize = {}
@@ -236,15 +221,16 @@ class Room
                         else
                             visible = false
                             return
-                        if !visible
-                            $(id).resizable('widget').trigger 'mouseup'
-                            $(id).width (maxSize.width - ($('.module').length * 10))
-                            $(id).height (maxSize.height - ($('.module').length * 10))
+                    if !visible
+                        $(id).resizable('widget').trigger 'mouseup'
+                        $(id).width (maxSize.width - ($('.module').length * 10))
+                        $(id).height (maxSize.height - ($('.module').length * 10))
             }
 
     sortableMod         : () =>
         $('#modArea').sortable({
-            containment: '#modArea',
+            containment: '#container',
+            tolerance: 'pointer',
             receive: (event, ui) ->
                 $('.module').each () ->
                     pos = { t: (do $(this).offset).top, l: (do $(this).offset).left, h: do $(this).height, w: do $(this).width, docH: do $(window).height, docW: do $(window).width }
@@ -264,10 +250,26 @@ class Room
                 if $('#mainCam').length
                     $('#mainCam').trigger 'resize'
         }).disableSelection()
-
+    
     dynamicMod          : () =>
         do @resizableMod
         do @sortableMod
+
+    # Get the javascript for the new module given in parameter
+    loadScript          : (moduleName, modules, cb) ->
+        $.ajax(
+            type    : 'GET'
+            url     : "/modules/#{moduleName}"
+            success : (data) =>
+                @_jqModArea.append data.html
+                module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
+                theModule = (new window[module] @emitter)
+                @emitter.on 'module.initialize', theModule.initialize
+                @moduleArray.push theModule
+                @loadModules modules, cb
+            error : () =>
+                @loadModules modules, cb
+        )
 
     # Load the Modules given in parameter recursively.
     # Parameter's type must be an array.

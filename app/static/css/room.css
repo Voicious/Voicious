@@ -169,6 +169,8 @@ video {
 
 #mainCam {
     text-align: center;
+	min-height: 115px;
+	min-width: 115px;
 }
 
 li.zoom-cam-wrapper {
