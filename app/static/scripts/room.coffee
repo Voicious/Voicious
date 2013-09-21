@@ -252,6 +252,8 @@ class Room
                     $(draggedItemId).css 'clear', 'left'
                 else
                     $(draggedItemId).css 'clear', ''
+                if $('#mainCam').length
+                    $('#mainCam').trigger 'resize'
         }).disableSelection()
 
     dynamicMod          : () =>
