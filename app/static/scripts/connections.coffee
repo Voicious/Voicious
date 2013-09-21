@@ -80,15 +80,18 @@ class DC
         @conn.on 'close', @onClose
         @conn.on 'error', errorHandler
 
+    peer        : () =>
+        return @conn.peer
+
     onOpen      : () =>
 
     onData      : (data) =>
-        @emitter.trigger data.type, data
+        @emitter.trigger data.type, data.params
 
     onClose     : () =>
 
     send        : (type, data) =>
-        @conn.send { type: type, data: data }
+        @conn.send { type: type, params: data }
 
     close       : () =>
         do @conn.close
@@ -98,6 +101,9 @@ class MC
         @call.on 'stream', @onStream
         @call.on 'close', @onClose
         @call.on 'error', errorHandler
+
+    peer        : () =>
+        return @conn.peer
 
     onStream    : (stream) =>
         data =
@@ -163,14 +169,14 @@ class Connections
             for peer in data.peers
                 @pjs.connect peer.id
         @emitter.on 'peer.dataconnection', (event, data) =>
-            if !@peers[data.pc.peer]?
-                @peers[data.pc.peer] = {}
-            @peers[data.pc.peer].pc = data.pc
-            @sendStreamState data.pc.peer
+            if !@peers[do data.dc.peer]?
+                @peers[do data.dc.peer] = {}
+            @peers[do data.dc.peer].dc = data.dc
+            # @sendStreamState do data.dc.peer
         @emitter.on 'peer.mediaconnection', (event, data) =>
-            if !@peers[data.mc.peer]?
-                @peers[data.mc.peer] = {}
-            @peers[data.mc.peer].mc = data.mc
+            if !@peers[do data.mc.peer]?
+                @peers[do data.mc.peer] = {}
+            @peers[do data.mc.peer].mc = data.mc
         @emitter.on 'peer.remove', (event, data) =>
             if @peers[data.id]?
                 @removePeer data.id
@@ -178,29 +184,34 @@ class Connections
         @emitter.on 'ping', (event, data) =>
             @ws.send { type : 'pong' , params : { token : data.token } }
 
+    send      : (id, message) =>
+        if @peers[id].dc?
+            @peers[id].dc.send message.type, message.params
+        else
+            @ws.forward id, message
+
     sendToAll : (event, data) =>
-        message
         if data.type?
             message = data
         else
             message = { type : 'chat.message' , params : { message : data } }
-        for id of @peers
-            @ws.forward id, message
+        for id, peer of @peers
+            @send id, message
     
     sendToOneName : (event, msg) =>
         message = { type : msg.type, params : msg.params }
         userId = @getIdFromUsername msg.to
         if userId is undefined
             @emitter.trigger 'chat.error', { text : 'kick: ' + msg.to + ' isn\'t in this room.' }
-        else    
-            @ws.forward userId, message
+        else
+            @send userId, message
 
     sendToOneId : (event, msg) =>
         message = { type : msg.type, params : msg.params }
-        @ws.forward msg.to, message
+        @send msg.to, message
 
     sendStreamState : (id) =>
-        @ws.forward id, { type : 'stream.state', params : { streamState : @userMedia } }
+        @send id, { type : 'stream.state', params : { streamState : @userMedia } }
 
     enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
