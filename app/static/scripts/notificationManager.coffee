@@ -23,6 +23,8 @@ class NotificationManager
             @textNotif yes, data
         @emitter.on 'notif.text.ko', (event, data) =>
             @textNotif no, data
+        @emitter.on 'notif.audio', (event, data) =>
+            @audioNotif data.name
 
     textNotif : (type, data) =>
         cla = if type then 'success' else 'error'
@@ -37,6 +39,14 @@ class NotificationManager
         ($ 'body').append n
         ((n.fadeIn 600).delay 3000).fadeOut 1000, () =>
             do n.remove
+
+    audioNotif : do () =>
+        _focus = yes
+        ($ window).focus () => _focus = yes
+        ($ window).blur () => _focus = no
+        (name) =>
+            if not _focus
+                do $("audio[name^='" + name + "']")[0].play
 
 if window.Voicious?
     window.Voicious.NotificationManager   = NotificationManager

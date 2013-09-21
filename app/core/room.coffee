@@ -18,6 +18,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 nodemailer  = require 'nodemailer'
 moment      = require 'moment'
 md5         = require 'MD5'
+fs          = require 'fs'
 
 Config      = require '../common/config'
 {Session}   = require './session'
@@ -29,7 +30,7 @@ Config      = require '../common/config'
 class _Room
     # Initialize a nodemailer module and a list of modules
     # with default values.
-    constructor : (@modulesList = [ 'userList' , 'notification', 'tutorial', 'textChat', 'camera']) ->
+    constructor : (@modulesList = [ 'userList' , 'tutorial', 'textChat', 'camera']) ->
         @transport = nodemailer.createTransport('Sendmail');
         @token  = Token
 
@@ -37,6 +38,7 @@ class _Room
     renderRoom : (res, options, host) =>
         options.trans = Translator.getTrans(host, 'room')
         options.modules = JSON.stringify @modulesList
+        options.audioFiles = fs.readdirSync "./app/static/sounds/notification/"
         res.render 'room', options
 
     # Create a new Room and check if the user is logged in.
