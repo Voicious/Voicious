@@ -52,30 +52,63 @@ class PeerJs
         @pjs.on 'connection', @onConnection
 
     onConnection    : (conn) =>
-        peer = new PC conn, @emitter
+        @createDataConnection conn
 
-    connect         : (peerUid) =>
-        conn = @pjs.connect peerUid
-        peer = new PC conn, @emitter
+    connect         : (uid) =>
+        conn = @pjs.connect uid
+        @createDataConnection conn
 
-class PC
+    createDataConnection    : (conn) =>
+        dc = new DC conn, @emitter
+        @emitter.trigger 'peer.dataconnection', { dc: dc }
+
+    onCall          : (call) =>
+        @createMediaConnection call
+
+    call            : (uid, stream) =>
+        call = @pjs.call uid, stream
+        @createMediaConnection call
+
+    createMediaConnection   : (call) =>
+        mc = new MC call, @emitter
+        @emitter.trigger 'peer.mediaconnection', { mc: mc }
+
+class DC
     constructor : (@conn, @emitter) ->
         @conn.on 'open', @onOpen
         @conn.on 'data', @onData
+        @conn.on 'close', @onClose
+        @conn.on 'error', errorHandler
 
     onOpen      : () =>
-        @send 'peer.uid', {}
 
     onData      : (data) =>
-        if data.type is 'peer.uid'
-            data.peer = @
         @emitter.trigger data.type, data
+
+    onClose     : () =>
 
     send        : (type, data) =>
         @conn.send { type: type, data: data }
 
     close       : () =>
         do @conn.close
+
+class MC
+    constructor : (@call, @emitter) ->
+        @call.on 'stream', @onStream
+        @call.on 'close', @onClose
+        @call.on 'error', errorHandler
+
+    onStream    : (stream) =>
+        data =
+            video   : createVideoTag stream
+            uid     : @call.peer
+        @emitter.trigger 'stream.create', data
+
+    onClose     : () =>
+
+    sendStream   : (stream) =>
+        @call.answer stream
 
 class Connections
     constructor : (@emitter, @uid, @rid, @wsPortal, @pjsPortal) ->
@@ -129,9 +162,15 @@ class Connections
         @emitter.on 'peer.list', (event, data) =>
             for peer in data.peers
                 @pjs.connect peer.id
-        @emitter.on 'peer.uid', (event, data) =>
-            @peers[data.peer.peer] = data.peer
-            @sendStreamState data.peer.peer
+        @emitter.on 'peer.dataconnection', (event, data) =>
+            if !@peers[data.pc.peer]?
+                @peers[data.pc.peer] = {}
+            @peers[data.pc.peer].pc = data.pc
+            @sendStreamState data.pc.peer
+        @emitter.on 'peer.mediaconnection', (event, data) =>
+            if !@peers[data.mc.peer]?
+                @peers[data.mc.peer] = {}
+            @peers[data.mc.peer].mc = data.mc
         @emitter.on 'peer.remove', (event, data) =>
             if @peers[data.id]?
                 @removePeer data.id
