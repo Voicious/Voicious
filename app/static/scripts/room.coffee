@@ -220,6 +220,12 @@ class Room
                 @loadModules modules, cb
         )
 
+    resizableMod        : () =>
+        do $('.module').resizable
+
+    dynamicMod          : () =>
+        do @resizableMod
+
     # Load the Modules given in parameter recursively.
     # Parameter's type must be an array.
     loadModules         : (modules, cb) ->
@@ -228,6 +234,7 @@ class Room
             @loadScript mod, modules, cb
         else
             do cb
+            do @dynamicMod
 
     quit                : (user, data) =>
         reason = ""
