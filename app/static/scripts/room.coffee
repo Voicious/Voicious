@@ -87,12 +87,6 @@ class Room
                     @refreshOnOff ($ '#cam'), data['video']
                     @refreshOnOff ($ '#mic'), data['audio']
 
-    setFocus        : () ->
-        $(window).focus () ->
-            window.Voicious.focus = true
-        $(window).blur () ->
-            window.Voicious.focus = false
-
     setClipboard        : () ->
         jqElem = $ '#clipboardLink'
         jqElem.attr 'data-clipboard-text', window.location
@@ -209,7 +203,6 @@ class Room
         }
         do @setOnOff
         do @setClipboard
-        do @setFocus
 
     # Get the javascript for the new module given in parameter
     loadScript          : (moduleName, modules, cb) ->

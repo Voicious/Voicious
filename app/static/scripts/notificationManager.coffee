@@ -40,9 +40,13 @@ class NotificationManager
         ((n.fadeIn 600).delay 3000).fadeOut 1000, () =>
             do n.remove
 
-    audioNotif : (name) =>
-        if window.Voicious.focus is false
-            do $("audio[name^='" + name + "']")[0].play
+    audioNotif : do () =>
+        _focus = yes
+        ($ window).focus () => _focus = yes
+        ($ window).blur () => _focus = no
+        (name) =>
+            if not _focus
+                do $("audio[name^='" + name + "']")[0].play
 
 if window.Voicious?
     window.Voicious.NotificationManager   = NotificationManager
