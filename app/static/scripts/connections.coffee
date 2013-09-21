@@ -48,25 +48,23 @@ class PeerJs
     constructor     : (@uid, @rid, @emitter) ->
 
     dance           : (pjs) =>
-        console.log pjs
         @pjs    = new Peer @uid, { host: pjs.host, port: pjs.port }
         @pjs.on 'connection', @onConnection
 
     onConnection    : (conn) =>
-        peer = new PC conn, @emitter, @uid
+        peer = new PC conn, @emitter
 
     connect         : (peerUid) =>
         conn = @pjs.connect peerUid
-        peer = new PC conn, @emitter, @uid
+        peer = new PC conn, @emitter
 
 class PC
-    constructor : (@conn, @emitter, from) ->
-        @conn.on 'open', () =>
-            @onOpen from
+    constructor : (@conn, @emitter) ->
+        @conn.on 'open', @onOpen
         @conn.on 'data', @onData
 
-    onOpen      : (from) =>
-        @send 'peer.uid', { uid: from }
+    onOpen      : () =>
+        @send 'peer.uid', {}
 
     onData      : (data) =>
         if data.type is 'peer.uid'
@@ -101,8 +99,9 @@ class Connections
         if @localStream isnt undefined
             do @localStream.stop
             for id, peer of @peers
-                peer.rmLocalStream @localStream
-                do peer.offerHandshake
+
+                # peer.rmLocalStream @localStream
+                # do peer.offerHandshake
                 if @userMedia['video'] is no or @userMedia['audio'] is no
                     @sendStreamState id
         @localStream = undefined # erase old stream
@@ -130,16 +129,15 @@ class Connections
         @emitter.on 'peer.list', (event, data) =>
             for peer in data.peers
                 @pjs.connect peer.id
-                # @sendStreamState peer.id
         @emitter.on 'peer.uid', (event, data) =>
-            @peers[data.id] = data.peer
-            # @sendStreamState data.id
-        @emitter.on 'ping', (event, data) =>
-            @ws.send { type : 'pong' , params : { token : data.token } }
+            @peers[data.peer.peer] = data.peer
+            @sendStreamState data.peer.peer
         @emitter.on 'peer.remove', (event, data) =>
             if @peers[data.id]?
                 @removePeer data.id
                 @emitter.trigger 'stream.remove', data
+        @emitter.on 'ping', (event, data) =>
+            @ws.send { type : 'pong' , params : { token : data.token } }
 
     sendToAll : (event, data) =>
         message
