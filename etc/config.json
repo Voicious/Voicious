@@ -22,7 +22,8 @@
             "External" : "localhost"
         },
         "Port"      : 4244,
-        "Enabled"   : 1
+        "Enabled"   : 1,
+        "Debug"     : 0
     },
     "Database"   : {
         "Connector" : "mongodb",

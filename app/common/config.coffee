@@ -61,6 +61,7 @@ class _Config
         @Peerjs.Enabled  = 0           if not @Peerjs.Enabled?
         @Peerjs.Hostname = DefaultHostname @Peerjs.Hostname
         @Peerjs.Port     = 4244        if not @Peerjs.Port?
+        @Peerjs.Debug    = 0           if not @Peerjs.Debug?
 
     #
     checkSessionsConfig : () ->
