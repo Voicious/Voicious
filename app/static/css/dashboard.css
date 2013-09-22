@@ -39,7 +39,7 @@
     font-family: 'OpenSans-Bold';
     margin-top: 5px;
     font-size: 10px;
-    color: white;
+    color: #444F54;
 }
 
 #optionController {
@@ -47,33 +47,45 @@
 }
 
 #optionController > ul > li {
-    position: relative;
-    padding: 10px 0;
+    height: 40px;
+    cursor: pointer;
 }
 
-#optionController > ul > li > i {
+/* Center content vertically */
+#optionController > ul > li > div.option-wrapper:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+#optionController > ul > li > div.option-wrapper {
+    display: inline-block;
+    position: relative;
     margin-left: 10%;
+    text-transform: uppercase;
+
+    font-family: 'OpenSans-Bold';
+    font-size: 12px;
 }
 
-
-.arrow_box {
+.options.active {
+    box-shadow: inset 0 1px rgba(255,255,255,.05);
     position: relative;
-    background: #88b7d5;
+    background-color: #008EF1;
 }
-.arrow_box:after {
+
+/* Draw the arrow on selected option */
+.options.active:before {
     left: 100%;
     border: solid transparent;
     content: " ";
     height: 0;
     width: 0;
+
     position: absolute;
     pointer-events: none;
-}
-
-.arrow_box:after {
     border-color: rgba(136, 183, 213, 0);
-    border-left-color: #88b7d5;
-    border-width: 20px;
-    top: 50%;
-    margin-top: 20px;
+    border-left-color: #008EF1;
+    border-width: 20px; /* half the height an li */
 }

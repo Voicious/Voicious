@@ -1,8 +1,12 @@
 extends main
 
 block style
-    !=css("/css/style.css")
-    !=css("/css/dashboard.css")
+  !=css('/vendor/font-awesome/less/font-awesome.css')
+  !=css("/css/style.css")
+  !=css("/css/dashboard.css")
+
+block scripts
+  !=js("/scripts/dashboard")
 
 block content
   div.container-fluid.fill-height.color-one
@@ -14,13 +18,16 @@ block content
             p#dashboard(align="right") DASHBOARD
           div#optionController.fill-width
             ul#optionList
-              li
-                i.icon-th-large
-                | option1
-              li
-                i.icon-group
-                | option2
-              li
-                i.icon-cog
-                | option3
+              li.options
+                div.option-wrapper
+                  i.icon-th-large
+                  | rooms
+              li.options
+                div.option-wrapper
+                  i.icon-group
+                  | friends
+              li.options
+                div.option-wrapper
+                  i.icon-cog
+                  | account settings
         div#content.fill-height
