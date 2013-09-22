@@ -242,10 +242,14 @@ class Room
                 $('.module').css 'clear', ''
             stop: (event, ui) ->
                 draggedItemId = '#' + ui.item.attr 'id'
-                prevHeight = do (do ui.item.prev).height
-                nextHeight = do (do ui.item.next).height
-                if ui.position.top >= prevHeight && ui.position.top >= nextHeight
-                    $(draggedItemId).css 'clear', 'left'
+                if ui.position.left < ui.originalPosition.left
+                    prevHeight = do (ui.item.prevAll '.module:first').height
+                    if prevHeight && ui.position.top >= prevHeight
+                        $(draggedItemId).css 'clear', 'left'
+                else if ui.position.left > ui.originalPosition.left
+                    nextHeight = do (ui.item.nextAll '.module:first').height
+                    if nextHeight && ui.position.top >= nextHeight
+                        $(draggedItemId).css 'clear', 'left'
                 else
                     $(draggedItemId).css 'clear', ''
                 if $('#mainCam').length
