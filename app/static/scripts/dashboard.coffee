@@ -15,13 +15,27 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+bindView = (elemToclick, divToDisplay) ->
+	($ elemToclick).click () =>
+		clickable = ($ elemToclick)
+		clickable.addClass 'active'
+		(clickable.siblings '.options').removeClass 'active'
+
+		do (($ divToDisplay).siblings '.content.display').hide
+		($ divToDisplay).fadeIn '100'
+		($ divToDisplay).addClass 'display'
+		(($ divToDisplay).siblings '.content.display').removeClass 'display'
+
+# Initialize the dashboard by binding options to content and hide all the content.
+init = () ->
+	options = ($ 'li.options')
+	do $('.content').hide
+
+	bindView (do options.first), '#roomsContent'
+	bindView (options[1]),  '#friendsContent'
+	bindView (options[2]),  '#settingsContent'
+
+	do (do options.first).click
 
 ($ document).ready () =>
-	options = ($ 'li.options')
-
-	options.each () ->
-		($ this).click () ->
-			($ this).addClass 'active'
-			(($ this).siblings '.options').removeClass 'active'
-
-	(do options.first).addClass 'active'
+	do init
