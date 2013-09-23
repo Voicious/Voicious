@@ -152,6 +152,8 @@ class TextChat extends Module
             @emitter.trigger 'chat.message', message
 
     newMessage : (event, message) =>
+        # Remove unwanted server data
+        message = message.message if message.message?
         #Append a timestamp to the object
         message.time = do (new Date).getTime
         #Push the object into the watched array
