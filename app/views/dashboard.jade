@@ -1,6 +1,7 @@
 extends main
 
 block style
+  !=css("/vendor/bootstrap/docs/assets/css/bootstrap-responsive.css")
   !=css('/vendor/font-awesome/less/font-awesome.css')
   !=css("/css/style.css")
   !=css("/css/dashboard.css")
@@ -19,21 +20,19 @@ block content
           div#optionController.fill-width
             ul#optionList
               li.options
-                div.option-wrapper
+                div.option-wrapper.centerVertically
                   i.icon-th-large
                   | rooms
               li.options
-                div.option-wrapper
+                div.option-wrapper.centerVertically
                   i.icon-group
                   | friends
               li.options
-                div.option-wrapper
+                div.option-wrapper.centerVertically
                   i.icon-cog
                   | account settings
         div#content.fill-height
-          div#roomsContent.content
-            p YEAAAAAAAAAAAAAH
-          div#friendsContent.content
-            p PIIIIIIIIIIIIIIIIIII
-          div#settingsContent.content
-            p kaaaaaaaaaaaaaaaaaaaa
+          div.frame
+            include dashboardRooms
+            include dashboardFriends
+            include dashboardSettings
