@@ -21,12 +21,8 @@ class CommandManager
     constructor     : (@emitter) ->
         @commands = {'help' : @help }
         @infos = {'help' : "display this help" }
-        @emitter.on 'chat.cmd', (event, data) =>
+        @emitter.on 'cmd.cmd', (event, data) =>
             @parseCmd data
-        @emitter.on 'cmd.kick', (event, data) =>
-            @onKick data
-        @emitter.on 'cmd.me', (event, data) =>
-            @onMe data
         @emitter.on 'cmd.register', (event, data) =>
             @register data
         @emitter.on 'cmd.remove', (event, data) =>
@@ -54,17 +50,8 @@ class CommandManager
             @commands[cmd[0]] user, cmd
         else
             @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
-
-    onKick          : (data) =>
-        #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
-        text    = "#{window.Voicious.currentUser.name} has been kicked out! (#{data.message})"
-        message = { type : 'chat.error', params : { text : text } }
-        @emitter.trigger 'message.sendtoall', message
-        window.location.replace '/'
     
-    onMe            : (data) =>
-        @emitter.trigger 'chat.me', { text : data.text }
-
+    # Display the available commands
     help            : () =>
         message = "Commands list:<br/>"
         for name, cb of @commands

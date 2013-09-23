@@ -55,6 +55,8 @@ class UserList extends Module
             @toggleButtons data.id, ['zoomBtn', 'muteBtn']
         @emitter.on 'stream.zoom', (event, id) =>
             @zoomButton id
+        @emitter.on 'user.kick', (event, data) =>
+            @onKick data
 
     # Fill the user list with new users.
     fill            : (event, data) =>
@@ -99,7 +101,7 @@ class UserList extends Module
         mainLi = ($ event.target).parents 'li.thumbnail-wrapper'
         uid = (mainLi.attr 'id').slice '6' # Skip the `video_`
         msg =
-          type   : 'cmd.kick'
+          type   : 'user.kick'
           to     : uid
           params :
             message : ""
@@ -165,7 +167,6 @@ class UserList extends Module
         do @updateColumns
 
     kick                : (user, data) =>
-        console.log window.Voicious.currentUser
         if data[1]?
             if data[1] is window.Voicious.currentUser.name
                 @emitter.trigger 'chat.error', { text: data[0] + ": you cannot kick yourself"}
@@ -173,10 +174,17 @@ class UserList extends Module
                 reason = ''
                 if data[2]?
                     reason = (data.splice 2).join ' '
-                message = { type : 'cmd.kick', to : data[1], params : { message : reason } }
+                message = { type : 'user.kick', to : data[1], params : { message : reason } }
                 @emitter.trigger 'message.sendToOneName', message
         else
             @emitter.trigger 'chat.error', { text: data[0] + ": usage: /kick user [reason]"}
+        
+    onKick          : (data) =>
+        #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
+        text    = "#{window.Voicious.currentUser.name} has been kicked out! (#{data.message})"
+        message = { type : 'chat.error', params : { text : text } }
+        @emitter.trigger 'message.sendtoall', message
+        window.location.replace '/'
         
 if window?
     window.UserList     = UserList

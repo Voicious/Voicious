@@ -94,7 +94,7 @@ class TextChat extends Module
         command =
             cmd : command[1]
             from : window.Voicious.currentUser.name
-        @emitter.trigger 'chat.cmd', command
+        @emitter.trigger 'cmd.cmd', command
 
     # Send the new message to the guests.
     sendMessage     : (message) =>
@@ -165,12 +165,15 @@ class TextChat extends Module
         if data[1]?
             action = (data.slice 1).join " "
             text = "#{user} #{action}"
-            message = { type : 'cmd.me',  params : { text : text } }
+            message = { type : 'chat.me',  params : { text : text } }
             @emitter.trigger 'message.sendtoall', message
             @addMeMessage message.params
         else
             message = { text : "me: usage: /me [action]" }
             @addServerMessage message
+            
+    onMe                : (data) =>
+        @emitter.trigger 'chat.me', { text : data.text }
 
 if window?
     window.TextChat     = TextChat
