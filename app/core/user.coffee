@@ -132,6 +132,17 @@ class _User
         else
             Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quickjoin', 'input': 'name', 'message': 'Missing field nickname'}]
 
+    join        : (req, res, next) =>
+        roomIdentifier = req.body.room
+        if roomIdentifier? and roomIdentifier isnt ""
+            res.redirect "room/#{roomIdentifier}"
+        else
+            res.redirect 'Dashboard'
+
+    createRoom : (req, res, next) =>
+        {Room}  = require './room'
+        Room.newRoom req, res, { }
+
 exports.User    = new _User
 exports.Routes  =
     post :
@@ -139,3 +150,5 @@ exports.Routes  =
         '/login'        : exports.User.login
         '/quickLogin'   : exports.User.quickLogin
         '/quickJoin'    : exports.User.quickJoin
+        '/join'         : exports.User.join
+        '/create'       : exports.User.createRoom

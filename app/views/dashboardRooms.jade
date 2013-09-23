@@ -1,11 +1,12 @@
 div#roomsContent.content.row-fluid.fill-height
 	p.title Create, join and manage rooms
-	div
+	div.row-fluid
 		div#createJoinRoom
-			button#createButton create
+			form(method='POST', action='/create')
+				button#createButton(type='submit') create
 			span.separator.centerVertically
-			form#joinForm
-				input
-				button join
+			form#joinForm(method='POST', action='/join')
+				input(name='room', placeholder='Room ID', type='text', required)
+				button(type='submit') join
 	div.yourRoom.row-fluid
 	div.friendsRoom.row-fluid

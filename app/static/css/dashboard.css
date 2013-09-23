@@ -128,7 +128,7 @@ button {
     font-family: 'OpenSans-Regular', Helvetica, sans-serif;
     font-style: normal;
     font-weight: bold;
-    font-size: 12px;
+    font-size: .9em;;
     color: #fff;
 }
 
@@ -149,18 +149,17 @@ button {
     display: inline-block;
 }
 
-#createJoinRoom > *:nth-child(n+2) {
-
+#joinForm {
+    min-width: 400px;
 }
 
-#joinForm > input {
+/* Duplicate ! Need to put this in style.coffee */
+input[type="text"], input[type="password"] {
     padding: 0 12px;
     background: #0f1012;
 
-    border-bottom-left-radius: 6px;
-    border-top-left-radius: 6px;
-
-    width: 225px;
+    border-radius: 6px;
+    width: 224px;
     height: 42px;
     line-height: 20px;
     font-size: 1em;
@@ -174,7 +173,16 @@ button {
     -webkit-transition: border-color 400ms;
 }
 
+#joinForm > input {
+    width: 60%;
+
+    border-radius: 0px;
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
 #joinForm > button {
+    width: 40%;
     background: #008EF1;
     border-radius: 0px;
     border-bottom-right-radius: 6px;
