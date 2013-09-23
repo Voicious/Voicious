@@ -53,7 +53,8 @@ class CommandManager
     onKick          : (data) =>
         #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
         text    = "#{window.Voicious.currentUser.name} has been kicked out! (#{data.message})"
-        message = { type : 'chat.message', params : { text : text } }
+        message =
+            text : text
         @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
 

@@ -181,7 +181,7 @@ class Connections
     initUser : (event, data) =>
         window.Voicious.currentUser = data
         @emitter.trigger 'module.initialize', { }
-        
+
     removePeer   : (peerId) =>
         do @peers[peerId].close
         @peers[peerId] = null

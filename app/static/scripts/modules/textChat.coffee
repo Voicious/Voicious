@@ -101,7 +101,7 @@ class TextChat extends Module
             #Humanize the timestamp
             formatedTime = (do (new Date message.time).toTimeString).substr 0, 5
             #Group message sent by a user
-            if prevMessage? and prevMessage.message.from is message.from and message.time - prevMessage.message.time < 3000
+            if prevMessage? and prevMessage.message.from is message.from isnt undefined and message.time - prevMessage.message.time < 3000
                 prevMessage.message = message
                 (($ prevMessage.html[2]).find '.chatmessage').append message.text
             else
