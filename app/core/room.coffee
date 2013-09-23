@@ -19,6 +19,7 @@ nodemailer  = require 'nodemailer'
 moment      = require 'moment'
 md5         = require 'MD5'
 fs          = require 'fs'
+path = require 'path'
 
 Config      = require '../common/config'
 {Session}   = require './session'
@@ -38,7 +39,7 @@ class _Room
     renderRoom : (res, options, host) =>
         options.trans = Translator.getTrans(host, 'room')
         options.modules = JSON.stringify @modulesList
-        options.audioFiles = fs.readdirSync "./app/static/sounds/notification/"
+        options.audioFiles = fs.readdirSync path.join Config.Paths.Webroot, 'sounds', 'notification'
         res.render 'room', options
 
     # Create a new Room and check if the user is logged in.
