@@ -24,6 +24,7 @@ Config       = require '../common/config'
 {Errors}     = require '../common/errors'
 {Translator} = require './trans'
 {Db}         = require '../common/' + Config.Database.Connector
+Ws = require '../ws/websocket.coffee'
 
 SStore       = (require 'connect-' + Config.Voicious.Sessions.Connector) Express
 
@@ -106,8 +107,9 @@ class Voicious
             if not @configured
                 do @configure
             process.on 'SIGINT', @end
-            (Http.createServer @app).listen (@app.get 'port'), () =>
+            server = (Http.createServer @app).listen (@app.get 'port'), () =>
                 console.log "Server ready on port #{@app.get 'port'}"
+            (new Ws.Websocket).start (server)
 
     # A callback closing the database before exiting.
     end     : () ->

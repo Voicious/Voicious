@@ -16,7 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Http    = require 'http'
-Ws      = (require 'ws').Server
+Io      = require 'socket.io'
 MD5     = require 'MD5'
 
 Config  = require '../common/config'
@@ -28,10 +28,9 @@ class Websocket
 
     onConnection : (sock) =>
         that = @
-        sock.onmessage = (message) ->
-            message = JSON.parse message.data
-            if message.type is 'authenticate'
-                that.validateSock message.params.uid, message.params.rid, @
+        sock.emit 'open'
+        sock.on 'authenticate', (message) ->
+            that.validateSock message.uid, message.rid, @
 
     validateSock : (uid, rid, sock) =>
         try
@@ -41,36 +40,21 @@ class Websocket
                         if Object.keys(body).length > 0 and body.id_room is rid
                             @acceptSock body._id, rid, body.name, sock
 
-    sendPing : (sock) =>
-        sock._h       = MD5 do Date.now
-        @send sock, { type : 'ping', params : { token : sock._h } }
-        sock._timeout = setTimeout (() =>
-            @pingTimeout sock
-        ), 30000
-
-    pingTimeout : (sock) =>
-        @close sock, 'Ping timeout'
-
     acceptSock : (uid, rid, name, sock) =>
         that             = @
         sock.rid         = rid
         sock.uid         = uid
         sock.name        = name
         sock._h          = undefined
-        sock._timeout    = undefined
-        sock._nextPing   = undefined
-        sock.onmessage   = (message) ->
-            that.onmessage @, message
-        sock.onclose     = () ->
-            that.close @
         Db.get 'room', rid, (res) =>
             owner = if String res.owner is uid then true else false
             Db.get 'user', uid, (res) =>
                 res.owner = owner
-                @send sock, { type : 'authenticated', params : res }
-                sock._nextPing   = setTimeout (() =>
-                    @sendPing sock
-                ), 60000
+                @send sock, 'authenticated', res
+                sock.onmessage   = (message) ->
+                    that.onmessage @, message
+                sock.on 'disconnect', () ->
+                    that.close @
                 if not @socks[rid]?
                     @socks[rid] = { }
                 else
@@ -136,12 +120,8 @@ class Websocket
         if sock.readyState is 1
             sock.send JSON.stringify message
 
-    start : () =>
-        Db.connect () =>
-            @server = new Ws {
-                server : (Http.createServer (req, res) ->).listen Config.Websocket.Port, () =>
-                    console.log "Server ready on port #{Config.Websocket.Port}"
-                }
-            @server.on 'connection', @onConnection
+    start : (server) =>
+        io = Io.listen server
+        io.sockets.on 'connection', @onConnection
 
-do (new Websocket).start
+exports.Websocket = Websocket

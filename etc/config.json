@@ -13,8 +13,8 @@
             "Internal" : "localhost",
             "External" : "localhost"
         },
-        "Port"      : 4243,
-        "Enabled"   : 1
+        "Port"      : 4242,
+        "Enabled"   : 0
     },
     "Peerjs"  : {
         "Hostname"  : {
