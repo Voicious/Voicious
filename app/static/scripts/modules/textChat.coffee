@@ -36,58 +36,104 @@ class TextChat extends Module
     # Init the text chat window and the callbacks in the event manager.
     constructor     : (emitter) ->
         super emitter
-        do @appendHTML
 
+        #Define the Markdown interpretor
         @markdown     = new Showdown.converter { extensions : ['voicious'] }
-        @jqForm       = ($ '#chatForm > form')
-        @jqMessageBox = ($ '#chatContent > ul')
-        @jqInput      = @jqForm.children 'textarea'
 
-        @scrollPane   = @jqMessageBox.jScrollPane { horizontalDragMaxWidth: 0 }
-        @scrollPane   = @jqMessageBox.data 'jsp'
+        #Define accessor for DOM elements
+        @content = ($ '#textChat')
+        @content.messages = @content.find '#chatContent > ul'
+        @content.form = @content.find 'form'
+        @content.form.textarea = @content.form.find 'textarea'
 
-        @jqInput.on 'keypress', (event) =>
+        #Launch jScrollpane
+        @scrollPane   = @content.messages.jScrollPane horizontalDragMaxWidth : 0
+        @scrollPane   = @content.messages.data 'jsp'
+        ($ window).resize () =>
+            do @scrollPane.reinitialise
+
+        #Define what's going on when and how the form is submitted
+        @content.form.textarea.on 'keypress', (event) =>
             if event.keyCode is 13 and not event.shiftKey
                 do event.preventDefault
-                @jqInput.trigger 'submit'
+                @content.form.trigger 'submit'
+        @content.form.submit @submit
 
-        @jqForm.submit (event) =>
-            do event.preventDefault
-            message = do @jqInput.val
-            message = message.replace /\n/g, '<br />'
-            @jqInput.val ''
-            # We check if it's a command or a message
-            command = message.match(/^\/([a-zA-Z ]+)/)
-            if command?
-                @sendCommand command
-            else
-                @sendMessage message
+        #Initialize the message list and tis watcher
+        (@messages = []).watch 'length', @update
 
-        $(window).resize () =>
-            do @scrollPane.reinitialise
-        
-        me =
+        #Define chat's own commands
+        @emitter.trigger 'cmd.register',
             name : 'me'
             callback : @me
-        @emitter.trigger 'cmd.register', me
-        
-        @emitter.on 'chat.message', (event, data) =>
-            @emitter.trigger 'notif.audio', { name : "chat.message" }
-            @addMessage data.message
-        @emitter.on 'chat.error', (event, data) =>
-            @addServerMessage data
-        @emitter.on 'chat.info', (event, data) =>
-            @addServerMessage data
-        @emitter.on 'chat.me', (event, data) =>
-            @addMeMessage data
+
+        #Define event bindings
+        @emitter.on 'chat.message', @newMessage
         @emitter.on 'peer.create', (event, data) =>
-            @emitter.trigger 'chat.error', { text : "#{data.name} arrives in the room." }
+            @emitter.trigger 'chat.message', { text : "#{data.name} arrives in the room." }
         @emitter.on 'peer.remove', (event, data) =>
-            @emitter.trigger 'chat.error', { text : "#{data.name} leaves the room. (#{data.reason})" }
+            @emitter.trigger 'chat.message', { text : "#{data.name} leaves the room. (#{data.reason})" }
+
+    submit : (event) =>
+        #Do not send the form
+        do event.preventDefault
+        #Translating line break to HTML <br />
+        message = (do @content.form.textarea.val).replace /\n/g, '<br />'
+        @content.form.textarea.val ''
+        # We check if it's a command or a message
+        command = message.match(/^\/([a-zA-Z ]+)/)
+        if command?
+            @sendCommand command
+        else
+            @sendMessage message
+        #Do not send the form
+        no
 
     # Update the text chat with a new message.
-    update          : (message) =>
-        @addMessage message
+    update          : () =>
+        #Empty the message list
+        container = (do @scrollPane.getContentPane)
+        do container.empty
+
+        prevMessage = undefined
+        #Loop through all messages
+        @messages.map (message) =>
+            #Humanize the timestamp
+            formatedTime = (do (new Date message.time).toTimeString).substr 0, 5
+            #Group message sent by a user
+            if prevMessage? and prevMessage.message.from is message.from isnt undefined and message.time - prevMessage.message.time < 3000
+                prevMessage.message = message
+                (($ prevMessage.html[2]).find '.chatmessage').append message.text
+            else
+                html = undefined
+                #If message.from is not defined, thew it is a server message
+                if message.from?
+                    html = """
+                        <div class='chatmetadata'>
+                            <span class='fontlightblue'>#{message.from}</span>
+                            <span class='time'> at #{formatedTime}</span>
+                        </div>
+                        <div class='chatmessage'>#{message.text}</div>
+                    """
+                else
+                    html = """
+                        <div class='blueduckturquoise #{if not message.me then "italic"}'>
+                            #{message.text}
+                            <span class='time'> at #{formatedTime}</span>
+                        </div>
+                    """
+                prevMessage =
+                    html : ($ """
+                        <div class='tcSeparator'></div>
+                        <li>
+                            #{html}
+                        </li>
+                    """).appendTo container
+                    message : message
+
+        #Reinitialize the scrollPane and scroll to its bottom
+        do @scrollPane.reinitialise
+        @scrollPane.scrollToPercentY 100, no
 
     # Send the command to the command Manager
     sendCommand     : (command) =>
@@ -100,77 +146,31 @@ class TextChat extends Module
     sendMessage     : (message) =>
         if message? and message isnt ""
             message =
-                text : message
+                text : @markdown.makeHtml message
                 from : window.Voicious.currentUser.name
             @emitter.trigger 'message.sendtoall', message
-            @addMessage message
+            @emitter.trigger 'chat.message', message
 
-    # Create a new message element and append it to @jqMessageBox
-    newMessageElem : (message) =>
-        d             = new Date
-        jqNewMetadata = ($ '<div>', { class : 'chatmetadata' })
-        jqNewAuthor   = ($ '<span>', { class : 'fontlightblue', rel : do d.getTime }).text message.from
-        jqNewTime     = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
-        (jqNewMetadata.append jqNewAuthor).append jqNewTime
-        jqNewMessage  = ($ '<div>', { class : 'chatmessage' }).html message.text
-        (do @scrollPane.getContentPane).append (($ '<li>').append jqNewMetadata).append jqNewMessage
+    newMessage : (event, message) =>
+        @emitter.trigger 'notif.audio', { name : "chat.message" }
+        # Remove unwanted server data
+        message = message.message if message.message?
+        #Append a timestamp to the object
+        message.time = do (new Date).getTime
+        #Push the object into the watched array
+        @messages.push message
 
-    # Add a new message to the text chat window.
-    addMessage      : (message) =>
-        message.text  = @markdown.makeHtml message.text
-        jqLastMessage = do (@jqMessageBox.find 'li').last
-        if jqLastMessage[0]?
-            d          = new Date
-            lastAuthor = do ((jqLastMessage.children '.chatmetadata').children 'span').first
-            diffTime   = do d.getTime - lastAuthor.attr 'rel'
-            if do lastAuthor.text is message.from and diffTime < 30000
-                #(jqLastMessage.children '.chatmessage').append ($ '<br>')
-                (jqLastMessage.children '.chatmessage').append message.text
-                lastAuthor.attr 'rel', do d.getTime
-            else
-                jqLastMessage.append '<div id="tcSeparator"></div>'
-                @newMessageElem message
-        else
-            @newMessageElem message
-        do @scrollPane.reinitialise
-        @scrollPane.scrollToPercentY 100, no
-
-    # Add an information message to the text chat window.
-    addServerMessage    : (message) =>
-        jqLastMessage = do (@jqMessageBox.find 'li').last
-        d = new Date
-        jqNewMsg  = ($ '<div>', { class : 'blueduckturquoise italic' }).html message.text
-        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
-        jqNewMsg.append jqNewTime
-        if jqLastMessage[0]?
-            jqLastMessage.append '<div id="tcSeparator"></div>'
-        (do @scrollPane.getContentPane).append ($ '<li>').append jqNewMsg
-        do @scrollPane.reinitialise
-        @scrollPane.scrollToPercentY 100, no
-
-    # Add an action message to the text chat window
-    addMeMessage        : (action) =>
-        jqLastMessage = do (@jqMessageBox.find 'li').last
-        d = new Date
-        jqNewMsg  = ($ '<div>', { class : 'blueduckturquoise' }).html action.text
-        jqNewTime   = ($ '<span>', { class : 'time' }).text ' at ' + ((do d.toTimeString).substr 0, 5)
-        jqNewMsg.append jqNewTime
-        if jqLastMessage[0]?
-            jqLastMessage.append '<div id="tcSeparator"></div>'
-        (do @scrollPane.getContentPane).append ($ '<li>').append jqNewMsg
-        do @scrollPane.reinitialise
-        @scrollPane.scrollToPercentY 100, no
-    
-    me                  : (user, data) =>
+    me : (user, data) =>
+        message = undefined
         if data[1]?
             action = (data.slice 1).join " "
             text = "#{user} #{action}"
-            message = { type : 'cmd.me',  params : { text : text } }
+            message = { type : 'cmd.me', params : { text : text } }
             @emitter.trigger 'message.sendtoall', message
-            @addMeMessage message.params
+            message = {text : text, me : yes}
         else
-            message = { text : "me: usage: /me [action]" }
-            @addServerMessage message
+            message = { text : "me: usage: /me action" }
+        @newMessage null, message
 
 if window?
     window.TextChat     = TextChat

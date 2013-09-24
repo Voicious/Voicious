@@ -290,7 +290,7 @@ class Room
         # duplicate with the first login/logout messages, so it is desactivated for the moment.
         # @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
-        
+
 # When the document has been loaded it will check if all services are available and
 # launch it.
 $(document).ready ->

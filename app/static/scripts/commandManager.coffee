@@ -34,7 +34,7 @@ class CommandManager
     # Register a command
     register        : (data) =>
         @commands[data.name] = data.callback
-    
+
     # Remove a command from the list
     remove          : (data) =>
         @commands[data] = null
@@ -48,17 +48,18 @@ class CommandManager
         if @commands[cmd[0]]?
             @commands[cmd[0]] user, cmd
         else
-            @emitter.trigger 'chat.error', { text: cmd[0] + ": command not found." }
+            @emitter.trigger 'chat.message', { text: cmd[0] + ": command not found." }
 
     onKick          : (data) =>
         #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
         text    = "#{window.Voicious.currentUser.name} has been kicked out! (#{data.message})"
-        message = { type : 'chat.error', params : { text : text } }
+        message =
+            text : text
         @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
-    
+
     onMe            : (data) =>
-        @emitter.trigger 'chat.me', { text : data.text }
+        @emitter.trigger 'chat.message', { text : data.text }
 
     help            : () =>
     # should use @commands to get the list of commands
@@ -67,7 +68,7 @@ class CommandManager
                     /kick user [reason]<br/>
                     /me [action]<br/>
                     /quit [message]" }
-        @emitter.trigger 'chat.info', message
+        @emitter.trigger 'chat.message', message
 
 if window?
     window.CommandManager   = CommandManager

@@ -18,6 +18,10 @@
     overflow: auto;
 }
 
+#chatContent ul .tcSeparator:first-child {
+    display: none;
+}
+
 .chatmetadata:first-child {
     color: #00AEEF;
 }
@@ -55,7 +59,7 @@
     text-decoration: underline;
 }
 
-#tcSeparator {
+.tcSeparator {
     width: calc(100% - 12px);
     border-bottom: 1px solid black;
     margin-top: 13px;
