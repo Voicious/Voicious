@@ -39,6 +39,9 @@ class UserList extends Module
         do @display
 
     configureEvents     : () =>
+        @emitter.on 'offline', =>
+            @users = []
+            do @display
         @emitter.on 'peer.list', @fill
         @emitter.on 'peer.create', (event, user) =>
             @update 'create', user

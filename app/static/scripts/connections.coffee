@@ -19,8 +19,16 @@ class Ws
     constructor : (@uid, @rid, @emitter) ->
 
     dance : (ws) =>
-        @ws           = io.connect "http://#{ws.host}:#{ws.port}"
-        @ws.on 'open', @onOpen
+        @ws = io.connect "http://#{ws.host}:#{ws.port}"
+        window.w = @ws
+        @ws.once 'connect', @onOpen
+        @ws.on 'disconnect', @onDisconnect
+
+    onDisconnect : =>
+        @emitter.trigger 'offline'
+        do @ws.removeAllListeners
+        @ws.once 'connect', @onOpen
+        @ws.on 'disconnect', @onDisconnect
 
     send : (data) =>
         @ws.emit 'message', data
@@ -33,10 +41,11 @@ class Ws
                 data : data
 
     onOpen : () =>
+        @emitter.trigger 'online'
         @ws.emit 'authenticate',
             rid : @rid
             uid : @uid
-        @ws.on 'authenticated', (info) =>
+        @ws.once 'authenticated', (info) =>
             @emitter.trigger 'authenticated', info
             @ws.on 'message', @onMessage
 
@@ -199,8 +208,15 @@ class Connections
             if @peers[data.id]?
                 @removePeer data.id
                 @emitter.trigger 'stream.remove', data
-        @emitter.on 'ping', (event, data) =>
-            @ws.send { type : 'pong' , params : { token : data.token } }
+        @emitter.on 'pc.offer', (event, data) =>
+            if @peers[data.from]?
+                @peers[data.from].answerHandshake data.description
+        @emitter.on 'pc.answer', (event, data) =>
+            if @peers[data.from]?
+                @peers[data.from].concludeHandshake data.description
+        @emitter.on 'ice.candidate', (event, data) =>
+            if @peers[data.from]?
+                @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
 
     send      : (id, message) =>
         if @peers[id].dc?

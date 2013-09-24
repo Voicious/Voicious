@@ -28,7 +28,6 @@ class Websocket
 
     onConnection : (sock) =>
         that = @
-        sock.emit 'open'
         sock.on 'authenticate', (message) ->
             that.validateSock message.uid, message.rid, @
 
@@ -53,7 +52,6 @@ class Websocket
                 sock.emit 'authenticated', res
                 sock.on 'message', (message) -> that.onmessage @, message
                 sock.on 'disconnect', () -> that.close @
-                console.log @socks.length
                 if not @socks[rid]?
                     @socks[rid] = { }
                 else
@@ -114,6 +112,7 @@ class Websocket
 
     start : (server) =>
         io = Io.listen server
+        io.set 'log level', 0
         io.sockets.on 'connection', @onConnection
 
 exports.Websocket = Websocket
