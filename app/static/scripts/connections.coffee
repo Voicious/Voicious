@@ -19,26 +19,29 @@ class Ws
     constructor : (@uid, @rid, @emitter) ->
 
     dance : (ws) =>
-        @ws           = new WebSocket "ws://#{ws.host}:#{ws.port}"
-        @ws.onopen    = @onOpen
-        @ws.onmessage = @onMessage
+        @ws           = io.connect "http://#{ws.host}:#{ws.port}"
+        @ws.on 'open', @onOpen
 
     send : (data) =>
-        @ws.send JSON.stringify data
+        @ws.emit 'message', data
 
     forward : (to, data) =>
-        @send { type : 'forward' , params : { to : to , data : data } }
+        @send
+            type : 'forward'
+            params :
+                to : to
+                data : data
 
     onOpen : () =>
-        auth =
-            type   : 'authenticate'
-            params :
-                rid : @rid
-                uid : @uid
-        @send auth
+        @ws.emit 'authenticate',
+            rid : @rid
+            uid : @uid
+        @ws.on 'authenticated', (info) =>
+            @emitter.trigger 'authenticated', info
+            @ws.on 'message', @onMessage
 
     onMessage : (message) =>
-        message = JSON.parse message.data
+        console.log message
         @emitter.trigger message.type, message.params
 
     close : () =>

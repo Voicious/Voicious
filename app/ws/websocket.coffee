@@ -50,11 +50,10 @@ class Websocket
             owner = if String res.owner is uid then true else false
             Db.get 'user', uid, (res) =>
                 res.owner = owner
-                @send sock, 'authenticated', res
-                sock.onmessage   = (message) ->
-                    that.onmessage @, message
-                sock.on 'disconnect', () ->
-                    that.close @
+                sock.emit 'authenticated', res
+                sock.on 'message', (message) -> that.onmessage @, message
+                sock.on 'disconnect', () -> that.close @
+                console.log @socks.length
                 if not @socks[rid]?
                     @socks[rid] = { }
                 else
@@ -64,7 +63,10 @@ class Websocket
                             @send @socks[rid][_uid], { type : 'peer.create' , params : { id : uid , name : name } }
                             if _uid isnt uid
                                 peers.push { id : _uid , name : @socks[rid][_uid].name }
-                    @send sock, { type : 'peer.list' , params : { peers : peers } }
+                    @send sock,
+                        type : 'peer.list'
+                        params :
+                            peers : peers
                 @socks[rid][uid] = sock
 
     close : (sock, reason = 'Session closed') =>
@@ -84,7 +86,6 @@ class Websocket
                 } }
 
     onmessage : (sock, message) =>
-        message = JSON.parse message.data
         switch message.type
             when 'forward' then do () =>
                 # Temporary
@@ -107,18 +108,9 @@ class Websocket
                         message.params.data.params.from = sock.uid
                         @send @socks[sock.rid][message.params.to], message.params.data
 
-            when 'pong' then do () =>
-                if message.params.token is sock._h
-                    clearTimeout sock._timeout
-                    sock._timeout  = undefined
-                    sock._h        = undefined
-                    sock._nextPing = setTimeout (() =>
-                        @sendPing sock
-                    ), 60000
-
-    send : (sock, message) =>
-        if sock.readyState is 1
-            sock.send JSON.stringify message
+    send : (sock, data) =>
+        if not sock.disconnected
+            sock.emit 'message', data
 
     start : (server) =>
         io = Io.listen server
