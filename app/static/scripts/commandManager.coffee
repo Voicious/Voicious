@@ -20,12 +20,9 @@ class CommandManager
     # Initialize the Command Manager and set the callbacks for the Event Manager.
     constructor     : (@emitter) ->
         @commands = {'help' : @help }
-        @emitter.on 'chat.cmd', (event, data) =>
+        @infos = {'help' : "display this help" }
+        @emitter.on 'cmd.cmd', (event, data) =>
             @parseCmd data
-        @emitter.on 'cmd.kick', (event, data) =>
-            @onKick data
-        @emitter.on 'cmd.me', (event, data) =>
-            @onMe data
         @emitter.on 'cmd.register', (event, data) =>
             @register data
         @emitter.on 'cmd.remove', (event, data) =>
@@ -35,10 +32,15 @@ class CommandManager
     register        : (data) =>
         @commands[data.name] = data.callback
 
+        if data.infos?
+            @infos[data.name] = data.infos
+
     # Remove a command from the list
     remove          : (data) =>
         @commands[data] = null
         delete @commands[data]
+        @infos[data] = null
+        delete @infos[data]
 
     # Parse the command and call the right function.
     parseCmd        : (command) =>
@@ -50,25 +52,15 @@ class CommandManager
         else
             @emitter.trigger 'chat.message', { text: cmd[0] + ": command not found." }
 
-    onKick          : (data) =>
-        #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
-        text    = "#{window.Voicious.currentUser.name} has been kicked out! (#{data.message})"
-        message =
-            text : text
-        @emitter.trigger 'message.sendtoall', message
-        window.location.replace '/'
-
-    onMe            : (data) =>
-        @emitter.trigger 'chat.message', { text : data.text }
-
+    # Display the available commands
     help            : () =>
-    # should use @commands to get the list of commands
-        message = { text : "Commands list:<br/>
-                    /help<br/>
-                    /kick user [reason]<br/>
-                    /me [action]<br/>
-                    /quit [message]" }
-        @emitter.trigger 'chat.message', message
+        message = "Commands list:<br/>"
+        for name, cb of @commands
+            message += "/" + name
+            if @infos[name]?
+                message += ": " + @infos[name]
+            message += "<br/>"
+        @emitter.trigger 'chat.message', { text : message }
 
 if window?
     window.CommandManager   = CommandManager

@@ -36,6 +36,7 @@ class Room
         quit =
             name : 'quit'
             callback : @quit
+            infos : "usage: /quit [reason]"
         @emitter.trigger 'cmd.register', quit
         $('#reportBug').click @bugReport
 

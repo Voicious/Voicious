@@ -105,7 +105,7 @@ class Websocket
             when 'forward' then do () =>
                 # Temporary
                 # check for the command system
-                if message.params.data.type is 'cmd.kick'
+                if message.params.data.type is 'user.kick'
                     Db.get 'room', sock.rid, (res) =>
                         owner = String res.owner
                         from = String sock.uid
