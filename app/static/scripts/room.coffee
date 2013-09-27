@@ -229,6 +229,7 @@ class Room
             }
 
     sortableMod         : () =>
+        lastModId = undefined
         $('#modArea').sortable({
             containment: '#container',
             tolerance: 'pointer',
@@ -238,6 +239,8 @@ class Room
                     visible = (pos.t > 0 && pos.l > 0 && pos.t + pos.h < pos.docH && pos.l + pos.w < pos.docW)
                     if !visible
                         $(ui.sender).sortable 'cancel'
+            start: (event, ui) ->
+                lastModId = $('#modArea .module:last').attr 'id'
             sort: (event, ui) ->
                 $('.module').css 'clear', ''
             stop: (event, ui) ->
@@ -245,10 +248,16 @@ class Room
                 if ui.position.left < ui.originalPosition.left
                     prevHeight = do (ui.item.prevAll '.module:first').height
                     if prevHeight && ui.position.top >= prevHeight
+                        if lastModId
+                            console.log lastModId
+                            ui.item.remove().insertAfter $('#' + lastModId)
                         $(draggedItemId).css 'clear', 'left'
                 else if ui.position.left > ui.originalPosition.left
                     nextHeight = do (ui.item.nextAll '.module:first').height
                     if nextHeight && ui.position.top >= nextHeight
+                        if lastModId
+                            console.log lastModId
+                            ui.item.remove().insertAfter $('#' + lastModId)
                         $(draggedItemId).css 'clear', 'left'
                 else
                     $(draggedItemId).css 'clear', ''
