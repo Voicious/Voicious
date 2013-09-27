@@ -111,10 +111,13 @@ class MC
             uid     : @call.peer
         @emitter.trigger 'stream.create', data
 
-    onClose     : () =>
-
     sendStream   : (stream) =>
         @call.answer stream
+
+    onClose     : () =>
+
+    close       : () =>
+        do @call.close
 
 class Connections
     constructor : (@emitter, @uid, @rid, @wsPortal, @pjsPortal) ->
@@ -150,9 +153,12 @@ class Connections
     initUser : (event, data) =>
         window.Voicious.currentUser = data
         @emitter.trigger 'module.initialize', { }
-        
+
     removePeer   : (peerId) =>
-        do @peers[peerId].close
+        console.log @peers[peerId]
+        do @peers[peerId].dc.close
+        if @peers[peerId].mc?
+            do @peers[peerId].mc.close
         @peers[peerId] = null
         delete @peers[peerId]
 
@@ -172,7 +178,7 @@ class Connections
             if !@peers[do data.dc.peer]?
                 @peers[do data.dc.peer] = {}
             @peers[do data.dc.peer].dc = data.dc
-            # @sendStreamState do data.dc.peer
+            @sendStreamState do data.dc.peer
         @emitter.on 'peer.mediaconnection', (event, data) =>
             if !@peers[do data.mc.peer]?
                 @peers[do data.mc.peer] = {}
@@ -197,7 +203,7 @@ class Connections
             message = { type : 'chat.message' , params : { message : data } }
         for id, peer of @peers
             @send id, message
-    
+
     sendToOneName : (event, msg) =>
         message = { type : msg.type, params : msg.params }
         userId = @getIdFromUsername msg.to
@@ -239,7 +245,7 @@ class Connections
             if peer.name is username
                 id = peer.id
                 break
-        id    
+        id
 
 window.RTCSessionDescription = window.mozRTCSessionDescription or window.RTCSessionDescription
 window.RTCIceCandidate       = window.mozRTCIceCandidate       or window.RTCIceCandidate
