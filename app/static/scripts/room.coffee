@@ -230,9 +230,10 @@ class Room
 
     sortableMod         : () =>
         lastModId = undefined
-        $('#modArea').sortable({
+        $('#modArea').sortable {
             containment: '#container',
             tolerance: 'pointer',
+            cancel: "input,textarea,button,select,option,p",
             receive: (event, ui) ->
                 $('.module').each () ->
                     pos = { t: (do $(this).offset).top, l: (do $(this).offset).left, h: do $(this).height, w: do $(this).width, docH: do $(window).height, docW: do $(window).width }
@@ -249,21 +250,19 @@ class Room
                     prevHeight = do (ui.item.prevAll '.module:first').height
                     if prevHeight && ui.position.top >= prevHeight
                         if lastModId
-                            console.log lastModId
-                            ui.item.remove().insertAfter $('#' + lastModId)
+                            ui.item.parent().append(ui.item)
                         $(draggedItemId).css 'clear', 'left'
                 else if ui.position.left > ui.originalPosition.left
                     nextHeight = do (ui.item.nextAll '.module:first').height
                     if nextHeight && ui.position.top >= nextHeight
                         if lastModId
-                            console.log lastModId
-                            ui.item.remove().insertAfter $('#' + lastModId)
+                            ui.item.parent().append(ui.item)
                         $(draggedItemId).css 'clear', 'left'
                 else
                     $(draggedItemId).css 'clear', ''
                 if $('#mainCam').length
                     $('#mainCam').trigger 'resize'
-        }).disableSelection()
+        }
     
     dynamicMod          : () =>
         do @resizableMod
