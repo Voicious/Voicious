@@ -20,7 +20,6 @@ bindView = (elemToclick, divToDisplay) ->
 		clickable = ($ elemToclick)
 		clickable.addClass 'active'
 		(clickable.siblings '.options').removeClass 'active'
-
 		do (($ divToDisplay).siblings '.content.display').hide
 		($ divToDisplay).fadeIn '100'
 		($ divToDisplay).addClass 'display'
