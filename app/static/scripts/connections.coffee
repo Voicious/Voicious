@@ -84,6 +84,7 @@ class DC
         return @conn.peer
 
     onOpen      : () =>
+        @emitter.trigger 'peer.streamstate', {id: @conn.peer}
 
     onData      : (data) =>
         @emitter.trigger data.type, data.params
@@ -141,9 +142,6 @@ class Connections
         if @localStream isnt undefined
             do @localStream.stop
             for id, peer of @peers
-
-                # peer.rmLocalStream @localStream
-                # do peer.offerHandshake
                 if @userMedia['video'] is no or @userMedia['audio'] is no
                     @sendStreamState id
         @localStream = undefined # erase old stream
@@ -155,7 +153,6 @@ class Connections
         @emitter.trigger 'module.initialize', { }
 
     removePeer   : (peerId) =>
-        console.log @peers[peerId]
         do @peers[peerId].dc.close
         if @peers[peerId].mc?
             do @peers[peerId].mc.close
@@ -175,14 +172,17 @@ class Connections
             for peer in data.peers
                 @pjs.connect peer.id
         @emitter.on 'peer.dataconnection', (event, data) =>
-            if !@peers[do data.dc.peer]?
-                @peers[do data.dc.peer] = {}
-            @peers[do data.dc.peer].dc = data.dc
-            @sendStreamState do data.dc.peer
+            uid = do data.dc.peer
+            if !@peers[uid]?
+                @peers[uid] = {}
+            @peers[uid].dc = data.dc
         @emitter.on 'peer.mediaconnection', (event, data) =>
-            if !@peers[do data.mc.peer]?
-                @peers[do data.mc.peer] = {}
-            @peers[do data.mc.peer].mc = data.mc
+            uid = do data.mc.peer
+            if !@peers[uid]?
+                @peers[uid] = {}
+            @peers[uid].mc = data.mc
+        @emitter.on 'peer.streamstate', (event, data) =>
+            @sendStreamState data.id
         @emitter.on 'peer.remove', (event, data) =>
             if @peers[data.id]?
                 @removePeer data.id
