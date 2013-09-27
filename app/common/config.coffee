@@ -78,7 +78,10 @@ class _Config
         @Paths  = {}
         @Paths.Root             = Path.join __dirname, '..'
         @Paths.Config           = Path.join @Paths.Root, '..', 'etc'
-        @Paths.Webroot          = Path.join @Paths.Root, 'static'
+        if process.env.NODE_ENV is 'production'
+            @Paths.Webroot = Path.join @Paths.Root, '..', 'builtAssets'
+        else
+            @Paths.Webroot = Path.join @Paths.Root, 'static'
         @Paths.Views            = Path.join @Paths.Root, 'views'
         @Paths.Logs             = Path.join @Paths.Root, '..', 'logs'
 
