@@ -50,20 +50,23 @@ class PeerJs
     dance           : (pjs) =>
         @pjs    = new Peer @uid, { host: pjs.host, port: pjs.port }
         @pjs.on 'connection', @onConnection
+        @pjs.on 'call', @onCall
 
     onConnection    : (conn) =>
-        @createDataConnection conn
+        @createDataConnection conn, () =>
+            @emitter.trigger 'peer.trycall', {uid: conn.peer}
 
     connect         : (uid) =>
         conn = @pjs.connect uid
         @createDataConnection conn
 
-    createDataConnection    : (conn) =>
-        dc = new DC conn, @emitter
+    createDataConnection    : (conn, onOpen) =>
+        dc = new DC conn, @emitter, onOpen
         @emitter.trigger 'peer.dataconnection', { dc: dc }
 
     onCall          : (call) =>
         @createMediaConnection call
+        @emitter.trigger 'peer.oncall', { uid: call.peer }
 
     call            : (uid, stream) =>
         call = @pjs.call uid, stream
@@ -74,8 +77,12 @@ class PeerJs
         @emitter.trigger 'peer.mediaconnection', { mc: mc }
 
 class DC
-    constructor : (@conn, @emitter) ->
-        @conn.on 'open', @onOpen
+    constructor : (@conn, @emitter, onOpen) ->
+        @conn.on 'open', () =>
+            if onOpen?
+                do onOpen
+            else
+                do @onOpen
         @conn.on 'data', @onData
         @conn.on 'close', @onClose
         @conn.on 'error', errorHandler
@@ -84,7 +91,6 @@ class DC
         return @conn.peer
 
     onOpen      : () =>
-        @emitter.trigger 'peer.streamstate', {id: @conn.peer}
 
     onData      : (data) =>
         @emitter.trigger data.type, data.params
@@ -104,7 +110,7 @@ class MC
         @call.on 'error', errorHandler
 
     peer        : () =>
-        return @conn.peer
+        return @call.peer
 
     onStream    : (stream) =>
         data =
@@ -112,7 +118,7 @@ class MC
             uid     : @call.peer
         @emitter.trigger 'stream.create', data
 
-    sendStream   : (stream) =>
+    answer   : (stream) =>
         @call.answer stream
 
     onClose     : () =>
@@ -140,10 +146,9 @@ class Connections
 
     modifyStream : () =>
         if @localStream isnt undefined
+            for id of @peers
+                @send id, { type: 'stream.remove', params: { id: @localStream.id } }
             do @localStream.stop
-            for id, peer of @peers
-                if @userMedia['video'] is no or @userMedia['audio'] is no
-                    @sendStreamState id
         @localStream = undefined # erase old stream
         if @userMedia['video'] is yes or @userMedia['audio'] is yes
             do @enableCamera
@@ -181,8 +186,12 @@ class Connections
             if !@peers[uid]?
                 @peers[uid] = {}
             @peers[uid].mc = data.mc
-        @emitter.on 'peer.streamstate', (event, data) =>
-            @sendStreamState data.id
+        @emitter.on 'peer.trycall', (event, data) =>
+            if @localStream?
+                @pjs.call data.uid, @localStream
+        @emitter.on 'peer.oncall', (event, data) =>
+            stream = @localstream
+            @peers[data.uid].mc.answer stream
         @emitter.on 'peer.remove', (event, data) =>
             if @peers[data.id]?
                 @removePeer data.id
@@ -216,9 +225,6 @@ class Connections
         message = { type : msg.type, params : msg.params }
         @send msg.to, message
 
-    sendStreamState : (id) =>
-        @send id, { type : 'stream.state', params : { streamState : @userMedia } }
-
     enableCamera : () =>
         navigator.getUserMedia @userMedia, (stream) =>
             @emitter.trigger 'activable.unlock', @userMedia
@@ -226,9 +232,7 @@ class Connections
                 $('p#messageCam').addClass "hidden"
             @localStream = stream
             for id, peer of @peers
-                peer.setLocalStream @localStream
-                do peer.offerHandshake
-                @sendStreamState id
+                @pjs.call id, stream
             @emitter.trigger 'camera.localstream', (createVideoTag stream)
         , (error) =>
             do @toggleCamera if @userMedia.video

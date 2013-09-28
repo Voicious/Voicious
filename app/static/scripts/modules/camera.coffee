@@ -25,12 +25,12 @@ class Camera extends Module
         @streams          = [ ]
         @mosaicNb         = 1
         @emitter.on 'stream.create', @newStream
-        @emitter.on 'stream.state', @changeStreamState
         @emitter.on 'stream.remove', (event, user) =>
             for key, value of @zoomCams
                 if key is user.id
                     @zoom user.id, undefined
                     return
+            do ($ "[data-streamid=#{user.id}]").remove
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
@@ -73,9 +73,6 @@ class Camera extends Module
         @emitter.trigger 'stream.display', video
         if !data.local?
             @zoom data.uid, video
-
-    changeStreamState : (event, data) =>
-        # Data.state = {audio : bool, video : bool}
 
     # Must set margin-left css propriety when adding a video tag to the page
     # Width is computed using video original size (640 * 480) since css value is wrong at this time
