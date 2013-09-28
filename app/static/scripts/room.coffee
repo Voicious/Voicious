@@ -199,6 +199,10 @@ class Room
                 window.open "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600'
         }
         @emitter.trigger 'button.create', {
+            name  : 'Modules'
+            icon  : 'th'
+        }
+        @emitter.trigger 'button.create', {
             name  : 'Report a bug'
             icon  : 'ambulance'
             click : {popover : do @reportBug}
@@ -276,6 +280,15 @@ class Room
             url     : "/modules/#{moduleName}"
             success : (data) =>
                 @_jqModArea.append data.html
+                elem = ($ '.module[name="' + moduleName + '"]')
+                if elem.length > 0
+                    @emitter.trigger 'button.create', {
+                    name   : elem.data('name')
+                    icon   : elem.data('icon')
+                    outer  : 'Modules'
+                    click : () =>
+                        elem.toggleClass 'none'
+                    }
                 module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
                 theModule = (new window[module] @emitter)
                 @emitter.on 'module.initialize', theModule.initialize
