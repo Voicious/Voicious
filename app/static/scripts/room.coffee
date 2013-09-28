@@ -38,6 +38,7 @@ class Room
             callback : @quit
             infos : "usage: /quit [reason]"
         @emitter.trigger 'cmd.register', quit
+        do @sidebarShortcut
         $('#reportBug').click @bugReport
 
     activateCam         : () =>
@@ -263,7 +264,7 @@ class Room
                 if $('#mainCam').length
                     $('#mainCam').trigger 'resize'
         }
-    
+
     dynamicMod          : () =>
         do @resizableMod
         do @sortableMod
@@ -303,6 +304,20 @@ class Room
         # duplicate with the first login/logout messages, so it is desactivated for the moment.
         # @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
+
+    sidebarShortcut     : () =>
+        shortcut.add 'Ctrl+Shift+H', () ->
+            sidebar = ($ '#sidebar')
+            hidden = sidebar.hasClass 'trans-hide-sidebar'
+            displayed = sidebar.hasClass 'trans-show-sidebar'
+            if not hidden and not displayed
+                sidebar.addClass 'trans-hide-sidebar'
+            else if displayed
+                sidebar.removeClass 'trans-show-sidebar'
+                sidebar.addClass 'trans-hide-sidebar'
+            else if hidden
+                sidebar.removeClass 'trans-hide-sidebar'
+                sidebar.addClass 'trans-show-sidebar'
 
 # When the document has been loaded it will check if all services are available and
 # launch it.

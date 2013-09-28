@@ -11,7 +11,7 @@
 #sidebar {
     width: auto;
     float: left;
-    min-width: 150px;
+    width: 150px;
 }
 
 
@@ -186,3 +186,26 @@
 }
 
 /* end notifications */
+
+/* transition */
+
+.trans-hide-sidebar {
+    width: 0% !important;
+    -webkit-transition: width .5s;
+}
+.trans-hide-sidebar * {
+    opacity: 0;
+    -webkit-transition: opacity .2s;
+}
+
+.trans-show-sidebar {
+    width: 150px !important;
+    -webkit-transition: width .5s;
+}
+.trans-show-sidebar * {
+    opacity: 1;
+    -webkit-transition: opacity .2s;
+    -webkit-transition-delay: .3s;
+}
+
+/* end transition */
