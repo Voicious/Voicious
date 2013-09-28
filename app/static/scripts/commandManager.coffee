@@ -27,6 +27,9 @@ class CommandManager
             @register data
         @emitter.on 'cmd.remove', (event, data) =>
             @remove data
+        option = { resGetPath: '/locales/__lng__/__ns__.json', useLocalStorage: true , useDataAttrOptions:true}
+        $.i18n.init option
+
 
     # Register a command
     register        : (data) =>

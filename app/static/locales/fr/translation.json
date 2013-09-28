@@ -1,0 +1,33 @@
+{
+    "app": {
+        "Test" : "this is the translation test",
+        "QuickStart": "Démarage rapide",
+        "quickInitial": {
+            "Create": "Créer&nbsp;nouveaux salon",
+            "Join": "Rejoindre&nbsp;salon existant"
+        },
+        "quickCreate":{
+            "Nickname": "Pseudo",
+            "Description": "Créer un nouveaux salon",
+            "NicknameError": "&nbsp;Veuillez choisir un Pseudo",
+            "Create": "Créer",
+            "Cancel": "Retour"
+
+        },
+        "quickJoin":{
+            "Description": "Rejoindre un salon existant",
+            "RoomID": "Identifiant du salon",
+            "RoomIDSuccess": "Identifiant du salon Valide",
+            "Nickname": "Pseudo",
+            "NicknameInfo": "[Trans]&nbsp;Choose a nickname, then you are good to join",
+            "NicknameError": "&nbsp;Veuillez choisir un Pseudo",
+            "Join": "Rejoindre",
+            "Cancel": "Retour"
+        },
+        "textChat":{
+            "DescriptionTC": "ENTRER pour envoyer",
+            "ArriveRoom": " arrives in the room."
+        }
+                
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "app": {
+        "Test" : "[DEV]this is the translation test",
+        "QuickStart": "Quick Start",
+        "quickInitial": {
+            "Create": "Create new room",
+            "Join": "Join existing room"
+        },
+        "quickCreate": {
+            "Nickname": "Nickname",
+            "Description": "Create a new Room",
+            "NicknameError": "&nbsp;Please choose a nickname",
+            "Create": "Create",
+            "Cancel": "Cancel",
+            "Join": "app.quickCreate.Join"
+        },
+        "quickJoin": {
+            "Description": "Join an existing Room",
+            "RoomID": "Room ID",
+            "RoomIDSuccess": "Room ID &nbsp;is OK",
+            "Nickname": "Nickname",
+            "NicknameInfo": "&nbsp;Choose a nickname, then you are good to join",
+            "NicknameError": "&nbsp;Please choose a nickname",
+            "Join": "Join",
+            "Cancel": "Cancel"
+        },
+        "textChat": {
+            "DescriptionTC": "press ENTER to post"
+        }
+    },
+    "QuickStart": "QuickStart",
+    "textChat": {
+        "ArriveRoom": "textChat.ArriveRoom"
+    }
+}

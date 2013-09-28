@@ -19,7 +19,8 @@
     "less": "~1.4.2",
     "bower": "~1.2.6",
     "peer": "~0.2.0",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+	 "i18next": "~1.7.0" 
   },
   "scripts": {
     "install": "bower install",
