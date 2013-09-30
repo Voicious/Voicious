@@ -286,8 +286,11 @@ class Room
                     name   : elem.data('name')
                     icon   : elem.data('icon')
                     outer  : 'Modules'
-                    click : () =>
+                    attrs  : {'class' : 'green'}
+                    click : () ->
                         elem.toggleClass 'none'
+                        $(this).toggleClass 'green'
+                        $(this).toggleClass 'red'
                     }
                 module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
                 theModule = (new window[module] @emitter)

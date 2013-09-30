@@ -187,6 +187,21 @@
 
 /* end notifications */
 
+#shortcuts {
+    text-align: center;
+}
+
+#shortcuts > p {
+    margin-top: 20px;
+    font-size: 10px;
+    font-family: 'OpenSans-Bold';
+    color: #fff;
+}
+
+#shortcuts .legend {
+    color: #b4C1C7;
+}
+
 /* transition */
 
 .trans-hide-sidebar {
