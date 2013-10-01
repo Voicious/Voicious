@@ -15,26 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-{spawn} = require 'child_process'
-Path    = require 'path'
-Fs      = require 'fs'
-Moment  = require 'moment'
-Config  = require './common/config'
+Config = require '../common/config'
 
-WriteLog  = (fd, data) =>
-    if data?
-        toLog = '[' + ((do Moment).format 'YYYY MMM DD hh:mm:ssa') + '] ' + data
-        Fs.writeSync fd, (new Buffer toLog), 0, toLog.length
-
-processes = []
-
-if not Fs.existsSync Config.Paths.Logs
-    Fs.mkdirSync Config.Paths.Logs, '0755'
-
-require './core/voicious'
-
-if Config.Websocket.Enabled
-    require './ws/websocket'
-
-if Config.Peerjs.Enabled
-	require './pjs/peerjs'
+PeerServer = require('peer').PeerServer
+server = new PeerServer { port: Config.Peerjs.Port, debug: Config.Peerjs.Debug }

@@ -18,6 +18,7 @@ block scripts
     !=js("/vendor/showdown/compressed/showdown.js")
     !=js("/vendor/zeroclipboard/ZeroClipboard.min.js")
     !=js("/vendor/object-watch/object-watch.js")
+    !=js("/vendor/peerjs/dist/peer.min.js")
     !=js("/scripts/modules/module.js")
     !=js('/scripts/connections.js')
     !=js('/scripts/commandManager.js')
@@ -31,6 +32,11 @@ block scripts
             window.ws          = {
                 Host : "#{wsHost}",
                 Port : parseInt("#{wsPort}")
+            };
+        if ("#{pjsHost}" !== "" && "#{pjsPort}" !== "")
+            window.pjs          = {
+                Host : "#{pjsHost}",
+                Port : parseInt("#{pjsPort}")
             };
         if ('!{modules}' != "") {
           window.modules = JSON.parse('!{modules}');

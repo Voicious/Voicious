@@ -55,6 +55,8 @@ class _Room
                 rid     : req.params.roomid
                 wsHost  : Config.Websocket.Hostname.External
                 wsPort  : Config.Websocket.Port
+                pjsHost : Config.Peerjs.Hostname.External
+                pjsPort : Config.Peerjs.Port
             user.id_room = req.params.roomid
             Db.update 'user', user._id, user, () =>
                 @token.createToken user._id, req.params.roomid, (token) =>

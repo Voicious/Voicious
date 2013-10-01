@@ -17,10 +17,8 @@
     "nodemailer": "~0.5.2",
     "connect-assets": "~2.5.2",
     "less": "~1.4.2",
-    "bower": "~1.2.6"
-  },
-  "directories": {
-    "lib": "./www/lib"
+    "bower": "~1.2.6",
+    "peer": "~0.2.0"
   },
   "scripts": {
     "install": "bower install",
