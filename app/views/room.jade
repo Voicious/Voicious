@@ -29,24 +29,17 @@ block scripts
         window.Voicious.currentUser = {
             uid  : "#{uid}",
         };
-        if ("#{wsHost}" !== "" && "#{wsPort}" !== "") {
-            window.ws          = {
-                Host : "#{wsHost}",
-                Port : parseInt("#{wsPort}")
-            };
-        if ("#{pjsHost}" !== "" && "#{pjsPort}" !== "")
-            window.pjs          = {
-                Host : "#{pjsHost}",
-                Port : parseInt("#{pjsPort}")
-            };
+        if ("#{pjsHost}" !== "" && "#{pjsPort}" !== "") {
+          window.pjs          = {
+              Host : "#{pjsHost}",
+              Port : parseInt("#{pjsPort}")
+          };
+        }
         if ('!{modules}' != "") {
           window.modules = JSON.parse('!{modules}');
-          };
         }
     !=js("/scripts/room.js")
     script(type="text/javascript", src="http://platform.twitter.com/widgets.js")
-    for af in audioFiles
-      audio(src="/sounds/notification/" + af, name=af)
 block content
   div.container-fluid.fill-height
     div.row-fluid.fill-height
@@ -66,3 +59,5 @@ block content
         div#container.fill-height.color-two
           ul#feeds.fill-height(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')
           div#modArea.frame.fill-width
+  for af in audioFiles
+    audio(src="/sounds/notification/" + af, name=af)

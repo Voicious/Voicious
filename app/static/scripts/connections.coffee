@@ -18,8 +18,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Ws
     constructor : (@uid, @rid, @emitter) ->
 
-    dance : (ws) =>
-        @ws = io.connect "http://#{ws.host}:#{ws.port}"
+    dance : () =>
+        @ws = io.connect window.location.origin
         window.w = @ws
         @ws.once 'connect', @onOpen
         @ws.on 'disconnect', @onDisconnect
@@ -50,7 +50,6 @@ class Ws
             @ws.on 'message', @onMessage
 
     onMessage : (message) =>
-        console.log message
         @emitter.trigger message.type, message.params
 
     close : () =>
@@ -139,7 +138,7 @@ class MC
         do @call.close
 
 class Connections
-    constructor : (@emitter, @uid, @rid, @wsPortal, @pjsPortal) ->
+    constructor : (@emitter, @uid, @rid, @pjsPortal) ->
         @peers       = { }
         @ws          = new Ws @uid, @rid, @emitter
         @pjs         = new PeerJs @uid, @rid, @emitter
@@ -183,7 +182,7 @@ class Connections
         @userMedia['audio'] = !@userMedia['audio']
 
     dance : () =>
-        @ws.dance @wsPortal
+        do @ws.dance
         @pjs.dance @pjsPortal
         @emitter.on 'peer.list', (event, data) =>
             for peer in data.peers

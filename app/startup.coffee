@@ -33,8 +33,5 @@ if not Fs.existsSync Config.Paths.Logs
 
 require './core/voicious'
 
-if Config.Websocket.Enabled
-    require './ws/websocket'
-
 if Config.Peerjs.Enabled
 	require './pjs/peerjs'

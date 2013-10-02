@@ -25,8 +25,8 @@ class Room
         @moduleArray = new Array
         @_jqModArea = $ '#modArea'
 
-        if window.ws? and window.ws.Host? and window.ws.Port? and window.pjs? and window.pjs.Host? and window.pjs.Port?
-            @connections    = new Voicious.Connections @emitter, @uid, @rid, { host : window.ws.Host, port : window.ws.Port }, { host : window.pjs.Host, port : window.pjs.Port }
+        if window.pjs? and window.pjs.Host? and window.pjs.Port?
+            @connections    = new Voicious.Connections @emitter, @uid, @rid, { host : window.pjs.Host, port : window.pjs.Port }
             @commandManager = new CommandManager @emitter
             @buttonManager  = new Voicious.ButtonManager @emitter
             @notificationManager = new Voicious.NotificationManager @emitter

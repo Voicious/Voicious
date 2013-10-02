@@ -8,14 +8,6 @@
         "Acl"       : ["administrator", "registered", "temporary"],
         "Roles"     : ["operator", "owner"]
     },
-    "Websocket"  : {
-        "Hostname"  : {
-            "Internal" : "localhost",
-            "External" : "localhost"
-        },
-        "Port"      : 4242,
-        "Enabled"   : 0
-    },
     "Peerjs"  : {
         "Hostname"  : {
             "Internal" : "localhost",
