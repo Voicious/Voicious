@@ -136,6 +136,7 @@ button {
 }
 
 #createButton:hover {
+    color: white;
     background-color: #73d339;
 }
 
@@ -155,6 +156,7 @@ button {
 /* Duplicate ! Need to put this in style.coffee */
 input[type="text"], input[type="password"] {
     padding: 0 12px;
+    margin: 0;
     background: #0f1012;
 
     border-radius: 6px;
@@ -177,12 +179,12 @@ input[type="text"], input[type="password"] {
 
     border-radius: 0px;
     border-bottom-left-radius: 6px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
     border-top-left-radius: 6px;
 }
 
 #joinForm > button {
     width: 40%;
-    background: #008EF1;
     border-radius: 0px;
     border-bottom-right-radius: 6px;
     border-top-right-radius: 6px;
@@ -225,7 +227,7 @@ input[type="text"], input[type="password"] {
     margin-left: 3%;
 }
 
-.friendRoom > div:last-child {
+.friendRoom > div:nth-last-child(-1n+2) {
     margin-left: 0;
 }
 
@@ -241,20 +243,64 @@ input[type="text"], input[type="password"] {
     width: 13%;
 }
 
-.joinBox {
+
+.boxHidder {
     padding: 0;
     margin: 0;
     width: 25%;
     height: 100%;
 }
 
+.joinBox {
+    width: 25%;
+}
+
 .center {
-  display: inline-block;
-  vertical-align: middle;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .headerText {
-    margin-bottom: 10px;
+    margin-bottom: 10px ;
+}
+
+
+.btn-join:hover {
+    background: #40a3ff;
+    color: white;
+}
+
+.btn-join {
+    background: #008EF1;
+}
+
+.btn {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+
+    box-shadow: inset 0  1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    border-style: solid;
+    border-width: 1px;
+    border-color: #101113;
+
+    width: 175px;
+    padding: 11px 0;
+    text-transform: uppercase;
+}
+
+div.joinBox > .joinFriendRoom {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+
+    box-shadow: inset 0  1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    border-style: solid;
+    border-width: 1px;
+    border-color: #101113;
+
+    width: 90%;
+    padding: 11px 0;
+
+    text-transform: uppercase;
 }
 
 /* end friend box */

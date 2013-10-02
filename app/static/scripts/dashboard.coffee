@@ -25,6 +25,22 @@ bindView = (elemToclick, divToDisplay) ->
 		($ divToDisplay).addClass 'display'
 		(($ divToDisplay).siblings '.content.display').removeClass 'display'
 
+onHoverEntry = () ->
+	jqBoxHidder = ($ this).find '.boxHidder'
+	jqJoinBox = ($ this).find '.joinBox'
+	do jqBoxHidder.hide
+	do jqJoinBox.show
+
+onHoverOut = () ->
+	jqBoxHidder = ($ this).find '.boxHidder'
+	jqJoinBox = ($ this).find '.joinBox'
+	do jqJoinBox.hide
+	do jqBoxHidder.show
+
+onFriendBoxHover = (friendBox) ->
+	jqBox = ($ friendBox)
+	jqBox.hover onHoverEntry, onHoverOut
+
 # Initialize the dashboard by binding options to content and hide all the content.
 init = () ->
 	options = ($ 'li.options')
@@ -35,6 +51,11 @@ init = () ->
 	bindView (options[2]),  '#settingsContent'
 
 	do (do options.first).click
+
+	do ($ '.joinBox').hide
+
+	($ '.friendRoom').each () ->
+		onFriendBoxHover($ this)
 
 ($ document).ready () =>
 	do init

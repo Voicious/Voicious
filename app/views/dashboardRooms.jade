@@ -2,12 +2,11 @@ div#roomsContent.content.white.fill-height
 	p.title.bigFont Create, join and manage rooms
 	div
 		div#createJoinRoom
-			form(method='POST', action='/create')
-				button#createButton(type='submit') create
+			a.btn.btn-large.white#createButton(href="/create") create
 			span.separator.centerVertically
 			form#joinForm(method='POST', action='/join')
 				input(name='room', placeholder='Room ID', type='text', required)
-				button(type='submit') join
+				button.btn-join(type='submit') join
 	div.yourRoom
 		p.title.titleSection.bigFont.bold Your rooms
 		div.room
@@ -17,11 +16,13 @@ div#roomsContent.content.white.fill-height
 		div.friendRoom.color-two.centerVertically
 			div.friendLoginBox.center
 					p.title.titleSection.bold.headerText owner
-					p.info Gwak-a-molle
+					p.info.bold Gwak-a-molle
 			div.roomIdBox.center
 					p.title.titleSection.bold.headerText id
-					p.info 5241ee389445bfa60e000002
+					p.info.bold 5241ee389445bfa60e000002
 			div.nbUserBox.center
 					p.title.titleSection.bold.headerText people in
-					p.info 3
-			div.joinBox.none.color-one.center
+					p.info.bold 3
+			div.boxHidder.center.fill-height.color-one
+			div.joinBox.center
+				a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/5241ee389445bfa60e000002") join

@@ -151,4 +151,5 @@ exports.Routes  =
         '/quickLogin'   : exports.User.quickLogin
         '/quickJoin'    : exports.User.quickJoin
         '/join'         : exports.User.join
+    get:
         '/create'       : exports.User.createRoom
