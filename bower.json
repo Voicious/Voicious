@@ -13,6 +13,7 @@
         "normalize-css" : "~2.1.3",
         "zeroclipboard" : "~1.1.7",
         "object-watch" : "https://gist.github.com/6614238.git#master",
-        "peerjs": "https://github.com/peers/peerjs.git"
+        "peerjs": "https://github.com/peers/peerjs.git",
+        "socket.io-client": "~0.9.16"
     }
 }

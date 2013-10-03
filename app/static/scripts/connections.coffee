@@ -18,27 +18,38 @@ program. If not, see <http://www.gnu.org/licenses/>.
 class Ws
     constructor : (@uid, @rid, @emitter) ->
 
-    dance : (ws) =>
-        @ws           = new WebSocket "ws://#{ws.host}:#{ws.port}"
-        @ws.onopen    = @onOpen
-        @ws.onmessage = @onMessage
+    dance : () =>
+        @ws = io.connect window.location.origin
+        window.w = @ws
+        @ws.once 'connect', @onOpen
+        @ws.on 'disconnect', @onDisconnect
+
+    onDisconnect : =>
+        @emitter.trigger 'offline'
+        do @ws.removeAllListeners
+        @ws.once 'connect', @onOpen
+        @ws.on 'disconnect', @onDisconnect
 
     send : (data) =>
-        @ws.send JSON.stringify data
+        @ws.emit 'message', data
 
     forward : (to, data) =>
-        @send { type : 'forward' , params : { to : to , data : data } }
+        @send
+            type : 'forward'
+            params :
+                to : to
+                data : data
 
     onOpen : () =>
-        auth =
-            type   : 'authenticate'
-            params :
-                rid : @rid
-                uid : @uid
-        @send auth
+        @emitter.trigger 'online'
+        @ws.emit 'authenticate',
+            rid : @rid
+            uid : @uid
+        @ws.once 'authenticated', (info) =>
+            @emitter.trigger 'authenticated', info
+            @ws.on 'message', @onMessage
 
     onMessage : (message) =>
-        message = JSON.parse message.data
         @emitter.trigger message.type, message.params
 
     close : () =>
@@ -127,7 +138,7 @@ class MC
         do @call.close
 
 class Connections
-    constructor : (@emitter, @uid, @rid, @wsPortal, @pjsPortal) ->
+    constructor : (@emitter, @uid, @rid, @pjsPortal) ->
         @peers       = { }
         @ws          = new Ws @uid, @rid, @emitter
         @pjs         = new PeerJs @uid, @rid, @emitter
@@ -171,7 +182,7 @@ class Connections
         @userMedia['audio'] = !@userMedia['audio']
 
     dance : () =>
-        @ws.dance @wsPortal
+        do @ws.dance
         @pjs.dance @pjsPortal
         @emitter.on 'peer.list', (event, data) =>
             for peer in data.peers
@@ -196,8 +207,15 @@ class Connections
             if @peers[data.id]?
                 @removePeer data.id
                 @emitter.trigger 'stream.remove', data
-        @emitter.on 'ping', (event, data) =>
-            @ws.send { type : 'pong' , params : { token : data.token } }
+        @emitter.on 'pc.offer', (event, data) =>
+            if @peers[data.from]?
+                @peers[data.from].answerHandshake data.description
+        @emitter.on 'pc.answer', (event, data) =>
+            if @peers[data.from]?
+                @peers[data.from].concludeHandshake data.description
+        @emitter.on 'ice.candidate', (event, data) =>
+            if @peers[data.from]?
+                @peers[data.from].pc.addIceCandidate data.label, data.id, data.candidate
 
     send      : (id, message) =>
         if @peers[id].dc?

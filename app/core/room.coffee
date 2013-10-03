@@ -53,8 +53,6 @@ class _Room
                 login   : user.name
                 uid     : user._id
                 rid     : req.params.roomid
-                wsHost  : Config.Websocket.Hostname.External
-                wsPort  : Config.Websocket.Port
                 pjsHost : Config.Peerjs.Hostname.External
                 pjsPort : Config.Peerjs.Port
             user.id_room = req.params.roomid

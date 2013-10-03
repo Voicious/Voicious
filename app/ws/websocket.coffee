@@ -16,7 +16,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 Http    = require 'http'
-Ws      = (require 'ws').Server
+Io      = require 'socket.io'
 MD5     = require 'MD5'
 
 Config  = require '../common/config'
@@ -28,10 +28,8 @@ class Websocket
 
     onConnection : (sock) =>
         that = @
-        sock.onmessage = (message) ->
-            message = JSON.parse message.data
-            if message.type is 'authenticate'
-                that.validateSock message.params.uid, message.params.rid, @
+        sock.on 'authenticate', (message) ->
+            that.validateSock message.uid, message.rid, @
 
     validateSock : (uid, rid, sock) =>
         try
@@ -41,36 +39,19 @@ class Websocket
                         if Object.keys(body).length > 0 and body.id_room is rid
                             @acceptSock body._id, rid, body.name, sock
 
-    sendPing : (sock) =>
-        sock._h       = MD5 do Date.now
-        @send sock, { type : 'ping', params : { token : sock._h } }
-        sock._timeout = setTimeout (() =>
-            @pingTimeout sock
-        ), 30000
-
-    pingTimeout : (sock) =>
-        @close sock, 'Ping timeout'
-
     acceptSock : (uid, rid, name, sock) =>
         that             = @
         sock.rid         = rid
         sock.uid         = uid
         sock.name        = name
         sock._h          = undefined
-        sock._timeout    = undefined
-        sock._nextPing   = undefined
-        sock.onmessage   = (message) ->
-            that.onmessage @, message
-        sock.onclose     = () ->
-            that.close @
         Db.get 'room', rid, (res) =>
             owner = if String res.owner is uid then true else false
             Db.get 'user', uid, (res) =>
                 res.owner = owner
-                @send sock, { type : 'authenticated', params : res }
-                sock._nextPing   = setTimeout (() =>
-                    @sendPing sock
-                ), 60000
+                sock.emit 'authenticated', res
+                sock.on 'message', (message) -> that.onmessage @, message
+                sock.on 'disconnect', () -> that.close @
                 if not @socks[rid]?
                     @socks[rid] = { }
                 else
@@ -80,7 +61,10 @@ class Websocket
                             @send @socks[rid][_uid], { type : 'peer.create' , params : { id : uid , name : name } }
                             if _uid isnt uid
                                 peers.push { id : _uid , name : @socks[rid][_uid].name }
-                    @send sock, { type : 'peer.list' , params : { peers : peers } }
+                    @send sock,
+                        type : 'peer.list'
+                        params :
+                            peers : peers
                 @socks[rid][uid] = sock
 
     close : (sock, reason = 'Session closed') =>
@@ -100,7 +84,6 @@ class Websocket
                 } }
 
     onmessage : (sock, message) =>
-        message = JSON.parse message.data
         switch message.type
             when 'forward' then do () =>
                 # Temporary
@@ -123,25 +106,13 @@ class Websocket
                         message.params.data.params.from = sock.uid
                         @send @socks[sock.rid][message.params.to], message.params.data
 
-            when 'pong' then do () =>
-                if message.params.token is sock._h
-                    clearTimeout sock._timeout
-                    sock._timeout  = undefined
-                    sock._h        = undefined
-                    sock._nextPing = setTimeout (() =>
-                        @sendPing sock
-                    ), 60000
+    send : (sock, data) =>
+        if not sock.disconnected
+            sock.emit 'message', data
 
-    send : (sock, message) =>
-        if sock.readyState is 1
-            sock.send JSON.stringify message
+    start : (server) =>
+        io = Io.listen server
+        io.set 'log level', 0
+        io.sockets.on 'connection', @onConnection
 
-    start : () =>
-        Db.connect () =>
-            @server = new Ws {
-                server : (Http.createServer (req, res) ->).listen Config.Websocket.Port, () =>
-                    console.log "Server ready on port #{Config.Websocket.Port}"
-                }
-            @server.on 'connection', @onConnection
-
-do (new Websocket).start
+exports.Websocket = Websocket
