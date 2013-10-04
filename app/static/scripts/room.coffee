@@ -229,28 +229,40 @@ class Room
             }
 
     sortableMod         : () =>
-        $('#modArea').sortable({
+        lastModId = undefined
+        $('#modArea').sortable {
             containment: '#container',
             tolerance: 'pointer',
+            cancel: "input,textarea,button,select,option,p",
             receive: (event, ui) ->
                 $('.module').each () ->
                     pos = { t: (do $(this).offset).top, l: (do $(this).offset).left, h: do $(this).height, w: do $(this).width, docH: do $(window).height, docW: do $(window).width }
                     visible = (pos.t > 0 && pos.l > 0 && pos.t + pos.h < pos.docH && pos.l + pos.w < pos.docW)
                     if !visible
                         $(ui.sender).sortable 'cancel'
+            start: (event, ui) ->
+                lastModId = $('#modArea .module:last').attr 'id'
             sort: (event, ui) ->
                 $('.module').css 'clear', ''
             stop: (event, ui) ->
                 draggedItemId = '#' + ui.item.attr 'id'
-                prevHeight = do (do ui.item.prev).height
-                nextHeight = do (do ui.item.next).height
-                if ui.position.top >= prevHeight && ui.position.top >= nextHeight
-                    $(draggedItemId).css 'clear', 'left'
+                if ui.position.left < ui.originalPosition.left
+                    prevHeight = do (ui.item.prevAll '.module:first').height
+                    if prevHeight && ui.position.top >= prevHeight
+                        if lastModId
+                            ui.item.parent().append(ui.item)
+                        $(draggedItemId).css 'clear', 'left'
+                else if ui.position.left > ui.originalPosition.left
+                    nextHeight = do (ui.item.nextAll '.module:first').height
+                    if nextHeight && ui.position.top >= nextHeight
+                        if lastModId
+                            ui.item.parent().append(ui.item)
+                        $(draggedItemId).css 'clear', 'left'
                 else
                     $(draggedItemId).css 'clear', ''
                 if $('#mainCam').length
                     $('#mainCam').trigger 'resize'
-        }).disableSelection()
+        }
     
     dynamicMod          : () =>
         do @resizableMod
