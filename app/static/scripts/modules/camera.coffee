@@ -36,7 +36,6 @@ class Camera extends Module
             video.muted = yes
             @newStream event, { video : video , uid : window.Voicious.currentUser._id , local : yes }
         ($ window).on 'resize', () =>
-            do @squareMainCam
             videos = ($ 'video')
             for video in videos
                 @centerVideoTag ($ video)
@@ -49,10 +48,6 @@ class Camera extends Module
             video = (mainLi.find 'video')
             if video?
                 @zoom (video.attr 'rel'), video
-        do @squareMainCam
-
-    squareMainCam : () =>
-        @jqMainCams.width do @jqMainCams.height
 
     delStream   : (event, user) =>
         if (@streams.indexOf user.id) >= 0
@@ -83,12 +78,23 @@ class Camera extends Module
 
     resizeZoomCams : () =>
         cam = ($ '#mainCam')
-        val = @mosaicNb * @mosaicNb
-        if val < Object.keys(@zoomCams).length
-            @mosaicNb += 1
-        else if @mosaicNb > Object.keys(@zoomCams).length
-            @mosaicNb -= 1
-        size = ((do cam.width) / @mosaicNb) - 10 # ugly fix
+        x = do cam.width
+        y = do cam.height
+        n = Object.keys(@zoomCams).length
+        px = Math.ceil(Math.sqrt(n * x / y))
+        if n is 0
+            return
+        if Math.floor(px * y / x) * px < n
+            sx = y / Math.ceil(px * y / x)
+        else
+            sx = x / px
+
+        py = Math.ceil(Math.sqrt(n * y/ x))
+        if Math.floor(py * x / y) * py < n
+            sy = x / Math.ceil(x * py / y)
+        else
+            sy = y / py
+        size = if sx > sy then sx else sy
         for key, li of @zoomCams
             li.css 'width', "#{size}px"
             li.css 'height', "#{size}px"
