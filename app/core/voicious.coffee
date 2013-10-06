@@ -79,7 +79,8 @@ class Voicious
         @i18n.init
             saveMissing: true
             resGetPath: 'app/static/locales/__lng__/__ns__.json'
-            lng: "dev"
+            lng: "en"
+            fallbackLng: "en"
         @app.use @i18n.handle
         @app.set 'port', Config.Voicious.Port
         @app.set 'views', Config.Paths.Views

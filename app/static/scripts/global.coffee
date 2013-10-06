@@ -66,7 +66,7 @@ PV  = new PrivateValue
 U   = new Utilities
 
 ($ document).ready () =>
-    option = { resGetPath: '/locales/__lng__/__ns__.json', useLocalStorage: true, useDataAttrOptions: true, lng: "dev"}
+    option = { resGetPath: '/locales/__lng__/__ns__.json', useLocalStorage: true, useDataAttrOptions: true, lng: "en", fallbackLng: "en"}
     $.i18n.init option
     if document.location.pathname isnt "/browser" and not window.webkitRTCPeerConnection?
         document.location = "/browser"
