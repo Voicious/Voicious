@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+i18n        = require 'i18next' 
 nodemailer  = require 'nodemailer'
 moment      = require 'moment'
 md5         = require 'MD5'
@@ -103,12 +104,8 @@ class _Room
         @transport.sendMail {
             from : "Voicious<no-reply@voicious.com>"
             to : req.body.emails
-            subject : "#{req.body.from} wants to talk to you on Voicious"
-            text : """
-                Hello!
-                #{req.body.from} just invited you on Voicious.
-                You can join him here: #{req.body.roomurl}
-            """
+            subject : "#{req.body.from}" + i18n.t("app.Room.ShareMail.MailSubject")
+            text : i18n.t("app.Room.ShareMail.Hello") + "#{req.body.from}" + i18n.t("app.Room.ShareMail.Text") + "#{req.body.roomurl}"
         }
         res.send 200
 

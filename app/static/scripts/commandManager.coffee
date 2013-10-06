@@ -27,8 +27,6 @@ class CommandManager
             @register data
         @emitter.on 'cmd.remove', (event, data) =>
             @remove data
-        option = { resGetPath: '/locales/__lng__/__ns__.json', useLocalStorage: true , useDataAttrOptions:true}
-        $.i18n.init option
 
 
     # Register a command
@@ -55,9 +53,10 @@ class CommandManager
         else
             @emitter.trigger 'chat.message', { text: cmd[0] + ": command not found." }
 
+
     # Display the available commands
     help            : () =>
-        message = "Commands list:<br/>"
+        message = $.t("app.CommandManager.CmdList") + ":<br/>"
         for name, cb of @commands
             message += "/" + name
             if @infos[name]?

@@ -256,7 +256,7 @@ class Connections
             do @toggleCamera if @userMedia.video
             do @toggleMicro if @userMedia.audio
             @emitter.trigger 'notif.text.ko',
-                text : "It seems that we can't access your hardware."
+                text : $.t("app.Connections.HardwareError")
             @emitter.trigger 'activable.unlock'
             if not MOZILLA and $('p#messageCam').hasClass "hidden"
                 $('p#messageCam').removeClass "hidden"

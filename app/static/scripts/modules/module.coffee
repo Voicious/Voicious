@@ -17,7 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 class Module
     constructor : (@emitter) ->
-
+    	
     appendHTML  : () =>
 
     initialize  : () =>

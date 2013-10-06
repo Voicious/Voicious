@@ -123,9 +123,9 @@ class Room
                     (do (f.find 'textarea').first).val ''
                     ((f.parents '.popover').prev 'li').popover 'hide'
             $.ajax options
-        form = @doForm '/shareroom', 'E-mail addresses (comma separated):', 'Share', cb
+        form = @doForm '/shareroom', $.t("app.Room.ShareMail.FormRule"), $.t("app.Room.ShareMail.FormButton"), cb
         {
-            title : "Share this room by email"
+            title : $.t("app.Room.ShareMail.FormTitle")
             html : yes
             content : form
         }
@@ -145,23 +145,23 @@ class Room
                     ($ '#btn_report_a_bug').popover 'hide'
             $.ajax options
         {
-            title : 'Report a bug'
+            title : $.t("app.Room.ReportBug.FormTitle")
             html : yes
-            content : @doForm '/report', 'Explain the bug:', 'Report', cb
+            content : @doForm '/report', $.t("app.Room.ReportBug.FormRule"), $.t("app.Room.ReportBug.FormButton"), cb
             container : 'body'
         }
 
     setPage             : () ->
         @emitter.trigger 'button.create', {
-            name  : 'Share Room ID'
+            name  : $.t("app.Room.SetPage.ShareName")
             icon  : 'share-alt'
             attrs :
                 'data-step'     : 1
-                'data-intro'    : 'Click here if you want to share the room.'
+                'data-intro'    : $.t("app.Room.SetPage.ShareIntro")
                 'data-position' : 'right'
         }
         @emitter.trigger 'button.create', {
-            name     : 'Copy to clipboard'
+            name     : $.t("app.Room.SetPage.ClipboardName")
             icon     : 'copy'
             outer    : 'Share Room ID'
             attrs    :
@@ -173,32 +173,32 @@ class Room
                 }
                 clip.on 'complete', () =>
                     @emitter.trigger 'notif.text.ok',
-                        text : 'Link copied to clipboard'
+                        text : $.t("app.Room.SetPage.ClipboardCopied")
         }
         @emitter.trigger 'button.create', {
-            name : 'Share by email'
+            name : $.t("app.Room.SetPage.ShareMailName")
             icon : 'envelope'
             outer : 'share room id'
             click : {popover : do @sendByMail}
         }
         @emitter.trigger 'button.create', {
-            name  : 'Share on Twitter'
+            name  : $.t("app.Room.SetPage.ShareTwitterName")
             icon  : 'twitter'
             outer : 'share room id'
             click : () =>
-                text = encodeURI "Join me on @voiciousapp: "
+                text = encodeURI $.t("app.Room.SetPage.ShareTwitterText")
                 url  = "http://twitter.com/share?text=" + text + "&url=" + window.location.href + "&related=voiciousapp"
                 window.open url, '', 'left=500,top=200,width=600,height=600'
         }
         @emitter.trigger 'button.create', {
-            name  : 'Share on Facebook'
+            name  : $.t("app.Room.SetPage.ShareFacebookName")
             icon  : 'facebook-sign'
             outer : 'share_room_id'
             click : () =>
                 window.open "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600'
         }
         @emitter.trigger 'button.create', {
-            name  : 'Report a bug'
+            name  : $.t("app.Room.SetPage.ReportBugName")
             icon  : 'ambulance'
             click : {popover : do @reportBug}
         }

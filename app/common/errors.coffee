@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+i18n            = require 'i18next' 
 Config          = require './config'
 {Translator}    = require '../core/trans'
 
@@ -40,20 +41,13 @@ class Errors
         if req.url is "/browser"
             options =
                 status          : "Oops"
-            if loc is 'fr'
-                options.statusText = "Mauvais navigateur"
-                options.errorMsg = "> Il semblerait que votre navigateur ne support pas WebRTC.<br />> Désolé, vous pouvez seulement utiliser Google chrome pour la béta actuelle."
-            else
-                options.errorMsg = "> Looks like you're using a browser that does not support WebRTC.<br />> Sorry, you can only use Google Chrome for the current beta."
-                options.statusText = "Wrong browser"
+            options.errorMsg = i18n.t("app.Errors.WrongBrowser.Message")
+            options.statusText = i18n.t("app.Errors.WrongBrowser.Status")
         else
             options =
                 status          : "404"
                 statusText      : "not_found"
-            if loc is 'fr'
-                options.errorMsg  = "> Oups !<br />> La page que vous recherchez n'existe pas.<br />> Désolé."
-            else
-                options.errorMsg  = "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
+            options.errorMsg  = i18n.t("app.Errors.404")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
         res.render 'error.jade', options
@@ -65,10 +59,7 @@ class Errors
         options =
             status              : "500"
             statusText          : "server_error"
-        if loc is 'fr'
-            options.errorMsg = "> Oups !<br />> Une erreur s'est produite.<br />> Désolé."
-        else
-            options.errorMsg = "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
+        options.errorMsg = i18n.t("app.Errors.500")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
         res.render 'error.jade', options
