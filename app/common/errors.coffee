@@ -15,7 +15,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-i18n            = require 'i18next' 
+i18n            = require 'i18next'
+
 Config          = require './config'
 {Translator}    = require '../core/trans'
 
@@ -41,13 +42,13 @@ class Errors
         if req.url is "/browser"
             options =
                 status          : "Oops"
-            options.errorMsg = i18n.t("app.Errors.WrongBrowser.Message")
-            options.statusText = i18n.t("app.Errors.WrongBrowser.Status")
+                errorMsg        : i18n.t("app.Errors.WrongBrowser.Message")
+                statusText      : i18n.t("app.Errors.WrongBrowser.Status")
         else
             options =
                 status          : "404"
                 statusText      : "not_found"
-            options.errorMsg  = i18n.t("app.Errors.404")
+                errorMsg        : i18n.t("app.Errors.404")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
         res.render 'error.jade', options
@@ -59,7 +60,7 @@ class Errors
         options =
             status              : "500"
             statusText          : "server_error"
-        options.errorMsg = i18n.t("app.Errors.500")
+            errorMsg            : i18n.t("app.Errors.500")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
         res.render 'error.jade', options
