@@ -18,7 +18,6 @@ program. If not, see <http://www.gnu.org/licenses/>.
 i18n            = require 'i18next'
 
 Config          = require './config'
-{Translator}    = require '../core/trans'
 
 class Errors
     # Configure 404.
@@ -37,7 +36,6 @@ class Errors
     # Also used when a wrong browser is use.
     # Set the right message and render the error page.
     @RenderNotFound : (req, res) ->
-        loc = Translator.getDomain req.host
         res.status 404
         if req.url is "/browser"
             options =
@@ -55,7 +53,6 @@ class Errors
 
     # Set the right message and render the internal error page.
     @RenderError : (req, res) ->
-        loc = Translator.getDomain req.host
         res.status 500
         options =
             status              : "500"
