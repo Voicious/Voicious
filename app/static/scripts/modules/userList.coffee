@@ -185,7 +185,7 @@ class UserList extends Module
 
     onKick          : (data) =>
         #document.cookie = 'connect.sid=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
-        text    = "#{window.Voicious.currentUser.name} has been kicked out! (#{data.message})"
+        text    = "#{window.Voicious.currentUser.name}" + $.t('app.CommandManager.Kick')
         message =
             text : text
         @emitter.trigger 'message.sendtoall', message
