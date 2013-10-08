@@ -104,8 +104,8 @@ class Camera extends Module
             @centerVideoTag (li.find 'video')
 
     zoom : (uid, video) =>
-        @detachToMainCam uid, video
-        if video?
+        detached = @detachToMainCam uid, video
+        if video? and detached is false
             @attachToMainCam uid, video
 
     attachToMainCam : (uid, video) =>
@@ -130,6 +130,7 @@ class Camera extends Module
         do @resizeZoomCams
 
     detachToMainCam : (uid, video) =>
+        detached = true
         container    = ($ '#mainCam')
         container.removeClass 'hidden'
         @emitter.trigger 'stream.zoom', uid
@@ -138,7 +139,9 @@ class Camera extends Module
                 do value.remove
                 delete @zoomCams[uid]
                 do @resizeZoomCams
-                return
+                return detached
+        detached = false
+        return detached
 
     diaporamaMode     : () =>
         shortcut.add 'Ctrl+Shift+M', () =>
