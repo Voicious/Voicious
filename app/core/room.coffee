@@ -26,7 +26,6 @@ Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require '../common/errors'
 {Token}     = require './token'
-{Translator}= require './trans'
 {Db}        = require '../common/' + Config.Database.Connector
 
 class _Room
@@ -38,7 +37,6 @@ class _Room
 
     # Render the room with the good translation and the list of modules stringified.
     renderRoom : (res, options, host) =>
-        options.trans = Translator.getTrans(host, 'room')
         options.modules = JSON.stringify @modulesList
         options.audioFiles = fs.readdirSync path.join Config.Paths.Webroot, 'sounds', 'notification'
         res.render 'room', options

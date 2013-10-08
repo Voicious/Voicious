@@ -23,7 +23,6 @@ I18n	= require 'i18next'
 
 Config       = require '../common/config'
 {Errors}     = require '../common/errors'
-{Translator} = require './trans'
 {Db}         = require '../common/' + Config.Database.Connector
 Ws = require '../ws/websocket.coffee'
 
@@ -59,7 +58,6 @@ class Voicious
                 signup_email    : ''
                 name            : ''
                 roomid          : req.query.roomid || ''
-            options.trans = Translator.getTrans(req.host, 'home')
             res.render 'home', options
         servicesNames   = Fs.readdirSync (Path.join Config.Paths.Root, 'core')
         for serviceName in servicesNames

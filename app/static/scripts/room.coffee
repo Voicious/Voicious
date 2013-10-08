@@ -157,7 +157,7 @@ class Room
             icon  : 'share-alt'
             attrs :
                 'data-step'     : 1
-                'data-intro'    : $.t("app.Room.SetPage.ShareIntro")
+                'data-intro'    : $.t("app.Tutorial.ShareRoom")
                 'data-position' : 'right'
         }
         @emitter.trigger 'button.create', {

@@ -46,6 +46,7 @@
             "500": "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
         },
         "Room": {
+            "User": "User",
             "ShareMail": {
                 "FormTitle": "Share this room by email",
                 "FormRule": "E-mail addresses (comma separated):",
@@ -61,7 +62,6 @@
             },
             "SetPage" :{
                 "ShareName": "Share Room ID",
-                "ShareIntro": "Click here if you want to share the room.",
                 "ClipboardName": "Copy to clipboard",
                 "ClipboardCopied": "Link copied to clipboard",
                 "ShareMailName": "Share by email",
@@ -73,7 +73,12 @@
             }
         },
         "Tutorial" : {
-            "Name": "Help"
+            "Name": "Help",
+            "Media": "Here you can activate your camera and microphone.",
+            "ShareRoom": "Click here if you want to share the room.",
+            "ManageRoom": "Click here to change room settings.",
+            "Feeds": "Here the users present in the room. You can zoom their face by clicking on them.",
+            "Chat": "Here you can chat with them!"      
         }
     }
 }

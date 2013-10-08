@@ -47,8 +47,8 @@ block content
           img#logo.center(src='/img/logo.png')
           div#userInfoCtn
             p#login(align="right") #{login}
-            p#acl(align="right") #{trans.user}
-          div#onOffCtn(data-step='0', data-intro='#{trans.mediaTuto}', data-position='right')
+            p#acl(align="right")= t('app.Room.User')
+          div#onOffCtn(data-step='0', data-intro= t('app.Tutorial.Media'), data-position='right')
             button#cam.activable.red.color-one.bordered.shadowed
               i.icon-facetime-video.dark-grey
               span OFF
@@ -57,7 +57,7 @@ block content
               span OFF
           div#sidebarAcc
         div#container.fill-height.color-two
-          ul#feeds.fill-height(data-step='2', data-intro='#{trans.feedsTuto}', data-position='right')
+          ul#feeds.fill-height(data-step='2', data-intro= t('app.Tutorial.Feeds'), data-position='right')
           div#modArea.frame.fill-width
   for af in audioFiles
     audio(src="/sounds/notification/" + af, name=af)
