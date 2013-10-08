@@ -150,6 +150,7 @@ class Camera extends Module
                 for key, value of @zoomCams
                     do value.remove
                     delete @zoomCams[key]
+                do @autoChangeMainCam
                 @diapoTimer = setInterval @autoChangeMainCam, 3000
             else
                 @diaporama = off
