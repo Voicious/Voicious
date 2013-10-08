@@ -156,34 +156,28 @@ class Camera extends Module
                 clearInterval @diapoTimer
 
     autoChangeMainCam : () =>
-        sidebar = ($ '#feeds')
         mainCam = ($ '#mainCam')
-        videos = sidebar.find('video')
-        if @diapoIndex isnt 0 and videos.length > 2
+        clients = ($ '#feeds > li')
+        if @diapoIndex isnt 0 and clients.length > 2
             for key, value of @zoomCams
                 do value.remove
                 oldKey = key
                 delete @zoomCams[key]
-        if videos.length > 2
-            videos.each (index) =>
+        if clients.length >= 2
+            clients.each (index) =>
                 if index > 0
-                    if @diapoIndex is videos.length
-                        uid = ($ videos[1]).attr('rel')
-                        @attachToMainCam uid, ($ videos[1])
+                    if index is clients.length - 1
+                        video = ($ clients[1]).find('video')
+                        uid = ($ video).attr('rel')
                         @diapoIndex = 1
-                        @zoomCams[uid] = videos[1]
-                    else if index > @diapoIndex
-                        uid = ($ videos[index]).attr('rel')
-                        @diapoIndex = index
-                        @attachToMainCam uid, ($ videos[index])
-                        @zoomCams[uid] = videos[index]
+                        @attachToMainCam uid, ($ video)
                         return
-        else if videos.length is 2
-            if mainCam.find('video').length isnt 1
-                uid = ($ videos[1]).attr('rel')
-                @attachToMainCam uid, ($ videos[1])
-                @diapoIndex = 1
-
+                    else if index > @diapoIndex
+                        video = ($ clients[index]).find('video')
+                        uid = ($ video).attr('rel')
+                        @diapoIndex = index
+                        @attachToMainCam uid, ($ video)
+                        return
 
 if window?
     window.Camera = Camera
