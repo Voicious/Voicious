@@ -19,7 +19,7 @@ class Tutorial extends Module
     constructor      : (emitter) ->
         super emitter
         button =
-            name  : 'Help'
+            name  : $.t("app.Tutorial.Name")
             icon  : 'question-sign'
             click : () =>
                 do (do introJs).start

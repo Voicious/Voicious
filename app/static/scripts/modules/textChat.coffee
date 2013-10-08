@@ -72,9 +72,9 @@ class TextChat extends Module
         @emitter.on 'chat.message', @newMessage
 
         @emitter.on 'peer.create', (event, data) =>
-            @emitter.trigger 'chat.message', { text : "#{data.name} arrives in the room." }
+           @emitter.trigger 'chat.message', { text : "#{data.name}" + $.t("app.textChat.EnterRoom") }
         @emitter.on 'peer.remove', (event, data) =>
-            @emitter.trigger 'chat.message', { text : "#{data.name} leaves the room. (#{data.reason})" }
+            @emitter.trigger 'chat.message', { text : "#{data.name}" + $.t("app.textChat.LeaveRoom") + " (#{data.reason})" }
 
     submit : (event) =>
         #Do not send the form

@@ -15,8 +15,9 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+i18n            = require 'i18next'
+
 Config          = require './config'
-{Translator}    = require '../core/trans'
 
 class Errors
     # Configure 404.
@@ -35,40 +36,28 @@ class Errors
     # Also used when a wrong browser is use.
     # Set the right message and render the error page.
     @RenderNotFound : (req, res) ->
-        loc = Translator.getDomain req.host
         res.status 404
         if req.url is "/browser"
             options =
                 status          : "Oops"
-            if loc is 'fr'
-                options.statusText = "Mauvais navigateur"
-                options.errorMsg = "> Il semblerait que votre navigateur ne support pas WebRTC.<br />> Désolé, vous pouvez seulement utiliser Google chrome pour la béta actuelle."
-            else
-                options.errorMsg = "> Looks like you're using a browser that does not support WebRTC.<br />> Sorry, you can only use Google Chrome for the current beta."
-                options.statusText = "Wrong browser"
+                errorMsg        : i18n.t("app.Errors.WrongBrowser.Message")
+                statusText      : i18n.t("app.Errors.WrongBrowser.Status")
         else
             options =
                 status          : "404"
                 statusText      : "not_found"
-            if loc is 'fr'
-                options.errorMsg  = "> Oups !<br />> La page que vous recherchez n'existe pas.<br />> Désolé."
-            else
-                options.errorMsg  = "> Oops !<br />> Looks like the page you are looking for doesn't exist.<br />> Sorry."
+                errorMsg        : i18n.t("app.Errors.404")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
         res.render 'error.jade', options
 
     # Set the right message and render the internal error page.
     @RenderError : (req, res) ->
-        loc = Translator.getDomain req.host
         res.status 500
         options =
             status              : "500"
             statusText          : "server_error"
-        if loc is 'fr'
-            options.errorMsg = "> Oups !<br />> Une erreur s'est produite.<br />> Désolé."
-        else
-            options.errorMsg = "> Oops !<br />> Looks like something went wrong.<br />> Sorry."
+            errorMsg            : i18n.t("app.Errors.500")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
         res.render 'error.jade', options

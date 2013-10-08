@@ -19,10 +19,10 @@ Http    = require 'http'
 Express = require 'express'
 Fs      = require 'fs'
 Path    = require 'path'
+I18n	= require 'i18next'
 
 Config       = require '../common/config'
 {Errors}     = require '../common/errors'
-{Translator} = require './trans'
 {Db}         = require '../common/' + Config.Database.Connector
 Ws = require '../ws/websocket.coffee'
 
@@ -42,6 +42,7 @@ Function.prototype.curry = () ->
 class Voicious
     constructor     : () ->
         @app            = do Express
+        @i18n  		    = I18n
         @configured     = no
 
     # Retrieve all routes from all services and register them in __Express__.
@@ -57,7 +58,6 @@ class Voicious
                 signup_email    : ''
                 name            : ''
                 roomid          : req.query.roomid || ''
-            options.trans = Translator.getTrans(req.host, 'home')
             res.render 'home', options
         servicesNames   = Fs.readdirSync (Path.join Config.Paths.Root, 'core')
         for serviceName in servicesNames
@@ -74,14 +74,20 @@ class Voicious
             db   : 'voicious_sessions'
             host : Config.Voicious.Sessions.Hostname.Internal
         }
+        @i18n.init
+            saveMissing: true
+            resGetPath: 'app/static/locales/__lng__/__ns__.json'
+            lng: "en"
+            fallbackLng: "en"
+        @app.use @i18n.handle
         @app.set 'port', Config.Voicious.Port
         @app.set 'views', Config.Paths.Views
         @app.set 'view engine', 'jade'
         @app.set 'title', Config.Voicious.Title
         @app.use do Express.favicon
-        @app.use Express.logger 'dev'
-        @app.use do Express.bodyParser
+        @app.use Express.logger 'dev'      
         @app.use do Express.methodOverride
+        @app.use do Express.bodyParser
         @app.use Express.cookieParser 'your secret here'
         @app.use Express.session {
             secret : 'your secret here',
@@ -98,6 +104,7 @@ class Voicious
             console.error err
             Errors.RenderError req, res
 
+        @i18n.registerAppHelper @app
         @configured = yes
 
     # Main function

@@ -38,7 +38,7 @@ block content
             div.tabs
                 div#quick
                     i.icon-bolt
-                    | quick start
+                    = t('app.QuickStart')
                 //div#signin
                     i.icon-user
                     | sign in
@@ -46,46 +46,43 @@ block content
                 div#quickInitial.step
                     button#quickCreateBtn.btn-large.btn-quick.btn-start.btn-quick-init
                         i.icon-asterisk.icon-create
-                        strong create
-                        | &nbsp;new room
+                        strong= t('app.quickInitial.Create')
                     button#quickJoinBtn.btn-large.btn-quick.btn-start.btn-quick-init
                         i.icon-chevron-right.icon-join
-                        strong join
-                        | &nbsp;existing room
+                        strong= t('app.quickInitial.Join')
                 div#quickCreate.step
                     form(method='POST', action='/quicklogin')
                         div.description
                             i.icon-asterisk
-                            | Create a new Room
-                        input(name='name', placeholder='Nickname', type='text', required)
+                            = t('app.quickCreate.Description')
+                        input(name='name',type='text', placeholder!= t('app.quickCreate.Nickname'), required)
                         div.error(for='name')
                             label
                                 i.icon-remove
-                                | &nbsp;Please choose a nickname
-                        button.btn-large.btn-start.btn-create(type='submit', formnovalidate) create
-                        button.btn-large.btn-start.btn-cancel(type='reset') cancel
+                                = t("app.quickCreate.NicknameError")
+                        button.btn-large.btn-start.btn-create(type='submit', formnovalidate)= t('app.quickCreate.Create')
+                        button.btn-large.btn-start.btn-cancel(type='reset')= t('app.quickCreate.Cancel')
                 div#quickJoin.step
                     form(method='POST', action='/quickJoin')
                         div.description
                             i.icon-chevron-right
-                            | Join an existing Room
-                        input(name='room', placeholder='Room ID', type='text', required)
+                            = t('app.quickJoin.Description')
+                        input(name='room', placeholder!= t('app.quickJoin.RoomID'), type='text', required)
                         div.msg.success(for='room')
                             label
                                 i.icon-ok
-                                strong Room ID
-                                | &nbsp;is OK
-                        input(name='name', placeholder='Nickname', type='text', required)
+                                strong= t('app.quickJoin.RoomIDSuccess')
+                        input(name='name', placeholder!= t('app.quickJoin.Nickname'), type='text', required)
                         div.msg.info(for='name')
                             label
                                 i.icon-hand-left
-                                | &nbsp;Choose a nickname, then you are good to join
+                                = t('app.quickJoin.NicknameInfo')
                         div.error(for='name')
                             label
                                 i.icon-remove
-                                | &nbsp;Please choose a nickname
-                        button.btn-large.btn-start.btn-join(type='submit', formnovalidate) join
-                        button.btn-large.btn-start.btn-cancel(type='reset') cancel
+                                = t('app.quickJoin.NicknameError')
+                        button.btn-large.btn-start.btn-join(type='submit', formnovalidate)= t('app.quickJoin.Join')
+                        button.btn-large.btn-start.btn-cancel(type='reset')= t('app.quickJoin.Cancel')
             div#signinContainer.stepContainer
                 div#signinStep.step
                     div.description

@@ -28,6 +28,7 @@ class CommandManager
         @emitter.on 'cmd.remove', (event, data) =>
             @remove data
 
+
     # Register a command
     register        : (data) =>
         @commands[data.name] = data.callback
@@ -52,9 +53,10 @@ class CommandManager
         else
             @emitter.trigger 'chat.message', { text: cmd[0] + ": command not found." }
 
+
     # Display the available commands
     help            : () =>
-        message = "Commands list:<br/>"
+        message = $.t("app.CommandManager.CmdList") + ":<br/>"
         for name, cb of @commands
             message += "/" + name
             if @infos[name]?

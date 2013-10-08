@@ -15,6 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
+i18n        = require 'i18next' 
 nodemailer  = require 'nodemailer'
 moment      = require 'moment'
 md5         = require 'MD5'
@@ -25,7 +26,6 @@ Config      = require '../common/config'
 {Session}   = require './session'
 {Errors}    = require '../common/errors'
 {Token}     = require './token'
-{Translator}= require './trans'
 {Db}        = require '../common/' + Config.Database.Connector
 
 class _Room
@@ -37,7 +37,6 @@ class _Room
 
     # Render the room with the good translation and the list of modules stringified.
     renderRoom : (res, options, host) =>
-        options.trans = Translator.getTrans(host, 'room')
         options.modules = JSON.stringify @modulesList
         options.audioFiles = fs.readdirSync path.join Config.Paths.Webroot, 'sounds', 'notification'
         res.render 'room', options
@@ -103,12 +102,8 @@ class _Room
         @transport.sendMail {
             from : "Voicious<no-reply@voicious.com>"
             to : req.body.emails
-            subject : "#{req.body.from} wants to talk to you on Voicious"
-            text : """
-                Hello!
-                #{req.body.from} just invited you on Voicious.
-                You can join him here: #{req.body.roomurl}
-            """
+            subject : "#{req.body.from}" + i18n.t("app.Room.ShareMail.MailSubject")
+            text : i18n.t("app.Room.ShareMail.Hello") + "#{req.body.from}" + i18n.t("app.Room.ShareMail.Text") + "#{req.body.roomurl}"
         }
         res.send 200
 
