@@ -75,8 +75,9 @@ class Voicious
             host : Config.Voicious.Sessions.Hostname.Internal
         }
         @i18n.init
+            debug: true
             saveMissing: true
-            resGetPath: 'app/static/locales/__lng__/__ns__.json'
+            resGetPath:  Path.join Config.Paths.Webroot, 'locales' ,'__lng__', '__ns__.json'
             lng: "en"
             fallbackLng: "en"
         @app.use @i18n.handle
