@@ -15,6 +15,7 @@
         "object-watch" : "https://gist.github.com/6614238.git#master",
         "peerjs": "https://github.com/peers/peerjs.git",
         "socket.io-client": "~0.9.16",
-        "i18next": "1.7.1"
+        "i18next": "1.7.1",
+        "shortcut.js" : "http://www.openjs.com/scripts/events/keyboard_shortcuts/shortcut.js"
     }
 }

@@ -24,6 +24,8 @@ class Camera extends Module
         @zoomCams         = { }
         @streams          = [ ]
         @mosaicNb         = 1
+        @diaporama        = off
+        @diapoIndex       = 0
         @emitter.on 'stream.create', @newStream
         @emitter.on 'stream.remove', (event, user) =>
             for key, value of @zoomCams
@@ -35,8 +37,8 @@ class Camera extends Module
         @emitter.on 'camera.localstream', (event, video) =>
             video.muted = yes
             @newStream event, { video : video , uid : window.Voicious.currentUser._id , local : yes }
+        do @diaporamaMode
         ($ window).on 'resize', () =>
-            do @squareMainCam
             videos = ($ 'video')
             for video in videos
                 @centerVideoTag ($ video)
@@ -49,10 +51,6 @@ class Camera extends Module
             video = (mainLi.find 'video')
             if video?
                 @zoom (video.attr 'rel'), video
-        do @squareMainCam
-
-    squareMainCam : () =>
-        @jqMainCams.width do @jqMainCams.height
 
     delStream   : (event, user) =>
         if (@streams.indexOf user.id) >= 0
@@ -83,18 +81,56 @@ class Camera extends Module
 
     resizeZoomCams : () =>
         cam = ($ '#mainCam')
-        val = @mosaicNb * @mosaicNb
-        if val < Object.keys(@zoomCams).length
-            @mosaicNb += 1
-        else if @mosaicNb > Object.keys(@zoomCams).length
-            @mosaicNb -= 1
-        size = ((do cam.width) / @mosaicNb) - 10 # ugly fix
+        x = do cam.width
+        y = do cam.height
+        n = Object.keys(@zoomCams).length
+        px = Math.ceil(Math.sqrt(n * x / y))
+        if n is 0
+            return
+        if Math.floor(px * y / x) * px < n
+            sx = y / Math.ceil(px * y / x)
+        else
+            sx = x / px
+
+        py = Math.ceil(Math.sqrt(n * y/ x))
+        if Math.floor(py * x / y) * py < n
+            sy = x / Math.ceil(x * py / y)
+        else
+            sy = y / py
+        size = if sx > sy then sx else sy
         for key, li of @zoomCams
             li.css 'width', "#{size}px"
             li.css 'height', "#{size}px"
             @centerVideoTag (li.find 'video')
 
     zoom : (uid, video) =>
+        detached = @detachToMainCam uid, video
+        if video? and detached is false
+            @attachToMainCam uid, video
+
+    attachToMainCam : (uid, video) =>
+        container = ($ '#mainCam')
+        newVideo     = do video.clone
+        newVideo[0].volume = video[0].volume
+        newVideo.removeClass 'thumbnailVideo'
+        do newVideo[0].play
+        html = ($ "<li id='zoomcam_#{uid}' class='zoom-cam-wrapper zoom-cam'>
+                        <div class='zoom-control index1'>
+                            <ul>
+                                <li class='closeBtn'><i class='icon-remove'></i></li>
+                            </ul>
+                        </div>
+                    </li>")
+        (html.find '.closeBtn').click () =>
+            @zoom uid, undefined
+        html.append newVideo
+        container.append html
+        @centerVideoTag newVideo
+        @zoomCams[uid] = ($ "li#zoomcam_#{uid}")
+        do @resizeZoomCams
+
+    detachToMainCam : (uid, video) =>
+        detached = true
         container    = ($ '#mainCam')
         container.removeClass 'hidden'
         @emitter.trigger 'stream.zoom', uid
@@ -103,26 +139,46 @@ class Camera extends Module
                 do value.remove
                 delete @zoomCams[uid]
                 do @resizeZoomCams
-                return
-        if video?
-            newVideo     = do video.clone
-            newVideo[0].volume = video[0].volume
-            newVideo.removeClass 'thumbnailVideo'
-            do newVideo[0].play
-            html = ($ "<li id='zoomcam_#{uid}' class='zoom-cam-wrapper zoom-cam'>
-                           <div class='zoom-control index1'>
-                               <ul>
-                                   <li class='closeBtn'><i class='icon-remove'></i></li>
-                               </ul>
-                           </div>
-                       </li>")
-            (html.find '.closeBtn').click () =>
-                @zoom uid, undefined
-            html.append newVideo
-            container.append html
-            @centerVideoTag newVideo
-            @zoomCams[uid] = ($ "li#zoomcam_#{uid}")
-            do @resizeZoomCams
+                return detached
+        detached = false
+        return detached
+
+    diaporamaMode     : () =>
+        shortcut.add 'Ctrl+Shift+M', () =>
+            if @diaporama is off
+                @diaporama = on
+                for key, value of @zoomCams
+                    do value.remove
+                    delete @zoomCams[key]
+                do @autoChangeMainCam
+                @diapoTimer = setInterval @autoChangeMainCam, 3000
+            else
+                @diaporama = off
+                clearInterval @diapoTimer
+
+    autoChangeMainCam : () =>
+        mainCam = ($ '#mainCam')
+        clients = ($ '#feeds > li')
+        if @diapoIndex isnt 0 and clients.length > 2
+            for key, value of @zoomCams
+                do value.remove
+                oldKey = key
+                delete @zoomCams[key]
+        if clients.length >= 2
+            clients.each (index) =>
+                if index > 0
+                    if index is clients.length - 1
+                        video = ($ clients[1]).find('video')
+                        uid = ($ video).attr('rel')
+                        @diapoIndex = 1
+                        @attachToMainCam uid, ($ video)
+                        return
+                    else if index > @diapoIndex
+                        video = ($ clients[index]).find('video')
+                        uid = ($ video).attr('rel')
+                        @diapoIndex = index
+                        @attachToMainCam uid, ($ video)
+                        return
 
 if window?
     window.Camera = Camera

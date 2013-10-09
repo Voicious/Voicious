@@ -38,6 +38,7 @@ class Room
             callback : @quit
             infos : "usage: /quit [reason]"
         @emitter.trigger 'cmd.register', quit
+        do @sidebarShortcut
         $('#reportBug').click @bugReport
 
     activateCam         : () =>
@@ -198,6 +199,10 @@ class Room
                 window.open "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '', 'left=500,top=200,width=600,height=600'
         }
         @emitter.trigger 'button.create', {
+            name  : 'Modules'
+            icon  : 'th'
+        }
+        @emitter.trigger 'button.create', {
             name  : $.t("app.Room.SetPage.ReportBugName")
             icon  : 'ambulance'
             click : {popover : do @reportBug}
@@ -263,7 +268,7 @@ class Room
                 if $('#mainCam').length
                     $('#mainCam').trigger 'resize'
         }
-    
+
     dynamicMod          : () =>
         do @resizableMod
         do @sortableMod
@@ -275,6 +280,18 @@ class Room
             url     : "/modules/#{moduleName}"
             success : (data) =>
                 @_jqModArea.append data.html
+                elem = ($ '.module[name="' + moduleName + '"]')
+                if elem.length > 0
+                    @emitter.trigger 'button.create', {
+                    name   : elem.data('name')
+                    icon   : elem.data('icon')
+                    outer  : 'Modules'
+                    attrs  : {'class' : 'green'}
+                    click : () ->
+                        elem.toggleClass 'none'
+                        $(this).toggleClass 'green'
+                        $(this).toggleClass 'red'
+                    }
                 module    = do (moduleName.charAt 0).toUpperCase + moduleName.slice 1
                 theModule = (new window[module] @emitter)
                 @emitter.on 'module.initialize', theModule.initialize
@@ -303,6 +320,20 @@ class Room
         # duplicate with the first login/logout messages, so it is desactivated for the moment.
         # @emitter.trigger 'message.sendtoall', message
         window.location.replace '/'
+
+    sidebarShortcut     : () =>
+        shortcut.add 'Ctrl+Shift+H', () ->
+            sidebar = ($ '#sidebar')
+            hidden = sidebar.hasClass 'trans-hide-sidebar'
+            displayed = sidebar.hasClass 'trans-show-sidebar'
+            if not hidden and not displayed
+                sidebar.addClass 'trans-hide-sidebar'
+            else if displayed
+                sidebar.removeClass 'trans-show-sidebar'
+                sidebar.addClass 'trans-hide-sidebar'
+            else if hidden
+                sidebar.removeClass 'trans-hide-sidebar'
+                sidebar.addClass 'trans-show-sidebar'
 
 # When the document has been loaded it will check if all services are available and
 # launch it.
