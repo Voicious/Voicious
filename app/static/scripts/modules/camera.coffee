@@ -81,9 +81,10 @@ class Camera extends Module
 
     resizeZoomCams : () =>
         cam = ($ '#mainCam')
+        cameras = cam.find 'li.zoom-cam'
         x = do cam.width
         y = do cam.height
-        n = Object.keys(@zoomCams).length
+        n = cameras.length
         px = Math.ceil(Math.sqrt(n * x / y))
         if n is 0
             return
@@ -98,10 +99,11 @@ class Camera extends Module
         else
             sy = y / py
         size = if sx > sy then sx else sy
-        for key, li of @zoomCams
-            li.css 'width', "#{size}px"
-            li.css 'height', "#{size}px"
-            @centerVideoTag (li.find 'video')
+        size = size - 10 # trash fix
+        cameras.each (index) =>
+            ($ cameras[index]).css 'width', "#{size}px"
+            ($ cameras[index]).css 'height', "#{size}px"
+            @centerVideoTag (($ cameras[index]).find 'video')
 
     zoom : (uid, video) =>
         detached = @detachToMainCam uid, video
