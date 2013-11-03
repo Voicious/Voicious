@@ -10,13 +10,15 @@ html
         title #{title}
 
         !=css("/vendor/normalize-css/normalize.css")
+        !=css('/vendor/font-awesome/less/font-awesome.css')
+        !=css("/vendor/bootstrap/dist/css/bootstrap.min.css")
         link(rel="shortcut icon", type="image/png", href="/img/favicon.png")
         block style
 
         !=js("/vendor/jquery/jquery.min.js")
         !=js("/vendor/jquery-ui/ui/minified/jquery-ui.min.js")
-        !=js('/vendor/bootstrap/docs/assets/js/bootstrap.min.js')
         !=js("/vendor/i18next/release/i18next-1.7.1.min.js")
+        !=js('/vendor/bootstrap/dist/js/bootstrap.min.js')
         !=js("/scripts/global.js")
         script(type='text/javascript')
             window.Voicious = {}

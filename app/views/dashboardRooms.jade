@@ -2,7 +2,7 @@ div#roomsContent.content.white.fill-height
 	p.title.bigFont Create, join and manage rooms
 	div
 		div#createJoinRoom
-			a.btn.btn-large.white#createButton(href="/create") create
+			a#createButton.btn.btn-default.btn-lg.white(href="/create", role="button") create
 			span.separator.centerVertically
 			form#joinForm(method='POST', action='/join')
 				input(name='room', placeholder='Room ID', type='text', required)
