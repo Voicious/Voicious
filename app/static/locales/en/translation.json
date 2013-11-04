@@ -83,7 +83,18 @@
             "Dashboard" : "dashboard",
             "Rooms"     : "rooms",
             "Friends"   : "friends",
-            "Settings"  : "account settings"
+            "Settings"  : "account settings",
+            "RoomTab"   : {
+                "Title"         : "Create, join and manage rooms",
+                "CreateButton"  : "create",
+                "JoinButton"    : "join",
+                "UserRoomsTitle": "Your rooms",
+                "NoActiveRooms" : "You currently have no active rooms",
+                "FriendsRooms"  : "Your friends' Room",
+                "Owner"         : "owner",
+                "Identifier"    : "id",
+                "NbPeopleInRoom": "people in"
+            }
         }
     }
 }

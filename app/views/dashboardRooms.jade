@@ -1,27 +1,27 @@
 div#roomsContent.content.white.fill-height
 	i.icon-th-large.bigFont
-	span.title.bigFont.bold.italic Create, join and manage rooms
+	span.title.bigFont.bold.italic= t('app.Dashboard.RoomTab.Title')
 	div#createJoinRoom
-		a#createButton.btn.btn-default.btn-lg.white(href="/create", role="button") create
+		a#createButton.btn.btn-default.btn-lg.white(href="/create", role="button")= t('app.Dashboard.RoomTab.CreateButton')
 		form#joinForm(method='POST', action='/join')
 			input(name='room', placeholder='Room ID', type='text', required)
-			button.btn-join(type='submit') join
+			button.btn-join(type='submit')= t('app.Dashboard.RoomTab.JoinButton')
 	div.yourRoom
-		p.title.titleSection.bigFont.bold Your rooms
+		p.title.titleSection.bigFont.bold= t('app.Dashboard.RoomTab.UserRoomsTitle')
 		div.room
-			span.title.bigFont You currently have no active rooms
+			span.title.bigFont= t('app.Dashboard.RoomTab.NoActiveRooms')
 	div#friendsBoxCtn.fill-width.fill-height
-		p.title.fill-width.titleSection.bigFont.bold Your friends' Room
+		p.title.fill-width.titleSection.bigFont.bold= t('app.Dashboard.RoomTab.FriendsRooms')
 		div.friendRoom.color-two.centerVertically
 			div.friendLoginBox.center
-				p.title.titleSection.bold.headerText owner
+				p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Owner')
 				p.info.bold Gwak-a-molle
 			div.roomIdBox.center
-				p.title.titleSection.bold.headerText id
+				p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Identifier')
 				p.info.bold 5241ee389445bfa60e000002
 			div.nbUserBox.center
-				p.title.titleSection.bold.headerText people in
+				p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.NbPeopleInRoom')
 				p.info.bold 3
 			div.boxHidder.center.fill-height.color-one
 			div.joinBox.center
-				a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/5241ee389445bfa60e000002") join
+				a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/5241ee389445bfa60e000002")= t('app.Dashboard.RoomTab.JoinButton')
