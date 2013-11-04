@@ -1,12 +1,11 @@
 div#roomsContent.content.white.fill-height
-	p.title.bigFont Create, join and manage rooms
-	div
-		div#createJoinRoom
-			a#createButton.btn.btn-default.btn-lg.white(href="/create", role="button") create
-			span.separator.centerVertically
-			form#joinForm(method='POST', action='/join')
-				input(name='room', placeholder='Room ID', type='text', required)
-				button.btn-join(type='submit') join
+	i.icon-th-large.bigFont
+	span.title.bigFont.bold.italic Create, join and manage rooms
+	div#createJoinRoom
+		a#createButton.btn.btn-default.btn-lg.white(href="/create", role="button") create
+		form#joinForm(method='POST', action='/join')
+			input(name='room', placeholder='Room ID', type='text', required)
+			button.btn-join(type='submit') join
 	div.yourRoom
 		p.title.titleSection.bigFont.bold Your rooms
 		div.room
@@ -15,14 +14,14 @@ div#roomsContent.content.white.fill-height
 		p.title.fill-width.titleSection.bigFont.bold Your friends' Room
 		div.friendRoom.color-two.centerVertically
 			div.friendLoginBox.center
-					p.title.titleSection.bold.headerText owner
-					p.info.bold Gwak-a-molle
+				p.title.titleSection.bold.headerText owner
+				p.info.bold Gwak-a-molle
 			div.roomIdBox.center
-					p.title.titleSection.bold.headerText id
-					p.info.bold 5241ee389445bfa60e000002
+				p.title.titleSection.bold.headerText id
+				p.info.bold 5241ee389445bfa60e000002
 			div.nbUserBox.center
-					p.title.titleSection.bold.headerText people in
-					p.info.bold 3
+				p.title.titleSection.bold.headerText people in
+				p.info.bold 3
 			div.boxHidder.center.fill-height.color-one
 			div.joinBox.center
 				a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/5241ee389445bfa60e000002") join

@@ -70,6 +70,26 @@ body {
    user-select: none;
 }
 
+input[type="text"], input[type="password"] {
+    padding: 0 12px;
+    margin: 0;
+    background: #0f1012;
+
+    border-radius: 6px;
+    width: 224px;
+    height: 42px;
+    line-height: 20px;
+    font-size: 1em;
+    font-family: "PT Sans", "Helvetica", sans-serif;
+    color: #fff;
+    box-shadow: 0 1px rgba(255, 255, 255, 0.04), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-style: solid;
+    border-width: 1px;
+    border-color: #101113;
+    transition: border-color 400ms;
+    -webkit-transition: border-color 400ms;
+}
+
 .container-fluid {
     width: 100%;
     padding: 0;
