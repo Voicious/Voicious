@@ -29,9 +29,8 @@ class Camera extends Module
         @emitter.on 'stream.create', @newStream
         @emitter.on 'stream.remove', (event, user) =>
             for key, value of @zoomCams
-                if key is user.id
-                    @zoom user.id, undefined
-                    return
+                if key is user.uid
+                    @zoom user.uid, undefined
             do ($ "[data-streamid=#{user.id}]").remove
         @emitter.on 'peer.remove', @delStream
         @emitter.on 'camera.localstream', (event, data) =>
