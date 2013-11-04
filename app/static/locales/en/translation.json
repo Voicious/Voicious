@@ -35,7 +35,6 @@
         },
         "Connections": {
             "HardwareError": "It seems that we can't access your hardware."
-
         },
         "Errors": {
             "WrongBrowser": {
@@ -79,6 +78,12 @@
             "ManageRoom": "Click here to change room settings.",
             "Feeds": "Here the users present in the room. You can zoom their face by clicking on them.",
             "Chat": "Here you can chat with them!"      
+        },
+        "Dashboard" : {
+            "Dashboard" : "dashboard",
+            "Rooms"     : "rooms",
+            "Friends"   : "friends",
+            "Settings"  : "account settings"
         }
     }
 }

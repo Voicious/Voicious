@@ -14,21 +14,21 @@ block content
             img#logo(src="/img/logo.png")
           div#userInfoCtn
             p#login(align="right") #{login}
-            p#dashboard(align="right") dashboard
+            p#dashboard(align="right")= t('app.Dashboard.Dashboard')
           div#optionController.fill-width
             ul#optionList
               li.options
                 div.option-wrapper.centerVertically
                   i.icon-th-large
-                  | rooms
+                  = t('app.Dashboard.Rooms')
               li.options
                 div.option-wrapper.centerVertically
                   i.icon-group
-                  | friends
+                  = t('app.Dashboard.Friends')
               li.options
                 div.option-wrapper.centerVertically
                   i.icon-cog
-                  | account settings
+                  = t('app.Dashboard.Settings')
         div#content.fill-height
           div.frame
             include dashboardRooms
