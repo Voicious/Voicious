@@ -126,10 +126,13 @@ class MC
         return @call.peer
 
     onStream    : (stream) =>
+        that = @
         data =
             video   : createVideoTag stream
             uid     : @call.peer
-        @emitter.trigger 'stream.create', data
+        ($ data.video).bind "loadedmetadata", () ->
+            data.type = if @videoHeight is 0 and @videoWidth is 0 then 'audio' else 'video'
+            that.emitter.trigger 'stream.create', data
 
     answer   : (stream) =>
         @call.answer stream
@@ -253,7 +256,10 @@ class Connections
             @localStream = stream
             for id, peer of @peers
                 @pjs.call id, stream
-            @emitter.trigger 'camera.localstream', (createVideoTag stream)
+            data =
+                video: (createVideoTag stream)
+                type: if @userMedia.video is on then 'video' else 'audio'
+            @emitter.trigger 'camera.localstream', data
         , (error) =>
             do @toggleCamera if @userMedia.video
             do @toggleMicro if @userMedia.audio

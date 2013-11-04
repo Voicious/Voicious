@@ -34,9 +34,9 @@ class Camera extends Module
                     return
             do ($ "[data-streamid=#{user.id}]").remove
         @emitter.on 'peer.remove', @delStream
-        @emitter.on 'camera.localstream', (event, video) =>
-            video.muted = yes
-            @newStream event, { video : video , uid : window.Voicious.currentUser._id , local : yes }
+        @emitter.on 'camera.localstream', (event, data) =>
+            data.video.muted = yes
+            @newStream event, { video : data.video, type: data.type, uid : window.Voicious.currentUser._id , local : yes }
         do @diaporamaMode
         ($ window).on 'resize', () =>
             videos = ($ 'video')
@@ -69,7 +69,7 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
-        if !data.local?
+        if !data.local? and data.type is 'video'
             @zoom data.uid, video
 
     # Must set margin-left css propriety when adding a video tag to the page

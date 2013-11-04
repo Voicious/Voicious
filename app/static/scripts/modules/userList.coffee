@@ -54,9 +54,12 @@ class UserList extends Module
             video.volume = @users[uid]['volume']
             ($ "li#video_#{uid}").append video
         @emitter.on 'stream.create', (event, data) =>
-            @toggleButtons data.uid, ['zoomBtn', 'muteBtn']
+            buttons = if data.type is 'video' then ['zoomBtn', 'muteBtn'] else ['muteBtn']
+            @users[data.uid].streamType = data.type
+            @toggleButtons data.uid, buttons
         @emitter.on 'stream.remove', (event, data) =>
-            @toggleButtons data.uid, ['zoomBtn', 'muteBtn']
+            buttons = if @users[data.uid].streamType is 'video' then ['zoomBtn', 'muteBtn'] else ['muteBtn']
+            @toggleButtons data.uid, buttons
         @emitter.on 'stream.zoom', (event, id) =>
             @zoomButton id
         @emitter.on 'user.kick', (event, data) =>
