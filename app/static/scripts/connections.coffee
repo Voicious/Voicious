@@ -73,7 +73,7 @@ class PeerJs
 
     createDataConnection    : (conn, onOpen) =>
         dc = new DC conn, @emitter, onOpen
-        @emitter.trigger 'peer.dataconnection', { dc: dc }
+        @emitter.trigger 'peer.setonload', do dc.peer
 
     onCall          : (call) =>
         @createMediaConnection call
@@ -90,6 +90,8 @@ class PeerJs
 class DC
     constructor : (@conn, @emitter, onOpen) ->
         @conn.on 'open', () =>
+            @emitter.trigger 'peer.dataconnection', { dc: @ }
+            @emitter.trigger 'peer.unsetonload', @conn.peer
             if onOpen?
                 do onOpen
             else
@@ -158,7 +160,7 @@ class Connections
     modifyStream : () =>
         if @localStream isnt undefined
             for id of @peers
-                @send id, { type: 'stream.remove', params: { id: @localStream.id } }
+                @send id, { type: 'stream.remove', params: { id: @localStream.id, uid: @uid } }
             do @localStream.stop
         @localStream = undefined # erase old stream
         if @userMedia['video'] is yes or @userMedia['audio'] is yes

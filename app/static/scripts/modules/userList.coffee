@@ -56,7 +56,7 @@ class UserList extends Module
         @emitter.on 'stream.create', (event, data) =>
             @toggleButtons data.uid, ['zoomBtn', 'muteBtn']
         @emitter.on 'stream.remove', (event, data) =>
-            @toggleButtons data.id, ['zoomBtn', 'muteBtn']
+            @toggleButtons data.uid, ['zoomBtn', 'muteBtn']
         @emitter.on 'stream.zoom', (event, id) =>
             @zoomButton id
         @emitter.on 'user.kick', (event, data) =>
