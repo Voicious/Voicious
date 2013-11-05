@@ -17,6 +17,7 @@ body > * {
 }
 
 #sidebar {
+    background-color: #131618;
     width: auto;
     float: left;
     min-width: 200px;

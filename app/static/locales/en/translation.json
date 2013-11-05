@@ -94,6 +94,12 @@
                 "Owner"         : "owner",
                 "Identifier"    : "id",
                 "NbPeopleInRoom": "people in"
+            },
+            "FriendTab" : {
+                "Title" : "Manage your friends list"
+            },
+            "SettingTab": {
+                "Title" : "Edit your account settings"
             }
         }
     }
