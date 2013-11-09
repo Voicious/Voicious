@@ -58,8 +58,9 @@ class UserList extends Module
             @users[data.uid].streamType = data.type
             @toggleButtons data.uid, buttons
         @emitter.on 'stream.remove', (event, data) =>
-            buttons = if @users[data.uid].streamType is 'video' then ['zoomBtn', 'muteBtn'] else ['muteBtn']
-            @toggleButtons data.uid, buttons
+            if @users[data.uid]?
+                buttons = if @users[data.uid].streamType is 'video' then ['zoomBtn', 'muteBtn'] else ['muteBtn']
+                @toggleButtons data.uid, buttons
         @emitter.on 'stream.zoom', (event, id) =>
             @zoomButton id
         @emitter.on 'user.kick', (event, data) =>
