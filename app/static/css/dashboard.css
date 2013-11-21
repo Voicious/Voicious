@@ -16,6 +16,10 @@ body > * {
     font-size: 14px;
 }
 
+.block {
+    display: block;
+}
+
 #sidebar {
     background-color: #131618;
     width: auto;
@@ -109,7 +113,7 @@ i {
     display: inline-block;
 }
 
-#roomsContent > div {
+.content > div {
     margin-top: 2%;
 }
 
@@ -263,3 +267,53 @@ div.joinBox > .joinFriendRoom {
 }
 
 /* end friend box */
+
+/* Settings tab */
+.settingBox > form {
+    margin-top: 20px;
+    width: 20%;
+}
+
+.settingBox > form > input, .settingBox > form > button {
+    width: 100%;
+}
+
+.settingBox > form > input:nth-child(n+2) {
+    margin-top: 5px;
+}
+
+.settingBox > form > button {
+    margin-top: 10px;
+}
+
+#password {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#passwordConfirm {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* End settings tab */
+
+/* Friend tab */
+.friendSettingCtn {
+    width: 30%;
+    min-width: 400px;
+}
+.sectionBox, .sectionBox > * {
+    width: 100%
+}
+
+.btn-default {
+    border: 0;
+    background-color: #64c32b;
+    color: #fff;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+    background-color: #73d339;
+    color: #fff;
+}
