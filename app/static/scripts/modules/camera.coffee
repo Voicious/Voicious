@@ -29,14 +29,13 @@ class Camera extends Module
         @emitter.on 'stream.create', @newStream
         @emitter.on 'stream.remove', (event, user) =>
             for key, value of @zoomCams
-                if key is user.id
-                    @zoom user.id, undefined
-                    return
+                if key is user.uid
+                    @zoom user.uid, undefined
             do ($ "[data-streamid=#{user.id}]").remove
         @emitter.on 'peer.remove', @delStream
-        @emitter.on 'camera.localstream', (event, video) =>
-            video.muted = yes
-            @newStream event, { video : video , uid : window.Voicious.currentUser._id , local : yes }
+        @emitter.on 'camera.localstream', (event, data) =>
+            data.video.muted = yes
+            @newStream event, { video : data.video, type: data.type, uid : window.Voicious.currentUser._id , local : yes }
         do @diaporamaMode
         ($ window).on 'resize', () =>
             videos = ($ 'video')
@@ -69,7 +68,7 @@ class Camera extends Module
         video.addClass 'thumbnailVideo'
         video.attr 'rel', data.uid
         @emitter.trigger 'stream.display', video
-        if !data.local?
+        if !data.local? and data.type is 'video'
             @zoom data.uid, video
 
     # Must set margin-left css propriety when adding a video tag to the page

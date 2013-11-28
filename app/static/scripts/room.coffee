@@ -58,7 +58,7 @@ class Room
         do ($ '#feeds > li:first > video:first').remove
         do @connections.modifyStream
 
-     refreshOnOff : (btn, val) =>
+    refreshOnOff : (btn, val) =>
         label = btn.find 'span'
         icon  = btn.find 'i'
         text = (do label.text)
@@ -67,6 +67,12 @@ class Room
             btn.toggleClass 'green red'
             icon.toggleClass 'dark-grey white'
             label.text (if (do label.text) is 'OFF' then 'ON' else 'OFF')
+
+    setOnLoadThumbnail  : () =>
+        @emitter.on 'peer.setonload', (event, id) ->
+            ($ "li#video_#{id}").append ($ "<i class='icon-spinner icon-spin icon-large'></i>")
+        @emitter.on 'peer.unsetonload', (event, id) ->
+            do ($ "li#video_#{id} i.icon-spinner").remove
 
     setOnOff            : () =>
         ($ '#cam').click @activateCam
@@ -208,6 +214,7 @@ class Room
             click : {popover : do @reportBug}
         }
         do @setOnOff
+        do @setOnLoadThumbnail
         do @setClipboard
 
     resizableMod        : () =>
