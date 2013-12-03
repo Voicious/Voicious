@@ -192,11 +192,11 @@ button {
 /* friend box */
 
 .friendRoom {
+    margin-top: 10px;
     position: relative;
     min-width: 600px;
     width: 40%;
     height: 100px;
-    display: inline-block;
 }
 
 .friendRoom > div {

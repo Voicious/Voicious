@@ -1,3 +1,5 @@
+friends = [{"name": "Gwak-a-molle", "roomID" : "5241ee389445bfa60e000002", "nbPeople" : "3"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}]
+
 div#roomsContent.content.white.fill-height
 	i.icon-th-large.bigFont
 	span.title.bigFont.bold.italic= t('app.Dashboard.RoomTab.Title')
@@ -12,16 +14,17 @@ div#roomsContent.content.white.fill-height
 			span.title.bigFont= t('app.Dashboard.RoomTab.NoActiveRooms')
 	div#friendsBoxCtn.fill-width.fill-height
 		p.title.fill-width.titleSection.bigFont.bold= t('app.Dashboard.RoomTab.FriendsRooms')
-		div.friendRoom.color-two.centerVertically
-			div.friendLoginBox.center
-				p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Owner')
-				p.info.bold Gwak-a-molle
-			div.roomIdBox.center
-				p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Identifier')
-				p.info.bold 5241ee389445bfa60e000002
-			div.nbUserBox.center
-				p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.NbPeopleInRoom')
-				p.info.bold 3
-			div.boxHidder.center.fill-height.color-one
-			div.joinBox.center
-				a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/5241ee389445bfa60e000002")= t('app.Dashboard.RoomTab.JoinButton')
+		for friend in friends
+			div.friendRoom.color-two.centerVertically
+				div.friendLoginBox.center
+					p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Owner')
+					p.info.bold #{friend.name}
+				div.roomIdBox.center
+					p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Identifier')
+					p.info.bold  #{friend.roomID}
+				div.nbUserBox.center
+					p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.NbPeopleInRoom')
+					p.info.bold #{friend.nbPeople}
+				div.boxHidder.center.fill-height.color-one
+				div.joinBox.center
+					a.joinFriendRoom.white.btn.btn-large.btn-join(href="#{friend.roomID}")= t('app.Dashboard.RoomTab.JoinButton')
