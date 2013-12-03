@@ -22,9 +22,8 @@ body > * {
 
 #sidebar {
     background-color: #131618;
-    width: auto;
+    width: 200px;
     float: left;
-    min-width: 200px;
     color: white;
 }
 
@@ -33,7 +32,7 @@ i {
 }
 
 #content {
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
 }
 
