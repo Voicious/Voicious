@@ -196,12 +196,9 @@ class _User
                                 offline : []
                                 online  : []
                                 inroom  : []
-                            for friend in friends
-                                if friend.rid?
-                                    list.inroom.push friend
-                                else
-                                    list.offline.push friend
-                            res.send list
+                            j = 0
+                            @requestFriendRoom friends, j, list, (list) =>
+                                res.send list
                     else
                         res.send 400
             else
@@ -212,12 +209,11 @@ class _User
             res.send 400
 
     requestUser : (friends, offset, infos, callback) =>
-        console.log friends[offset]
         if friends[offset]?
             Db.get 'user', friends[offset]._id, (info) =>
                 friend =
                     name    : info.name
-                    rid     : info.rid
+                    id_room : info.id_room
                     _id     : info._id
 
                 infos.push friend
@@ -225,6 +221,28 @@ class _User
 
         else
             callback infos
+
+    requestFriendRoom : (friends, offset, list, callback) =>
+        friend = friends[offset]
+        if friend?
+            if friend.id_room?
+                Db.getBy 'user', { id_room:friend.id_room }, (docs) =>
+                    if docs?
+                        if docs.length is 0
+                            console.log 'rid_not_found'
+                            res.send 400
+                        else
+                            friend.nbInRoom = docs.length
+                            list.inroom.push friend
+                            @requestFriendRoom friends, offset + 1, list, callback
+                    else
+                        console.log 'rid_not_found'
+                        res.send 400
+            else
+                list.offline.push friend
+                @requestFriendRoom friends, offset + 1, list, callback
+        else
+            callback list
 
     updateUser : (req, res, next) =>
         console.log "update user"
