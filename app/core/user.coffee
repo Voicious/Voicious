@@ -185,10 +185,10 @@ class _User
         Room.newRoom req, res, { }
 
     getFriends : (req, res, next) =>
-        param = req.body
+        param = req.params
         if param?
-            if param._id?
-                Db.get 'user', param._id, (user) =>
+            if param.id?
+                Db.get 'user', param.id, (user) =>
                     if user.friends? and user.friends.length isnt 0
                         i = 0
                         @requestUser user.friends, i, [], (friends) =>
@@ -258,11 +258,11 @@ exports.Routes  =
         '/quickLogin'   : exports.User.quickLogin
         '/quickJoin'    : exports.User.quickJoin
         '/join'         : exports.User.join
-        '/addFriend'   : exports.User.addFriend
-        '/getFriends'  : exports.User.getFriends
+        '/friend'       : exports.User.addFriend
 
     get :
         '/create'       : exports.User.createRoom
+        '/friends/:id'  : exports.User.getFriends
 
     put :
         '/user'   : exports.User.updateUser
