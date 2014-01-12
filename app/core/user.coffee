@@ -54,6 +54,7 @@ class _User
                                         delete param.passwordconfirm
                                         param.id_acl = 0 #TO DO : put the right value
                                         param.id_role = 0 #TO DO : put the right value
+                                        param.friends = []
                                         @newUser req, res, param, (req, res) =>
                                             @goToDashboard req, res, req.body
                                     else
@@ -66,6 +67,45 @@ class _User
                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'mail', 'message': 'Missing field mail'}]
         else
             Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'Missing field name'}]
+
+    addFriend : (req, res, next) =>
+        param   = req.body
+        err     = []
+        if param.name?
+            console.log param
+            Db.getBy 'user', {name : param.name}, (docs) =>
+                if docs.length == 0
+                    console.log 'bad_name'
+                    res.send 400 # Change to render a proper page TODO
+                else
+                    if param._id?
+                        Db.get 'user', param._id, (user) =>
+                            console.log user
+                            if !user?
+                                console.log 'bad_user'
+                                res.send 400 # Change to render a proper page TODO
+                            else
+                                console.log user
+                                if !user.friends?
+                                    user.friends = []
+                                else
+                                    for friend of user.friends
+                                        if friend.name == param.name
+                                            console.log 'already_in_list'
+                                            res.send 400 # Change to render a proper page TODO
+                                            return
+                                user.friends.push {_id : docs[0]._id, name : param.name}
+                                Db.update 'user', user._id, user, () =>
+                                    res.send 200 # Change to render a proper page TODO
+                    else
+                        console.log 'bad_id'
+                        res.send 400 # Change to render a proper page TODO
+        else
+            err.push 'bad_name'
+        if err.length > 0
+            err = JSON.stringify err
+            console.log err
+            res.send 400 # Change to render a proper page TODO
 
     # Called for loging in a user.
     # Check sanity of all values and render the home page if any value is wrong.
@@ -144,6 +184,54 @@ class _User
         {Room}  = require './room'
         Room.newRoom req, res, { }
 
+    getFriends : (req, res, next) =>
+        param = req.body
+        if param?
+            if param._id?
+                Db.get 'user', param._id, (user) =>
+                    if user.friends? and user.friends.length isnt 0
+                        i = 0
+                        @requestUser user.friends, i, [], (friends) =>
+                            list =
+                                offline : []
+                                online  : []
+                                inroom  : []
+                            for friend in friends
+                                if friend.rid?
+                                    list.inroom.push friend
+                                else
+                                    list.offline.push friend
+                            res.send list
+                    else
+                        res.send 400
+            else
+                console.log 'bad_id'
+                res.send 400
+        else
+            console.log 'bad_params'
+            res.send 400
+
+    requestUser : (friends, offset, infos, callback) =>
+        console.log friends[offset]
+        if friends[offset]?
+            Db.get 'user', friends[offset]._id, (info) =>
+                friend =
+                    name    : info.name
+                    rid     : info.rid
+                    _id     : info._id
+
+                infos.push friend
+                @requestUser friends, offset + 1, infos, callback
+
+        else
+            callback infos
+
+    updateUser : (req, res, next) =>
+        console.log "update user"
+
+    deleteFriend : (req, res, next) =>
+        console.log "delete friend"
+
 exports.User    = new _User
 exports.Routes  =
     post :
@@ -152,5 +240,14 @@ exports.Routes  =
         '/quickLogin'   : exports.User.quickLogin
         '/quickJoin'    : exports.User.quickJoin
         '/join'         : exports.User.join
-    get:
+        '/addFriend'   : exports.User.addFriend
+        '/getFriends'  : exports.User.getFriends
+
+    get :
         '/create'       : exports.User.createRoom
+
+    put :
+        '/user'   : exports.User.updateUser
+
+    delete :
+        '/user/friend'  : exports.User.deleteFriend
