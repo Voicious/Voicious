@@ -59,26 +59,26 @@ class _User
             callback req, res
             # Stats.countTmpUser req, res, callback
 
-    # Redirect to room.
-    redirtoroom : (req, res) =>
-        res.redirect '/room'
-
     # Called for registering a user.
     # Check sanity of all values and called the method newUser to create a new user.
     # if something went wrong, render the home page with the errors setted.
     register : (req, res, next) =>
         param   = req.body
         err     = []
-        if param.mail?
+        if param.name? and param.mail?
             if param.password? and param.passwordconfirm?
                 if param.passwordconfirm isnt param.password
                     err.push "signup_password"
                 else
                     param.password = md5(param.password)
                     param.name = param.mail
+                    delete param.passwordconfirm
                     param.id_acl = 0 #TO DO : put the right value
                     param.id_role = 0 #TO DO : put the right value
-                    @newUser req, res, param, @redirtoroom, @errorOnRegistration
+                    @newUser req, res, param, ((req, res) =>
+                        {Room} = require './room'
+                        Room.newRoom req, res, { }
+                    ), @errorOnRegistration
             else
                 err.push 'signup_password'
         else
@@ -99,18 +99,14 @@ class _User
             name            : ''
             erroron         : []
             title           : Config.Voicious.Title
-        if param.mail?
+        if param.name?
             if param.password?
-                Request.get "#{Config.Restapi.Url}/user?mail=#{param.mail}&password=#{md5(param.password)}", (e, r, data) =>
-                    if (typeof data) is (typeof "")
-                        data    = JSON.parse data
-                    if e
-                        return (next (new Errors.Error e[0]))
-                    else if data.length > 0
-                        req.session.uid = data[0].id
-                        res.redirect '/room'
-                    else
-                        res.render 'home', errorOpts
+                Db.find 'user', {'name': param.name, 'password': md5(param.password)}, (body) =>
+                    if not body? or body.length is 0
+                        Db.find 'user', {'mail': param.name, 'password': md5(param.password)}, (body) =>
+                            if not body? or body.length is 0
+                                res.render 'home', errorOpts
+                            @goToDashboard req, res, body
             else
                 errorOpts.erroron.push 'login_password'
         else
@@ -118,6 +114,12 @@ class _User
         if errorOpts.erroron.length > 0
             errorOpts.erroron   = JSON.stringify errorOpts.erroron
             res.render 'home', errorOpts
+
+     goToDashboard : (req, res, userData) =>
+        req.body = userData
+        req.session.uid = userData._id
+        {Room} = require './room'
+        Room.newRoom req, res, {}
 
     # Called when non registered user create a Room.
     # Check if the name of the user is correctly set, if not render the home page.
@@ -150,7 +152,7 @@ class _User
 exports.User    = new _User
 exports.Routes  =
     post :
-        '/user'         : exports.User.register
+        '/register'     : exports.User.register
         '/login'        : exports.User.login
         '/quickLogin'   : exports.User.quickLogin
         '/quickJoin'    : exports.User.quickJoin
