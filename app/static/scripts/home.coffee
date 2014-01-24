@@ -35,15 +35,18 @@ displaySection = (element) =>
     do (container.siblings '.stepContainer').hide
     container.fadeIn 100
 
-displayStep = (element) =>
-    element = ($ element)
-    step    = ($ containers[element.attr 'id'])
+moveStep = (step) =>
     do (do step.siblings).hide
     step.fadeTo 0, 0.1
     (step.css 'right', '-50px').animate {
         opacity : 1
         right   : 0
     }, 200
+
+displayStep = (element) =>
+    element = ($ element)
+    step    = ($ containers[element.attr 'id'])
+    moveStep step
 
 validateInput = (event) ->
     target   = ($ event.currentTarget)
@@ -80,6 +83,14 @@ validateForm = (event) ->
                 ok = no
     if not ok
         do event.preventDefault
+
+handleErrors = (error) ->
+    formContainer = ($ 'form[name="' + error.form + '"]').parent()
+    if formContainer.hasClass 'movingStep'
+        moveStep formContainer
+    errorContainer = ($ 'form[name="' + error.form + '"]').find('.error[for="' + error.input + '"]')
+    errorContainer.find('label').text(error.message)
+    errorContainer.css 'display', 'inline-block'
 
 init = () =>
     quick              = ($ '#quick')
@@ -134,14 +145,8 @@ init = () =>
     displaySection (if window.location.hash? and window.location.hash != '' then window.location.hash else quick)
     if window.Voicious.locals? and window.Voicious.locals.errors?
         errors = window.Voicious.locals.errors
-        if errors[0].form isnt ''
-            formContainer = ($ 'form[name="' + errors[0].form + '"]').parent()
-            do (do formContainer.siblings).hide
-            formContainer.fadeTo 0, 0.1
-            (formContainer.css 'right', '-50px').animate {
-                opacity : 1
-                right   : 0
-            }, 200
+        for error in errors
+            handleErrors error
 
     if window.location.search?
         params = (window.location.search.substr 1).split '&'

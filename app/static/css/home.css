@@ -204,8 +204,8 @@ input[type="text"], input[type="password"] {
 
 .error.left, .success.left, .info.left {
   margin: 0;
-  right: 165px;
-  top: 4px; }
+  right: 190px;
+  margin-top: 5px; }
 
 .step .input-error {
   border-color: #f32837; }

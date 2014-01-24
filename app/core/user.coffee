@@ -40,54 +40,47 @@ class _User
     # if something went wrong, render the home page with the errors setted.
     register : (req, res, next) =>
         param   = req.body
-        err     = []
-        if param.name? and param.mail?
-            if param.password? and param.passwordconfirm?
-                if param.passwordconfirm isnt param.password
-                    err.push "signup_password"
+        if param.name?
+            if param.mail?
+                if param.password? and param.passwordconfirm?
+                    if param.passwordconfirm isnt param.password
+                        Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'password', 'message': 'Passwords are not matching'}]
+                    else
+                        Db.find 'user', {'name': param.name}, (body) =>
+                            if not body? or body.length is 0
+                                param.password = md5(param.password)
+                                delete param.passwordconfirm
+                                param.id_acl = 0 #TO DO : put the right value
+                                param.id_role = 0 #TO DO : put the right value
+                                @newUser req, res, param, (req, res) =>
+                                    {Room} = require './room'
+                                    Room.newRoom req, res, {}
+                            else
+                                Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'This nickname is not available'}]
                 else
-                    param.password = md5(param.password)
-                    param.name = param.mail
-                    delete param.passwordconfirm
-                    param.id_acl = 0 #TO DO : put the right value
-                    param.id_role = 0 #TO DO : put the right value
-                    @newUser req, res, param, (req, res) =>
-                       Room.newRoom req, res, {}
+                   Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'password', 'message': 'Missing field password'}]
             else
-                err.push 'signup_password'
-        else
-            err.push 'signup_email'
-        if err.length > 0
-            err = JSON.stringify err
-            @errorOnRegistration err, req, res
+                Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'mail', 'message': 'Missing field mail'}]
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'Missing field name'}]
 
     # Called for loging in a user.
     # Check sanity of all values and render the home page if any value is wrong.
     # if everything is ok, log the user in and redirect him into room.
     login : (req, res, next) =>
         param       = req.body
-        errorOpts   =
-            hash            : '#logIn'
-            login_email     : ''
-            signup_email    : ''
-            name            : ''
-            erroron         : []
-            title           : Config.Voicious.Title
         if param.name?
             if param.password?
                 Db.find 'user', {'name': param.name, 'password': md5(param.password)}, (body) =>
                     if not body? or body.length is 0
                         Db.find 'user', {'mail': param.name, 'password': md5(param.password)}, (body) =>
                             if not body? or body.length is 0
-                                res.render 'home', errorOpts
-                            @goToDashboard req, res, body
+                                Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'The username or password is incorrect'}]
+                            else
+                                @goToDashboard req, res, body
             else
-                errorOpts.erroron.push 'login_password'
+                Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field password'}]
         else
-            errorOpts.erroron.push 'login_email'
-        if errorOpts.erroron.length > 0
-            errorOpts.erroron   = JSON.stringify errorOpts.erroron
-            res.render 'home', errorOpts
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field nickname'}]
 
      goToDashboard : (req, res, userData) =>
         req.body = userData
