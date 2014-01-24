@@ -31,12 +31,17 @@ block content
                 strong SIGN UP
                 | &nbsp;for an account
             div#signup.step
-                form(method='POST', action='/signup')
-                    input(name='username', placeholder='Username or Email address', type='text', required)
+                form(method='POST', action='/register')
+                    input(name='username', placeholder='Username', type='text', required)
                     div.error.left(for='username')
                       label
                         i.icon-remove
                         | &nbsp;Please choose a nickname
+                    input(name='mail', placeholder='Email address', type='text', required)
+                    div.error.left(for='mail')
+                      label
+                        i.icon-remove
+                        | &nbsp;Please choose a valid email address
                     input(name='password', placeholder='Password', type='password', required)
                     div.error.left(for='password')
                       label
