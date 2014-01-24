@@ -17,6 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 quick = undefined
 signIn = undefined
+signUp = undefined
 cancel = undefined
 tabs = undefined
 rememberMe = undefined
@@ -82,7 +83,8 @@ validateForm = (event) ->
 
 init = () =>
     quick              = ($ '#quick')
-    signin             = ($ '#signin')
+    signIn             = ($ '#signin')
+    signUp             = ($ '.signup a')
     cancel             = ($ '.btn-cancel')
     tabs               = ($ '.tabs > div')
     rememberMe         = ($ '.rememberMe')
@@ -91,10 +93,13 @@ init = () =>
     quickChoices       = ($ '#quickInitial > button')
     containers         =
         quick          : '#quickContainer'
-        signin         : '#signinContainer'
+        signIn         : '#signinContainer'
         quickCreateBtn : '#quickCreate'
         quickJoinBtn   : '#quickJoin'
     ($ 'button').attr 'tabindex', '-1'
+
+    signUp.click () ->
+        $('#signup').toggle(250);
 
     tabs.click () ->
         displaySection @

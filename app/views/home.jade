@@ -25,11 +25,24 @@ block scripts
 
 block content
     div.container
-        //div.signup
+        div.signup
             a
                 i.icon-edit
                 strong SIGN UP
                 | &nbsp;for an account
+            div#signup.step
+                form(method='POST', action='/signup')
+                    input(name='username', placeholder='Username or Email address', type='text', required)
+                    div.error.left(for='username')
+                      label
+                        i.icon-remove
+                        | &nbsp;Please choose a nickname
+                    input(name='password', placeholder='Password', type='password', required)
+                    div.error.left(for='password')
+                      label
+                        i.icon-remove
+                        | &nbsp;You need to enter a valid password
+                    button.btn-large.-middle.btn-start.btn-signup(type='submit') Sign Up
             a.benefits
                 i.icon-chevron-sign-right
                 | benefits of signing up (for free)
@@ -39,7 +52,7 @@ block content
                 div#quick
                     i.icon-bolt
                     = t('app.QuickStart')
-                //div#signin
+                div#signin
                     i.icon-user
                     | sign in
             div#quickContainer.stepContainer
