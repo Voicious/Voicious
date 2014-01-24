@@ -84,7 +84,7 @@ validateForm = (event) ->
 init = () =>
     quick              = ($ '#quick')
     signin             = ($ '#signin')
-    signup             = ($ '.signup a')
+    signup             = ($ '.signup a').first()
     cancel             = ($ '.btn-cancel')
     tabs               = ($ '.tabs > div')
     rememberMe         = ($ '.rememberMe')
