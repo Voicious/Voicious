@@ -85,6 +85,6 @@ class _Mongo extends Database
 class Mongo
     @_instance   = undefined
     @get        : () ->
-        @_instance   ?= new _Mongo Config.Database.Name, Config.Database.Host
+        @_instance   ?= new _Mongo Config.Database.Name, Config.Database.Hostname
 
 exports.Db = do Mongo.get
