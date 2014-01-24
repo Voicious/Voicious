@@ -14,7 +14,9 @@ block scripts
 
     if locals.erroron
         script(type='text/javascript')
-            this.erroron    = JSON.parse('!{erroron}');
+            if ('#{pageConfig.hash}' !== '') {
+                window.location.hash    = '#{pageConfig.hash}';
+            }
 
     if locals.roomid
         script(type='text/javascript')
@@ -30,8 +32,8 @@ block content
                 i.icon-edit
                 strong SIGN UP
                 | &nbsp;for an account
-            div#signup.step
-                form(method='POST', action='/register')
+            div#signup.step.stepContainer
+                form(method='POST', action='/register', name='signup')
                     input(name='name', placeholder='Username', type='text', required)
                     div.error.left(for='username')
                       label
@@ -74,7 +76,7 @@ block content
                         i.icon-chevron-right.icon-join
                         strong= t('app.quickInitial.Join')
                 div#quickCreate.step
-                    form(method='POST', action='/quicklogin')
+                    form(method='POST', action='/quicklogin', name='quicklogin')
                         div.description
                             i.icon-asterisk
                             = t('app.quickCreate.Description')
@@ -86,7 +88,7 @@ block content
                         button.btn-large.btn-start.btn-create(type='submit', formnovalidate)= t('app.quickCreate.Create')
                         button.btn-large.btn-start.btn-cancel(type='reset')= t('app.quickCreate.Cancel')
                 div#quickJoin.step
-                    form(method='POST', action='/quickJoin')
+                    form(method='POST', action='/quickJoin', name='quickjoin')
                         div.description
                             i.icon-chevron-right
                             = t('app.quickJoin.Description')
@@ -108,7 +110,7 @@ block content
                         button.btn-large.btn-start.btn-cancel(type='reset')= t('app.quickJoin.Cancel')
             div#signinContainer.stepContainer
                 div#signinStep.step
-                    form(method='POST', action='/login')
+                    form(method='POST', action='/login', name='signin')
                         div.description
                             i.icon-user
                             | Sign in

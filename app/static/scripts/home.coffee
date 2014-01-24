@@ -96,10 +96,12 @@ init = () =>
         signin         : '#signinContainer'
         quickCreateBtn : '#quickCreate'
         quickJoinBtn   : '#quickJoin'
+        signup         : '#signup'
     ($ 'button').attr 'tabindex', '-1'
 
     signup.click () ->
-        $('#signup').toggle(250);
+        $('#signup:visible').fadeOut 100
+        $('#signup:hidden').fadeIn 100
 
     tabs.click () ->
         displaySection @
@@ -129,7 +131,18 @@ init = () =>
 
 ($ document).ready () =>
     do init
-    displaySection quick
+    displaySection (if window.location.hash? and window.location.hash != '' then window.location.hash else quick)
+    if window.Voicious.locals? and window.Voicious.locals.errors?
+        errors = window.Voicious.locals.errors
+        if errors[0].form isnt ''
+            formContainer = ($ 'form[name="' + errors[0].form + '"]').parent()
+            do (do formContainer.siblings).hide
+            formContainer.fadeTo 0, 0.1
+            (formContainer.css 'right', '-50px').animate {
+                opacity : 1
+                right   : 0
+            }, 200
+
     if window.location.search?
         params = (window.location.search.substr 1).split '&'
         for param in params

@@ -49,7 +49,7 @@ class Errors
                 errorMsg        : i18n.t("app.Errors.404")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
-        res.render 'error.jade', options
+        res.render 'error', options
 
     # Set the right message and render the internal error page.
     @RenderError : (req, res) ->
@@ -60,7 +60,13 @@ class Errors
             errorMsg            : i18n.t("app.Errors.500")
         options.title = Config.Voicious.Title + " | " + options.status + " " + options.statusText
         options.year = do (new Date()).getFullYear
-        res.render 'error.jade', options
+        res.render 'error', options
 
+    @RenderPageOnError : (req, res, page, pageConfig, errors) ->
+        locals =
+            title   : Config.Voicious.Title
+            pageConfig : pageConfig
+            errors : errors
+        res.render page, locals
 
 exports.Errors  = Errors

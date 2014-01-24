@@ -26,34 +26,10 @@ Config          = require '../common/config'
 class _User
     constructor : () ->
 
-    # Render the home page.
-    # This function is called when there is an error during registration.
-    errorOnRegistration : (err, req, res) =>
-        options =
-            erroron         : err
-            hash            : '#signUp'
-            login_email     : ''
-            signup_email    : req.body.mail || ''
-            name            : ''
-            title           : Config.Voicious.Title
-        res.render 'home', options
-
-    # Render the home page.
-    # This function is called when there is an error during quick log in.
-    errorOnQuickLogin : (err, req, res) =>
-        options =
-            error        : err
-            hash         : '#jumpIn'
-            login_email  : ''
-            signup_email : ''
-            name         : req.body.name || ''
-            title        : Config.Voicious.Title
-        res.render 'home', options
-
     # Called for inserting a new user in database.
     # Check Validity of all the values (mail, name, etc).
     # If everything is ok, create the user, log him in and redirect into room (only room for the moment).
-    newUser : (req, res, param, callback, errorCallback) =>
+    newUser : (req, res, param, callback) =>
         Db.insert 'user', param, (newitem) =>
             req.session.uid = newitem._id
             callback req, res
@@ -75,10 +51,8 @@ class _User
                     delete param.passwordconfirm
                     param.id_acl = 0 #TO DO : put the right value
                     param.id_role = 0 #TO DO : put the right value
-                    @newUser req, res, param, ((req, res) =>
-                        {Room} = require './room'
-                        Room.newRoom req, res, { }
-                    ), @errorOnRegistration
+                    @newUser req, res, param, (req, res) =>
+                       Room.newRoom req, res, {}
             else
                 err.push 'signup_password'
         else
@@ -127,13 +101,15 @@ class _User
     quickLogin : (req, res, next) =>
         param = req.body
         if param.name? and param.name isnt ""
-            param.mail = param.name + do Date.now
-            @newUser req, res, param, ((req, res) =>
-                {Room}  = require './room'
-                Room.newRoom req, res, { }
-            ), @errorOnQuickLogin
+           Db.find 'user', {'name': param.name}, (body) =>
+                if not body? or body.length is 0
+                    @newUser req, res, param, (req, res) =>
+                        {Room}  = require './room'
+                        Room.newRoom req, res, {}
+                else
+                    Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quicklogin', 'input': 'name', 'message': 'Nickname already used'}]
         else
-            @errorOnQuickLogin 'Missing field : Nickname', req, res
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quicklogin', 'input': 'name', 'message': 'Missing field nickname'}]
 
     # Called when a not registered user wants to join a Room.
     # Check if the login and the Room id are correctly set, if not, redirect to the home page.
@@ -145,9 +121,7 @@ class _User
                 rid             = param.room
                 delete param.room
                 param.mail      = param.name + do Date.now
-                @newUser req, res, param, ((req, res) =>
-                    res.redirect "/room/#{rid}"
-                ), @errorOnQuickLogin
+                @newUser req, res, param, (req, res) =>
 
 exports.User    = new _User
 exports.Routes  =
