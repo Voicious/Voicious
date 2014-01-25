@@ -10,7 +10,7 @@ body {
   -ms-user-select: none; }
 
 .container {
-  margin: 0;
+  margin: auto;
   min-width: 940px;
   position: relative; }
 

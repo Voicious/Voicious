@@ -3,7 +3,7 @@
     "dependencies" : {
         "jquery" : "~2.0.3",
         "jquery-ui" : "~1.10.3",
-        "bootstrap" : "~3.0",
+        "bootstrap" : "~2.3.2",
         "intro.js" : "~0.5.0",
         "flot" : "~0.8.1",
         "jscrollpane" : "~2.0.14",

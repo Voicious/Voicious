@@ -4,6 +4,10 @@ body > * {
     font-size: 12px;
 }
 
+input[type=text], input[type=password] {
+    font-size: 16px;
+}
+
 .italic {
     font-style: italic;
 }
@@ -21,7 +25,7 @@ body > * {
 }
 
 #sidebar {
-    background-color: #131618;
+
     width: 200px;
     float: left;
     color: white;
@@ -31,9 +35,17 @@ i {
     margin-right: 6px;
 }
 
+.info {
+    font-size: 14px;
+}
+.dashboardCtn {
+   background-color: #131618;
+   height: 100%;
+}
+
 #content {
-    overflow-x: hidden;
-    position: relative;
+    float: right;
+    width: calc(100% - 200px);
 }
 
 #logo {
@@ -54,6 +66,7 @@ i {
 }
 
 #login {
+    font-family: "OpenSans-Regular";
     font-weight: bold;
     font-size: 17px;
 }
@@ -102,10 +115,12 @@ i {
 }
 
 .frame {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    margin: 30px 10px 10px 60px;
+    margin: 0;
+    width: auto;
+    height: auto;
+    position: relative;
+    margin-left: 60px;
+    margin-top: 30px;
 }
 
 .title {
@@ -113,7 +128,7 @@ i {
 }
 
 .content > div {
-    margin-top: 2%;
+    margin-top: 30px;
 }
 
 button {
@@ -140,22 +155,33 @@ button {
 }
 
 #createJoinRoom {
+    min-width: 450px;
     width: 30%;
 }
 
 #createJoinRoom > *:not(:first-child) {
-    margin-top: 2em;
+    margin-top: 20px;
 }
 
 #createButton {
     width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
     border: 0;
     background: #64c32b;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 0 0;
 }
 
 #createButton:hover {
     color: white;
     background-color: #73d339;
+}
+
+#joinForm {
+    width: 100%;
 }
 
 #joinForm > input {
@@ -173,6 +199,7 @@ button {
     border-radius: 0px;
     border-bottom-right-radius: 6px;
     border-top-right-radius: 6px;
+    font-size: 14px;
 }
 
 .centerVertically:before {
@@ -242,12 +269,12 @@ button {
 
 
 .btn-join:hover {
-    background: #40a3ff;
+    background: #40a3ff !important;
     color: white;
 }
 
 .btn-join {
-    background: #008EF1;
+    background: #008EF1 !important;
 }
 
 div.joinBox > .joinFriendRoom {
@@ -309,7 +336,9 @@ div.joinBox > .joinFriendRoom {
 .btn-default {
     border: 0;
     background-color: #64c32b;
+    background-image: none;
     color: #fff;
+    text-shadow: 0 0;
 }
 
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {

@@ -8,7 +8,7 @@ block scripts
   !=js("/scripts/dashboard")
 
 block content
-  div.container-fluid.fill-height.color-one
+  div.dashboardCtn
         div#sidebar.row-fluid.fill-height.left.bold
           div.fill-width.color-two.content-right
             img#logo(src="/img/logo.png")
@@ -29,7 +29,7 @@ block content
                 div.option-wrapper.centerVertically
                   i.icon-cog
                   = t('app.Dashboard.Settings')
-        div#content.fill-height
+        div#content.color-one
           div.frame
             include dashboardRooms
             include dashboardFriends
