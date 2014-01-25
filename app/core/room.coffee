@@ -15,7 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-i18n        = require 'i18next' 
+i18n        = require 'i18next'
 nodemailer  = require 'nodemailer'
 moment      = require 'moment'
 md5         = require 'MD5'

@@ -143,8 +143,8 @@ init = () =>
 ($ document).ready () =>
     do init
     displaySection (if window.location.hash? and window.location.hash != '' then window.location.hash else quick)
-    if window.Voicious.locals? and window.Voicious.locals.errors?
-        errors = window.Voicious.locals.errors
+    if window.Voicious? and window.Voicious.errors?
+        errors = window.Voicious.errors
         for error in errors
             handleErrors error
 

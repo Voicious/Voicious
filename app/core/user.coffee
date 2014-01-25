@@ -48,19 +48,24 @@ class _User
                     else
                         Db.find 'user', {'name': param.name}, (body) =>
                             if not body? or body.length is 0
-                                param.password = md5(param.password)
-                                delete param.passwordconfirm
-                                param.id_acl = 0 #TO DO : put the right value
-                                param.id_role = 0 #TO DO : put the right value
-                                @newUser req, res, param, (req, res) =>
-                                    {Room} = require './room'
-                                    Room.newRoom req, res, {}
+                                Db.find 'user', {'mail': param.mail}, (body) =>
+                                    if not body? or body.length is 0
+                                        param.password = md5(param.password)
+                                        delete param.passwordconfirm
+                                        param.id_acl = 0 #TO DO : put the right value
+                                        param.id_role = 0 #TO DO : put the right value
+                                        @newUser req, res, param, (req, res) =>
+                                            {Room} = require './room'
+                                            Room.newRoom req, res, {}
+                                    else
+                                        Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'mail', 'message': 'This mail is already used'}]
                             else
-                                Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'This nickname is not available'}]
+                                Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'This nickname is already used'}]
                 else
-                   Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'password', 'message': 'Missing field password'}]
+                    Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'password', 'message': 'Missing field password'}]
             else
                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'mail', 'message': 'Missing field mail'}]
+        else
             Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'Missing field name'}]
 
     # Called for loging in a user.
@@ -77,6 +82,8 @@ class _User
                                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'The username or password is incorrect'}]
                             else
                                 @goToDashboard req, res, body
+                    else
+                        @goToDashboard req, res, body
             else
                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field password'}]
         else
@@ -110,11 +117,20 @@ class _User
     quickJoin : (req, res, next) =>
         param = req.body
         if param.name? and param.name isnt ""
-            if param.room? and param.room isnt ""
-                rid             = param.room
-                delete param.room
-                param.mail      = param.name + do Date.now
-                @newUser req, res, param, (req, res) =>
+            Db.find 'user', {'name': param.name}, (body) =>
+                if not body? or body.length is 0
+                    if param.room? and param.room isnt ""
+                        rid             = param.room
+                        delete param.room
+                        param.mail      = param.name + do Date.now
+                        @newUser req, res, param, (req, res) =>
+                            res.redirect "/room/#{rid}"
+                    else
+                        Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quickjoin', 'input': 'room', 'message': 'Missing field room'}]
+                else
+                    Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quickjoin', 'input': 'name', 'message': 'Nickname already used'}]
+        else
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quickjoin', 'input': 'name', 'message': 'Missing field nickname'}]
 
 exports.User    = new _User
 exports.Routes  =

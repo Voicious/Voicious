@@ -262,7 +262,7 @@ button {
     margin-right: 8px; }
 
 .-middle {
-  width: 185px; }
+  width: 185px !important; }
 
 .btn-large {
   border-radius: 6px;

@@ -7,12 +7,17 @@ block style
 
 block scripts
     !=js('/scripts/home')
-    script(type='text/javascript')
-        if ('#{hash}' !== '') {
-            window.location.hash    = '#{hash}';
-        }
+    if locals.errors
+        script(type='text/javascript')
+            window.Voicious.errors = JSON.parse('!{errors}');
 
-    if locals.erroron
+    if locals.hash
+        script(type='text/javascript')
+            if ('#{hash}' !== '') {
+                window.location.hash    = '#{hash}';
+            }
+
+    if locals.pageConfig
         script(type='text/javascript')
             if ('#{pageConfig.hash}' !== '') {
                 window.location.hash    = '#{pageConfig.hash}';
@@ -94,7 +99,7 @@ block content
                         input(name='name', placeholder!= t('app.quickJoin.Nickname'), type='text', required)
                         div.error(for='name')
                             i.icon-remove
-                            = t('app.quickJoin.NicknameError')
+                            label= t('app.quickJoin.NicknameError')
                         button.btn-large.btn-start.btn-join(type='submit', formnovalidate)= t('app.quickJoin.Join')
                         button.btn-large.btn-start.btn-cancel(type='reset')= t('app.quickJoin.Cancel')
             div#signinContainer.stepContainer
@@ -114,9 +119,8 @@ block content
                         a.forgot(href='#')
                             i.icon-question-sign
                             | I forgot my password
-                    div.rememberMe
-                        input#rememberMe(type='checkbox', hidden=true)
-                        label
+                        div.rememberMe
+                            input#rememberMe(type='checkbox', hidden=true)
                             i.icon-check-empty
                             | Remember me
-                    button.btn-large.btn-start.btn-signin(type='submit', formnovalidate) sign in
+                        button.btn-large.btn-start.btn-signin(type='submit', formnovalidate) sign in

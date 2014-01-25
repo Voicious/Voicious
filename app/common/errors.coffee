@@ -66,7 +66,7 @@ class Errors
         locals =
             title   : Config.Voicious.Title
             pageConfig : pageConfig
-            errors : errors
+            errors : JSON.stringify errors
         res.render page, locals
 
 exports.Errors  = Errors
