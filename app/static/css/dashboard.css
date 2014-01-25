@@ -96,7 +96,8 @@ i {
 .options.active {
     box-shadow: inset 0 1px rgba(255,255,255,.05);
     position: relative;
-    background-color: #008EF1;
+    background-color: #20252a;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 /* Draw the arrow on selected option */
@@ -106,11 +107,10 @@ i {
     content: " ";
     height: 0;
     width: 0;
-
     position: absolute;
     pointer-events: none;
     border-color: rgba(136, 183, 213, 0);
-    border-left-color: #008EF1;
+    border-left-color: #20252a;
     border-width: 20px; /* half the height an li */
 }
 
@@ -327,7 +327,7 @@ div.joinBox > .joinFriendRoom {
 /* Friend tab */
 .friendSettingCtn {
     width: 30%;
-    min-width: 400px;
+    min-width: 450px;
 }
 .sectionBox, .sectionBox > * {
     width: 100%
@@ -344,4 +344,65 @@ div.joinBox > .joinFriendRoom {
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
     background-color: #73d339;
     color: #fff;
+}
+
+.blueCircle {
+    color: #2194ff;
+}
+
+.greyOffline {
+    color: #575a5d;
+}
+.friendListHeader {
+    border: 1px solid #000;
+}
+
+
+#inroom:before {
+    background-color: #2194ff;
+}
+
+#online:before {
+    background-color: #fff;
+}
+
+#offline:before {
+    background-color: #575a5d;
+}
+
+
+
+.friendListHeader:before {
+    content: "";
+    width: 5px;
+    display: block;
+    height: 48px;
+    position: relative;
+    float: left;
+    left: -7px;
+}
+
+.headerTitle {
+    background: linear-gradient(#101113, #141719);
+    padding: 15 10;
+    text-align: center;
+    font-size: 16px;
+    font-style: italic;
+}
+
+.headerTitle > i {
+    vertical-align: middle;
+}
+
+
+#listFriends > ul > li
+{
+    list-style-type: none;
+    padding: 20px 0;
+    text-indent: 20px;
+    border: 1px solid #000;
+    font-size: 18px;
+    background-color: #1b1f23;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    font-family: OpenSans-Regular;
 }

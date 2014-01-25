@@ -1,6 +1,26 @@
+lists = {inroom: [{name: "Artiom", rid: "5241ee389445bfa60e000002"}], online: [{name: "Artiom", rid: "5241ee389445bfa60e000002"}], offline: [{name: "Artiom", rid: "5241ee389445bfa60e000002"}]}
+
 div#friendsContent.content.row-fluid.fill-height.white
 	i.icon-group.bigFont
 	span.title.bigFont.bold.italic= t('app.Dashboard.FriendTab.Title')
 	div.friendSettingCtn
 		div.sectionBox
 			button.btn.btn-default.white add someone
+		div.sectionBox#listFriends
+			div.friendListHeader#inroom
+				div.headerTitle
+					i.icon-circle.blueCircle
+					span in a room
+			ul.friendListContainer
+				for friend in lists.inroom
+					li #{friend.name}
+			div.friendListHeader#online
+				div.headerTitle
+					i.icon-circle-blank
+					span online
+			ul.friendListContainer
+			div.friendListHeader.greyOffline#offline
+				div.headerTitle
+					i.icon-ban-circle
+					span offline
+			ul.friendListContainer
