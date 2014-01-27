@@ -55,8 +55,7 @@ class _User
                                         param.id_acl = 0 #TO DO : put the right value
                                         param.id_role = 0 #TO DO : put the right value
                                         @newUser req, res, param, (req, res) =>
-                                            {Room} = require './room'
-                                            Room.newRoom req, res, {}
+                                            @goToDashboard req, res, req.body
                                     else
                                         Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'mail', 'message': 'This mail is already used'}]
                             else
@@ -81,19 +80,21 @@ class _User
                             if not body? or body.length is 0
                                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'The username or password is incorrect'}]
                             else
-                                @goToDashboard req, res, body
+                                @goToDashboard req, res, req.body
                     else
-                        @goToDashboard req, res, body
+                        @goToDashboard req, res, req.body
             else
                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field password'}]
         else
             Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field nickname'}]
 
      goToDashboard : (req, res, userData) =>
-        req.body = userData
-        req.session.uid = userData._id
-        {Room} = require './room'
-        Room.newRoom req, res, {}
+        console.log userData
+        options =
+            title   : Config.Voicious.Title
+            login   : userData.name
+            uid     : userData._id
+        res.render "dashboard", options
 
     # Called when non registered user create a Room.
     # Check if the name of the user is correctly set, if not render the home page.

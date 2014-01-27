@@ -12,7 +12,7 @@ body {
 .container {
   margin: auto;
   min-width: 940px;
-  position: relative; }
+ }
 
 .signup {
   width: 211px;

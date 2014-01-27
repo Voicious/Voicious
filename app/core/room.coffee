@@ -39,7 +39,7 @@ class _Room
     renderRoom : (res, options, host) =>
         options.modules = JSON.stringify @modulesList
         options.audioFiles = fs.readdirSync path.join Config.Paths.Webroot, 'sounds', 'notification'
-        res.render 'dashboard', options
+        res.render 'room', options
 
     # Create a new Room and check if the user is logged in.
     roomPage : (req, res, next) =>
