@@ -29,7 +29,7 @@ class NotificationManager
     textNotif : (type, data) =>
         cla = if type then 'success' else 'error'
         icon = if type then 'icon-check-sign' else 'icon-remove-sign'
-        n = """<div class='notification-wrapper none'>
+        n = """<div class='notification-wrapper hiddenNotification'>
                     <div class='notification notification-#{cla}'>
                         <i class='#{icon} icon-large'></i>
                         <span class='notification-content'>#{data.text}</span>
