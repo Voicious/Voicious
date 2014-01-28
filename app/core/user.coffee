@@ -33,7 +33,6 @@ class _User
         Db.insert 'user', param, (newitem) =>
             req.session.uid = newitem._id
             callback req, res
-            # Stats.countTmpUser req, res, callback
 
     # Called for registering a user.
     # Check sanity of all values and called the method newUser to create a new user.
@@ -112,6 +111,7 @@ class _User
     # if everything is ok, log the user in and redirect him into room.
     login : (req, res, next) =>
         param       = req.body
+        console.log param
         if param.name?
             if param.password?
                 Db.find 'user', {'name': param.name, 'password': md5(param.password)}, (body) =>
@@ -120,16 +120,16 @@ class _User
                             if not body? or body.length is 0
                                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'The username or password is incorrect'}]
                             else
-                                @goToDashboard req, res, req.body
+                                @goToDashboard req, res, body
                     else
-                        @goToDashboard req, res, req.body
+                        @goToDashboard req, res, body
             else
                 Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field password'}]
         else
             Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field nickname'}]
 
      goToDashboard : (req, res, userData) =>
-        console.log userData
+        req.session.uid = userData._id
         options =
             title   : Config.Voicious.Title
             login   : userData.name
