@@ -27,6 +27,7 @@ block scripts
     !=js('/scripts/buttonManager.js')
     !=js('/scripts/notificationManager.js')
     script(type="text/javascript")
+        console.log("#{register}");
         window.Voicious.currentUser = {
             uid  : "#{uid}",
         };
@@ -45,7 +46,8 @@ block content
   div.container-fluid.fill-height
     div.row-fluid.fill-height
         div#sidebar.row-fluid.fill-height.left.color-one
-          img#logo.center(src='/img/logo.png')
+          a(href="/dashboard")
+            img#logo.center(src='/img/logo.png')
           div#userInfoCtn
             p#login(align="right") #{login}
             p#acl(align="right")= t('app.Room.User')

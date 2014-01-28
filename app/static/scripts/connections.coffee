@@ -170,6 +170,7 @@ class Connections
             do @enableCamera
 
     initUser : (event, data) =>
+        console.log data
         window.Voicious.currentUser = data
         @emitter.trigger 'module.initialize', { }
 

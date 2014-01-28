@@ -37,6 +37,7 @@ class _Room
 
     # Render the room with the good translation and the list of modules stringified.
     renderRoom : (res, options, host) =>
+        console.log "RENDER", options
         options.modules = JSON.stringify @modulesList
         options.audioFiles = fs.readdirSync path.join Config.Paths.Webroot, 'sounds', 'notification'
         res.render 'room', options
@@ -51,6 +52,7 @@ class _Room
                 title   : Config.Voicious.Title
                 login   : user.name
                 uid     : user._id
+                register: user._registered?
                 rid     : req.params.roomid
                 pjsHost : Config.Peerjs.Hostname.External
                 pjsPort : Config.Peerjs.Port

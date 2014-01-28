@@ -24,10 +24,13 @@ class _Session
 
     # Middleware which load the current user informations in __req.currentUser__.
     withCurrentUser : (req, res, next) =>
+        console.log "NEEEEEEXT", req.session
         req.currentUser = undefined
         if req.session? and req.session.uid?
             Db.get 'user', req.session.uid, (res) =>
+                delete res.password
                 req.currentUser = res
+                console.log req.currentUser
                 do next
         else
             do next

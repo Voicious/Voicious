@@ -50,6 +50,7 @@ class _User
                                 Db.find 'user', {'mail': param.mail}, (body) =>
                                     if not body? or body.length is 0
                                         param.password = md5(param.password)
+                                        param.registered = true
                                         delete param.passwordconfirm
                                         param.id_acl = 0 #TO DO : put the right value
                                         param.id_role = 0 #TO DO : put the right value
