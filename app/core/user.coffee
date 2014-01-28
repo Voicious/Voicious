@@ -71,33 +71,26 @@ class _User
         param   = req.body
         err     = []
         if param.name?
-            console.log param
             Db.getBy 'user', {name : param.name}, (docs) =>
                 if docs.length == 0
-                    console.log 'bad_name'
                     res.send 400 # Change to render a proper page TODO
                 else
                     if param._id?
                         Db.get 'user', param._id, (user) =>
-                            console.log user
                             if !user?
-                                console.log 'bad_user'
                                 res.send 400 # Change to render a proper page TODO
                             else
-                                console.log user
                                 if !user.friends?
                                     user.friends = []
                                 else
                                     for friend of user.friends
                                         if friend.name == param.name
-                                            console.log 'already_in_list'
                                             res.send 400 # Change to render a proper page TODO
                                             return
                                 user.friends.push {_id : docs[0]._id, name : param.name}
                                 Db.update 'user', user._id, user, () =>
                                     res.send 200 # Change to render a proper page TODO
                     else
-                        console.log 'bad_id'
                         res.send 400 # Change to render a proper page TODO
         else
             err.push 'bad_name'
@@ -202,10 +195,8 @@ class _User
                     else
                         res.send 400
             else
-                console.log 'bad_id'
                 res.send 400
         else
-            console.log 'bad_params'
             res.send 400
 
     requestUser : (friends, offset, infos, callback) =>
@@ -229,14 +220,12 @@ class _User
                 Db.getBy 'user', { id_room:friend.id_room }, (docs) =>
                     if docs?
                         if docs.length is 0
-                            console.log 'rid_not_found'
                             res.send 400
                         else
                             friend.nbInRoom = docs.length
                             list.inroom.push friend
                             @requestFriendRoom friends, offset + 1, list, callback
                     else
-                        console.log 'rid_not_found'
                         res.send 400
             else
                 list.offline.push friend
@@ -244,8 +233,34 @@ class _User
         else
             callback list
 
-    updateUser : (req, res, next) =>
-        console.log "update user"
+    updateUserPassword : (req, res, next) =>
+        param = req.body
+        if param? and req.params.id?
+            if param.password? and param.passwordconfirm?
+                if param.password is param.passwordconfirm
+                    Db.update 'user', req.params.id, {password:md5(param.password)}, () =>
+                        res.send 200
+                else
+                    res.send 400
+            else
+                res.send 400
+        else
+            res.send 400
+
+    updateUserMail : (req, res, next) =>
+        param = req.body
+        if param? and req.params.id?
+            if param.mail?
+                Db.find 'user', {'mail': param.mail}, (body) =>
+                    if not body? or body.length is 0
+                        Db.update 'user', req.params.id, {mail:param.mail}, () =>
+                            res.send 200
+                    else
+                        res.send 400
+            else
+                res.send 400
+        else
+            res.send 400
 
     deleteFriend : (req, res, next) =>
         console.log "delete friend"
@@ -265,7 +280,8 @@ exports.Routes  =
         '/friends/:id'  : exports.User.getFriends
 
     put :
-        '/user'   : exports.User.updateUser
+        '/user/mail/:id'        : exports.User.updateUserMail
+        '/user/password/:id'    : exports.User.updateUserPassword
 
     delete :
         '/user/friend'  : exports.User.deleteFriend
