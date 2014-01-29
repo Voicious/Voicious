@@ -72,7 +72,6 @@ class _User
         param   = req.body
         param._id = req.currentUser._id
         err     = []
-        console.log "PARAM ", param
         if param.name?
             Db.getBy 'user', {name : param.name}, (docs) =>
                 if docs.length == 0
