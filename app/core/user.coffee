@@ -76,7 +76,7 @@ class _User
                 if docs.length == 0
                     res.send 400 # Change to render a proper page TODO
                 else
-                    if param._id? and param.registered is true
+                    if param._id? and docs[0].registered is true and param.name != docs[0].name
                         Db.get 'user', param._id, (user) =>
                             if !user?
                                 res.send 400 # Change to render a proper page TODO
