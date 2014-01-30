@@ -8,23 +8,23 @@ div#roomsContent.content.white
 		form#joinForm(method='POST', action='/join')
 			input(name='room', placeholder='Room ID', type='text', required)
 			button.btn-join(type='submit')= t('app.Dashboard.RoomTab.JoinButton')
-	div.yourRoom
-		p.title.titleSection.bigFont.bold= t('app.Dashboard.RoomTab.UserRoomsTitle')
-		div.room
-			span.title.bigFont= t('app.Dashboard.RoomTab.NoActiveRooms')
+	//- div.yourRoom
+	//- 	p.title.titleSection.bigFont.bold= t('app.Dashboard.RoomTab.UserRoomsTitle')
+	//- 	div.room
+	//- 		span.title.bigFont= t('app.Dashboard.RoomTab.NoActiveRooms')
 	div#friendsBoxCtn.fill-width
 		p.title.fill-width.titleSection.bigFont.bold= t('app.Dashboard.RoomTab.FriendsRooms')
-		for friend in friends
+		each friend in inroom
 			div.friendRoom.color-two.centerVertically
 				div.friendLoginBox.center
 					p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Owner')
 					p.info.bold #{friend.name}
 				div.roomIdBox.center
 					p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.Identifier')
-					p.info.bold  #{friend.roomID}
+					p.info.bold  #{friend.rid}
 				div.nbUserBox.center
 					p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.NbPeopleInRoom')
-					p.info.bold #{friend.nbPeople}
-				div.boxHidder.center.fill-height.color-one
+					p.info.bold #{friend.nbInRoom}
+				div.boxHidder.center.fill-height(style="background-color: #131618")
 				div.joinBox.center
-					a.joinFriendRoom.white.btn.btn-large.btn-join(href="#{friend.roomID}")= t('app.Dashboard.RoomTab.JoinButton')
+					a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/	#{friend.rid}")= t('app.Dashboard.RoomTab.JoinButton')

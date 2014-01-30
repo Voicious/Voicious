@@ -60,8 +60,6 @@ onHoverRemove = () ->
 configureForm = ()  ->
     ($ "#addFriend").submit (event) ->
         do event.preventDefault
-<<<<<<< HEAD
-        console.log ($ ($ this).find('input[name=name]')[0]).val()
         $.ajax '/friend',
             type: 'POST'
             dataType: 'json'
@@ -72,20 +70,10 @@ configureForm = ()  ->
             success: (data, textStatus, jqXHR) ->
                 window.location.href = "/dashboard" + window.location.hash
                 do window.location.reload
-=======
-        $.ajax '/friend',
-            type: 'POST'
-            dataType: 'json'
-            error: (jqXHR, textStatus, errorThrown) ->
-                do window.location.href = "/dashboard"
-            success: (data, textStatus, jqXHR) ->
-                do window.location.href = "/dashboard"
->>>>>>> Add and Get Friends
 
 init = () ->
     do configureForm
     options = ($ 'li.options')
-<<<<<<< HEAD
     hash = undefined
     do $('.content').hide
 
@@ -112,22 +100,6 @@ init = () ->
         ($ this).click () ->
             roomID = ($ this).attr "data-rid"
             window.location.href = "/room/" + roomID
-=======
-    do $('.content').hide
-
-    bindView (do options.first), '#roomsContent'
-    bindView (options[1]),  '#friendsContent'
-    bindView (options[2]),  '#settingsContent'
-
-    do (do options.first).click
-
-    do ($ '.joinBox').hide
-
-    ($ '.friendRoom').each () ->
-        onFriendBoxHover($ this)
-
-    ($ '.friendRow').hover onHoverFriendRow, outHoverFriendRow
->>>>>>> Add and Get Friends
 
 ($ document).ready () =>
     do init
