@@ -2,7 +2,7 @@
     "Voicious"  : {
         "Hostname"  : {
             "Internal" : "localhost",
-            "External" : "192.168.1.48"
+            "External" : "localhost"
         },
         "Port"      : 4242,
         "Acl"       : ["administrator", "registered", "temporary"],
@@ -11,7 +11,7 @@
     "Peerjs"  : {
         "Hostname"  : {
             "Internal" : "localhost",
-            "External" : "192.168.1.48"
+            "External" : "localhost"
         },
         "Port"      : 4244,
         "Enabled"   : 1,

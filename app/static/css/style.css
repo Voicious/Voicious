@@ -90,6 +90,11 @@ input[type="text"], input[type="password"] {
     -webkit-transition: border-color 400ms;
 }
 
+.clickable {
+    cursor: pointer;
+    cursor: hand;
+}
+
 .container-fluid {
     width: 100%;
     padding: 0;

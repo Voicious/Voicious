@@ -97,5 +97,10 @@ init = () ->
 
     ($ '.friendRow').hover onHoverFriendRow, outHoverFriendRow
 
+    ($ '.joinRow').each () ->
+        ($ this).click () ->
+            roomID = ($ this).attr "data-rid"
+            window.location.href = "/room/" + roomID
+
 ($ document).ready () =>
     do init
