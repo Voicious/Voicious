@@ -108,7 +108,6 @@ class _User
     # if everything is ok, log the user in and redirect him into room.
     login : (req, res, next) =>
         param       = req.body
-        console.log param
         if param.name?
             if param.password?
                 Db.find 'user', {'name': param.name, 'password': md5(param.password)}, (body) =>
@@ -238,12 +237,9 @@ class _User
     requestFriendRoom : (friends, offset, list, callback) =>
         friend = friends[offset]
         if friend?
-            console.log "Friend: ", friend
             if friend.rid?
-                console.log "Friend 2: ", friend
                 Db.getBy 'user', { id_room:friend.rid }, (docs) =>
                     if docs?
-                        console.log "Docs: ", docs
                         if docs.length is 0
                             res.send 400
                         else
@@ -274,16 +270,10 @@ class _User
 
     updateUserMail : (req, res, next) =>
         param = req.body
-        console.log param
-        console.log req.params
         if param? and req.params.id?
-            console.log "1"
             if param.mail?
-                console.log "2"
                 Db.find 'user', {'mail': param.mail}, (body) =>
-                    console.log "3"
                     if not body? or body.length is 0
-                        console.log "4"
                         Db.update 'user', req.params.id, {mail:param.mail}, () =>
                             res.send 200
                     else
@@ -299,13 +289,10 @@ class _User
             Db.get 'user', req.params.id, (user) =>
                 if user?
                     if user.friends?
-                        i = 0
                         list = []
-                        if user.friends.length isnt 0
-                            for friend of user.friends
-                                if friend.name isnt user.name and user.friends.length isnt 1
-                                    list.push friend
-                                i++
+                        for friend in user.friends
+                            if friend.name isnt param.name
+                                list.push friend
                         Db.update 'user', req.params.id, {friends:list}, () =>
                             res.send 200
                     else
