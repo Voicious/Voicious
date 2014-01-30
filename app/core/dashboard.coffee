@@ -24,8 +24,6 @@ class _Dashboard
 
     dashboard : (req, res, next) =>
         userData = req.currentUser
-        console.log req.body
-        console.log userData
         if !userData.registered?
             res.redirect "/"
         else

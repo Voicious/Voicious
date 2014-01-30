@@ -329,8 +329,20 @@ div.joinBox > .joinFriendRoom {
     width: 30%;
     min-width: 450px;
 }
-.sectionBox, .sectionBox > * {
-    width: 100%
+
+.addFriendInput {
+    width: 35% !important;
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.btnAddFriend {
+    width: 65%;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 .btn-default {
@@ -357,7 +369,6 @@ div.joinBox > .joinFriendRoom {
     border: 1px solid #000;
 }
 
-
 #inroom:before {
     background-color: #2194ff;
 }
@@ -369,8 +380,6 @@ div.joinBox > .joinFriendRoom {
 #offline:before {
     background-color: #575a5d;
 }
-
-
 
 .friendListHeader:before {
     content: "";
@@ -394,15 +403,74 @@ div.joinBox > .joinFriendRoom {
     vertical-align: middle;
 }
 
+.headerTitle span {
+    font-weight: bold;
+}
 
-#listFriends > ul > li
-{
+#listFriends {
+    margin-top: 20px;
+}
+
+.friendListContainer .friendRow {
     list-style-type: none;
-    padding: 20px 0;
-    text-indent: 20px;
     border: 1px solid #000;
     font-size: 18px;
     background-color: #1b1f23;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
     font-family: OpenSans-Regular;
+    line-height: 65px;
+}
+
+.friendListContainer .friendRow:hover {
+    background-color: #24292f;
+    box-shadow: inset 0 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.friendRow .friendRowElem {
+    display: inline-block;
+    padding: 0px 20px 0px 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.friendRow .friendRowElem i {
+    position: relative;
+    top: 5px;
+    left: -5px;
+}
+
+.friendRow .friendRowElem.remove {
+    float: right;
+    color: #000;
+    font-size: 28px;
+}
+
+.friendRow .friendRowElem.remove i {
+    top: 24px;
+}
+
+.friendRow .friendRowElem.removeFull {
+    background-color: #ff0042;
+    float: right;
+}
+
+.friendRow .friendRowElem.removeFull i {
+    color: #fff;
+    font-size: 28px;
+    left: -10px;
+}
+
+.friendRow .friendRowElem.squared {
+    border: 1px solid #000;
+    border-top: none;
+    border-bottom: none;
+}
+
+.friendRow .friendRowElem.squared:hover {
+    background-color: #2095fe;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+    background-image: none;
 }

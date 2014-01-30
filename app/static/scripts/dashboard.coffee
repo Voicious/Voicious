@@ -41,6 +41,20 @@ onFriendBoxHover = (friendBox) ->
 	jqBox = ($ friendBox)
 	jqBox.hover onHoverEntry, onHoverOut
 
+onHoverFriendRow = () ->
+	rows = ($ this).find '.friendRowElem.onHover'
+	($ rows).removeClass 'none'
+	($ '.friendRowElem.remove').hover onHoverRemove
+
+outHoverFriendRow = () ->
+	rows = ($ this).find '.friendRowElem.onHover'
+	($ rows).addClass 'none'
+	($ '.friendRowElem.removeFull').addClass 'none'
+
+onHoverRemove = () ->
+	($ this).addClass 'none'
+	($ this).next().removeClass 'none'
+
 # Initialize the dashboard by binding options to content and hide all the content.
 init = () ->
 	options = ($ 'li.options')
@@ -56,6 +70,8 @@ init = () ->
 
 	($ '.friendRoom').each () ->
 		onFriendBoxHover($ this)
+
+	($ '.friendRow').hover onHoverFriendRow, outHoverFriendRow
 
 ($ document).ready () =>
 	do init

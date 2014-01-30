@@ -1,26 +1,62 @@
-lists = {inroom: [{name: "Artiom", rid: "5241ee389445bfa60e000002"}], online: [{name: "Artiom", rid: "5241ee389445bfa60e000002"}], offline: [{name: "Artiom", rid: "5241ee389445bfa60e000002"}]}
+lists = {inroom: [{name: "Paulloz", rid: "5241ee389445bfa60e000002"}], online: [{name: "Shedna", rid: "5241ee389445bfa60e000002"}], offline: [{name: "iMajestic", rid: "5241ee389445bfa60e000002"}]}
 
 div#friendsContent.content.row-fluid.fill-height.white
 	i.icon-group.bigFont
 	span.title.bigFont.bold.italic= t('app.Dashboard.FriendTab.Title')
 	div.friendSettingCtn
 		div.sectionBox
-			button.btn.btn-default.white add someone
+			form(method='POST', name='addFriend')
+				input.addFriendInput(placeholder='Roger...', name='friendName', type='text')
+				button.btn.btn-default.white.btnAddFriend(type='submit') add someone
 		div.sectionBox#listFriends
 			div.friendListHeader#inroom
 				div.headerTitle
 					i.icon-circle.blueCircle
-					span in a room
+					span In a ROOM
 			ul.friendListContainer
 				for friend in lists.inroom
-					li #{friend.name}
+					li.friendRow
+						ul
+							li.friendRowElem #{friend.name}
+							li.friendRowElem.onHover.squared.none
+								i.icon-arrow-left
+								| JOIN
+							li.friendRowElem.remove.onHover.none
+								i.icon-remove-sign
+							li.friendRowElem.removeFull.none
+								i.icon-remove-sign
+								| REMOVE
 			div.friendListHeader#online
 				div.headerTitle
 					i.icon-circle-blank
-					span online
+					span Online
 			ul.friendListContainer
+				for friend in lists.online
+					li.friendRow
+						ul
+							li.friendRowElem #{friend.name}
+							li.friendRowElem.onHover.squared.none
+								i.icon-arrow-left
+								| JOIN
+							li.friendRowElem.remove.onHover.none
+								i.icon-remove-sign
+							li.friendRowElem.removeFull.none
+								i.icon-remove-sign
+								| REMOVE
 			div.friendListHeader.greyOffline#offline
 				div.headerTitle
 					i.icon-ban-circle
-					span offline
+					span Offline
 			ul.friendListContainer
+				for friend in lists.offline
+					li.friendRow.greyOffline
+						ul
+							li.friendRowElem #{friend.name}
+							li.friendRowElem.onHover.squared.none
+								i.icon-arrow-left
+								| JOIN
+							li.friendRowElem.remove.onHover.none
+								i.icon-remove-sign
+							li.friendRowElem.removeFull.none
+								i.icon-remove-sign
+								| REMOVE
