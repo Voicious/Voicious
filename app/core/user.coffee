@@ -70,7 +70,9 @@ class _User
 
     addFriend : (req, res, next) =>
         param   = req.body
+        param._id = req.currentUser._id
         err     = []
+        console.log "PARAM ", param
         if param.name?
             Db.getBy 'user', {name : param.name}, (docs) =>
                 if docs.length == 0
@@ -178,6 +180,24 @@ class _User
         {Room}  = require './room'
         Room.newRoom req, res, { }
 
+    getFriendsArray : (userID, next) =>
+        if userID?
+            Db.get 'user', userID, (user) =>
+                if user.friends? and user.friends.length isnt 0
+                    i = 0
+                    @requestUser user.friends, i, [], (friends) =>
+                        list =
+                            offline : []
+                            online  : []
+                            inroom  : []
+                        j = 0
+                        @requestFriendRoom friends, j, list, (list) =>
+                            next list
+                else
+                    next {}
+        else
+            next {}
+
     getFriends : (req, res, next) =>
         param = req.params
         if param?
@@ -205,7 +225,7 @@ class _User
             Db.get 'user', friends[offset]._id, (info) =>
                 friend =
                     name    : info.name
-                    id_room : info.id_room
+                    rid : info.id_room
                     _id     : info._id
 
                 infos.push friend

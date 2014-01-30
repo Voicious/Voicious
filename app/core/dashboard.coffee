@@ -31,7 +31,13 @@ class _Dashboard
                 title   : Config.Voicious.Title
                 login   : userData.name
                 uid     : userData._id
-            res.render "dashboard",options
+            {User}  = require './user'
+            User.getFriendsArray userData._id, (friendsList) ->
+                options.online = friendsList.online
+                options.offline = friendsList.offline
+                options.inroom = friendsList.inroom
+                console.log JSON.stringify options
+                res.render "dashboard", options
 
 exports.Dashboard  = new _Dashboard
 exports.Routes  =

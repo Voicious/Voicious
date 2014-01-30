@@ -331,7 +331,7 @@ div.joinBox > .joinFriendRoom {
 }
 
 .addFriendInput {
-    width: 35% !important;
+    width: 70% !important;
     border-bottom-right-radius: 0px;
     border-top-right-radius: 0px;
     border-top-left-radius: 6px;
@@ -340,7 +340,7 @@ div.joinBox > .joinFriendRoom {
 }
 
 .btnAddFriend {
-    width: 65%;
+    width: 30%;
     border-bottom-left-radius: 0px;
     border-top-left-radius: 0px;
 }

@@ -16,62 +16,74 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 bindView = (elemToclick, divToDisplay) ->
-	($ elemToclick).click () =>
-		clickable = ($ elemToclick)
-		clickable.addClass 'active'
-		(clickable.siblings '.options').removeClass 'active'
-		do (($ divToDisplay).siblings '.content.display').hide
-		($ divToDisplay).fadeIn '100'
-		($ divToDisplay).addClass 'display'
-		(($ divToDisplay).siblings '.content.display').removeClass 'display'
+    ($ elemToclick).click () =>
+        clickable = ($ elemToclick)
+        clickable.addClass 'active'
+        (clickable.siblings '.options').removeClass 'active'
+        do (($ divToDisplay).siblings '.content.display').hide
+        ($ divToDisplay).fadeIn '100'
+        ($ divToDisplay).addClass 'display'
+        (($ divToDisplay).siblings '.content.display').removeClass 'display'
 
 onHoverEntry = () ->
-	jqBoxHidder = ($ this).find '.boxHidder'
-	jqJoinBox = ($ this).find '.joinBox'
-	do jqBoxHidder.hide
-	do jqJoinBox.show
+    jqBoxHidder = ($ this).find '.boxHidder'
+    jqJoinBox = ($ this).find '.joinBox'
+    do jqBoxHidder.hide
+    do jqJoinBox.show
 
 onHoverOut = () ->
-	jqBoxHidder = ($ this).find '.boxHidder'
-	jqJoinBox = ($ this).find '.joinBox'
-	do jqJoinBox.hide
-	do jqBoxHidder.show
+    jqBoxHidder = ($ this).find '.boxHidder'
+    jqJoinBox = ($ this).find '.joinBox'
+    do jqJoinBox.hide
+    do jqBoxHidder.show
 
 onFriendBoxHover = (friendBox) ->
-	jqBox = ($ friendBox)
-	jqBox.hover onHoverEntry, onHoverOut
+    jqBox = ($ friendBox)
+    jqBox.hover onHoverEntry, onHoverOut
 
 onHoverFriendRow = () ->
-	rows = ($ this).find '.friendRowElem.onHover'
-	($ rows).removeClass 'none'
-	($ '.friendRowElem.remove').hover onHoverRemove
+    rows = ($ this).find '.friendRowElem.onHover'
+    ($ rows).removeClass 'none'
+    ($ '.friendRowElem.remove').hover onHoverRemove
 
 outHoverFriendRow = () ->
-	rows = ($ this).find '.friendRowElem.onHover'
-	($ rows).addClass 'none'
-	($ '.friendRowElem.removeFull').addClass 'none'
+    rows = ($ this).find '.friendRowElem.onHover'
+    ($ rows).addClass 'none'
+    ($ '.friendRowElem.removeFull').addClass 'none'
 
 onHoverRemove = () ->
-	($ this).addClass 'none'
-	($ this).next().removeClass 'none'
+    ($ this).addClass 'none'
+    ($ this).next().removeClass 'none'
 
 # Initialize the dashboard by binding options to content and hide all the content.
+configureForm = ()  ->
+    ($ "#addFriend").submit (event) ->
+        do event.preventDefault
+        $.ajax '/friend',
+            type: 'POST'
+            dataType: 'json'
+            error: (jqXHR, textStatus, errorThrown) ->
+                do window.location.href = "/dashboard"
+            success: (data, textStatus, jqXHR) ->
+                do window.location.href = "/dashboard"
+
 init = () ->
-	options = ($ 'li.options')
-	do $('.content').hide
+    do configureForm
+    options = ($ 'li.options')
+    do $('.content').hide
 
-	bindView (do options.first), '#roomsContent'
-	bindView (options[1]),  '#friendsContent'
-	bindView (options[2]),  '#settingsContent'
+    bindView (do options.first), '#roomsContent'
+    bindView (options[1]),  '#friendsContent'
+    bindView (options[2]),  '#settingsContent'
 
-	do (do options.first).click
+    do (do options.first).click
 
-	do ($ '.joinBox').hide
+    do ($ '.joinBox').hide
 
-	($ '.friendRoom').each () ->
-		onFriendBoxHover($ this)
+    ($ '.friendRoom').each () ->
+        onFriendBoxHover($ this)
 
-	($ '.friendRow').hover onHoverFriendRow, outHoverFriendRow
+    ($ '.friendRow').hover onHoverFriendRow, outHoverFriendRow
 
 ($ document).ready () =>
-	do init
+    do init
