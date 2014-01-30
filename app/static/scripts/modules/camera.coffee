@@ -145,17 +145,17 @@ class Camera extends Module
         return detached
 
     diaporamaMode     : () =>
-        shortcut.add 'Ctrl+Shift+M', () =>
-            if @diaporama is off
-                @diaporama = on
-                for key, value of @zoomCams
-                    do value.remove
-                    delete @zoomCams[key]
-                do @autoChangeMainCam
-                @diapoTimer = setInterval @autoChangeMainCam, 3000
-            else
-                @diaporama = off
-                clearInterval @diapoTimer
+        # shortcut.add 'Ctrl+Shift+M', () =>
+        #     if @diaporama is off
+        #         @diaporama = on
+        #         for key, value of @zoomCams
+        #             do value.remove
+        #             delete @zoomCams[key]
+        #         do @autoChangeMainCam
+        #         @diapoTimer = setInterval @autoChangeMainCam, 3000
+        #     else
+        #         @diaporama = off
+        #         clearInterval @diapoTimer
 
     autoChangeMainCam : () =>
         mainCam = ($ '#mainCam')

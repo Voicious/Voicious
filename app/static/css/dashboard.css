@@ -1,0 +1,476 @@
+body > * {
+    font-family: 'OpenSans-Regular';
+    font-weight: normal;
+    font-size: 12px;
+}
+
+input[type=text], input[type=password] {
+    font-size: 16px;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.bold {
+    font-family: 'OpenSans-Bold';
+}
+
+.bigFont {
+    font-size: 14px;
+}
+
+.block {
+    display: block;
+}
+
+#sidebar {
+
+    width: 200px;
+    float: left;
+    color: white;
+}
+
+i {
+    margin-right: 6px;
+}
+
+.info {
+    font-size: 14px;
+}
+.dashboardCtn {
+   background-color: #131618;
+   height: 100%;
+}
+
+#content {
+    float: right;
+    width: calc(100% - 200px);
+}
+
+#logo {
+    text-align: right;
+    margin-right: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.content-right {
+    text-align: right;
+}
+
+#userInfoCtn {
+    color : #ffffff;
+    margin-top: 15px;
+    margin-right: 20px;
+}
+
+#login {
+    font-family: "OpenSans-Regular";
+    font-weight: bold;
+    font-size: 17px;
+}
+
+#dashboard {
+    margin-top: 5px;
+    color: #444F54;
+    text-transform: uppercase;
+}
+
+#optionController {
+    margin-top: 20px;
+}
+
+#optionController > ul > li {
+    height: 40px;
+    cursor: pointer;
+}
+
+#optionController > ul > li > div.option-wrapper {
+    display: inline-block;
+    position: relative;
+    margin-left: 10%;
+    text-transform: uppercase;
+}
+
+.options.active {
+    box-shadow: inset 0 1px rgba(255,255,255,.05);
+    position: relative;
+    background-color: #20252a;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Draw the arrow on selected option */
+.options.active:before {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #20252a;
+    border-width: 20px; /* half the height an li */
+}
+
+.frame {
+    margin: 0;
+    width: auto;
+    height: auto;
+    position: relative;
+    margin-left: 60px;
+    margin-top: 30px;
+}
+
+.title {
+    display: inline-block;
+}
+
+.content > div {
+    margin-top: 30px;
+}
+
+button {
+    text-transform: uppercase;
+
+    background: linear-gradient(to bottom, #262c32 0%, #1b1f23 100%);
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: #101113;
+    border-radius: 6px;
+
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    margin: 0;
+    padding: 0;
+
+    width: 175px;
+    height: 42px;
+
+    font-style: normal;
+    font-weight: bold;
+    font-size: .9em;;
+    color: #fff;
+}
+
+#createJoinRoom {
+    min-width: 450px;
+    width: 30%;
+}
+
+#createJoinRoom > *:not(:first-child) {
+    margin-top: 20px;
+}
+
+#createButton {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: 0;
+    background: #64c32b;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 0 0;
+}
+
+#createButton:hover {
+    color: white;
+    background-color: #73d339;
+}
+
+#joinForm {
+    width: 100%;
+}
+
+#joinForm > input {
+    width: 75%;
+
+    border-radius: 0px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+#joinForm > button {
+    width: 25%;
+
+    border-radius: 0px;
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
+    font-size: 14px;
+}
+
+.centerVertically:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.titleSection {
+    color: #2194FF;
+    margin-bottom: 1%;
+    text-transform: uppercase;
+}
+
+/* friend box */
+
+.friendRoom {
+    margin-top: 10px;
+    position: relative;
+    min-width: 600px;
+    width: 40%;
+    height: 100px;
+}
+
+.friendRoom > div {
+    display: inline-block;
+    margin-left: 3%;
+}
+
+.friendRoom > div:nth-last-child(-1n+2) {
+    margin-left: 0;
+}
+
+.friendLoginBox {
+    width: 20%;
+}
+
+.roomIdBox {
+   width: 33%;
+}
+
+.nbUserBox {
+    width: 13%;
+}
+
+
+.boxHidder {
+    padding: 0;
+    margin: 0;
+    width: 25%;
+    height: 100%;
+}
+
+.joinBox {
+    width: 25%;
+}
+
+.center {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.headerText {
+    margin-bottom: 10px ;
+}
+
+
+.btn-join:hover {
+    background: #40a3ff !important;
+    color: white;
+}
+
+.btn-join {
+    background: #008EF1 !important;
+}
+
+div.joinBox > .joinFriendRoom {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+
+    box-shadow: inset 0  1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    border-style: solid;
+    border-width: 1px;
+    border-color: #101113;
+
+    width: 90%;
+    padding: 11px 0;
+
+    text-transform: uppercase;
+}
+
+/* end friend box */
+
+/* Settings tab */
+.settingBox > form {
+    margin-top: 20px;
+    width: 20%;
+}
+
+.settingBox > form > input, .settingBox > form > button {
+    width: 100%;
+}
+
+.settingBox > form > input:nth-child(n+2) {
+    margin-top: 5px;
+}
+
+.settingBox > form > button {
+    margin-top: 10px;
+}
+
+#password {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#passwordConfirm {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* End settings tab */
+
+/* Friend tab */
+.friendSettingCtn {
+    width: 30%;
+    min-width: 450px;
+}
+
+.addFriendInput {
+    width: 70% !important;
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.btnAddFriend {
+    width: 30%;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+.btn-default {
+    border: 0;
+    background-color: #64c32b;
+    background-image: none;
+    color: #fff;
+    text-shadow: 0 0;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+    background-color: #73d339;
+    color: #fff;
+}
+
+.blueCircle {
+    color: #2194ff;
+}
+
+.greyOffline {
+    color: #575a5d;
+}
+.friendListHeader {
+    border: 1px solid #000;
+}
+
+#inroom:before {
+    background-color: #2194ff;
+}
+
+#online:before {
+    background-color: #fff;
+}
+
+#offline:before {
+    background-color: #575a5d;
+}
+
+.friendListHeader:before {
+    content: "";
+    width: 5px;
+    display: block;
+    height: 48px;
+    position: relative;
+    float: left;
+    left: -7px;
+}
+
+.headerTitle {
+    background: linear-gradient(#101113, #141719);
+    padding: 15 10;
+    text-align: center;
+    font-size: 16px;
+    font-style: italic;
+}
+
+.headerTitle > i {
+    vertical-align: middle;
+}
+
+.headerTitle span {
+    font-weight: bold;
+}
+
+#listFriends {
+    margin-top: 20px;
+}
+
+.friendListContainer .friendRow {
+    list-style-type: none;
+    border: 1px solid #000;
+    font-size: 18px;
+    background-color: #1b1f23;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    font-family: OpenSans-Regular;
+    line-height: 65px;
+}
+
+.friendListContainer .friendRow:hover {
+    background-color: #24292f;
+    box-shadow: inset 0 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.friendRow .friendRowElem {
+    display: inline-block;
+    padding: 0px 20px 0px 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.friendRow .friendRowElem i {
+    position: relative;
+    top: 5px;
+    left: -5px;
+}
+
+.friendRow .friendRowElem.remove {
+    float: right;
+    color: #000;
+    font-size: 28px;
+}
+
+.friendRow .friendRowElem.remove i {
+    top: 24px;
+}
+
+.friendRow .friendRowElem.removeFull {
+    background-color: #ff0042;
+    float: right;
+}
+
+.friendRow .friendRowElem.removeFull i {
+    color: #fff;
+    font-size: 28px;
+    left: -10px;
+}
+
+.friendRow .friendRowElem.squared {
+    border: 1px solid #000;
+    border-top: none;
+    border-bottom: none;
+}
+
+.friendRow .friendRowElem.squared:hover {
+    background-color: #2095fe;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+    background-image: none;
+}

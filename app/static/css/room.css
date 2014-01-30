@@ -5,6 +5,11 @@
     border-color: rgb(15, 15, 15);
 }
 
+/* Class .none breaks notification due to !important */
+.hiddenNotification {
+    display: none
+}
+
 .shadowed {
     box-shadow: inset 0 1px rgba(255,255,255,.05);
 }
@@ -178,9 +183,7 @@ video {
 
 #mainCam {
     text-align: center;
-    min-height: 115px;
-    min-width: 115px;
-    width: 70%;
+    width: 40%;
 }
 
 li.zoom-cam-wrapper {

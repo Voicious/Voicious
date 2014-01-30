@@ -1,0 +1,36 @@
+extends main
+
+block style
+  !=css("/css/style.css")
+  !=css("/css/dashboard.css")
+
+block scripts
+  !=js("/scripts/dashboard")
+
+block content
+  div.dashboardCtn
+        div#sidebar.row-fluid.fill-height.left.bold
+          div.fill-width.color-two.content-right
+            img#logo(src="/img/logo.png")
+          div#userInfoCtn
+            p#login(align="right", data-uid="#{uid}") #{login}
+            p#dashboard(align="right")= t('app.Dashboard.Dashboard')
+          div#optionController.fill-width
+            ul#optionList
+              li#friendsRoomOpt.options
+                div.option-wrapper.centerVertically
+                  i.icon-th-large
+                  = t('app.Dashboard.Rooms')
+              li#friendsListOpt.options
+                div.option-wrapper.centerVertically
+                  i.icon-group
+                  = t('app.Dashboard.Friends')
+              li#settingsOpt.options
+                div.option-wrapper.centerVertically
+                  i.icon-cog
+                  = t('app.Dashboard.Settings')
+        div#content
+          div.frame
+            include dashboardRooms
+            include dashboardFriends
+            include dashboardSettings

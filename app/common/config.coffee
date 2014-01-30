@@ -46,7 +46,7 @@ class _Config
         @Database.Name      = "voicious"          if not @Database.Name?
         @Database.Connector = "mongodb"           if not @Database.Connector?
         @Database.Sessions  = 'mongo'             if @Database.Sessions is 'mongodb'
-        @Database.Hostname  = DefaultHostname @Database.Hostname
+        @Database.Hostname  = 'localhost'         if not @Database.Hostname?
 
     # Initialize the Peerjs server config with basic value if configuration file doesn't
     # contain the required informations.

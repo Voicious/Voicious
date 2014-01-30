@@ -27,6 +27,7 @@ class _Session
         req.currentUser = undefined
         if req.session? and req.session.uid?
             Db.get 'user', req.session.uid, (res) =>
+                delete res.password
                 req.currentUser = res
                 do next
         else

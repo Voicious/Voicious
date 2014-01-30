@@ -15,7 +15,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 ###
 
-i18n        = require 'i18next' 
+i18n        = require 'i18next'
 nodemailer  = require 'nodemailer'
 moment      = require 'moment'
 md5         = require 'MD5'
@@ -51,6 +51,7 @@ class _Room
                 title   : Config.Voicious.Title
                 login   : user.name
                 uid     : user._id
+                register: user._registered?
                 rid     : req.params.roomid
                 pjsHost : Config.Peerjs.Hostname.External
                 pjsPort : Config.Peerjs.Port

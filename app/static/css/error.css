@@ -49,6 +49,6 @@ div#footer {
 
 div#footer > p > span#copyright {
     position: relative;
-    bottom: 4px;
+    bottom: -2px;
     left: 10px;
 }

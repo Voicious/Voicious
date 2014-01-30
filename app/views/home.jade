@@ -7,14 +7,21 @@ block style
 
 block scripts
     !=js('/scripts/home')
-    script(type='text/javascript')
-        if ('#{hash}' !== '') {
-            window.location.hash    = '#{hash}';
-        }
-
-    if locals.erroron
+    if locals.errors
         script(type='text/javascript')
-            this.erroron    = JSON.parse('!{erroron}');
+            window.Voicious.errors = JSON.parse('!{errors}');
+
+    if locals.hash
+        script(type='text/javascript')
+            if ('#{hash}' !== '') {
+                window.location.hash    = '#{hash}';
+            }
+
+    if locals.pageConfig
+        script(type='text/javascript')
+            if ('#{pageConfig.hash}' !== '') {
+                window.location.hash    = '#{pageConfig.hash}';
+            }
 
     if locals.roomid
         script(type='text/javascript')
@@ -25,11 +32,30 @@ block scripts
 
 block content
     div.container
-        //div.signup
+        div.signup
             a
                 i.icon-edit
                 strong SIGN UP
                 | &nbsp;for an account
+            div#signup.step.stepContainer
+                form(method='POST', action='/register', name='signup')
+                    input(name='name', placeholder='Username', type='text', required)
+                    div.error.left(for='name')
+                      i.icon-remove
+                      label &nbsp;Please choose a nickname
+                    input(name='mail', placeholder='Email address', type='text', required)
+                    div.error.left(for='mail')
+                      i.icon-remove
+                      label &nbsp;Please choose a valid email address
+                    input(name='password', placeholder='Password', type='password', required)
+                    div.error.left(for='password')
+                      i.icon-remove
+                      label &nbsp;Please choose a valid password
+                    input(name='passwordconfirm', placeholder='Confirm password', type='password', required)
+                    div.error.left(for='passwordconfirm')
+                      i.icon-remove
+                      label &nbsp;Passwords are not matching
+                    button.btn-large.-middle.btn-start.btn-signup(type='submit', formnovalidate) Sign Up
             a.benefits
                 i.icon-chevron-sign-right
                 | benefits of signing up (for free)
@@ -39,7 +65,7 @@ block content
                 div#quick
                     i.icon-bolt
                     = t('app.QuickStart')
-                //div#signin
+                div#signin
                     i.icon-user
                     | sign in
             div#quickContainer.stepContainer
@@ -50,52 +76,51 @@ block content
                     button#quickJoinBtn.btn-large.btn-quick.btn-start.btn-quick-init
                         i.icon-chevron-right.icon-join
                         strong= t('app.quickInitial.Join')
-                div#quickCreate.step
-                    form(method='POST', action='/quicklogin')
+                div#quickCreate.step.movingStep
+                    form(method='POST', action='/quicklogin', name='quicklogin')
                         div.description
                             i.icon-asterisk
                             = t('app.quickCreate.Description')
                         input(name='name',type='text', placeholder!= t('app.quickCreate.Nickname'), required)
                         div.error(for='name')
-                            label
-                                i.icon-remove
-                                = t("app.quickCreate.NicknameError")
+                            i.icon-remove
+                            = t("app.quickCreate.NicknameError")
                         button.btn-large.btn-start.btn-create(type='submit', formnovalidate)= t('app.quickCreate.Create')
                         button.btn-large.btn-start.btn-cancel(type='reset')= t('app.quickCreate.Cancel')
-                div#quickJoin.step
-                    form(method='POST', action='/quickJoin')
+                div#quickJoin.step.movingStep
+                    form(method='POST', action='/quickJoin', name='quickjoin')
                         div.description
                             i.icon-chevron-right
                             = t('app.quickJoin.Description')
                         input(name='room', placeholder!= t('app.quickJoin.RoomID'), type='text', required)
                         div.msg.success(for='room')
-                            label
-                                i.icon-ok
-                                strong= t('app.quickJoin.RoomIDSuccess')
+                            i.icon-ok
+                            strong= t('app.quickJoin.RoomIDSuccess')
                         input(name='name', placeholder!= t('app.quickJoin.Nickname'), type='text', required)
-                        div.msg.info(for='name')
-                            label
-                                i.icon-hand-left
-                                = t('app.quickJoin.NicknameInfo')
                         div.error(for='name')
-                            label
-                                i.icon-remove
-                                = t('app.quickJoin.NicknameError')
+                            i.icon-remove
+                            label= t('app.quickJoin.NicknameError')
                         button.btn-large.btn-start.btn-join(type='submit', formnovalidate)= t('app.quickJoin.Join')
                         button.btn-large.btn-start.btn-cancel(type='reset')= t('app.quickJoin.Cancel')
             div#signinContainer.stepContainer
-                div#signinStep.step
-                    div.description
-                        i.icon-user
-                        | Sign in
-                    input(name='username', placeholder='Username or Email address', type='text')
-                    input(name='password', placeholder='Password', type='password')
-                    a.forgot(href='#')
-                        i.icon-question-sign
-                        | I forgot my password
-                    div.rememberMe
-                        input#rememberMe(type='checkbox', hidden=true)
-                        label
+                div#signinStep.step.movingStep
+                    form(method='POST', action='/login', name='signin')
+                        div.description
+                            i.icon-user
+                            | Sign in
+                        input(name='name', placeholder='Username or Email address', type='text', required)
+                        div.error(for='name')
+                          i.icon-remove
+                          label &nbsp;Enter a valid nickname or email address
+                        input(name='password', placeholder='Password', type='password', required)
+                        div.error(for='password')
+                          i.icon-remove
+                          label &nbsp;Do not forget your password !
+                        a.forgot(href='#')
+                            i.icon-question-sign
+                            | I forgot my password
+                        div.rememberMe
+                            input#rememberMe(type='checkbox', hidden=true)
                             i.icon-check-empty
                             | Remember me
-                    button.btn-large.btn-start.btn-signin sign in
+                        button.btn-large.btn-start.btn-signin(type='submit', formnovalidate) sign in

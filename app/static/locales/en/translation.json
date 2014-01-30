@@ -35,7 +35,6 @@
         },
         "Connections": {
             "HardwareError": "It seems that we can't access your hardware."
-
         },
         "Errors": {
             "WrongBrowser": {
@@ -79,6 +78,29 @@
             "ManageRoom": "Click here to change room settings.",
             "Feeds": "Here the users present in the room. You can zoom their face by clicking on them.",
             "Chat": "Here you can chat with them!"      
+        },
+        "Dashboard" : {
+            "Dashboard" : "dashboard",
+            "Rooms"     : "rooms",
+            "Friends"   : "friends",
+            "Settings"  : "account settings",
+            "RoomTab"   : {
+                "Title"         : "Create, join and manage rooms",
+                "CreateButton"  : "create",
+                "JoinButton"    : "join",
+                "UserRoomsTitle": "Your rooms",
+                "NoActiveRooms" : "You currently have no active rooms",
+                "FriendsRooms"  : "Your friends' Room",
+                "Owner"         : "owner",
+                "Identifier"    : "id",
+                "NbPeopleInRoom": "people in"
+            },
+            "FriendTab" : {
+                "Title" : "Manage your friends list"
+            },
+            "SettingTab": {
+                "Title" : "Edit your account settings"
+            }
         }
     }
 }

@@ -1,0 +1,64 @@
+//- lists = {inroom: [{name: "Paulloz", rid: "5241ee389445bfa60e000002"}], online: [{name: "Shedna", rid: "5241ee389445bfa60e000002"}], offline: [{name: "iMajestic", rid: "5241ee389445bfa60e000002"}]}
+//- var lists = friends
+//- friends = {online:[], inroom:{}, offline:[]}
+
+div#friendsContent.content.row-fluid.white
+	i.icon-group.bigFont
+	span.title.bigFont.bold.italic= t('app.Dashboard.FriendTab.Title')
+	div.friendSettingCtn
+		div.sectionBox
+			form#addFriend(method='POST', name='addFriend', action='/friend')
+				input.addFriendInput(placeholder='Add your friend', name='name', type='text')
+				button.btn.btn-default.white.btnAddFriend(type='submit') add someone
+		div.sectionBox#listFriends
+			div.friendListHeader#inroom
+				div.headerTitle
+					i.icon-circle.blueCircle
+					span In a ROOM
+			ul.friendListContainer
+				each friend in inroom
+					li.friendRow
+						ul
+							li.friendRowElem #{friend.name}
+							li(data-rid="#{friend.rid}").friendRowElem.joinRow.onHover.squared.none.clickable
+								i.icon-arrow-left
+								| JOIN
+							li.friendRowElem.remove.onHover.none
+								i.icon-remove-sign
+							li.friendRowElem.removeFull.none.clickable(data-login="#{friend.name}")
+								i.icon-remove-sign
+								| REMOVE
+			div.friendListHeader#online
+				div.headerTitle
+					i.icon-circle-blank
+					span Online
+			ul.friendListContainer
+				each friend in online
+					li.friendRow
+						ul
+							li.friendRowElem #{friend.name}
+							//- li.friendRowElem.onHover.squared.none
+							//- 	i.icon-arrow-left
+							//- 	| JOIN
+							li.friendRowElem.remove.onHover.none
+								i.icon-remove-sign
+							li.friendRowElem.removeFull.none.clickable(data-login="#{friend.name}")
+								i.icon-remove-sign
+								| REMOVE
+			div.friendListHeader.greyOffline#offline
+				div.headerTitle
+					i.icon-ban-circle
+					span Offline
+			ul.friendListContainer
+				each friend in offline
+					li.friendRow.greyOffline
+						ul
+							li.friendRowElem #{friend.name}
+							//- li.friendRowElem.onHover.squared.none
+							//- 	i.icon-arrow-left
+							//- 	| JOIN
+							li.friendRowElem.remove.onHover.none
+								i.icon-remove-sign
+							li.friendRowElem.removeFull.none.clickable(data-login="#{friend.name}")
+								i.icon-remove-sign
+								| REMOVE

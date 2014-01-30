@@ -26,98 +26,111 @@ Config          = require '../common/config'
 class _User
     constructor : () ->
 
-    # Render the home page.
-    # This function is called when there is an error during registration.
-    errorOnRegistration : (err, req, res) =>
-        options =
-            erroron         : err
-            hash            : '#signUp'
-            login_email     : ''
-            signup_email    : req.body.mail || ''
-            name            : ''
-            title           : Config.Voicious.Title
-        res.render 'home', options
-
-    # Render the home page.
-    # This function is called when there is an error during quick log in.
-    errorOnQuickLogin : (err, req, res) =>
-        options =
-            error        : err
-            hash         : '#jumpIn'
-            login_email  : ''
-            signup_email : ''
-            name         : req.body.name || ''
-            title        : Config.Voicious.Title
-        res.render 'home', options
-
     # Called for inserting a new user in database.
     # Check Validity of all the values (mail, name, etc).
     # If everything is ok, create the user, log him in and redirect into room (only room for the moment).
-    newUser : (req, res, param, callback, errorCallback) =>
+    newUser : (req, res, param, callback) =>
         Db.insert 'user', param, (newitem) =>
             req.session.uid = newitem._id
             callback req, res
-            # Stats.countTmpUser req, res, callback
-
-    # Redirect to room.
-    redirtoroom : (req, res) =>
-        res.redirect '/room'
 
     # Called for registering a user.
     # Check sanity of all values and called the method newUser to create a new user.
     # if something went wrong, render the home page with the errors setted.
     register : (req, res, next) =>
         param   = req.body
-        err     = []
-        if param.mail?
-            if param.password? and param.passwordconfirm?
-                if param.passwordconfirm isnt param.password
-                    err.push "signup_password"
+        if param.name?
+            if param.mail?
+                if param.password? and param.passwordconfirm?
+                    if param.passwordconfirm isnt param.password
+                        Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'password', 'message': 'Passwords are not matching'}]
+                    else
+                        Db.find 'user', {'name': param.name}, (body) =>
+                            if not body? or body.length is 0
+                                Db.find 'user', {'mail': param.mail}, (body) =>
+                                    if not body? or body.length is 0
+                                        param.password = md5(param.password)
+                                        param.registered = true
+                                        delete param.passwordconfirm
+                                        param.id_acl = 0 #TO DO : put the right value
+                                        param.id_role = 0 #TO DO : put the right value
+                                        param.friends = []
+                                        @newUser req, res, param, (req, res) =>
+                                            @goToDashboard req, res, req.body
+                                    else
+                                        Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'mail', 'message': 'This mail is already used'}]
+                            else
+                                Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'This nickname is already used'}]
                 else
-                    param.password = md5(param.password)
-                    param.name = param.mail
-                    param.id_acl = 0 #TO DO : put the right value
-                    param.id_role = 0 #TO DO : put the right value
-                    @newUser req, res, param, @redirtoroom, @errorOnRegistration
+                    Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'password', 'message': 'Missing field password'}]
             else
-                err.push 'signup_password'
+                Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'mail', 'message': 'Missing field mail'}]
         else
-            err.push 'signup_email'
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#signup'}, [{'form': 'signup', 'input': 'name', 'message': 'Missing field name'}]
+
+    addFriend : (req, res, next) =>
+        param   = req.body
+        param._id = req.currentUser._id
+        err     = []
+        if param.name?
+            Db.getBy 'user', {name : param.name}, (docs) =>
+                if docs.length == 0
+                    res.send 400 # Change to render a proper page TODO
+                else
+                    if param._id? and docs[0].registered is true
+                        Db.get 'user', param._id, (user) =>
+                            if !user?
+                                res.send 400 # Change to render a proper page TODO
+                            else if user.name isnt docs[0].name
+                                if !user.friends?
+                                    user.friends = []
+                                else
+                                    for friend of user.friends
+                                        if friend.name == param.name
+                                            res.send 400 # Change to render a proper page TODO
+                                            return
+                                user.friends.push {_id : docs[0]._id, name : param.name}
+                                Db.update 'user', user._id, user, () =>
+                                    res.send 200 # Change to render a proper page TODO
+                            else
+                                res.send 400
+                    else
+                        res.send 400 # Change to render a proper page TODO
+        else
+            err.push 'bad_name'
         if err.length > 0
             err = JSON.stringify err
-            @errorOnRegistration err, req, res
+            console.log err
+            res.send 400 # Change to render a proper page TODO
 
     # Called for loging in a user.
     # Check sanity of all values and render the home page if any value is wrong.
     # if everything is ok, log the user in and redirect him into room.
     login : (req, res, next) =>
         param       = req.body
-        errorOpts   =
-            hash            : '#logIn'
-            login_email     : ''
-            signup_email    : ''
-            name            : ''
-            erroron         : []
-            title           : Config.Voicious.Title
-        if param.mail?
+        if param.name?
             if param.password?
-                Request.get "#{Config.Restapi.Url}/user?mail=#{param.mail}&password=#{md5(param.password)}", (e, r, data) =>
-                    if (typeof data) is (typeof "")
-                        data    = JSON.parse data
-                    if e
-                        return (next (new Errors.Error e[0]))
-                    else if data.length > 0
-                        req.session.uid = data[0].id
-                        res.redirect '/room'
+                Db.find 'user', {'name': param.name, 'password': md5(param.password)}, (body) =>
+                    if not body? or body.length is 0
+                        Db.find 'user', {'mail': param.name, 'password': md5(param.password)}, (body) =>
+                            if not body? or body.length is 0
+                                Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'The username or password is incorrect'}]
+                            else
+                                @goToDashboard req, res, body
                     else
-                        res.render 'home', errorOpts
+                        @goToDashboard req, res, body
             else
-                errorOpts.erroron.push 'login_password'
+                Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field password'}]
         else
-            errorOpts.erroron.push 'login_email'
-        if errorOpts.erroron.length > 0
-            errorOpts.erroron   = JSON.stringify errorOpts.erroron
-            res.render 'home', errorOpts
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#signin'}, [{'form': 'signin', 'input': 'name', 'message': 'Missing field nickname'}]
+
+     goToDashboard : (req, res, userData) =>
+        req.session.uid = userData._id
+        options =
+            title   : Config.Voicious.Title
+            login   : userData.name
+            uid     : userData._id
+        res.redirect "Dashboard"
 
     # Called when non registered user create a Room.
     # Check if the name of the user is correctly set, if not render the home page.
@@ -125,13 +138,15 @@ class _User
     quickLogin : (req, res, next) =>
         param = req.body
         if param.name? and param.name isnt ""
-            param.mail = param.name + do Date.now
-            @newUser req, res, param, ((req, res) =>
-                {Room}  = require './room'
-                Room.newRoom req, res, { }
-            ), @errorOnQuickLogin
+           Db.find 'user', {'name': param.name}, (body) =>
+                if not body? or body.length is 0
+                    @newUser req, res, param, (req, res) =>
+                        {Room}  = require './room'
+                        Room.newRoom req, res, {}
+                else
+                    Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quicklogin', 'input': 'name', 'message': 'Nickname already used'}]
         else
-            @errorOnQuickLogin 'Missing field : Nickname', req, res
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quicklogin', 'input': 'name', 'message': 'Missing field nickname'}]
 
     # Called when a not registered user wants to join a Room.
     # Check if the login and the Room id are correctly set, if not, redirect to the home page.
@@ -139,18 +154,171 @@ class _User
     quickJoin : (req, res, next) =>
         param = req.body
         if param.name? and param.name isnt ""
-            if param.room? and param.room isnt ""
-                rid             = param.room
-                delete param.room
-                param.mail      = param.name + do Date.now
-                @newUser req, res, param, ((req, res) =>
-                    res.redirect "/room/#{rid}"
-                ), @errorOnQuickLogin
+            Db.find 'user', {'name': param.name}, (body) =>
+                if not body? or body.length is 0
+                    if param.room? and param.room isnt ""
+                        rid             = param.room
+                        delete param.room
+                        param.mail      = param.name + do Date.now
+                        @newUser req, res, param, (req, res) =>
+                            res.redirect "/room/#{rid}"
+                    else
+                        Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quickjoin', 'input': 'room', 'message': 'Missing field room'}]
+                else
+                    Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quickjoin', 'input': 'name', 'message': 'Nickname already used'}]
+        else
+            Errors.RenderPageOnError req, res, 'home', {'hash': '#quick'}, [{'form': 'quickjoin', 'input': 'name', 'message': 'Missing field nickname'}]
+
+    join        : (req, res, next) =>
+        roomIdentifier = req.body.room
+        if roomIdentifier? and roomIdentifier isnt ""
+            res.redirect "room/#{roomIdentifier}"
+        else
+            res.redirect 'Dashboard'
+
+    createRoom : (req, res, next) =>
+        {Room}  = require './room'
+        Room.newRoom req, res, { }
+
+    getFriendsArray : (userID, next) =>
+        if userID?
+            Db.get 'user', userID, (user) =>
+                if user.friends? and user.friends.length isnt 0
+                    i = 0
+                    @requestUser user.friends, i, [], (friends) =>
+                        list =
+                            offline : []
+                            online  : []
+                            inroom  : []
+                        j = 0
+                        @requestFriendRoom friends, j, list, (list) =>
+                            next list
+                else
+                    next {}
+        else
+            next {}
+
+    getFriends : (req, res, next) =>
+        param = req.params
+        if param?
+            if param.id?
+                Db.get 'user', param.id, (user) =>
+                    if user.friends? and user.friends.length isnt 0
+                        i = 0
+                        @requestUser user.friends, i, [], (friends) =>
+                            list =
+                                offline : []
+                                online  : []
+                                inroom  : []
+                            j = 0
+                            @requestFriendRoom friends, j, list, (list) =>
+                                res.send list
+                    else
+                        res.send 400
+            else
+                res.send 400
+        else
+            res.send 400
+
+    requestUser : (friends, offset, infos, callback) =>
+        if friends[offset]?
+            Db.get 'user', friends[offset]._id, (info) =>
+                friend =
+                    name    : info.name
+                    rid : info.id_room
+                    _id     : info._id
+
+                infos.push friend
+                @requestUser friends, offset + 1, infos, callback
+
+        else
+            callback infos
+
+    requestFriendRoom : (friends, offset, list, callback) =>
+        friend = friends[offset]
+        if friend?
+            if friend.rid?
+                Db.getBy 'user', { id_room:friend.rid }, (docs) =>
+                    if docs?
+                        if docs.length is 0
+                            res.send 400
+                        else
+                            friend.nbInRoom = docs.length
+                            list.inroom.push friend
+                            @requestFriendRoom friends, offset + 1, list, callback
+                    else
+                        res.send 400
+            else
+                list.offline.push friend
+                @requestFriendRoom friends, offset + 1, list, callback
+        else
+            callback list
+
+    updateUserPassword : (req, res, next) =>
+        param = req.body
+        if param? and req.params.id?
+            if param.password? and param.passwordconfirm?
+                if param.password is param.passwordconfirm
+                    Db.update 'user', req.params.id, {password:md5(param.password)}, () =>
+                        res.send 200
+                else
+                    res.send 400
+            else
+                res.send 400
+        else
+            res.send 400
+
+    updateUserMail : (req, res, next) =>
+        param = req.body
+        if param? and req.params.id?
+            if param.mail?
+                Db.find 'user', {'mail': param.mail}, (body) =>
+                    if not body? or body.length is 0
+                        Db.update 'user', req.params.id, {mail:param.mail}, () =>
+                            res.send 200
+                    else
+                        res.send 400
+            else
+                res.send 400
+        else
+            res.send 400
+
+    deleteFriend : (req, res, next) =>
+        param = req.body
+        if param? and param.name? and req.params.id?
+            Db.get 'user', req.params.id, (user) =>
+                if user?
+                    if user.friends?
+                        list = []
+                        for friend in user.friends
+                            if friend.name isnt param.name
+                                list.push friend
+                        Db.update 'user', req.params.id, {friends:list}, () =>
+                            res.send 200
+                    else
+                        res.send 400
+                else
+                    res.send 400
+        else
+            res.send 400
 
 exports.User    = new _User
 exports.Routes  =
     post :
-        '/user'         : exports.User.register
+        '/register'     : exports.User.register
         '/login'        : exports.User.login
         '/quickLogin'   : exports.User.quickLogin
         '/quickJoin'    : exports.User.quickJoin
+        '/join'         : exports.User.join
+        '/friend'       : exports.User.addFriend
+
+    get :
+        '/create'       : exports.User.createRoom
+        '/friends/:id'  : exports.User.getFriends
+
+    put :
+        '/user/mail/:id'        : exports.User.updateUserMail
+        '/user/password/:id'    : exports.User.updateUserPassword
+
+    delete:
+        '/deleteFriend/:id'     : exports.User.deleteFriend

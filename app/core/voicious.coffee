@@ -53,7 +53,7 @@ class Voicious
         @app.get '/', Session.withCurrentUser, (req, res) =>
             options =
                 title           : (@app.get 'title'),
-                hash            : '#jumpIn'
+                hash            : '#quick'
                 login_email     : ''
                 signup_email    : ''
                 name            : ''
@@ -86,7 +86,7 @@ class Voicious
         @app.set 'view engine', 'jade'
         @app.set 'title', Config.Voicious.Title
         @app.use do Express.favicon
-        @app.use Express.logger 'dev'      
+        @app.use Express.logger 'dev'
         @app.use do Express.methodOverride
         @app.use do Express.bodyParser
         @app.use Express.cookieParser 'your secret here'
@@ -98,13 +98,11 @@ class Voicious
         @app.use Express.static Config.Paths.Webroot
         @app.use (require 'connect-assets') src : Config.Paths.Webroot
         do @setAllRoutes
-
         @app.use (req, res, next) =>
             Errors.RenderNotFound req, res
         @app.use (err, req, res, next) =>
             console.error err
             Errors.RenderError req, res
-
         @i18n.registerAppHelper @app
         @configured = yes
 

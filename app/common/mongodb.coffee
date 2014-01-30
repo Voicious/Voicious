@@ -63,6 +63,13 @@ class _Mongo extends Database
                     doc._id = String doc._id
                 callback doc
 
+        getBy : (collName, params, callback) =>
+            coll = @db.collection collName
+            coll.find(params).toArray (err, docs) =>
+                if err
+                    throw err
+                callback docs
+
         find : (collName, filters, callback) =>
             coll = @db.collection collName
             if filters._id?
@@ -85,6 +92,6 @@ class _Mongo extends Database
 class Mongo
     @_instance   = undefined
     @get        : () ->
-        @_instance   ?= new _Mongo Config.Database.Name, Config.Database.Host
+        @_instance   ?= new _Mongo Config.Database.Name, Config.Database.Hostname
 
 exports.Db = do Mongo.get

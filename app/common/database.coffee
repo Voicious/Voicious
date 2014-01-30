@@ -32,6 +32,9 @@ class Database
         get: () =>
             throw Errors.Error "Database.get : not implemented"
 
+        getBy: () =>
+            throw Errors.Error "Database.getBy : not implemented"
+
         find: () =>
             throw Errors.Error "Database.find : not implemented"
 

@@ -16,7 +16,8 @@ program. If not, see <http://www.gnu.org/licenses/>.
 ###
 
 quick = undefined
-signIn = undefined
+signin = undefined
+signup = undefined
 cancel = undefined
 tabs = undefined
 rememberMe = undefined
@@ -34,15 +35,18 @@ displaySection = (element) =>
     do (container.siblings '.stepContainer').hide
     container.fadeIn 100
 
-displayStep = (element) =>
-    element = ($ element)
-    step    = ($ containers[element.attr 'id'])
+moveStep = (step) =>
     do (do step.siblings).hide
     step.fadeTo 0, 0.1
     (step.css 'right', '-50px').animate {
         opacity : 1
         right   : 0
     }, 200
+
+displayStep = (element) =>
+    element = ($ element)
+    step    = ($ containers[element.attr 'id'])
+    moveStep step
 
 validateInput = (event) ->
     target   = ($ event.currentTarget)
@@ -80,9 +84,18 @@ validateForm = (event) ->
     if not ok
         do event.preventDefault
 
+handleErrors = (error) ->
+    formContainer = ($ 'form[name="' + error.form + '"]').parent()
+    if formContainer.hasClass 'movingStep'
+        moveStep formContainer
+    errorContainer = ($ 'form[name="' + error.form + '"]').find('.error[for="' + error.input + '"]')
+    errorContainer.find('label').text(error.message)
+    errorContainer.css 'display', 'inline-block'
+
 init = () =>
     quick              = ($ '#quick')
     signin             = ($ '#signin')
+    signup             = ($ '.signup a').first()
     cancel             = ($ '.btn-cancel')
     tabs               = ($ '.tabs > div')
     rememberMe         = ($ '.rememberMe')
@@ -94,7 +107,12 @@ init = () =>
         signin         : '#signinContainer'
         quickCreateBtn : '#quickCreate'
         quickJoinBtn   : '#quickJoin'
+        signup         : '#signup'
     ($ 'button').attr 'tabindex', '-1'
+
+    signup.click () ->
+        $('#signup:visible').fadeOut 100
+        $('#signup:hidden').fadeIn 100
 
     tabs.click () ->
         displaySection @
@@ -124,7 +142,12 @@ init = () =>
 
 ($ document).ready () =>
     do init
-    displaySection quick
+    displaySection (if window.location.hash? and window.location.hash != '' then window.location.hash else quick)
+    if window.Voicious? and window.Voicious.errors?
+        errors = window.Voicious.errors
+        for error in errors
+            handleErrors error
+
     if window.location.search?
         params = (window.location.search.substr 1).split '&'
         for param in params
