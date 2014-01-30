@@ -59,9 +59,11 @@ onHoverRemove = () ->
 configureForm = ()  ->
     ($ "#addFriend").submit (event) ->
         do event.preventDefault
+        console.log ($ ($ this).find('input[name=name]')[0]).val()
         $.ajax '/friend',
             type: 'POST'
             dataType: 'json'
+            data: {name: ($ ($ this).find('input[name=name]')[0]).val()}
             error: (jqXHR, textStatus, errorThrown) ->
                 do window.location.href = "/dashboard"
             success: (data, textStatus, jqXHR) ->

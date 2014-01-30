@@ -32,11 +32,11 @@ class _Dashboard
                 login   : userData.name
                 uid     : userData._id
             {User}  = require './user'
-            User.getFriendsArray userData._id, (friendsList) ->
-                options.online = friendsList.online
-                options.offline = friendsList.offline
-                options.inroom = friendsList.inroom
-                console.log JSON.stringify options
+            User.getFriendsArray userData._id, (friendsList) =>
+                options.online = if friendsList.online? then friendsList.online else []
+                options.offline = if friendsList.offline? then friendsList.offline else []
+                options.inroom = if friendsList.inroom? then friendsList.inroom else []
+                console.log "OPTIONS", JSON.stringify options
                 res.render "dashboard", options
 
 exports.Dashboard  = new _Dashboard

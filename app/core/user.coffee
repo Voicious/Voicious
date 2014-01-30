@@ -130,7 +130,7 @@ class _User
             title   : Config.Voicious.Title
             login   : userData.name
             uid     : userData._id
-        res.render "dashboard", options
+        res.redirect "Dashboard"
 
     # Called when non registered user create a Room.
     # Check if the name of the user is correctly set, if not render the home page.
@@ -237,9 +237,12 @@ class _User
     requestFriendRoom : (friends, offset, list, callback) =>
         friend = friends[offset]
         if friend?
-            if friend.id_room?
-                Db.getBy 'user', { id_room:friend.id_room }, (docs) =>
+            console.log "Friend: ", friend
+            if friend.rid?
+                console.log "Friend 2: ", friend
+                Db.getBy 'user', { id_room:friend.rid }, (docs) =>
                     if docs?
+                        console.log "Docs: ", docs
                         if docs.length is 0
                             res.send 400
                         else

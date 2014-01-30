@@ -7,8 +7,8 @@ div#friendsContent.content.row-fluid.fill-height.white
 	span.title.bigFont.bold.italic= t('app.Dashboard.FriendTab.Title')
 	div.friendSettingCtn
 		div.sectionBox
-			form#addFriendInput(method='POST', name='addFriend', action='/user/friend')
-				input.addFriendInput(placeholder='Add your friend', name='friendName', type='text')
+			form#addFriend(method='POST', name='addFriend', action='/friend')
+				input.addFriendInput(placeholder='Add your friend', name='name', type='text')
 				button.btn.btn-default.white.btnAddFriend(type='submit') add someone
 		div.sectionBox#listFriends
 			div.friendListHeader#inroom
