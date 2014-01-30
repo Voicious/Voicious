@@ -17,6 +17,7 @@ program. If not, see <http://www.gnu.org/licenses/>.
 
 bindView = (elemToclick, divToDisplay) ->
     ($ elemToclick).click () =>
+        window.location.hash = ($ elemToclick).attr 'id'
         clickable = ($ elemToclick)
         clickable.addClass 'active'
         (clickable.siblings '.options').removeClass 'active'
@@ -65,20 +66,29 @@ configureForm = ()  ->
             dataType: 'json'
             data: {name: ($ ($ this).find('input[name=name]')[0]).val()}
             error: (jqXHR, textStatus, errorThrown) ->
-                do window.location.href = "/dashboard"
+                window.location.href = "/dashboard" + window.location.hash
+                do window.location.reload
             success: (data, textStatus, jqXHR) ->
-                do window.location.href = "/dashboard"
+                window.location.href = "/dashboard" + window.location.hash
+                do window.location.reload
 
 init = () ->
     do configureForm
     options = ($ 'li.options')
+    hash = undefined
     do $('.content').hide
 
     bindView (do options.first), '#roomsContent'
     bindView (options[1]),  '#friendsContent'
     bindView (options[2]),  '#settingsContent'
 
-    do (do options.first).click
+    if window.location.hash? and window.location.hash != ""
+        hash = ($ "li" + window.location.hash + ".options")
+
+    if (hash? and hash.length > 0)
+        do hash.click
+    else
+        do (do options.first).click
 
     do ($ '.joinBox').hide
 
