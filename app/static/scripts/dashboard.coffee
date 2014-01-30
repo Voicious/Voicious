@@ -71,6 +71,38 @@ configureForm = ()  ->
                 window.location.href = "/dashboard" + window.location.hash
                 do window.location.reload
 
+    ($ "#updateEmail").submit (event) ->
+        do event.preventDefault
+        uid = $("#login").attr("data-uid")
+
+        $.ajax '/user/mail/' + uid,
+            type: 'PUT'
+            dataType: 'json'
+            data: {mail: ($ ($ this).find('input[name=mail]')[0]).val()}
+            error: (jqXHR, textStatus, errorThrown) ->
+                window.location.href = "/dashboard" + window.location.hash
+                do window.location.reload
+            success: (data, textStatus, jqXHR) ->
+                window.location.href = "/dashboard" + window.location.hash
+                do window.location.reload
+
+    ($ "#updatePassword").submit (event) ->
+        do event.preventDefault
+        uid = $("#login").attr("data-uid")
+        $.ajax '/user/password/' + uid,
+            type: 'PUT'
+            dataType: 'json'
+            data: {
+                password: ($ ($ this).find('input[name=password]')[0]).val(),
+                passwordconfirm: ($ ($ this).find('input[name=passwordconfirm]')[0]).val()
+            }
+            error: (jqXHR, textStatus, errorThrown) ->
+                window.location.href = "/dashboard" + window.location.hash
+                do window.location.reload
+            success: (data, textStatus, jqXHR) ->
+                window.location.href = "/dashboard" + window.location.hash
+                do window.location.reload
+
 init = () ->
     do configureForm
     options = ($ 'li.options')
@@ -100,6 +132,22 @@ init = () ->
         ($ this).click () ->
             roomID = ($ this).attr "data-rid"
             window.location.href = "/room/" + roomID
+
+    ($ '.removeFull.clickable').each () ->
+        ($ this).click () ->
+            uid = $("#login").attr("data-uid")
+            $.ajax '/deleteFriend/' + uid,
+                type: 'DELETE'
+                dataType: 'json'
+                data: {
+                    name: ($ this).attr("data-login")
+                }
+                error: (jqXHR, textStatus, errorThrown) ->
+                    window.location.href = "/dashboard" + window.location.hash
+                    do window.location.reload
+                success: (data, textStatus, jqXHR) ->
+                    window.location.href = "/dashboard" + window.location.hash
+                    do window.location.reload
 
 ($ document).ready () =>
     do init

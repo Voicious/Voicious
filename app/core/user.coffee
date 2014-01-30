@@ -274,10 +274,16 @@ class _User
 
     updateUserMail : (req, res, next) =>
         param = req.body
+        console.log param
+        console.log req.params
         if param? and req.params.id?
+            console.log "1"
             if param.mail?
+                console.log "2"
                 Db.find 'user', {'mail': param.mail}, (body) =>
+                    console.log "3"
                     if not body? or body.length is 0
+                        console.log "4"
                         Db.update 'user', req.params.id, {mail:param.mail}, () =>
                             res.send 200
                     else

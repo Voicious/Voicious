@@ -5,14 +5,14 @@ div#settingsContent.content.row-fluid.white
 		p.title.titleSection.bigFont.bold email address
 		p.bigFont Current email address :
 			span.bold &nbsp;jacket@horsehead.hm
-		form
-			input.block(type="text", name="newMail", placeholder="New email address")
+		form#updateEmail
+			input.block(type="text", name="mail", placeholder="New email address")
 			button.btn.btn-default.btn-join update my email
 	div.settingBox
 		p.title.titleSection.bigFont.bold password
 		//- p.bigFont updated :
 		//- 	span.bold 2 months ago - 31 Aug. 2013
-		form
-			input#password.block(type="text", placeholder="New password")
-			input#passwordConfirm.block(type="text", placeholder="Confirm the new password")
+		form#updatePassword
+			input#password.block(type="text", name="password", placeholder="New password")
+			input#passwordConfirm.block(type="text", name="passwordconfirm", placeholder="Confirm the new password")
 			button.btn.btn-default.btn-join update my password

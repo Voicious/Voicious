@@ -1,5 +1,3 @@
-friends = [{"name": "Gwak-a-molle", "roomID" : "5241ee389445bfa60e000002", "nbPeople" : "3"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"},{"name": "Gwak-a-molle", "roomID" : "5241ee389445bfa60e000002", "nbPeople" : "3"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"},{"name": "Gwak-a-molle", "roomID" : "5241ee389445bfa60e000002", "nbPeople" : "3"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"},{"name": "Gwak-a-molle", "roomID" : "5241ee389445bfa60e000002", "nbPeople" : "3"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"},{"name": "Gwak-a-molle", "roomID" : "5241ee389445bfa60e000002", "nbPeople" : "3"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"},{"name": "Gwak-a-molle", "roomID" : "5241ee389445bfa60e000002", "nbPeople" : "3"}, {"name": "Supermolle", "roomID" : "5242ee389445bfa60e000002", "nbPeople" : "15"}]
-
 div#roomsContent.content.white
 	i.icon-th-large.bigFont
 	span.title.bigFont.bold.italic= t('app.Dashboard.RoomTab.Title')
@@ -25,6 +23,6 @@ div#roomsContent.content.white
 				div.nbUserBox.center
 					p.title.titleSection.bold.headerText= t('app.Dashboard.RoomTab.NbPeopleInRoom')
 					p.info.bold #{friend.nbInRoom}
-				div.boxHidder.center.fill-height(style="background-color: #131618")
+				div.boxHidder.center.fill-height(style="background-color: #131618;")
 				div.joinBox.center
-					a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/	#{friend.rid}")= t('app.Dashboard.RoomTab.JoinButton')
+					a.joinFriendRoom.white.btn.btn-large.btn-join(href="/room/#{friend.rid}")= t('app.Dashboard.RoomTab.JoinButton')

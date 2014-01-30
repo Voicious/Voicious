@@ -25,7 +25,7 @@ div#friendsContent.content.row-fluid.white
 								| JOIN
 							li.friendRowElem.remove.onHover.none
 								i.icon-remove-sign
-							li.friendRowElem.removeFull.none.clickable
+							li.friendRowElem.removeFull.none.clickable(data-login="#{friend.name}")
 								i.icon-remove-sign
 								| REMOVE
 			div.friendListHeader#online
@@ -42,7 +42,7 @@ div#friendsContent.content.row-fluid.white
 							//- 	| JOIN
 							li.friendRowElem.remove.onHover.none
 								i.icon-remove-sign
-							li.friendRowElem.removeFull.none.clickable
+							li.friendRowElem.removeFull.none.clickable(data-login="#{friend.name}")
 								i.icon-remove-sign
 								| REMOVE
 			div.friendListHeader.greyOffline#offline
@@ -59,6 +59,6 @@ div#friendsContent.content.row-fluid.white
 							//- 	| JOIN
 							li.friendRowElem.remove.onHover.none
 								i.icon-remove-sign
-							li.friendRowElem.removeFull.none.clickable
+							li.friendRowElem.removeFull.none.clickable(data-login="#{friend.name}")
 								i.icon-remove-sign
 								| REMOVE

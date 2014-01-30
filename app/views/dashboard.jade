@@ -13,7 +13,7 @@ block content
           div.fill-width.color-two.content-right
             img#logo(src="/img/logo.png")
           div#userInfoCtn
-            p#login(align="right") #{login}
+            p#login(align="right", data-uid="#{uid}") #{login}
             p#dashboard(align="right")= t('app.Dashboard.Dashboard')
           div#optionController.fill-width
             ul#optionList
