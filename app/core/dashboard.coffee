@@ -31,6 +31,7 @@ class _Dashboard
                 title   : Config.Voicious.Title
                 login   : userData.name
                 uid     : userData._id
+                mail    : userData.mail
             {User}  = require './user'
             User.getFriendsArray userData._id, (friendsList) =>
                 options.online = if friendsList.online? then friendsList.online else []
