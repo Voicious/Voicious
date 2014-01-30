@@ -131,7 +131,10 @@ class MC
             video   : createVideoTag stream
             uid     : @call.peer
         ($ data.video).bind "loadedmetadata", () ->
-            data.type = if @videoHeight is 0 and @videoWidth is 0 then 'audio' else 'video'
+            if navigator.mozGetUserMedia?
+                data.type = "video"
+            else
+                data.type = if @videoHeight is 0 and @videoWidth is 0 then 'audio' else 'video'
             that.emitter.trigger 'stream.create', data
 
     answer   : (stream) =>
@@ -289,10 +292,7 @@ createVideoTag = (stream) ->
     videoTag          = document.createElement 'video'
     videoTag.setAttribute 'data-streamid', stream.id
     videoTag.autoplay = yes
-    if MOZILLA
-        videoTag.mozSrcObject = stream
-    else
-        videoTag.src          = window.URL.createObjectURL stream
+    videoTag.src = window.URL.createObjectURL stream
     do videoTag.play
     return videoTag
 

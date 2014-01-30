@@ -36,7 +36,6 @@ class _Dashboard
                 options.online = if friendsList.online? then friendsList.online else []
                 options.offline = if friendsList.offline? then friendsList.offline else []
                 options.inroom = if friendsList.inroom? then friendsList.inroom else []
-                console.log "OPTIONS", JSON.stringify options
                 res.render "dashboard", options
 
 exports.Dashboard  = new _Dashboard
