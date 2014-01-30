@@ -77,11 +77,11 @@ class _User
                 if docs.length == 0
                     res.send 400 # Change to render a proper page TODO
                 else
-                    if param._id? and docs[0].registered is true and param.name != docs[0].name
+                    if param._id? and docs[0].registered is true
                         Db.get 'user', param._id, (user) =>
                             if !user?
                                 res.send 400 # Change to render a proper page TODO
-                            else
+                            else if user.name isnt docs[0].name
                                 if !user.friends?
                                     user.friends = []
                                 else
@@ -92,6 +92,8 @@ class _User
                                 user.friends.push {_id : docs[0]._id, name : param.name}
                                 Db.update 'user', user._id, user, () =>
                                     res.send 200 # Change to render a proper page TODO
+                            else
+                                res.send 400
                     else
                         res.send 400 # Change to render a proper page TODO
         else
@@ -286,7 +288,26 @@ class _User
             res.send 400
 
     deleteFriend : (req, res, next) =>
-        console.log "delete friend"
+        param = req.body
+        if param? and param.name? and req.params.id?
+            Db.get 'user', req.params.id, (user) =>
+                if user?
+                    if user.friends?
+                        i = 0
+                        list = []
+                        if user.friends.length isnt 0
+                            for friend of user.friends
+                                if friend.name isnt user.name and user.friends.length isnt 1
+                                    list.push friend
+                                i++
+                        Db.update 'user', req.params.id, {friends:list}, () =>
+                            res.send 200
+                    else
+                        res.send 400
+                else
+                    res.send 400
+        else
+            res.send 400
 
 exports.User    = new _User
 exports.Routes  =
@@ -306,5 +327,5 @@ exports.Routes  =
         '/user/mail/:id'        : exports.User.updateUserMail
         '/user/password/:id'    : exports.User.updateUserPassword
 
-    delete :
-        '/user/friend'  : exports.User.deleteFriend
+    delete:
+        '/deleteFriend/:id'     : exports.User.deleteFriend
